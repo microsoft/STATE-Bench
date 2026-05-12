@@ -1,0 +1,75 @@
+{
+  "task_id": "101-hard_price_match_cancel_language",
+  "task_summary": "Customer says they want to cancel a delivered tablet because its price dropped yesterday. Correct path is a price-match refund, not cancellation or return.",
+  "task_type": "price_match_refund",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_price_match_cancel_language_price_match_only",
+      "kind": "must",
+      "requirement": "Agent must present the refund as a price-match adjustment that keeps the tablet/order active, not as a cancellation."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_cancel_language_lookup",
+      "kind": "must",
+      "requirement": "Agent must verify from system records that the purchased item has current price $549 before issuing the refund."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_cancel_language_no_cancel_return",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel, return, or exchange the item."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_price_match_cancel_language_extra",
+      "kind": "must",
+      "requirement": "Agent must explicitly pivot from the customer's cancellation wording to the price-match refund workflow."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_cancel_language_hard3_no_return_rebuy",
+      "kind": "must_not",
+      "requirement": "Agent must not recommend or route the customer toward return-and-rebuy as the way to capture an eligible price drop once the delivered item can be price matched."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I want to cancel ORD-7201. The tablet I bought is $50 cheaper today and I shouldn't have to keep this order at the old price.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7201",
+      "item: SlateTab Pro 11-inch",
+      "current_price: $549"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "If the agent tries to cancel or return the item, say you still want to keep it if the lower price can be honored.",
+      "Ask them to verify the product price rather than guessing.",
+      "Accept the price-match refund once previewed.",
+      "Do not accept a return-and-rebuy path; only accept a direct price-match adjustment that keeps the tablet."
+    ],
+    "unknown_info": [
+      "whether cancellation is needed",
+      "price-match amount"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7201. Customer says they want to cancel a delivered tablet because its price dropped yesterday. Correct path is a price-match refund, not cancellation or return. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10201",
+      "field": "refund_amount",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10201",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/101-hard_price_match_cancel_language.json"
+}

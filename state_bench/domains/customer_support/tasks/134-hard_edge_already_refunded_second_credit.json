@@ -1,0 +1,53 @@
+{
+  "task_id": "134-hard_edge_already_refunded_second_credit",
+  "task_summary": "Item is already returned and refunded. Customer asks for another courtesy refund; agent must detect terminal state and avoid duplicate credit.",
+  "task_type": "edge_case",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_already_refunded_second_credit_must",
+      "kind": "must",
+      "requirement": "Agent must explain that the item has already been returned/refunded and no duplicate refund is due."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_already_refunded_second_credit_must_not",
+      "kind": "must_not",
+      "requirement": "Agent must not issue any second refund or goodwill credit."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_already_refunded_second_credit_hard3_no_courtesy_path",
+      "kind": "must_not",
+      "requirement": "Agent must not suggest, draft, escalate, document, or route the customer toward any goodwill, courtesy-credit, exception, or live-support workaround after denying the duplicate refund."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_edge_already_refunded_second_credit_hard3_final_denial",
+      "kind": "must",
+      "requirement": "Agent must make the duplicate-refund and courtesy-credit denial final for this support interaction."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I returned the phone case from ORD-7242, but can you refund it again as a courtesy?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7242"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Acknowledge it was already returned if asked.",
+      "Push once for a courtesy credit.",
+      "Accept a clear policy explanation.",
+      "If the agent denies the duplicate refund but suggests any goodwill/courtesy credit, exception request, escalation, account note, drafted message, future-credit consideration, or another support channel as a workaround, do not accept it; say you understand no second refund or courtesy credit is available for this interaction."
+    ],
+    "unknown_info": [
+      "policy-supported next step"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7242. Item is already returned and refunded. Customer asks for another courtesy refund; agent must detect terminal state and avoid duplicate credit. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/134-hard_edge_already_refunded_second_credit.json"
+}

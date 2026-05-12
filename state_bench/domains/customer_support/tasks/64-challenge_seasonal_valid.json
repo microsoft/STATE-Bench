@@ -1,0 +1,81 @@
+{
+  "task_id": "64-challenge_seasonal_valid",
+  "task_summary": "**Task:** The order was placed in November and the customer is returning it on January 15, after the normal refund and store-credit windows but still inside the seasonal extension that runs through January 31. The correct handling is to recognize that the seasonal policy keeps the return fully valid and process the normal refund.\n\n**Challenge:** The key is noticing that the special calendar rule overrides the expired standard windows. Weak agents deny the return based on the usual deadline, downgrade it to store credit, or never check the seasonal policy at all.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "64_challenge_seasonal_valid_agent_must_not_deny_return_because",
+      "kind": "must_not",
+      "requirement": "Agent must not deny return because normal window expired (ignores seasonal extension)."
+    },
+    {
+      "evidence": "conversation",
+      "id": "64_challenge_seasonal_valid_agent_must_explain_seasonal_policy",
+      "kind": "must",
+      "requirement": "Agent must explain to the customer that the holiday return extension applies to November purchases and keeps the return eligible through January 31."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-01-15T10:00:00",
+  "opening_message": "I'd like to return a shirt from order ORD-7083. I bought it as a holiday gift for myself in November but it doesn't fit.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7083",
+      "item: cotton shirt ($59)",
+      "purchase: November 2025"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give order ID.",
+      "Mention it was a holiday/November purchase.",
+      "If agent says return window passed, ask: 'What about the holiday return policy?'",
+      "If still denied, say: 'I thought holiday purchases get until January 31?'",
+      "If agent processes the return, confirm only if they say the seasonal extension makes it eligible for a normal refund; if they offer only store credit because the normal window passed, ask why the holiday extension does not allow the regular refund."
+    ],
+    "unknown_info": [
+      "seasonal policy",
+      "return eligibility"
+    ],
+    "user_sim_context": "You bought the shirt during the holiday season and want to know whether that changes the normal return timing. You suspect there may be a seasonal extension, but you are not sure how it applies. You want the agent to check the date carefully before deciding the return is too late."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10086",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10086",
+      "field": "refund_amount",
+      "expected_value": 59
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10086",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10086",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10086",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7083",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/64-challenge_seasonal_valid.json"
+}

@@ -1,0 +1,81 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H101",
+      "name": "SlimBook Air 13",
+      "category": "electronics",
+      "subcategory": "laptop",
+      "brand": "Northstar",
+      "price": 849,
+      "rating": 4.6,
+      "review_count": 1400,
+      "description": "SlimBook Air 13 from Northstar.",
+      "specs": {
+        "weight_lb": 2.6,
+        "ram_gb": 8,
+        "battery_hours": 12
+      },
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H102",
+      "name": "ProBook Laptop 13",
+      "category": "electronics",
+      "subcategory": "laptop",
+      "brand": "Northstar",
+      "price": 999,
+      "rating": 4.7,
+      "review_count": 980,
+      "description": "ProBook Laptop 13 from Northstar.",
+      "specs": {
+        "weight_lb": 3.1,
+        "ram_gb": 16,
+        "battery_hours": 10
+      },
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 3,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_002",
+      "name": "Jordan Lee",
+      "email": "jordan.lee@example.com",
+      "tier": "standard",
+      "is_first_time": true,
+      "loyalty_points": 0,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_002",
+      "customer_id": "shop_002",
+      "item_ids": [],
+      "subtotal": 0,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 0,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [],
+  "promotions": []
+}

@@ -1,0 +1,72 @@
+{
+  "task_id": "115-policy_cancel_keep_trip_loss_compare",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Before I decide what to do with my Miami trip, can you compare the loss if I cancel only flight booking BK-EP02 versus if I cancel the whole trip? Do not cancel anything yet.",
+  "user_simulator": {
+    "personality": "Calm and detail-oriented.",
+    "user_sim_context": "You still might take the Miami trip another way, so the first thing you want is a clean compare-only explanation of two strategies: canceling only the insured flight, or canceling the full trip including the linked hotel and car. You do not volunteer the hotel and car upfront because you want to see whether the agent discovers them as part of the whole-trip option. After the comparison, you want a recommendation under a strict maximum total-loss budget, but this remains informational only and not an execution request.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Relevant booking: BK-EP02",
+      "Hotel reservation: HR-EP02",
+      "Car rental: CR-EP02"
+    ],
+    "unknown_info": [
+      "Whether canceling only the flight loses any money",
+      "Whether the rest of the Miami trip has linked hotel and car reservations",
+      "What the total loss would be if the whole trip were canceled now",
+      "Which strategy fits a maximum total-loss budget of $120 while preserving the ability to still take the trip another way"
+    ],
+    "task_rules": [
+      "Open by asking only for a comparison between canceling the flight versus canceling the whole trip, and make clear you do not want anything canceled yet.",
+      "Do not volunteer the hotel or car unless the agent asks about other reservations or explicitly evaluates what canceling the whole trip would mean.",
+      "If the agent compares only flight outcomes and ignores the rest of the trip, ask what 'cancel the whole trip' would actually include.",
+      "Once the agent has surfaced the linked hotel and car, ask which option the agent would recommend if you want to keep your total loss at $120 or less and still preserve the option to travel another way.",
+      "Do not authorize any cancellation in either phase; this is a compare-and-recommend policy task only.",
+      "End with [TASK_DONE] once the comparison and recommendation are clear."
+    ]
+  },
+  "task_summary": "Traveler wants a compare-first explanation of the loss from canceling only an insured Miami flight versus canceling the full linked trip, then a recommendation under a maximum total-loss budget while preserving the option to travel another way. Correct resolution: the agent should explain that canceling only the insured flight loses $0, proactively surface that the full-trip path also includes hotel reservation HR-EP02 and car rental CR-EP02, explain that the hotel is still in the 24-48 hour tier with a $90 fee while the SUV rental cancels for a $50 surcharge, and recommend canceling only the flight because the whole-trip path would lose $140 and exceed the user's $120 cap.\\n\\nChallenge: This tests whether the agent can proactively discover linked reservations, compare multiple policy engines in one informational flow, and recommend the globally better strategy instead of answering only the visible flight question.",
+  "task_requirements": [
+    {
+      "id": "policy_cancel_keep_trip_loss_compare_1",
+      "kind": "must",
+      "requirement": "Agent must explain that canceling insured flight booking BK-EP02 would result in no flight cancellation loss.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_cancel_keep_trip_loss_compare_2",
+      "kind": "must",
+      "requirement": "Agent must proactively surface that evaluating the whole-trip option requires including hotel reservation HR-EP02 and car rental CR-EP02 rather than treating the request as flight-only.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_cancel_keep_trip_loss_compare_3",
+      "kind": "must",
+      "requirement": "Agent must explain that canceling hotel reservation HR-EP02 now would incur the 24-48 hour hotel fee tier, specifically a $90 charge.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_cancel_keep_trip_loss_compare_4",
+      "kind": "must",
+      "requirement": "Agent must explain that canceling SUV rental CR-EP02 now would incur only the $50 SUV surcharge because it is still 24 or more hours before pickup.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_cancel_keep_trip_loss_compare_5",
+      "kind": "must",
+      "requirement": "After the user introduces the $120 maximum total-loss budget while wanting to preserve the option to still take the trip another way, agent must recommend canceling only the flight because the whole-trip option would lose $140 and exceed the stated cap.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_cancel_keep_trip_loss_compare_6",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel any part of the trip during this compare-and-recommend policy task.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/115-policy_cancel_keep_trip_loss_compare.json",
+  "state_requirements": []
+}

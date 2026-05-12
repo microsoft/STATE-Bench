@@ -1,0 +1,95 @@
+{
+  "task_id": "22-shipping_missing_item",
+  "task_summary": "**Task:** A three-item order was delivered, but the phone case was missing from the box. The right outcome is to resolve the claim for that missing line only and record the $35 refund without disturbing the other delivered items.\n\n**Challenge:** The agent has to keep the scope narrow and identify the correct missing item. Weak agents process the entire order, refund the wrong product, or blur a one-line missing-item claim into a full return.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "22_shipping_missing_item_agent_must_ask_resolution",
+      "kind": "must",
+      "requirement": "Agent must ask the customer whether they want a refund or a reship for the missing item before processing one."
+    },
+    {
+      "evidence": "conversation",
+      "id": "22_shipping_missing_item_agent_must_identify_the_correct_missing",
+      "kind": "must",
+      "requirement": "Agent must identify the phone case as the missing item and distinguish it from the delivered shirt and book."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I received my order ORD-6024 but the phone case is missing. I got the shirt and book but no phone case in the box.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6024",
+      "missing: phone case",
+      "received: shirt, book",
+      "preferred_resolution: refund to original payment (only reveal if the agent asks)"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Specify the phone case is missing.",
+      "Confirm the other items arrived.",
+      "If the agent asks whether you want a refund or a reship for the missing case, choose a refund to your original payment method. If the agent processes a reship without asking, push back once and ask for a refund to your original payment instead. Do not volunteer this preference unprompted.",
+      "If the agent tries to refund, return, reship, or otherwise change the shirt, the book, or the whole order, correct them and say only the phone case is missing and the other two items should stay as delivered.",
+      "Accept only a refund to original payment for the missing phone case; do not accept changes to the shirt or book."
+    ],
+    "unknown_info": [
+      "replacement process",
+      "timeline"
+    ],
+    "user_sim_context": "A multi-item order arrived, but one of the listed items was not in the box. You are not disputing the whole shipment, only the missing piece. You want the agent to isolate that item and resolve the shortfall without creating confusion about the rest of the order. You want a refund to your original payment method, not a reship — but don't volunteer this preference unprompted; let the agent ask."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9162",
+      "field": "refund_amount",
+      "expected_value": 35
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9162",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6024",
+      "field": "status",
+      "expected_value": "delivered"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9162",
+      "field": "item_status",
+      "expected_value": "delivered"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9160",
+      "field": "item_status",
+      "expected_value": "delivered"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9160",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9161",
+      "field": "item_status",
+      "expected_value": "delivered"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9161",
+      "field": "refund_amount",
+      "expected_value": null
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/22-shipping_missing_item.json"
+}

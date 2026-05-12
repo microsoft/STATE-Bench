@@ -1,0 +1,106 @@
+{
+  "task_id": "63-challenge_bulk_clawback",
+  "task_summary": "**Task:** The customer is returning headphones and a shirt from a four-item order that originally qualified for a bulk discount. Once those two items come out, the order drops below the bulk threshold, so the correct handling is to process both returns and account for the $10 clawback that now applies.\n\n**Challenge:** The refund math has to reflect the changed order composition. Weak agents miss the bulk clawback entirely, mention it vaguely without actually applying it, or deduct the wrong amount from the combined return.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "challenge_bulk_clawback_agent_must_communicate_10_bulk_clawback",
+      "kind": "must",
+      "requirement": "Agent must communicate the $10 bulk clawback to the customer."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I want to return the headphones and the shirt from order ORD-7081. I'll keep the book and phone case.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7081",
+      "return: headphones + shirt",
+      "keep: novel + phone case"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give order ID.",
+      "Specify headphones and shirt for return.",
+      "If agent mentions a clawback or additional deduction, ask: 'What clawback? Why?'",
+      "If agent explains the bulk discount policy, accept.",
+      "If the agent previews both returns without mentioning the original bulk discount or any clawback, ask whether returning two of the four items affects the bulk discount before confirming.",
+      "Confirm both returns only after the agent has included the headphones and shirt and has explained any bulk-discount clawback or clearly said none applies."
+    ],
+    "unknown_info": [
+      "bulk clawback policy",
+      "clawback amount"
+    ],
+    "user_sim_context": "You want to return two items from a bulk order and are thinking mostly about the value of those specific items. You are not focused on how the original discount depended on keeping more of the order. If returning items changes the economics of what remains, you want the agent to surface that explicitly."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10081",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10081",
+      "field": "refund_amount",
+      "expected_value": 208
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10081",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10081",
+      "field": "restocking_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10081",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10082",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10082",
+      "field": "refund_amount",
+      "expected_value": 38
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10082",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10082",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10082",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7081",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/63-challenge_bulk_clawback.json"
+}

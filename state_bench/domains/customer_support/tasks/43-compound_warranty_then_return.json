@@ -1,0 +1,96 @@
+{
+  "task_id": "43-compound_warranty_then_return",
+  "task_summary": "**Task:** The customer raises two different issues on the same order: a phone with a warranty-covered screen problem and a phone case they simply want to return. The correct handling is to keep those tracks separate, route the phone through warranty, and complete the $35 changed-mind return for the case.\n\n**Challenge:** Mixed-workflow discipline is the core difficulty. Weak agents handle only one issue, confuse which item belongs to which policy path, or collapse the warranty claim and return request into a single muddled action.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "43_compound_warranty_then_return_agent_must_separate_workflows",
+      "kind": "must",
+      "requirement": "Agent must clearly treat the phone issue as a warranty claim for ITEM-9320/WRT-4020 and the phone case issue as a changed-mind return for ITEM-9321, without collapsing them into the same workflow."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I have two issues with order ORD-6045. My phone has the same screen flickering issue again and I also want to return the phone case I don't need.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6045",
+      "warranty_id: WRT-4020",
+      "phone_issue: screen flickering",
+      "case: return"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Explain BOTH issues upfront.",
+      "Warranty ID is WRT-4020 for the phone.",
+      "If the agent handles only one issue, remind them you need both the phone warranty claim and the case return handled.",
+      "If the agent tries to return the phone instead of using warranty, say the phone issue is a warranty screen-flicker claim under WRT-4020.",
+      "If the agent applies warranty handling to the case, clarify that the case is just a changed-mind return.",
+      "Accept only when the phone and case are previewed as separate operations with the correct policy path for each."
+    ],
+    "unknown_info": [
+      "warranty claim process",
+      "return refund for case"
+    ],
+    "user_sim_context": "You have two unrelated issues with the same order: a phone with a recurring defect and an accessory you simply do not want. You expect both to be handled in one conversation, but not as though they are the same type of problem. The agent should keep the warranty claim and the return path clearly separated."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9321",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9321",
+      "field": "refund_amount",
+      "expected_value": 35
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9321",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9321",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9321",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6045",
+      "field": "status",
+      "expected_value": "partially_returned"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4020",
+      "field": "claim_count",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4020",
+      "field": "resolution",
+      "expected_value": "repair"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4020",
+      "field": "status",
+      "expected_value": "claimed"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/43-compound_warranty_then_return.json"
+}

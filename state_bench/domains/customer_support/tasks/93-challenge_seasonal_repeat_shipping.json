@@ -1,0 +1,117 @@
+{
+  "task_id": "93-challenge_seasonal_repeat_shipping",
+  "task_summary": "**Task:** A free-shipping November order is being partially returned in January, so the seasonal extension keeps the return alive. Because the customer is returning two clothing items, the second one carries the $5 repeat surcharge, and because the remaining order drops below the shipping threshold, the correct handling also includes the $8 shipping clawback.\n\n**Challenge:** The agent has to keep three moving parts straight at once. Weak agents deny the January return, remember the seasonal rule but miss one of the later financial adjustments, or flatten the two clothing lines into identical refunds.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "93_challenge_seasonal_repeat_shipping_agent_must_not_deny_no_seasonal",
+      "kind": "must",
+      "requirement": "Agent must explain that the seasonal holiday extension makes the November order return-eligible through January 31 and must not deny the return as outside the normal window."
+    },
+    {
+      "evidence": "conversation",
+      "id": "93_challenge_seasonal_repeat_shipping_agent_must_include_5_repeat",
+      "kind": "must",
+      "requirement": "Agent must explain that the running-shoes return is the second clothing return in the order and therefore carries a $5 repeat-category surcharge."
+    },
+    {
+      "evidence": "conversation",
+      "id": "93_challenge_seasonal_repeat_shipping_agent_must_include_8_shipping",
+      "kind": "must",
+      "requirement": "Agent must explain that an $8 free-shipping clawback applies because returning the shirt and shoes leaves only the $35 phone case, below the free-shipping threshold."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2027-01-18T10:00:00",
+  "opening_message": "I want to return the shirt and running shoes from order ORD-7127. I ordered them in November.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7127",
+      "items: shirt+shoes",
+      "reason: changed mind"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give order ID.",
+      "If window expired, mention holiday returns.",
+      "Accept the return terms only after the agent confirms both the shirt and shoes are included and explains any per-item surcharge or shipping adjustment; if the shoes refund looks the same as a normal clothing refund or no shipping adjustment is mentioned, ask for the itemized breakdown.",
+      "If one item only, ask about other."
+    ],
+    "unknown_info": [
+      "seasonal",
+      "repeat surcharge",
+      "shipping clawback"
+    ],
+    "user_sim_context": "You want to return two clothing items from a holiday-season order and are mainly focused on whether the return window is still open. You are not automatically thinking about any repeated-category charge or the original shipping qualification. The agent should explain all of that in a way that still feels grounded in your request."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10163",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10163",
+      "field": "refund_amount",
+      "expected_value": 59
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10163",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10163",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10163",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10164",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10164",
+      "field": "refund_amount",
+      "expected_value": 116
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10164",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10164",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10164",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7127",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/93-challenge_seasonal_repeat_shipping.json"
+}

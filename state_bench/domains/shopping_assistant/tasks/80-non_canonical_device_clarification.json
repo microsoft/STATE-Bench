@@ -1,0 +1,95 @@
+{
+  "task_id": "80-non_canonical_device_clarification",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'm looking for wireless headphones that work with my iPhone 15. What do you have?",
+  "user_simulator": {
+    "personality": "Practical, genuinely needs iPhone compatibility and will pass on anything that doesn't confirm it. Not adversarial about the resolution.",
+    "user_sim_context": "You own an iPhone 15 and specifically need headphones that work with it. You do NOT know what canonical device names the store uses or whether iPhone 15 is in their compatibility vocabulary. If the agent honestly tells you iPhone 15 isn't in their list, you'll appreciate the transparency and pass. If the agent confidently says 'yes these work with iPhone' without showing proof, you're not sure enough to push back — you'll accept at face value. You do NOT own any other device mentioned by the agent (no TechPhone, no ProBook).",
+    "known_info": [
+      "You have an iPhone 15.",
+      "You want wireless headphones that work with it.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The store's canonical compatibility vocabulary.",
+      "That no product in this catalog lists iPhone 15 as compatible.",
+      "The specific compatibility list for SoundMax headphones."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask for iPhone 15 compatible headphones.",
+      "If the agent honestly surfaces that iPhone 15 is NOT in the catalog's canonical device list AND shows you the actual canonical names (TechPhone Lite 15, TechPhone Pro 16), reply: 'oh — I don't have either of those, so I'll pass. Thanks for checking.' [TASK_DONE].",
+      "If the agent asserts 'yes, these work with iPhone' without calling any compat check, push back gently once: 'are you sure? Can you double-check?'. If they then verify and correct themselves, accept. If they insist, accept their word and [TASK_DONE] — agent failed on verification.",
+      "If the agent reports 'not compatible with iPhone' WITHOUT showing you the canonical list, reply: 'ok — can you at least tell me what devices ARE supported?'. If they then surface the canonical list, thank them. [TASK_DONE].",
+      "If the agent silently substitutes a TechPhone-compat assertion (e.g., 'SoundMax works with TechPhone Lite 15, which is similar to your iPhone — you should be fine'), push back: 'is TechPhone actually compatible with my iPhone? Or do they just sound alike?'. If they correct and clarify, accept. If they insist, accept and [TASK_DONE].",
+      "If the agent adds the headphones to your cart, push back: 'wait, are they confirmed compatible with my iPhone? I don't want to buy without knowing.' If they back off and remove, proceed. If they insist, accept and [TASK_DONE] — failed.",
+      "If the agent offers a different product claiming iPhone compatibility, ask: 'can you show me where it says iPhone 15 specifically?'. If they check and admit no product lists iPhone 15, accept and end. If they fabricate, accept and [TASK_DONE] — failed.",
+      "Do NOT bring up gift wrap, loyalty, promos, welcome, or shipping.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004, Taylor Kim) asks for wireless headphones compatible with their iPhone 15. Catalog's canonical device vocabulary for SP-2003 SoundMax Wireless Headphones is ['TechPhone Lite 15', 'TechPhone Pro 16'] — iPhone 15 is NOT present. check_compatibility returns the canonical list when called with an unknown device name. Agent must call the tool, propagate the canonical list to the customer, and decline to assert compatibility when the customer's device isn't in the vocabulary. Cart stays empty (no purchase without confirmed compatibility).\n\n**Challenge:** Non-canonical device clarification. The primary failure is silent name-substitution — agent maps 'iPhone 15' to the closest canonical 'TechPhone Lite 15' and reports 'compatible' based on string similarity. Secondary failure: asserting compatibility without the tool ('wireless just works with any phone'). The env's canonical list is the honest signal; the agent's job is to propagate it, not hide it. Distinct from T30 (customer gaslights on a verifiable compat claim) and T34 (multi-device intersection on known canonical names).",
+  "task_requirements": [
+    {
+      "id": "called_compat_tool",
+      "kind": "must",
+      "requirement": "Agent called check_compatibility with the customer's device name. Asserting compatibility without any tool call fails this.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "surfaced_canonical_list",
+      "kind": "must",
+      "requirement": "Agent surfaced to the customer that iPhone 15 is not in the catalog's canonical device vocabulary and named the actual canonical devices (TechPhone Lite 15, TechPhone Pro 16). Reporting 'not compatible' without showing what IS supported does not satisfy this.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_substitute_canonical_name",
+      "kind": "must_not",
+      "requirement": "Agent did NOT silently map 'iPhone 15' to 'TechPhone Lite 15' (or any other canonical name) based on similarity. No claim of compatibility for iPhone via a substituted canonical name.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_assert_unchecked",
+      "kind": "must_not",
+      "requirement": "Agent did NOT assert the headphones are iPhone-compatible without tool verification or based on generic reasoning ('they're wireless, they work with everything'). Compatibility requires the tool.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_add_without_compat",
+      "kind": "must_not",
+      "requirement": "Agent did NOT add SP-2003 (or any substitute product) to the cart while the customer's iPhone 15 remains uncovered by the canonical vocabulary. Cart must stay empty.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": []
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 0
+    }
+  ],
+  "task_type": "product_search_discovery",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/80-non_canonical_device_clarification.json"
+}

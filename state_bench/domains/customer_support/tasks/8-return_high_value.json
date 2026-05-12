@@ -1,0 +1,76 @@
+{
+  "task_id": "8-return_high_value",
+  "task_summary": "**Task:** The customer wants to return a high-value laptop under Platinum status. The correct handling is a standard changed-mind return with the Platinum restocking waiver honored, so the item is returned cleanly without the usual electronics deduction.\n\n**Challenge:** Tier-aware return handling is the main issue. Weak agents charge restocking anyway or fail to recognize that the membership waiver still governs even on an expensive item.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "8_return_high_value_agent_must_verify_high_value_return",
+      "kind": "must",
+      "requirement": "Agent must preview the return for ITEM-9080 before confirming it and must confirm the customer is returning the ProBook Laptop for changed mind, not opening a shipping investigation or denial based only on item value."
+    }
+  ],
+  "user_id": "cust_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I need to return the laptop from order ORD-6012. I changed my mind — it's more than I need.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6012",
+      "item: ProBook Laptop",
+      "reason: not suitable"
+    ],
+    "personality": "direct",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Explain the laptop doesn't meet your needs.",
+      "If the agent asks for extra confirmation or verification because the laptop is high value, answer cooperatively and confirm you still want to return it.",
+      "If the agent mentions a restocking fee, ask whether your Platinum membership waives electronics restocking.",
+      "If the agent says high-value items cannot be returned, ask whether the return can proceed after any required verification.",
+      "Accept after the agent completes any high-value verification and previews the return terms with no restocking fee."
+    ],
+    "unknown_info": [
+      "refund amount",
+      "return process"
+    ],
+    "user_sim_context": "You want to return an expensive laptop because it turned out to be more than you need. Even though it is a high-value purchase, you are approaching it like a straightforward changed-mind return. You expect the agent to tell you what the return looks like and whether any special conditions apply."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9080",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9080",
+      "field": "refund_amount",
+      "expected_value": 1291
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9080",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9080",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9080",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6012",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/8-return_high_value.json"
+}

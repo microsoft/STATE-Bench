@@ -1,0 +1,75 @@
+{
+  "task_id": "75-challenge_gold_restock_on_promo",
+  "task_summary": "**Task:** A Gold customer is returning headphones from a SAVE10 promo order. The correct handling is to account for the promo redistribution and the normal $37 restocking deduction, then apply the $18 Gold restocking-discount adjustment rather than waiving the fee outright.\n\n**Challenge:** The subtlety is that Gold changes the economics without erasing the base fee. Weak agents forget the Gold adjustment, eliminate the restocking charge entirely as if the customer were Platinum, or lose the promo adjustment while focusing on the membership discount.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "75_challenge_gold_restock_on_promo_agent_must_know_about_restocking_discount",
+      "kind": "must",
+      "requirement": "Agent must explain that the headphones refund is $214 after the SAVE10 promo allocation, the $37 restocking fee, the $18 Gold restocking discount as a partial fee reduction rather than a full waiver, and the $8 free-shipping clawback."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I want to return the wireless headphones from order ORD-7106. I changed my mind.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7106",
+      "item: headphones",
+      "reason: changed mind"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give order ID when asked.",
+      "If restocking fee is mentioned, ask about Gold member discount.",
+      "Accept the return only after the agent explains the SAVE10/promo-adjusted refund, the base restocking fee, and the Gold restocking discount.",
+      "If the agent says Gold fully waives the restocking fee, ask them to verify whether Gold gives a discount rather than a full waiver."
+    ],
+    "unknown_info": [
+      "promo adjustment",
+      "restocking fee",
+      "Gold restocking discount"
+    ],
+    "user_sim_context": "You want to return headphones from a discounted order and assume your Gold status may soften the cost of doing that. You are not also thinking through how the original promo changes the refund math. You need the agent to explain the full amount in a way that makes the deductions and membership benefit easy to follow."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10128",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10128",
+      "field": "refund_amount",
+      "expected_value": 214
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10128",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10128",
+      "field": "restocking_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10128",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7106",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/75-challenge_gold_restock_on_promo.json"
+}

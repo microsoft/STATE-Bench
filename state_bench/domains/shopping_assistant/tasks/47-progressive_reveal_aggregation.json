@@ -1,0 +1,107 @@
+{
+  "task_id": "47-progressive_reveal_aggregation",
+  "user_id": "shop_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Can you finalize my cart? I'm ready to check out.",
+  "user_simulator": {
+    "personality": "Absent-minded — remembers things gradually, one per turn.",
+    "user_sim_context": "Your cart has a ProBook Laptop. You want to finalize. Across 3 follow-up turns you'll reveal (one at a time, not volunteered upfront): (1) you have promo code SAVE10, (2) the laptop is a gift for your dad — please wrap it, (3) you're a Platinum-tier loyalty member and want to know about points. You expect the agent to re-aggregate the cart after each reveal and give you an accurate final breakdown that cites the promo discount, wrap fee, AND points earned at the correct Platinum tier rate (3 pts/$ per policy).",
+    "known_info": [
+      "You have a ProBook in your cart.",
+      "You have a SAVE10 promo code.",
+      "It's a gift for your dad.",
+      "You're a Platinum-tier customer (52k existing points)."
+    ],
+    "unknown_info": [
+      "Specific prices / math.",
+      "Whether Platinum points are 2 or 3 pts/$ (you trust agent to know)."
+    ],
+    "task_rules": [
+      "Opening: 'can you finalize my cart? I'm ready to check out.'",
+      "Turn 2: after agent confirms cart, reveal promo: 'oh wait — I have a promo code, SAVE10. Can you apply it?'. Do NOT reveal gift or Platinum yet.",
+      "Turn 3: after agent applies promo and gives updated total, reveal gift: 'and actually — it's a gift for my dad. Can you wrap it?'. Do NOT reveal Platinum yet.",
+      "If agent wraps unilaterally without confirming (e.g. adds wrap without asking), that's on the gift context cue so it's fine. If agent ASKS confirmation first, also fine.",
+      "Turn 4: after agent confirms wrap added, reveal loyalty: 'oh, and I'm Platinum — do I earn points on this order?'.",
+      "Turn 5: agent should now give a final breakdown citing: subtotal, SAVE10 discount (-$99), wrap fee (+$5), total ($905), and Platinum points earned (3 pts/$ × $905 ≈ 2700-2715 pts, or comparable formula explicitly stated).",
+      "If the final breakdown includes ALL FOUR pieces (promo discount with amount, wrap fee with amount, final total, Platinum points with specific number), reply: 'perfect, thanks' and next turn [TASK_DONE].",
+      "If the final breakdown OMITS one of the four pieces (e.g. doesn't mention promo was applied, or doesn't mention points), accept and end. Agent failed — missed aggregating the full picture.",
+      "If agent uses WRONG Platinum rate (e.g. says 1 or 2 pts/$), accept and end. Failed — tier rate error.",
+      "If agent applies Platinum rate to PRE-discount amount ($999) instead of post-discount+wrap ($905), accept and end. Failed — applied rate to wrong base.",
+      "If agent uses WRONG discount amount (e.g. says discount is $100 or $99.90), be lenient if within $1 of $99 (integer division of 999*0.10). If off by $10+, push back once: 'that math doesn't look right'.",
+      "Do NOT volunteer the tier rate, the discount math, or the wrap fee amount. Do NOT reveal more than one signal per turn.",
+      "Keep replies short.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Platinum customer (shop_001) has a pre-seeded cart with SP-1002 ProBook Laptop 13-inch ($999). They ask to finalize, then reveal over 3 turns: (1) promo SAVE10 (-$99), (2) it's a gift → wrap (+$5), (3) Platinum tier → points earned at 3 pts/$ on post-discount+wrap total ($905 × 3 = 2715 pts). Final breakdown must correctly aggregate all three reveals.\n\n**Challenge:** Multi-turn progressive aggregation over 5+ turns. Pitfall: agent's turn-8 summary omits promo or wrap; applies Platinum rate to pre-discount total instead of post-discount+wrap; uses wrong tier rate; loses track of what was added across 3 mutations. Correct: re-aggregate after each reveal, final summary cites all 3 signals with correct math. Tests conversational state retention + correct policy math across 5+ turns. Distinct from T18 (platinum + shipping on single ask) — T47 is reveal-paced with 3 separate aggregation steps.",
+  "task_requirements": [
+    {
+      "id": "applied_save10",
+      "kind": "must",
+      "requirement": "Agent called apply_promo for SAVE10 after the customer revealed the code at turn 2. The applied_promo_codes list must contain SAVE10 at the end.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "added_wrap_on_gift_cue",
+      "kind": "must",
+      "requirement": "Agent called update_cart_item (or equivalent) to set gift_wrap=True for the ProBook after the customer revealed it's a gift. Final cart_item.gift_wrap must be True.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "cited_platinum_points_correctly",
+      "kind": "must",
+      "requirement": "When the customer asked about points, agent cited the Platinum tier rate of 3 points per $1 AND applied it to the post-discount+wrap total ($905), arriving at ~2715 points. Using the wrong tier rate (1 or 2 pts/$) fails. Applying the rate to pre-discount $999 fails. Omitting points entirely fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "final_breakdown_complete",
+      "kind": "must",
+      "requirement": "Agent's final summary (after all 3 reveals) explicitly includes ALL four items with specific numbers: (1) promo discount amount (~$99), (2) gift wrap fee ($5), (3) final total ($905), (4) Platinum points earned (~2715). Missing any of the four fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "cart_items",
+      "record_key": "CI-A1",
+      "field": "gift_wrap",
+      "expected_value": true
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "applied_promo_codes",
+      "expected_value": [
+        "SAVE10"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "discount_amount",
+      "expected_value": 99
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "gift_wrap_fee",
+      "expected_value": 5
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "total",
+      "expected_value": 905
+    }
+  ],
+  "task_type": "comparison_recommendation",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/47-progressive_reveal_aggregation.json"
+}

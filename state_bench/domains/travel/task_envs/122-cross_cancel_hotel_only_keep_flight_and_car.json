@@ -1,0 +1,163 @@
+{
+  "flights": [
+    {
+      "flight_id": "AA100",
+      "airline_code": "AA",
+      "origin": "ORD",
+      "destination": "LAX",
+      "departure_time": "2026-06-19T16:00:00",
+      "arrival_time": "2026-06-19T19:40:00",
+      "duration_minutes": 220,
+      "stops": 0,
+      "cabin_prices": {
+        "economy": 360,
+        "business": 940
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    }
+  ],
+  "bookings": [
+    {
+      "booking_id": "BK-ET02",
+      "user_id": "user_002",
+      "flight_id": "AA100",
+      "status": "confirmed",
+      "cabin_class": "economy",
+      "seat_type": "window",
+      "meal_preference": "vegetarian",
+      "add_wifi": false,
+      "add_extra_legroom": false,
+      "add_insurance": false,
+      "price_paid": 360,
+      "payment_method": "credit_card",
+      "points_used": 0,
+      "cash_amount": 0,
+      "booked_at": "2026-06-07T10:00:00",
+      "cancellation_fee": null,
+      "refund_amount": null,
+      "change_fee": null,
+      "fare_difference": null,
+      "delay_compensation": null,
+      "paid_checked_bags": 0
+    }
+  ],
+  "users": [
+    {
+      "user_id": "user_001",
+      "name": "Emma Smith",
+      "email": "emma.smith@example.com",
+      "loyalty_tier": "gold",
+      "loyalty_points": 75000,
+      "budget": 1500,
+      "preferences": {
+        "meal_preference": "kosher",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": false
+      }
+    },
+    {
+      "user_id": "user_002",
+      "name": "Liam Johnson",
+      "email": "liam.johnson@example.com",
+      "loyalty_tier": "basic",
+      "loyalty_points": 5000,
+      "budget": 800,
+      "preferences": {
+        "meal_preference": "vegetarian",
+        "seat_type": "window",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": false
+      }
+    },
+    {
+      "user_id": "user_003",
+      "name": "Olivia Williams",
+      "email": "olivia.williams@example.com",
+      "loyalty_tier": "platinum",
+      "loyalty_points": 120000,
+      "budget": 2000,
+      "preferences": {
+        "meal_preference": "standard",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": true
+      }
+    },
+    {
+      "user_id": "user_004",
+      "name": "Noah Brown",
+      "email": "noah.brown@example.com",
+      "loyalty_tier": "silver",
+      "loyalty_points": 15000,
+      "budget": 600,
+      "preferences": {
+        "meal_preference": "standard",
+        "seat_type": "window",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true
+      }
+    },
+    {
+      "user_id": "user_005",
+      "name": "Ava Garcia",
+      "email": "ava.garcia@example.com",
+      "loyalty_tier": "basic",
+      "loyalty_points": 12000,
+      "budget": 700,
+      "preferences": {
+        "meal_preference": "vegan",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": false,
+        "add_insurance": false
+      }
+    }
+  ],
+  "hotel_inventory": [],
+  "hotels": [
+    {
+      "reservation_id": "HR-0100",
+      "user_id": "user_002",
+      "hotel_name": "LAX Inn",
+      "city": "LAX",
+      "check_in": "2026-06-19",
+      "check_out": "2026-06-22",
+      "room_type": "standard",
+      "nightly_rate": 170,
+      "total_price": 510,
+      "hotel_id": null,
+      "status": "confirmed",
+      "booked_at": "2026-06-07T10:00:00",
+      "cancellation_fee": null,
+      "refund_amount": null
+    }
+  ],
+  "car_inventory": [],
+  "car_rentals": [
+    {
+      "rental_id": "CR-0100",
+      "user_id": "user_002",
+      "company": "Hertz",
+      "pickup_location": "LAX",
+      "dropoff_location": "LAX",
+      "pickup_date": "2026-06-19",
+      "dropoff_date": "2026-06-22",
+      "car_class": "suv",
+      "daily_rate": 95,
+      "total_price": 285,
+      "car_id": null,
+      "status": "confirmed",
+      "insurance_included": false,
+      "booked_at": "2026-06-07T10:00:00",
+      "cancellation_fee": null,
+      "refund_amount": null
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "task_id": "47-edge_signature_conflict",
+  "task_summary": "**Task:** The customer disputes a laptop delivery, but the order record shows a matching signature from E. Chen. The correct outcome is to rely on the signed-delivery evidence, deny the not-received claim, and explain that the matching signature is why no refund or replacement is available.\n\n**Challenge:** This is an evidence-driven denial. Weak agents ignore the signature, refund the order to be accommodating, or avoid making a firm decision even though the delivery record already resolves the dispute.",
+  "task_type": "edge_case",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "47_edge_signature_conflict_agent_must_deny_per_policy",
+      "kind": "must",
+      "requirement": "Agent must deny the not-received refund or replacement request and explain that the order has a matching signature on file for E. Chen."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "47_edge_signature_conflict_agent_must_check_delivery_signature",
+      "kind": "must",
+      "requirement": "Agent must use the delivery signature evidence from ORD-6048, or explicitly mention the E. Chen signature when explaining the denial."
+    }
+  ],
+  "user_id": "cust_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I never received my laptop from order ORD-6048. The tracking says delivered but I don't have it.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6048",
+      "item: laptop"
+    ],
+    "personality": "direct",
+    "task_rules": [
+      "Give the order ID.",
+      "Insist you didn't get it.",
+      "When told about the signature, say you don't remember signing.",
+      "If the agent says the signature is E. Chen or otherwise matches your name, ask whether that means the not-received claim is denied under policy.",
+      "If the agent offers an investigation, refund, or replacement after citing a matching signature, ask once for a clear policy decision based on the signature record.",
+      "If the agent clearly explains that the matching signature means no refund or replacement is available, express frustration but accept the denial."
+    ],
+    "unknown_info": [
+      "that signature 'E. Chen' is on file",
+      "that claim will be denied"
+    ],
+    "user_sim_context": "Tracking shows the laptop as delivered, but you do not have it and want the company to look past the tracking status. You are not focused on the delivery proof the company might rely on. You need the agent to explain clearly if there is a reason the missing-package claim cannot go forward."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/47-edge_signature_conflict.json"
+}

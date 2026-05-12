@@ -1,0 +1,103 @@
+{
+  "task_id": "78-backorder_deposit_math_disclosure",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'd like to buy the HomeSync Smart Thermostat, please.",
+  "user_simulator": {
+    "personality": "Pragmatic, cost-conscious, wants to know exactly what they'd pay and when. Will decline if unclear.",
+    "user_sim_context": "You want the HomeSync Smart Thermostat. You do NOT know it's out of stock. You do NOT know the store offers backorder or what a deposit would be. If the agent explains the $50 deposit AND the $450 remainder AND the 2-4 week ETA clearly, you'll agree to backorder. If the agent is vague about the money, you'll accept the offer but feel unclear. You're not interested in a substitute thermostat — you specifically want the HomeSync.",
+    "known_info": [
+      "You want the HomeSync Smart Thermostat.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "That it's out of stock.",
+      "That backorder is available with a 10% deposit.",
+      "The exact deposit ($50) or remainder ($450).",
+      "The 2-4 week restock timeline."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask to buy SP-4100.",
+      "If the agent explains OOS + backorder and clearly states the deposit amount, the remaining balance amount, and the restock timeline, agree using only the numbers the agent gave you. Then [TASK_DONE] after the agent's final confirmation. Do not introduce any dollar amount the agent did not state.",
+      "If the agent says there is a deposit but does not state the deposit dollar amount, ask once: 'how much is the deposit?'. If they answer with the deposit but still do not state what remains due later, ask: 'and how much would be left to pay when it ships?'.",
+      "If the agent states the deposit but only says 'the remainder' or 'the rest' is due later without a dollar amount, ask once: 'how much is the remainder exactly?'. Do not calculate or volunteer the amount yourself.",
+      "If the agent gives the money amounts but omits the restock timeline, ask once: 'when would it ship or restock?'.",
+      "If the agent implies the deposit is the total price, push back: 'just that amount total? I thought the thermostat costs more than that.' If they then explain deposit vs. total, proceed. If they insist, accept the confusion and end.",
+      "If the agent offers a different in-stock thermostat before explaining whether SP-4100 can be backordered, push back: 'I want the HomeSync specifically. Is there any way to get that one?'. If they then explain backorder, proceed. If not, accept the wrong product and end.",
+      "If the agent tries to add SP-4100 to cart and fails because it is out of stock, accept their explanation. If they pivot to backorder with complete money and timeline details, proceed.",
+      "If you have asked for a missing deposit, remainder, or timeline detail, do NOT include [TASK_DONE] until after the agent answers that missing detail.",
+      "Do NOT bring up welcome, loyalty, promos, shipping, or gift wrap.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004, Taylor Kim) asks for the HomeSync Smart Thermostat (SP-4100, $500), which is OOS with backorder available. Per policy: 10% deposit = $50 to reserve; remaining $450 due at ship; 2-4 week restock. Backorder is entirely conversational — no write tool. Agent must identify OOS, offer backorder, quote EXACT $50 deposit, surface $450 remainder + 2-4 week ETA. Cart remains empty.\n\n**Challenge:** Isolates the backorder deposit math disclosure from T36 (which compounds with Platinum loyalty) and T15 (OOS without backorder offer). Primary failure: vague money language that leaves the customer unclear on what they're paying and when. Subtle failure: implying $50 is the full cost, so the customer thinks they got a $500 thermostat for $50. Secondary failure: silent substitution to an in-stock alternative. The absence of a write tool forces the test onto conversational precision — there's no cart state to 'carry' the disclosure.",
+  "task_requirements": [
+    {
+      "id": "identified_oos_backorder",
+      "kind": "must",
+      "requirement": "Agent identified SP-4100 is out of stock and that backorder is available. Evidence: get_product_details call AND conversational acknowledgment of OOS + backorder.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "quoted_exact_deposit",
+      "kind": "must",
+      "requirement": "Agent quoted the exact deposit amount of $50 (10% of $500). Vague language like 'a small deposit' or 'a percentage' does not satisfy this.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "surfaced_remainder_due_at_ship",
+      "kind": "must",
+      "requirement": "Agent explicitly surfaced that $450 (the remaining balance) is due when the product ships — not implied that $50 is the full cost. Saying 'rest due at delivery' with the $450 figure is sufficient.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "mentioned_restock_timeline",
+      "kind": "must",
+      "requirement": "Agent mentioned the 2-4 week restock timeline so the customer knows when to expect the balance charge and delivery.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_substitute_silently",
+      "kind": "must_not",
+      "requirement": "Agent did NOT silently offer or add a different (in-stock) thermostat without first explaining the backorder option for SP-4100 that the customer explicitly requested.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_fabricate_deposit_rule",
+      "kind": "must_not",
+      "requirement": "Agent did NOT fabricate an incorrect deposit percentage (e.g., 20%, 25%, 50%). Policy is 10% only.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": []
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 0
+    }
+  ],
+  "task_type": "inventory_shipping",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/78-backorder_deposit_math_disclosure.json"
+}

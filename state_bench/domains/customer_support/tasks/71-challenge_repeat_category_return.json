@@ -1,0 +1,105 @@
+{
+  "task_id": "71-challenge_repeat_category_return",
+  "task_summary": "**Task:** A Gold customer is returning two clothing items from the same order. The first shirt follows the ordinary path, but the second same-category return carries the extra $5 repeat surcharge, so the correct handling is to refund the first at $59 and the second at $54.\n\n**Challenge:** The hard part is noticing that the second line is not symmetric with the first. Weak agents refund both items identically, miss the repeat-return rule, or fail to tie the surcharge specifically to the later clothing return.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "71_challenge_repeat_category_return_agent_must_discover_repeat_return_policy",
+      "kind": "must",
+      "requirement": "Agent must explain that the first shirt refunds $59, while the second shirt refunds $54 because a $5 same-category repeat-return surcharge applies to the later clothing return."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "Hi, I bought three things from order ORD-7100 but I'd like to return both shirts. The regular one and the large one don't fit. I'm keeping the running shoes though.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7100",
+      "items_to_return: both cotton shirts",
+      "reason: changed mind (wrong sizes)"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give order ID when asked.",
+      "Confirm you want to return both shirts.",
+      "If the agent previews both shirts with the same refund amount, ask whether the repeat same-category return rule changes the second shirt's refund.",
+      "Accept a fee or surcharge only if the agent explains it is the $5 repeat clothing-return surcharge on the second shirt; otherwise ask what the charge is for before confirming.",
+      "If agent only processes one return, remind them about the second shirt."
+    ],
+    "unknown_info": [
+      "refund amounts",
+      "repeat return surcharge"
+    ],
+    "user_sim_context": "You want to return two shirts from the same order because neither one fit correctly. From your perspective, they are just two clothing returns from one purchase. If the second return in the same category is treated differently, you need the agent to explain that clearly rather than burying it in the numbers."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10112",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10112",
+      "field": "refund_amount",
+      "expected_value": 59
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10112",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10112",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10112",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10113",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10113",
+      "field": "refund_amount",
+      "expected_value": 54
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10113",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10113",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10113",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7100",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/71-challenge_repeat_category_return.json"
+}

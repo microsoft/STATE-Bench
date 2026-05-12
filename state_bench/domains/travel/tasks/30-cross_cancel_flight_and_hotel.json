@@ -1,0 +1,93 @@
+{
+  "task_id": "30-cross_cancel_flight_and_hotel",
+  "user_id": "user_005",
+  "now": "2026-06-15T13:00:00",
+  "opening_message": "I need to cancel my whole Miami trip — both my flight (booking BK-MS05) and my hotel reservation (HR-0100).",
+  "user_simulator": {
+    "personality": "Casual and straightforward. Appreciates quick resolution.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Flight booking ID: BK-MS05",
+      "Hotel reservation ID: HR-0100",
+      "Flight is BOS → MIA on June 16",
+      "Hotel is in Miami, June 16-19, $180/night",
+      "Does not have travel insurance"
+    ],
+    "unknown_info": [
+      "Flight cancellation fee amount",
+      "Hotel 24-48h cancellation tier fee",
+      "That the fee will increase if they wait too long"
+    ],
+    "task_rules": [
+      "Start by asking to cancel both the flight (BK-MS05) and hotel (HR-0100).",
+      "When agent explains fees for the flight, acknowledge and confirm cancellation.",
+      "When agent explains the hotel fee, ask why there is a charge (you booked 5 days ago).",
+      "When agent explains the time-based tier, ask what happens if you wait.",
+      "When agent warns about the fee increasing, say you want to cancel now to avoid higher fees.",
+      "After both are cancelled, ask for a total summary of refunds and fees.",
+      "End with [TASK_DONE]."
+    ],
+    "user_sim_context": "You want to cancel a Miami trip and already know it involves both the flight and the hotel. Even so, you do not have the fee structure in your head and need the agent to walk through how the pieces differ. You want to handle the trip as a package while still understanding the separate consequences."
+  },
+  "task_summary": "**Task:** User wants both a domestic flight and a linked Miami hotel canceled, but the two products fall under different fee rules and the hotel is close to crossing into a worse fee tier. Correct resolution: The flight and hotel have different cancellation fee amounts because they follow different cancellation rules.\n\n**Challenge:** The agent explains the separate flight and hotel cancellation fees correctly, makes clear why the hotel is currently in the 24-48 hour tier, and warns that waiting past 3pm today would raise the hotel fee to a full first night.",
+  "task_requirements": [
+    {
+      "id": "state_separate_flight_hotel_fee_explanation",
+      "kind": "must",
+      "requirement": "Agent must make clear that the flight and hotel have different cancellation fee amounts because they follow different cancellation rules.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_hotel_24_48h_tier_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that the hotel cancellation fee is the 24-48 hour tier, specifically a 50% first-night charge of $90, rather than a booking-age-based fee or a free cancellation.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_deadline_warning_given",
+      "kind": "must",
+      "requirement": "Agent must warn that waiting longer will move the hotel into the under-24-hour tier and raise the fee to a full first night charge of $180.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/30-cross_cancel_flight_and_hotel.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS05",
+      "field": "cancellation_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS05",
+      "field": "refund_amount",
+      "expected_value": 240
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS05",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "cancellation_fee",
+      "expected_value": 90
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "refund_amount",
+      "expected_value": 450
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ]
+}

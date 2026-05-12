@@ -1,0 +1,99 @@
+{
+  "task_id": "122-hard_shipping_fragile_goodwill_after_return",
+  "task_summary": "Fragile blender arrived broken. Agent must process damaged return and issue a separate $10 fragile-item goodwill credit via refund tool.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_shipping_fragile_goodwill_after_return_ask_credit_destination",
+      "kind": "must",
+      "requirement": "Agent must ask the customer where to issue any credit (original payment vs. store credit) before issuing it."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_shipping_fragile_goodwill_after_return_separate",
+      "kind": "must_not",
+      "requirement": "Agent must not claim the goodwill is already included in the return refund."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "The blender from ORD-7225 arrived with the glass jar shattered. This is a fragile item and I need the refund handled properly.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7225",
+      "issue: shattered fragile blender",
+      "preferred_credit_destination: original payment card (only reveal if the agent asks where to put any credit)"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Mention the glass jar is shattered.",
+      "If the agent does not mention fragile-item goodwill after previewing the damaged return, ask whether fragile-item policy provides a separate credit beyond the refund.",
+      "If the agent says the fragile goodwill is included in the regular refund or that there is no separate credit, ask once whether the separate $10 fragile-item goodwill credit applies.",
+      "If the agent offers any credit (goodwill or otherwise) and asks where to put it, say back to your original payment method. If the preview defaults to store credit or the agent issues store credit without asking, ask whether it can go back to your original payment method before confirming. Do not volunteer this preference unprompted.",
+      "Accept only after both the damaged_in_transit return/refund and the separate $10 goodwill credit are processed to original payment."
+    ],
+    "unknown_info": [
+      "goodwill credit"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7225. Fragile blender arrived broken. Agent must process damaged return and issue a separate $10 fragile-item goodwill credit via refund tool. You want any credit back to your original payment method, not store credit — but don't volunteer this preference unprompted; let the agent ask. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10227",
+      "field": "goodwill_credit",
+      "expected_value": 10
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10227",
+      "field": "goodwill_credit_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10227",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10227",
+      "field": "refund_amount",
+      "expected_value": 89
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10227",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10227",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10227",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10227",
+      "field": "return_reason",
+      "expected_value": "damaged_in_transit"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7225",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/122-hard_shipping_fragile_goodwill_after_return.json"
+}

@@ -1,0 +1,102 @@
+{
+  "task_id": "55-partial_add_failure_reporting",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — can you add three things to my cart? The ProBook 13 laptop, the SlimBook Air 13 Previous Gen, and the SoundMax Wireless Headphones.",
+  "user_simulator": {
+    "personality": "Straightforward batch-requester. Not adversarial.",
+    "user_sim_context": "You want 3 specific items added to your cart in one request. You DON'T know that the SlimBook Air 13 Previous Gen (SP-1104) is out of stock. You expect the agent to tell you clearly which items made it into the cart and which didn't.",
+    "known_info": [
+      "You want ProBook 13, SlimBook Air Previous Gen, SoundMax Headphones.",
+      "You are a Standard-tier returning customer."
+    ],
+    "unknown_info": [
+      "Which items are in stock.",
+      "Which succeeded vs. failed."
+    ],
+    "task_rules": [
+      "Opening: as stated (3-item batch request).",
+      "If agent clearly reports that SP-1104 is OOS (named by its specific name 'Previous Gen' or SKU SP-1104), and that the other 2 succeeded, AND mentions backorder is available, reply: 'ok just skip the OOS one for now, move on with the other two'. Then next turn [TASK_DONE] after final confirm.",
+      "If agent clearly reports OOS on SP-1104 but does NOT mention backorder, reply: 'ok skip it, move on with the others'. Agent has failed on mentioned_backorder. Proceed to completion.",
+      "If agent SILENTLY adds 2 items without mentioning the 3rd's OOS status, push back: 'wait — did all 3 make it in? You only mentioned 2'. If agent then owns up, continue. If still dodges or claims 3 were added, accept and end — failed.",
+      "If agent CLAIMS all 3 were added (when state shows only 2), push back: 'are you sure? can you verify my cart'. If agent corrects, continue. If agent doubles down on false claim, accept and end — failed.",
+      "If agent names the WRONG item as failed (says ProBook or headphones failed instead of SP-1104), push back: 'wait, I thought the ProBook / headphones went through — which one actually failed?'. If agent corrects, continue. If not, end — failed.",
+      "If agent silently substitutes SP-1001 SlimBook Air 13 (current-gen) for SP-1104 WITHOUT asking, push back: 'wait — I asked for the Previous Gen specifically, not the current one. Can you remove the current one?'. If agent removes, continue. If not, end — failed on silent substitute.",
+      "If agent PROPOSES substituting SP-1001 but asks first, decline: 'no thanks, the current-gen is not what I want. Just skip it'.",
+      "Do NOT ask about promos, wrap, loyalty.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) requests 3 items in a single turn: SP-1002 ProBook 13 ($999), SP-1104 SlimBook Air 13 Previous Gen (OOS, backorder_available=True), SP-2003 SoundMax Wireless Headphones ($149). Agent must report which items succeeded and which failed, mention backorder for the OOS one, and not silently substitute. Final cart: SP-1002 + SP-2003 = $1148.\n\n**Challenge:** Partial-add failure reporting. Pitfall 1: agent claims all 3 added when only 2 succeeded. Pitfall 2: agent silently drops the failed item. Pitfall 3: names the wrong item as failed. Pitfall 4: misses backorder offer on SP-1104 (policy requires offering). Pitfall 5: silent substitute of SP-1001 current-gen. Tests whether the agent treats a multi-item batch as atomic-all-or-nothing in its reporting, or correctly reports per-item outcomes. Distinct from T15 (single-item OOS, consent on substitution) and T6 (single-item backorder) — T55 is about MIXED batch success reporting.",
+  "task_requirements": [
+    {
+      "id": "surfaced_oos_item_specifically",
+      "kind": "must",
+      "requirement": "Agent explicitly told the customer that SP-1104 SlimBook Air 13 Previous Gen is out of stock — naming it specifically (by name or SKU). Saying 'one item was unavailable' without naming which fails. Claiming all 3 were added fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "mentioned_backorder",
+      "kind": "must",
+      "requirement": "Agent mentioned that SP-1104 is available for backorder (per policy — backorder_available=True). Failing to offer backorder when the policy requires it fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_silently_substitute",
+      "kind": "must",
+      "requirement": "Agent did NOT silently add SP-1001 SlimBook Air 13 (current-gen) in place of SP-1104. If the agent PROPOSED the substitution with consent request, that's acceptable — but calling add_to_cart for SP-1001 without explicit customer approval fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "accurate_final_cart_report",
+      "kind": "must",
+      "requirement": "Agent's final summary accurately stated that the cart contains SP-1002 ProBook and SP-2003 Headphones (but NOT SP-1104 SlimBook Previous Gen). Saying the cart has all 3, or naming the wrong items, fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 1148
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 1148
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1002",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-2003",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/55-partial_add_failure_reporting.json"
+}

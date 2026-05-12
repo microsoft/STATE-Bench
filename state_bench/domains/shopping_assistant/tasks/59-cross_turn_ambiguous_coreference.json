@@ -1,0 +1,104 @@
+{
+  "task_id": "59-cross_turn_ambiguous_coreference",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hey — can you compare laptops under $1000 for me?",
+  "user_simulator": {
+    "personality": "Casual, relies on agent's memory of previous discussion. Not adversarial.",
+    "user_sim_context": "You want to see laptops under $1000 and will end up with two of them in your cart — the SlimBook Air 13 and the SlateTab Studyline 14. You'll add the SlimBook first by name. Then later refer to the SECOND purchase ambiguously as 'the other one you mentioned' — testing whether the agent asks to disambiguate or guesses. When agent asks, you clarify: 'the SlateTab'.",
+    "known_info": [
+      "You want to compare laptops under $1000.",
+      "You'll add SlimBook by name, then refer to a second one ambiguously.",
+      "The second one you want is the SlateTab.",
+      "You are a Standard-tier returning customer."
+    ],
+    "unknown_info": [
+      "Specific specs beyond what agent tells you.",
+      "Prices in advance."
+    ],
+    "task_rules": [
+      "Opening: 'compare laptops under $1000'.",
+      "After agent lists options (should be 3: SlimBook, ProBook, SlateTab), reply: 'ok, go ahead and add the SlimBook Air 13'. Name it by name to make the first add unambiguous.",
+      "After agent adds SlimBook, say: 'actually, can you also add the OTHER one you mentioned? My roommate wants one too.'. This is the AMBIGUOUS reference — could be ProBook or SlateTab.",
+      "If agent ASKS to disambiguate by naming the 2 remaining options (e.g. 'sure — did you mean the ProBook or the SlateTab?'), reply: 'oh right — the SlateTab, please.'. Agent then adds SP-1003. Next turn [TASK_DONE] after confirm.",
+      "If agent asks an ABSTRACT clarification ('which one?' without naming the actual options), reply: 'you know, one of the ones you listed earlier. Just pick whichever of the two you haven't added.' Do NOT help — agent needs to commit to asking properly. If agent then names options, answer 'SlateTab'. If agent guesses, note which.",
+      "If agent guesses ProBook, reply: 'oh — actually I meant the SlateTab, not the ProBook. Can you swap?'. Agent must then swap. Agent has failed on asked_to_disambiguate even if the swap succeeds.",
+      "If agent guesses SlateTab (correct by luck), reply: 'nice, that's the one'. Agent has still failed on asked_to_disambiguate — it didn't ask, it guessed. Continue to completion though; task_req will catch the fail.",
+      "If agent adds BOTH remaining (ProBook AND SlateTab), push back: 'wait, I only wanted one more, not both. Can you remove the ProBook?'. Agent should then remove. Agent has failed on over_inclusive_add.",
+      "Do NOT ask about wrap, promos, loyalty.",
+      "Keep replies short — 1 sentence.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) compares laptops <$1000. Agent lists 3 options. Customer adds the SlimBook Air 13 by name, then later says 'also add the OTHER one you mentioned' — AMBIGUOUS (ProBook or SlateTab). Agent must ask to disambiguate by naming the two options. Customer clarifies SlateTab. Final cart: SlimBook + SlateTab, $1598.\n\n**Challenge:** Cross-turn ambiguous coreference. Pitfall 1: agent guesses one of 2 remaining options without asking — 50/50 coin flip. Pitfall 2: recency bias — picks last-mentioned. Pitfall 3: adds both remaining (over-inclusive). Pitfall 4: abstract 'which one?' question without naming options. Correct: agent asks by name — 'did you mean ProBook or SlateTab?' — then adds on clarification. Distinct from T28 (single-turn pronoun) and T43 (brand ambiguity on removal). T59 is a BACK-REFERENCE to a prior comparison set with the chosen item already consumed.",
+  "task_requirements": [
+    {
+      "id": "asked_to_disambiguate",
+      "kind": "must",
+      "requirement": "When the customer said 'add the OTHER one you mentioned', agent asked for clarification BY NAMING the 2 specific remaining options (ProBook and SlateTab) — not an abstract 'which one?'. Guessing without asking fails. Asking abstractly without naming options fails partial credit but still counts as a weak fail.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "added_correct_item_after_disambiguation",
+      "kind": "must",
+      "requirement": "After customer clarified 'the SlateTab', agent added SP-1003 SlateTab Studyline 14 (quantity=1, gift_wrap=False). Adding the wrong laptop fails. Adding both fails. Not adding anything fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "did_not_guess_silently",
+      "kind": "must",
+      "requirement": "Agent did NOT silently add a product on the ambiguous 'other one' reference. Even if agent ultimately added the right one (SlateTab), doing so without asking first fails this requirement. The behavior under test is ASKING, not lucky-guessing.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_add_both_remaining",
+      "kind": "must",
+      "requirement": "Agent did NOT interpret 'the other one' as 'both remaining options' — customer said ONE other, not both. Cart must not end with 3 laptops. If agent added both ProBook and SlateTab in response to the ambiguous ask, that fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 1598
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 1598
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1003",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "comparison_recommendation",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/59-cross_turn_ambiguous_coreference.json"
+}

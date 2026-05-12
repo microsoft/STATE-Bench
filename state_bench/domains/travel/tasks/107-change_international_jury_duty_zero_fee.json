@@ -1,0 +1,114 @@
+{
+  "task_id": "107-change_international_jury_duty_zero_fee",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Jury duty means I need to move booking BK-1000 to June 27, but do not change anything yet. Please compare at least two June 27 Delta options, explain whether jury duty waives only the change fee or also the fare difference, and tell me if the earlier option is still worth it when I only want to pay up to $120 extra total. Even if I lean toward one option later, wait until I explicitly tell you to finalize.",
+  "user_simulator": {
+    "personality": "Calm and practical.",
+    "user_sim_context": "You are asking about an international change driven by jury duty and expect the special reason to wipe out the fee. At the same time, you want the agent to compare at least two real June 27 Delta options, keep the jury-duty waiver limited to the fee rather than the fare difference, reason about whether your preference for the earlier flight survives a hard $120 total-extra cap, and still wait for an explicit final go-ahead even after you indicate which option sounds best.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Booking ID: BK-1000",
+      "Current route: JFK to CDG",
+      "Current travel date: 2026-06-20",
+      "Requested new date: 2026-06-27",
+      "Reason: jury duty"
+    ],
+    "unknown_info": [
+      "Exact change fee",
+      "Exact total after the change"
+    ],
+    "task_rules": [
+      "If the agent starts changing the booking before you explicitly tell them to finalize a specific option, say you do not approve any change yet.",
+      "Ask the agent whether the jury-duty waiver removes only the change fee or also the fare difference.",
+      "Do not approve any change until the agent compares at least two June 27 Delta options and gives the total extra amount for each option.",
+      "Only approve once the agent explicitly reasons through your preference conflict: you like the earlier option, but only if the total extra cost stays at or below $120.",
+      "After the agent recommends DL101, first ask for one more explicit recap that DL101 is Delta, afternoon, nonstop, and $100 extra with no separate fee. Do not let a statement like 'that sounds right' count as approval to change.",
+      "Only after that recap should you explicitly say 'go ahead and finalize DL101' if the agent has been correct.",
+      "End with [TASK_DONE] only after the approved option is booked and the final booking details match your preferences.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ]
+  },
+  "task_summary": "Traveler needs to move a international economy booking for a jury duty reason. Correct resolution: the change fee is $0 and the requested replacement changes the total by $100 more.\n\nChallenge: The agent must compare two real June 27 options, keep the jury-duty waiver limited to the change fee, resolve an earlier-flight versus hard-budget conflict, and still wait for an explicit finalize instruction after a recap instead of treating a soft preference statement as approval.",
+  "task_requirements": [
+    {
+      "id": "change_international_jury_duty_zero_fee_fee_quote",
+      "kind": "must",
+      "requirement": "Agent must explain that the correct change fee for this request is $0.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_international_jury_duty_zero_fee_delta_quote",
+      "kind": "must",
+      "requirement": "Agent must explain that moving to the requested flight changes the booking total by $100 more, based on the replacement fare and the applicable change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_international_jury_duty_zero_fee_must_not_invent_fee",
+      "kind": "must_not",
+      "requirement": "Agent must not invent a non-zero change fee once the qualifying exemption is established.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_international_jury_duty_zero_fee_compare_two_options_before_action",
+      "kind": "must",
+      "requirement": "Agent must compare at least two concrete June 27 Delta options and give the user the total extra amount for each option before executing any booking change.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_international_jury_duty_zero_fee_jury_scope_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain that the jury-duty waiver removes the change fee but does not waive the fare difference.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_international_jury_duty_zero_fee_budget_conflict_reasoning",
+      "kind": "must",
+      "requirement": "Agent must reason that the earlier June 27 option is not valid because its total extra cost exceeds the user's hard $120 cap, so the later $100-extra option is the correct choice.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_international_jury_duty_zero_fee_no_premature_write",
+      "kind": "must_not",
+      "requirement": "Agent must not update the booking before the user explicitly says to finalize a specific compared option after the recap step.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/107-change_international_jury_duty_zero_fee.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 100
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "DL101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 860
+    }
+  ]
+}

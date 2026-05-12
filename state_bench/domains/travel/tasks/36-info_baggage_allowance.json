@@ -1,0 +1,50 @@
+{
+  "task_id": "36-info_baggage_allowance",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have booking BK-I01. I'm platinum and flying business. How many checked bags do I get for free?",
+  "user_simulator": {
+    "personality": "Quick and to-the-point. Just wants the number.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Booking ID is BK-I01",
+      "Platinum loyalty member",
+      "Business class booking"
+    ],
+    "unknown_info": [
+      "Exact number of free checked bags (5)",
+      "Breakdown: 2 cabin + 3 platinum",
+      "Extra bag fees"
+    ],
+    "task_rules": [
+      "Ask your question about baggage allowance.",
+      "If the agent gives only the total number without the cabin-versus-loyalty breakdown, ask for that breakdown.",
+      "When you have complete information, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You have a specific booking and just want to know how many checked bags you get. Once you hear the number, you want the reasoning behind it as well. This is a quick information request, not a request to change anything."
+  },
+  "task_summary": "**Task:** User request: I have booking BK-I01. I'm platinum and flying business. How many checked bags do I get for free? Resolve the request under the correct travel policy and booking constraints for this scenario. Correct resolution: The traveler gets 5 free checked bags.\n\n**Challenge:** Agent must state that the user gets 5 free checked bags.",
+  "task_requirements": [
+    {
+      "id": "state_checked_bag_count",
+      "kind": "must",
+      "requirement": "Agent must state that the user gets 5 free checked bags.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_baggage_breakdown",
+      "kind": "must",
+      "requirement": "Agent must explain the breakdown as 2 free checked bags from business class plus 3 from platinum status.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_baggage_or_booking_action",
+      "kind": "must_not",
+      "requirement": "Agent must not modify the booking or add paid baggage in this information-only baggage task.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/36-info_baggage_allowance.json",
+  "state_requirements": []
+}

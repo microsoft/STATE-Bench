@@ -1,0 +1,111 @@
+{
+  "task_id": "90-challenge_return_shipping_plus_repeat",
+  "task_summary": "**Task:** A Standard customer is returning two phone cases from a $44 order. The first return triggers the $8 low-value return-shipping fee, and the second same-category return also carries the $5 repeat surcharge, so the two lines must be settled differently.\n\n**Challenge:** The refunds are intentionally asymmetric even though the items match. Weak agents apply the shipping fee without the repeat surcharge, treat both cases identically, or fail to sequence the second same-category adjustment correctly.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "90_challenge_return_shipping_plus_repeat_agent_must_charge_8_return_shipping",
+      "kind": "must",
+      "requirement": "Agent must charge $8 return shipping."
+    },
+    {
+      "evidence": "conversation",
+      "id": "90_challenge_return_shipping_plus_repeat_agent_must_apply_5_repeat_surcharge",
+      "kind": "must",
+      "requirement": "Agent must apply $5 repeat surcharge."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "I want to return both phone cases from order ORD-7121. Neither fits my phone.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7121",
+      "items: 2 phone cases",
+      "reason: don't fit"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "Return both phone cases because neither fits.",
+      "If the agent previews or processes only one phone case, ask to include both phone cases from the order.",
+      "If both phone cases have the same refund amount or the preview does not mention a repeat same-category surcharge, ask whether the second phone-case return should have a different refund because it is another accessories return.",
+      "If the agent mentions the $5 repeat surcharge, ask for the final per-item refunds before accepting if the processed amounts or preview do not clearly show $14 for the first case and $9 for the second.",
+      "Accept the final preview once both cases, the low-value return-shipping deduction, and the second-item repeat surcharge are clearly reflected."
+    ],
+    "unknown_info": [
+      "return shipping",
+      "repeat surcharge"
+    ],
+    "user_sim_context": "You want to return two phone cases because neither fits, and on the surface that feels like a simple two-item return. Since the total order value was low, you may not expect the final refund to be reduced in more than one way. You need the agent to explain any shipping deduction or repeated-category effect without making the answer feel arbitrary."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10152",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10152",
+      "field": "refund_amount",
+      "expected_value": 14
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10152",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10152",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10152",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10153",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10153",
+      "field": "refund_amount",
+      "expected_value": 9
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10153",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10153",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10153",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7121",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/90-challenge_return_shipping_plus_repeat.json"
+}

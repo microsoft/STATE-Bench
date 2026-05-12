@@ -1,0 +1,65 @@
+{
+  "task_id": "32-warranty_refurbished",
+  "task_summary": "**Task:** The customer has a refurbished laptop with a shorter ninety-day warranty, and the issue arises around day eighty-four. The correct handling is to recognize that the refurbished-item terms still cover the claim and route it to repair under that shortened warranty.\n\n**Challenge:** The trap is assuming every laptop follows the standard warranty timeline. Weak agents apply the wrong coverage window, deny the claim because the product is refurbished, or never verify which warranty schedule governs the item.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "32_warranty_refurbished_agent_must_not_deny_claim_for",
+      "kind": "must_not",
+      "requirement": "Agent must not deny claim for refurbished."
+    },
+    {
+      "evidence": "conversation",
+      "id": "32_warranty_refurbished_agent_must_explain_that_the_refurbished",
+      "kind": "must",
+      "requirement": "Agent must explain that the refurbished item uses the 90-day warranty and is still covered."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My refurbished laptop from order ORD-6033 won't boot anymore. I bought it about 3 months ago — is it still covered?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6033",
+      "warranty_id: WRT-4014",
+      "issue: won't boot",
+      "refurbished: yes"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Mention it's refurbished.",
+      "Warranty ID is WRT-4014 if asked.",
+      "Ask about warranty terms for refurbished.",
+      "If the agent says refurbished items are not covered or denies the claim without checking WRT-4014, ask them to check the refurbished warranty terms for this order.",
+      "Accept only after the agent explains the refurbished laptop is still within its 90-day warranty and offers a warranty repair."
+    ],
+    "unknown_info": [
+      "refurbished warranty terms",
+      "whether still covered"
+    ],
+    "user_sim_context": "Your refurbished laptop will not boot, and you want to know what warranty coverage still applies to a refurbished purchase. You realize those items can have different terms, but you are not sure where you stand. You need the agent to check the actual coverage instead of assuming it works like a new device."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4014",
+      "field": "claim_count",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4014",
+      "field": "resolution",
+      "expected_value": "repair"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4014",
+      "field": "status",
+      "expected_value": "claimed"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/32-warranty_refurbished.json"
+}

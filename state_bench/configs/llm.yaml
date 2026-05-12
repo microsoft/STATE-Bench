@@ -1,0 +1,12 @@
+# Shared LLM call defaults.
+
+defaults:
+  api_version: "2025-03-01-preview"
+
+max_tokens:
+  default: 8192
+  agent: 8192
+
+retry:
+  max_attempts: 5
+  wait_seconds: 3

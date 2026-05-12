@@ -1,0 +1,153 @@
+{
+  "task_id": "142-hard_compound_exchange_plus_late_compensation",
+  "task_summary": "Shirt arrived late and in the wrong size. Agent must process a size exchange and separately issue late-delivery compensation.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_compound_exchange_plus_late_compensation_ask_comp_destination",
+      "kind": "must",
+      "requirement": "Agent must ask the customer where to issue the late-delivery compensation (original payment vs. store credit) before issuing it."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T18:00:00",
+  "opening_message": "ORD-7253 arrived late and the shirt is too small. I need the large size and compensation for the delay.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7253",
+      "exchange: large shirt",
+      "late: 4 days",
+      "preferred_compensation_destination: original payment card (only reveal if the agent asks where to put any compensation)"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Confirm you want the large size.",
+      "Ask about delay compensation if not offered.",
+      "If the agent offers delay compensation and asks where to put it, say back to your original payment method. If the agent issues compensation as store credit without asking, push back once and ask for it on your card instead. Do not volunteer this preference unprompted.",
+      "Accept both previews once compensation is to your original payment."
+    ],
+    "unknown_info": [
+      "two actions"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7253. Shirt arrived late and in the wrong size. Agent must process a size exchange and separately issue late-delivery compensation. You want any delay compensation back to your original payment method, not store credit — but don't volunteer this preference unprompted; let the agent ask. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10255",
+      "field": "item_status",
+      "expected_value": "exchanged"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10255",
+      "field": "refund_amount",
+      "expected_value": 22
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10255",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10255",
+      "field": "replacement_item_id",
+      "expected_value": "ITEM-10256"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "goodwill_credit",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "goodwill_credit_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "item_id",
+      "expected_value": "ITEM-10256"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "item_status",
+      "expected_value": "confirmed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "order_id",
+      "expected_value": "ORD-7253"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "product_id",
+      "expected_value": "PROD-4266"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "quantity",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "refund_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "replacement_item_id",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "restocking_fee",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "return_label_issued",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "store_credit_only",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10256",
+      "field": "unit_price",
+      "expected_value": 59
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/142-hard_compound_exchange_plus_late_compensation.json"
+}

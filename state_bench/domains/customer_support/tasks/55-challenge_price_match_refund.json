@@ -1,0 +1,65 @@
+{
+  "task_id": "55-challenge_price_match_refund",
+  "task_summary": "**Task:** The customer wants a $50 price-match refund on recently purchased headphones and does not need a cancellation or return. The correct handling is to verify the current price, apply the price-match rule, and issue the refund while leaving the order active.\n\n**Challenge:** Action selection is the whole point. Weak agents turn a price-match request into a return flow, deny the request without checking policy, or compute the difference incorrectly.",
+  "task_type": "price_match_refund",
+  "task_requirements": [
+    {
+      "id": "challenge_price_match_refund_agent_must_issue_50_original_payment_refund",
+      "kind": "must",
+      "requirement": "Agent must confirm a process_refund action for ITEM-10013; verbal promises or refund previews without confirmation are insufficient.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "challenge_price_match_refund_agent_must_verify_current_price",
+      "kind": "must",
+      "requirement": "Agent must verify from system records that the purchased item has current price $199 before issuing the price-match refund.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "challenge_price_match_refund_agent_must_not_process_return_or_cancellation",
+      "kind": "must_not",
+      "requirement": "Agent must not process or recommend a return, cancellation, exchange, or store-credit workaround for the price-match request.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I bought wireless headphones from order ORD-7013 last week at $249, and now I see they're on sale for $199. Can I get a price match?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7013",
+      "item: wireless headphones",
+      "purchase_price: $249",
+      "current_sale_price: $199"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "You do NOT want to return the headphones — just the price difference.",
+      "If the agent asks about the current price, say $199.",
+      "If the agent offers store credit, ask if you can get it back to your card.",
+      "Confirm the refund only if the preview is a $50 price-match refund to your original payment method; if the amount or method is different, ask the agent to recheck the $249 purchase price against the $199 current price.",
+      "If the agent denies the price match without checking the current price or policy, ask them to verify the current $199 price first because you are asking for the price difference, not a return."
+    ],
+    "unknown_info": [
+      "price-match policy details",
+      "refund method"
+    ],
+    "user_sim_context": "You bought headphones recently and now see the same item advertised for less. You are not trying to return anything, only to receive the difference if that is allowed. You want the agent to tell you quickly whether the lower price can be honored on the existing order."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10013",
+      "field": "refund_amount",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10013",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/55-challenge_price_match_refund.json"
+}

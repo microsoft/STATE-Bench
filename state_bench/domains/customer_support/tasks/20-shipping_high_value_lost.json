@@ -1,0 +1,46 @@
+{
+  "task_id": "20-shipping_high_value_lost",
+  "task_summary": "**Task:** A high-value laptop worth $799 appears to be lost in transit. Because the order is above the $500 threshold, the correct handling is to explain that a three-to-five-business-day investigation is required before any refund or replacement can be issued.\n\n**Challenge:** The policy turns on order value, not on customer urgency. Weak agents issue an immediate refund or reship to be helpful, or mention the problem without making the mandatory investigation step explicit.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "20_shipping_high_value_lost_agent_must_not_issue_immediate_refund",
+      "kind": "must_not",
+      "requirement": "Agent must not issue immediate refund, reship, or replacement."
+    },
+    {
+      "evidence": "conversation",
+      "id": "20_shipping_high_value_lost_agent_must_explain_investigation_is_required",
+      "kind": "must",
+      "requirement": "Agent must explain that an investigation is required (3-5 business days) before resolution."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My laptop order ORD-6002 was supposed to arrive over a week ago and tracking shows it's lost. This was an expensive purchase — I need this resolved.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6002",
+      "item: ProBook Laptop",
+      "tracking: lost"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Express urgency.",
+      "Say you would prefer a refund over a replacement once the claim is eligible for resolution.",
+      "If the agent offers or processes an immediate refund, reshipment, or replacement, ask whether a high-value laptop requires a carrier investigation before any resolution.",
+      "If the agent explains that a 3-5 business day investigation is required before refund or replacement, push back once about the urgency, ask whether any compensation is available, then accept the investigation path.",
+      "After accepting the investigation requirement, do not keep asking for immediate refund, replacement, escalation, or repeated updates."
+    ],
+    "unknown_info": [
+      "investigation requirement",
+      "high-value threshold",
+      "compensation"
+    ],
+    "user_sim_context": "Your expensive laptop appears to be lost in transit, and the cost of the purchase is making you especially anxious. You want a concrete resolution quickly, because waiting around for a vague answer does not feel acceptable on a purchase this large. You expect the agent to explain what happens next and why."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/20-shipping_high_value_lost.json"
+}

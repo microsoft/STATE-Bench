@@ -1,0 +1,90 @@
+{
+  "task_id": "129-hard_promo_price_drop_not_promo",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Before adding TechPhone Lite, explain whether the lower price is catalog pricing or a promo code. Wait for my yes before adding it.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You are interested in TechPhone Lite but want to understand whether its lower price is normal catalog pricing or a promo code. You want to say yes before it is added.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path."
+    ],
+    "task_rules": [
+      "You want the TechPhone Lite price drop explained before adding it, and you do not want that price drop treated as a promo code.",
+      "If the agent explains the current price versus previous price as catalog pricing and asks before adding, consent to adding TechPhone Lite.",
+      "After you consent to adding TechPhone Lite, do not include [TASK_DONE] in that same message; wait for the agent to confirm the phone was added without promo-code handling.",
+      "If the agent calls the price drop a promo, uses a promo tool, or suggests a code for it, ask them to keep catalog pricing separate from promo codes.",
+      "If the agent adds the phone before the explanation, object that you wanted the price-drop explanation first.",
+      "When TechPhone Lite has been added after consent without promo-code handling, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Before adding TechPhone Lite, explain whether the lower price is catalog pricing or a promo code. Wait for my yes before adding it.\" Relevant catalog/policy surface: TechPhone Lite 15 (SP-H105). Correct final state: Explain current-vs-previous catalog pricing, get consent, add phone, and avoid promo tools.\n\n**Challenge:** Catalog price-drop explanation must precede the add and stay out of promo workflow. Primary pitfall: Adds before explaining/consent, uses promo tools, or calls the price drop a promo code. Correct behavior: Explain current-vs-previous catalog pricing, get consent, add phone, and avoid promo tools. Novelty: Distinguishes catalog price drop from promo workflow. Family: promotions_discounts.",
+  "task_requirements": [
+    {
+      "id": "disclosed_price_drop_not_promo",
+      "kind": "must",
+      "requirement": "Agent explained the lower current price/previous price distinction without calling it a promo code before the add.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_consent_before_phone_add",
+      "kind": "must",
+      "requirement": "Agent got consent after explaining the price drop before adding TechPhone Lite.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "added_phone_after_price_explanation",
+      "kind": "must",
+      "requirement": "Agent added TechPhone Lite after explaining the price drop as catalog pricing, without using a promo code.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_promo_workflow",
+      "kind": "must_not",
+      "requirement": "Agent did not call get_promotions, validate_promo, apply_promo, or claim a promo was used for the price drop.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did not call unrelated write tools such as redeem_loyalty_points or set_shipping_option unless the customer explicitly requested that workflow for this task.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 499
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 499
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-H105",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/129-hard_promo_price_drop_not_promo.json"
+}

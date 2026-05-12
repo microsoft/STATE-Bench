@@ -1,0 +1,166 @@
+{
+  "flights": [
+    {
+      "flight_id": "DL-ET03A",
+      "airline_code": "DL",
+      "origin": "JFK",
+      "destination": "MIA",
+      "departure_time": "2026-06-22T09:15:00",
+      "arrival_time": "2026-06-22T12:03:00",
+      "duration_minutes": 168,
+      "stops": 0,
+      "cabin_prices": {
+        "economy": 280,
+        "business": 780
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    },
+    {
+      "flight_id": "DL-ET03B",
+      "airline_code": "DL",
+      "origin": "MIA",
+      "destination": "JFK",
+      "departure_time": "2026-06-25T19:30:00",
+      "arrival_time": "2026-06-25T22:25:00",
+      "duration_minutes": 175,
+      "stops": 0,
+      "cabin_prices": {
+        "economy": 300,
+        "business": 820
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    }
+  ],
+  "bookings": [],
+  "users": [
+    {
+      "user_id": "user_001",
+      "name": "Emma Smith",
+      "email": "emma.smith@example.com",
+      "loyalty_tier": "gold",
+      "loyalty_points": 75000,
+      "budget": 1500,
+      "preferences": {
+        "meal_preference": "kosher",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": false
+      }
+    },
+    {
+      "user_id": "user_002",
+      "name": "Liam Johnson",
+      "email": "liam.johnson@example.com",
+      "loyalty_tier": "basic",
+      "loyalty_points": 5000,
+      "budget": 800,
+      "preferences": {
+        "meal_preference": "vegetarian",
+        "seat_type": "window",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": false
+      }
+    },
+    {
+      "user_id": "user_003",
+      "name": "Olivia Williams",
+      "email": "olivia.williams@example.com",
+      "loyalty_tier": "platinum",
+      "loyalty_points": 120000,
+      "budget": 2000,
+      "preferences": {
+        "meal_preference": "standard",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": true
+      }
+    },
+    {
+      "user_id": "user_004",
+      "name": "Noah Brown",
+      "email": "noah.brown@example.com",
+      "loyalty_tier": "silver",
+      "loyalty_points": 15000,
+      "budget": 600,
+      "preferences": {
+        "meal_preference": "standard",
+        "seat_type": "window",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true
+      }
+    },
+    {
+      "user_id": "user_005",
+      "name": "Ava Garcia",
+      "email": "ava.garcia@example.com",
+      "loyalty_tier": "basic",
+      "loyalty_points": 12000,
+      "budget": 700,
+      "preferences": {
+        "meal_preference": "vegan",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": false,
+        "add_insurance": false
+      }
+    }
+  ],
+  "hotel_inventory": [
+    {
+      "hotel_id": "HOTEL-ET03A",
+      "hotel_name": "Bayside Stay",
+      "city": "MIA",
+      "check_in": "2026-06-22",
+      "check_out": "2026-06-25",
+      "room_type": "standard",
+      "nightly_rate": 90,
+      "total_price": 270
+    },
+    {
+      "hotel_id": "HOTEL-ET03B",
+      "hotel_name": "Ocean Central",
+      "city": "MIA",
+      "check_in": "2026-06-22",
+      "check_out": "2026-06-25",
+      "room_type": "standard",
+      "nightly_rate": 102,
+      "total_price": 306
+    }
+  ],
+  "hotels": [],
+  "car_inventory": [
+    {
+      "car_id": "CAR-ET03A",
+      "company": "Enterprise",
+      "pickup_location": "MIA",
+      "dropoff_location": "MIA",
+      "pickup_date": "2026-06-22",
+      "dropoff_date": "2026-06-25",
+      "car_class": "economy",
+      "daily_rate": 48,
+      "total_price": 144,
+      "insurance_included": false
+    },
+    {
+      "car_id": "CAR-ET03B",
+      "company": "Enterprise",
+      "pickup_location": "MIA",
+      "dropoff_location": "MIA",
+      "pickup_date": "2026-06-22",
+      "dropoff_date": "2026-06-25",
+      "car_class": "midsize",
+      "daily_rate": 55,
+      "total_price": 165,
+      "insurance_included": false
+    }
+  ],
+  "car_rentals": []
+}

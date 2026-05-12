@@ -1,0 +1,58 @@
+{
+  "task_id": "18-policy_24h_vs_48h_window",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I made two bookings yesterday — BK-PR03A for a domestic flight and BK-PR03B for an international flight. I'm thinking of cancelling both. Can you tell me the cancellation fees for each?",
+  "user_simulator": {
+    "personality": "Organized and likes clear comparisons. Asks for specifics.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Booking IDs are BK-PR03A (domestic) and BK-PR03B (international)",
+      "Both were booked yesterday (about 30 hours ago)",
+      "Neither has insurance"
+    ],
+    "unknown_info": [
+      "Domestic has 24h free window (expired)",
+      "International has 48h free window (still active)",
+      "Exact cancellation fees for each"
+    ],
+    "task_rules": [
+      "Ask about cancellation fees for both bookings.",
+      "When the agent provides the fees, ask why they are different.",
+      "When the agent explains the 24h vs 48h windows, confirm understanding.",
+      "Ask specifically if the international one can still be cancelled for free.",
+      "When you have complete information on both, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You made two bookings around the same time and want to know how the free-cancellation windows compare. From your perspective they feel nearly identical, so you expect the agent to explain the difference in plain language. You are looking for clarity before taking any action."
+  },
+  "task_summary": "**Task:** A traveler asks to compare cancellation fees on one domestic booking and one international booking that were both made about 30 hours ago. Correct resolution: Domestic booking BK-PR03A is past its 24-hour free-cancellation window and would incur a $52 cancellation fee.\n\n**Challenge:** The agent applies the 24-hour domestic window and 48-hour international window correctly, including the exact fee result for each booking.",
+  "task_requirements": [
+    {
+      "id": "state_domestic_fee",
+      "kind": "must",
+      "requirement": "Agent must explain that domestic booking BK-PR03A is past its 24-hour free-cancellation window and would incur a $52 cancellation fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_international_free",
+      "kind": "must",
+      "requirement": "Agent must explain that international booking BK-PR03B is still within its 48-hour free-cancellation window and can be cancelled for free.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_window_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain that the different answers come from domestic flights using a 24-hour free-cancellation window while international flights use a 48-hour window.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_cancellation_or_modification",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel or modify either booking in this fee-comparison task.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/18-policy_24h_vs_48h_window.json",
+  "state_requirements": []
+}

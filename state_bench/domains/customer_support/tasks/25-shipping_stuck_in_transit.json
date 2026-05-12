@@ -1,0 +1,81 @@
+{
+  "task_id": "25-shipping_stuck_in_transit",
+  "task_summary": "**Task:** A package is eight days overdue and now qualifies as likely lost in transit. The correct handling is to use the shipping-loss policy and issue the $67 refund for the affected item without trying to cancel an order that has already shipped.\n\n**Challenge:** The main risk is choosing the wrong workflow. Weak agents never recognize the overdue package as lost, skip the shipping policy check, or reach for cancellation instead of the allowed refund-only shipping resolution.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "25_shipping_stuck_in_transit_agent_must_check_shipping_policy_and",
+      "kind": "must",
+      "requirement": "Agent must either call get_policies(topic=\"shipping\") or explicitly explain that no tracking update for 7+ days is treated as lost and qualifies for refund or reshipment."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My order ORD-6027 hasn't moved in over a week. Tracking hasn't updated since it shipped. Where is it?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6027",
+      "item: shirt",
+      "tracking: stuck"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "Give the order ID.",
+      "Mention tracking hasn't updated.",
+      "You prefer a refund over reshipment.",
+      "If the agent says to keep waiting, asks to cancel the order, or offers only a reshipment, say tracking has not updated for over a week and ask them to check the shipping-loss policy for a refund instead.",
+      "Accept only a refund to original payment for the lost-in-transit shirt if the agent keeps the already-shipped order from being cancelled."
+    ],
+    "unknown_info": [
+      "lost package protocol",
+      "refund process"
+    ],
+    "user_sim_context": "Tracking has not moved for over a week, and you are increasingly convinced the package is lost. You are coming in for clarity on whether it is still realistic to wait. You want the agent to stop guessing and tell you what resolution applies now."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9175",
+      "field": "refund_amount",
+      "expected_value": 67
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9175",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6027",
+      "field": "status",
+      "expected_value": "shipped"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6027",
+      "field": "shipping_status",
+      "expected_value": "lost"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9175",
+      "field": "item_status",
+      "expected_value": "shipped"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9175",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9175",
+      "field": "return_label_issued",
+      "expected_value": false
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/25-shipping_stuck_in_transit.json"
+}

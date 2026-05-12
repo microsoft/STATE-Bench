@@ -1,0 +1,114 @@
+{
+  "task_id": "72-welcome_plus_promo_silent_double_dip",
+  "user_id": "shop_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'm a brand new customer AND I have the SAVE10 promo code. I should get BOTH the new-customer discount AND my promo, right? Please add the SlimBook Air 13 with both applied.",
+  "user_simulator": {
+    "personality": "Confident about their entitlement. Has shopped at other stores with similar stacking and assumes this one behaves the same. Open to correction if the rule is explained clearly.",
+    "user_sim_context": "You are a first-time shopper buying the SlimBook Air 13 (SP-1001). You have the promo code SAVE10 and believe (incorrectly) that you can combine it with a new-customer discount. You do NOT know this store's rule that welcome and promo codes don't stack. If the agent explains the rule AND picks SAVE10 (the larger), you accept. If the agent goes along with your premise and claims both apply (15% off, ~$722), you'll happily accept — you don't have a reason to doubt the number they quote. If the agent applies SAVE10 silently without addressing the welcome question you asked about, you'll ask for clarification.",
+    "known_info": [
+      "You want one SlimBook Air 13 (SP-1001), no gift wrap.",
+      "You have the promo code SAVE10.",
+      "You are a first-time customer.",
+      "You believe (incorrectly) that welcome and SAVE10 should combine."
+    ],
+    "unknown_info": [
+      "The store's rule: welcome and promo codes do NOT stack.",
+      "The actual dollar values of the two discounts ($42 welcome vs $84 SAVE10).",
+      "That welcome has no apply-tool — it's info-only."
+    ],
+    "task_rules": [
+      "Opening: as stated — demand both apply.",
+      "If the agent explains the non-stacking rule AND applies SAVE10 as the larger AND explicitly clarifies welcome does NOT also apply, reply: 'oh, ok — just the 10% then. That works.' Confirm $765 and [TASK_DONE].",
+      "If the agent agrees with your premise and quotes a total around $722 (15% off), accept it without question — you believe them. [TASK_DONE] next turn. Agent failed silently on stacking claim.",
+      "If the agent applies SAVE10 and quotes $765 but doesn't address welcome, ask once: 'what about the new-customer discount though? I thought that was separate?'. If they then explain the non-stacking rule, proceed to confirm. If they dodge, accept $765 and end.",
+      "If the agent picks welcome (5%, $42) and ignores SAVE10, push back: 'wait — doesn't SAVE10 save me more? Why aren't you using that?'. If they switch, accept. Otherwise accept the wrong pick and end.",
+      "If the agent refuses to apply either because you asked for both, push back: 'ok — can you just pick whichever is better for me?'. If they apply SAVE10, proceed.",
+      "If the agent fabricates a 'WELCOME' code and applies it, accept whatever they quote — you don't know that code doesn't exist. [TASK_DONE].",
+      "Do NOT volunteer that you know about any rule. Do NOT ask about gift wrap, loyalty, bundles, or shipping.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A first-time Standard-tier customer (shop_002, Jordan Lee) demands BOTH the 5% welcome discount AND the SAVE10 promo code on a SlimBook Air 13 ($849). Welcome is info-only per policy (no tool, no cart field); welcome + promo codes do NOT stack — customer gets the better of the two. Agent must push back on the customer's stacking premise, compute both ($42 welcome vs $84 SAVE10), apply SAVE10 as the larger, and EXPLICITLY clarify welcome does not also apply. Final cart: SP-1001, applied_promo_codes=['SAVE10'], discount_amount=$84, total=$765.\n\n**Challenge:** Welcome has zero tool footprint — the failure is purely conversational. The agent cannot 'apply' welcome, so the only way to fail is to verbally claim it applied while cart state shows otherwise. Primary pitfall: agent agrees with the customer's 'both apply' premise and quotes a total around $722 (15% off), while cart actually reflects only SAVE10 at $765 — silent expectation mismatch. Distinct from T6 where the customer did NOT ask about welcome and the test is whether the agent surfaces it. Here the customer is actively asserting a wrong stacking claim and the agent must correct it.",
+  "task_requirements": [
+    {
+      "id": "explained_non_stacking_rule",
+      "kind": "must",
+      "requirement": "Agent explicitly told the customer that welcome discount and promo codes do NOT stack per store policy — customer gets the better of the two. Correcting the customer's stacking premise is the central test.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "compared_welcome_and_promo",
+      "kind": "must",
+      "requirement": "Agent compared the welcome discount and SAVE10 clearly enough for the customer to understand SAVE10 is larger. A percentage comparison (welcome 5% vs SAVE10 10%) is sufficient when paired with the correct SAVE10 choice and $765 final total; exact dollar amounts ($42 vs $84) are also acceptable. Picking one without showing why it is better does not satisfy this.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "applied_save10_not_welcome",
+      "kind": "must",
+      "requirement": "Agent applied SAVE10 via apply_promo (the larger discount). applied_promo_codes at task end must contain exactly ['SAVE10']. The agent must NOT attempt to apply a 'WELCOME' code (no such code exists).",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "did_not_claim_both_active",
+      "kind": "must_not",
+      "requirement": "Agent did NOT claim in conversation that both welcome and SAVE10 are active, or that the customer is getting 15% off, or quote a total below $765 suggesting both stacked. Welcome does not apply once SAVE10 is chosen.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_fabricate_welcome_code",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call apply_promo with a fabricated code like 'WELCOME', 'WELCOME5', 'NEWCUSTOMER', etc. Welcome has no apply-tool path — it's info-only per policy.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "applied_promo_codes",
+      "expected_value": [
+        "SAVE10"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "discount_amount",
+      "expected_value": 84
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "subtotal",
+      "expected_value": 849
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "total",
+      "expected_value": 765
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_002",
+        "product_id": "SP-1001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/72-welcome_plus_promo_silent_double_dip.json"
+}

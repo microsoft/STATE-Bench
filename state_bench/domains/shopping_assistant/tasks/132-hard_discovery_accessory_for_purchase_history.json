@@ -1,0 +1,60 @@
+{
+  "task_id": "132-hard_discovery_accessory_for_purchase_history",
+  "user_id": "shop_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Use my purchase history to verify which ProBook I bought, then compare a compatible dock and compact hub for it. Do not add anything yet.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You want an accessory for the ProBook you bought before. You expect the agent to use your purchase history to verify which ProBook it was, then compare a compatible dock and compact hub without adding anything yet.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your account purchase history includes: ProBook Laptop 13."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Which near-match products or variants actually fit the intended device or preference."
+    ],
+    "task_rules": [
+      "You want the agent to use your purchase history before recommending accessories for the ProBook you bought before.",
+      "If the agent verifies the ProBook purchase and compares a compatible dock and compact hub using compatibility evidence, accept the comparison.",
+      "If the agent recommends based only on a guess about your past purchase, ask them to check your purchase history first.",
+      "If the agent offers to add an accessory, say not yet; this task is for verified comparison only.",
+      "When history has been verified, compatible accessory options have been compared, and the cart is unchanged, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_003 opens with: \"Use my purchase history to verify which ProBook I bought, then compare a compatible dock and compact hub for it. Do not add anything yet.\" Relevant catalog/policy surface: ProBook Laptop 13 (SP-H102), ProBook USB-C Dock (SP-H110), 7-Port USB-C Hub (SP-H111), Atlas 9-in-1 USB-C Hub (SP-H112). Final cart/account state should remain unchanged.\n\n**Challenge:** Purchase-history discovery must anchor the device before compatibility comparison, with no cart write. Primary pitfall: Skips history verification, invents exact ports/specs, or adds an accessory before consent. Correct behavior: Verify ProBook purchase history, compare compatible dock and hub, and leave cart unchanged. Novelty: Purchase-history driven discovery with consent boundary. Family: product_discovery.",
+  "task_requirements": [
+    {
+      "id": "checked_purchase_history",
+      "kind": "must",
+      "requirement": "Agent checked customer account/purchase history before relying on a prior ProBook purchase.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "compared_compatible_dock_and_hub",
+      "kind": "must",
+      "requirement": "Agent compared a compatible dock and compact hub using compatibility evidence for the purchased ProBook.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_unverified_specs",
+      "kind": "must_not",
+      "requirement": "Agent did not invent exact ports, charging, or display limits that are not present in catalog/tool evidence.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_add_before_consent",
+      "kind": "must_not",
+      "requirement": "Agent did not add the accessory before explicit consent.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "product_search_discovery",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/132-hard_discovery_accessory_for_purchase_history.json"
+}

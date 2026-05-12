@@ -1,0 +1,91 @@
+{
+  "task_id": "127-hard_promo_remove_item_breaks_discount",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Before removing the skillet, tell me separately what will happen to KITCHEN10 and the 3-item kitchen bundle. Wait for my yes, then remove only the skillet.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "Your cart has kitchen items and discounts, and you are thinking about removing the skillet. Before removal, you want separate explanations of what happens to KITCHEN10 and the three-item kitchen bundle.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 1 x PowerBlend Pro Blender; 1 x CasaGrande Cast-Iron Skillet; 1 x HomeBrew Pour-Over Coffee Set.",
+      "Your cart already has promo code(s) applied: KITCHEN10.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path."
+    ],
+    "task_rules": [
+      "You want separate explanations of KITCHEN10 and the three-item kitchen bundle before the skillet is removed.",
+      "If the agent explains both discount effects separately and asks whether to remove the skillet, consent to removing only the skillet.",
+      "After you consent to removing only the skillet, do not include [TASK_DONE] in that same message; wait for the agent to confirm the skillet was removed.",
+      "If the agent removes the skillet before explaining both discount effects, object that you asked for the discount preview first.",
+      "If the agent treats KITCHEN10 and the bundle as the same thing or mentions only one, ask for the missing discount surface.",
+      "When only the skillet has been removed after consent and both discount effects were explained, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Before removing the skillet, tell me separately what will happen to KITCHEN10 and the 3-item kitchen bundle. Wait for my yes, then remove only the skillet.\" Relevant catalog/policy surface: PowerBlend Pro Blender (SP-H116), CasaGrande Cast-Iron Skillet (SP-H117), HomeBrew Pour-Over Coffee Set (SP-H118). Correct final state: Preview KITCHEN10 and bundle effects separately, get consent, then remove only the skillet.\n\n**Challenge:** Discount side effects must be explained before mutation and separated by discount surface. Primary pitfall: Removes immediately, mentions only one discount surface, or treats promo and bundle as the same rule. Correct behavior: Preview KITCHEN10 and bundle effects separately, get consent, then remove only the skillet. Novelty: Discount side-effect after removal, not initial promo application. Family: promotions_discounts.",
+  "task_requirements": [
+    {
+      "id": "pre_disclosed_bundle_break",
+      "kind": "must",
+      "requirement": "Agent explained before removal that the 3-item category bundle eligibility changes or breaks.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "pre_disclosed_kitchen10_status",
+      "kind": "must",
+      "requirement": "Agent separately explained before removal whether KITCHEN10 remains valid for remaining kitchen items.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_consent_before_skillet_remove",
+      "kind": "must",
+      "requirement": "Agent got consent after the discount preview and before removing the skillet.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "removed_skillet_only",
+      "kind": "must",
+      "requirement": "Agent removed only the skillet.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 28
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": [
+        "CI-0001",
+        "CI-0003"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 288
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 260
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/127-hard_promo_remove_item_breaks_discount.json"
+}

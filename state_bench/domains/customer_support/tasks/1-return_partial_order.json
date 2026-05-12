@@ -1,0 +1,77 @@
+{
+  "task_id": "1-return_partial_order",
+  "task_summary": "**Task:** The customer wants to return only the headphones from a discounted three-item order. The correct handling is to leave the other two items in place, recalculate the promo-adjusted refund for just the returned line, and preview that partial refund before completing the return.\n\n**Challenge:** Partial returns are easy to flatten into standalone item math. Weak agents ignore the promo redistribution, disturb the remaining items, or quote a refund that treats the headphones as if they were purchased alone.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "tool_calls",
+      "id": "1_return_partial_order_agent_must_preview_before_confirming",
+      "kind": "must",
+      "requirement": "Agent must call process_return with confirm=false for ITEM-9001 before calling process_return with confirm=true for ITEM-9001."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi, I'd like to return the headphones from my recent order ORD-6001. I changed my mind about them.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6001",
+      "item: wireless headphones",
+      "reason: changed mind"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Confirm you want to return the headphones specifically.",
+      "You do NOT know the exact refund amount — ask the agent.",
+      "If the agent previews returning anything besides the headphones, or implies the whole order will be returned, say the phone case and book are fine and ask to return only the headphones.",
+      "If the refund preview does not mention that the SAVE20 discount affects the partial refund, ask once how the promo was applied before confirming.",
+      "Accept the refund terms only after the preview covers the headphones-only return, the refund amount, the restocking fee, and the promo adjustment."
+    ],
+    "unknown_info": [
+      "refund amount",
+      "discount redistribution rules",
+      "restocking fee"
+    ],
+    "user_sim_context": "You want to return just the headphones from a recent multi-item order because they were not the right fit for you. The rest of the order is fine, and you are not trying to undo the whole purchase. You expect the agent to help with that one item and explain what the return would look like."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9001",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9001",
+      "field": "refund_amount",
+      "expected_value": 141
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9001",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9001",
+      "field": "restocking_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9001",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6001",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/1-return_partial_order.json"
+}

@@ -1,0 +1,61 @@
+{
+  "task_id": "83-challenge_missing_single_item_claim",
+  "task_summary": "**Task:** The customer says the blender is missing from the package, but the order had only one item and tracking shows delivery, so this is really a delivered-not-received shipping claim rather than a return. The correct handling is to treat it as a shipping-loss path and offer the allowed refund or reship choice without inventing a return flow.\n\n**Challenge:** Issue-type diagnosis is the whole difficulty. Weak agents follow the customer's wording too literally, create a nonsense return for an item that was never in hand, or miss the shipping-claim policy entirely.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "83_challenge_missing_single_item_claim_agent_must_offer_reship_or_refund",
+      "kind": "must",
+      "requirement": "Agent must offer the customer a reship or refund for the delivered-not-received claim."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "83_challenge_missing_single_item_claim_agent_must_not_process_this_as",
+      "kind": "must_not",
+      "requirement": "Agent must not call process_return or ask the customer to send the missing item back."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "83_challenge_missing_single_item_claim_agent_must_check_shipping_policies_for",
+      "kind": "must",
+      "requirement": "Agent must call get_policies with topic \"shipping\" before resolving the delivered-not-received claim, or explicitly cite the under-$500 delivered-not-received reship/refund policy."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "I got the box from order ORD-7116 but the blender is missing from the package. The box was way too light when I picked it up.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7116",
+      "item: blender",
+      "issue: empty box, item missing"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give order ID.",
+      "Describe: 'The box arrived but was basically empty, no blender inside.'",
+      "If agent asks if you want a return: 'There's nothing TO return — the box was empty.'",
+      "If agent offers reship or refund, choose refund."
+    ],
+    "unknown_info": [
+      "resolution options"
+    ],
+    "user_sim_context": "Your one-item order arrived as an empty or incorrect experience from your perspective because the blender you expected was not actually in hand. You are framing it as a missing-item problem, not a standard return. You want the agent to recognize what kind of issue this really is and offer the right resolution."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10144",
+      "field": "refund_amount",
+      "expected_value": 89
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10144",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/83-challenge_missing_single_item_claim.json"
+}

@@ -1,0 +1,115 @@
+{
+  "task_id": "99-challenge_same_medical_different_routes",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Due to a medical procedure, I need to change both BK-1000 (Paris flight) and BK-1001 (Denver flight). Both to the following week. Both for medical reasons. My user ID is user_004.",
+  "user_simulator": {
+    "personality": "Organized. Lists both with same reason.",
+    "known_info": [
+      "Your user ID: user_004",
+      "BK-1000: JFK to CDG, June 19 -> June 26, medical",
+      "BK-1001: ORD to DEN, June 20 -> June 27, medical"
+    ],
+    "unknown_info": [
+      "That fees differ by route type even with same reason"
+    ],
+    "task_rules": [
+      "Open with: medical reason, change both BK-1000 and BK-1001.",
+      "Ask: 'What is the combined fee for both changes?'",
+      "If agent charges same for both, ask: 'Should the fees differ since one is international and the other domestic?'",
+      "If agent gives different fees but the combined total is unclear, ask for the combined fee before approving.",
+      "If agent explains the $100 international medical fee, the $75 domestic medical fee, and the $175 combined fee, say: 'That makes sense. Go ahead with both.'",
+      "After done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget applies to incremental out-of-pocket cost for the change, not the final total fare already paid into the booking.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to change two bookings for the same medical reason and would naturally expect that shared reason to produce a similar answer. The complication is that the routes themselves are very different. You need the agent to separate what the reason changes from what the route still controls."
+  },
+  "task_summary": "**Task:** A traveler changes two bookings for the same medical reason, but one booking is international and the other is domestic, so the discounted fees should still differ. Correct resolution: The Paris booking carries a $100 medical change fee.\n\n**Challenge:** The agent does not collapse the two medical changes into one shared fee, applies the correct $100 international fee and $75 domestic fee, and gives the correct combined total of $175.",
+  "task_requirements": [
+    {
+      "id": "intl_medical_fee_is_100",
+      "kind": "must",
+      "requirement": "Agent must explain that the Paris booking carries a $100 medical change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "domestic_medical_fee_is_75",
+      "kind": "must",
+      "requirement": "Agent must explain that the Denver booking carries a $75 medical change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "combined_total_is_175",
+      "kind": "must",
+      "requirement": "Agent must explain or otherwise make clear that the combined fees for the two medical changes total $175.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "must_not_same_fee_both_routes",
+      "kind": "must_not",
+      "requirement": "Agent must not tell the user that both bookings have the same medical change fee despite the different route types.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/99-challenge_same_medical_different_routes.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 100
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 40
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "AF101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 1040
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "change_fee",
+      "expected_value": 75
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "fare_difference",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "flight_id",
+      "expected_value": "UA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "price_paid",
+      "expected_value": 455
+    }
+  ]
+}

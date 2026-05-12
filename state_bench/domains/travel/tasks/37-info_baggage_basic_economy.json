@@ -1,0 +1,62 @@
+{
+  "task_id": "37-info_baggage_basic_economy",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I'm flying on BK-I02 in basic economy. Do I get any free checked bags? How much to check a suitcase?",
+  "user_simulator": {
+    "personality": "Budget-conscious. Wants to weigh costs carefully.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Booking ID is BK-I02",
+      "Basic economy fare",
+      "Basic loyalty tier"
+    ],
+    "unknown_info": [
+      "0 free checked bags on basic economy",
+      "Checked bag fee is $50 per bag for basic economy",
+      "Still gets 1 free carry-on"
+    ],
+    "task_rules": [
+      "Ask your question about baggage allowance for basic economy.",
+      "When the agent provides the information, ask if there's any way to get free bags (loyalty upgrade, etc.).",
+      "When you have complete information, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You are flying basic economy and want to know exactly what baggage you get and what extra bags would cost. You are thinking like a budget traveler and want to avoid surprises at the airport. Once the main answer is clear, you naturally ask whether there is any way to improve the situation."
+  },
+  "task_summary": "**Task:** User asks what baggage they get on a basic economy booking and what a checked suitcase would cost. Correct resolution: This basic economy booking includes 0 free checked bags.\n\n**Challenge:** The agent explains there are no free checked bags, states the $50 checked-bag fee, and mentions the carry-on allowance.",
+  "task_requirements": [
+    {
+      "id": "state_no_free_checked_bags",
+      "kind": "must",
+      "requirement": "Agent must state that this basic economy booking includes 0 free checked bags.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_checked_bag_fee",
+      "kind": "must",
+      "requirement": "Agent must state that checking a bag costs $50 per bag on this booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_carry_on_allowance",
+      "kind": "must",
+      "requirement": "Agent must state that the user still gets 1 free carry-on.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_free_bag_follow_up",
+      "kind": "must",
+      "requirement": "When the user asks whether there is any way to get free checked bags, agent must answer the follow-up instead of only repeating the base baggage fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_baggage_or_booking_action",
+      "kind": "must_not",
+      "requirement": "Agent must not modify the booking or add paid baggage in this information-only baggage task.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/37-info_baggage_basic_economy.json",
+  "state_requirements": []
+}

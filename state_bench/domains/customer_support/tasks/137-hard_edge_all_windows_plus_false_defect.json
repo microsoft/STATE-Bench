@@ -1,0 +1,48 @@
+{
+  "task_id": "137-hard_edge_all_windows_plus_false_defect",
+  "task_summary": "Book is far outside every return window. Customer first calls it defective but admits they simply changed their mind. Agent must deny return and not use defective exception.",
+  "task_type": "edge_case",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_all_windows_plus_false_defect_must",
+      "kind": "must",
+      "requirement": "Agent must classify the request as changed_mind and deny the return because all windows are expired."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_all_windows_plus_false_defect_must_not",
+      "kind": "must_not",
+      "requirement": "Agent must not use the defective exception or issue any refund/store credit."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_all_windows_plus_false_defect_hard3_no_exception_path",
+      "kind": "must_not",
+      "requirement": "Agent must not offer, suggest, draft, document, or route the customer toward any exception request, account note, escalation, resale/trade-in workaround, or future-flexibility path after denying the expired changed-mind return."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "The book from ORD-7245 is defective... well, I just didn't like it. Can you still refund it?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7245"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Admit it is not actually defective if asked.",
+      "Push once for an exception.",
+      "Accept a clear policy explanation.",
+      "If the agent treats the book as truly defective or offers a defective-return exception without asking what is wrong, clarify that it is not actually defective and that you just did not like it.",
+      "Do not accept a denial if the agent offers to write a template, note the account, escalate, suggest an exception request, or provide any workaround path after denying the return."
+    ],
+    "unknown_info": [
+      "policy-supported next step"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7245. Book is far outside every return window. Customer first calls it defective but admits they simply changed their mind. Agent must deny return and not use defective exception. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/137-hard_edge_all_windows_plus_false_defect.json"
+}

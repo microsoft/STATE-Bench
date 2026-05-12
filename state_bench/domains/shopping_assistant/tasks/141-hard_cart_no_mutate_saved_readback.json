@@ -1,0 +1,51 @@
+{
+  "task_id": "141-hard_cart_no_mutate_saved_readback",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Audit my cart exactly as-is: item IDs, product IDs, names, quantities, gift-wrap flags, promo codes, loyalty points redeemed, shipping option/cost, subtotal, and total. Do not refresh or fix anything.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You want an exact audit of your current cart, including item IDs, product IDs, names, quantities, gift-wrap flags, promo codes, loyalty fields, shipping, subtotal, and total. You do not want the agent to refresh, fix, or mutate anything.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 1 x ClearGrip Case for Pixel 7; 1 x 7-Port USB-C Hub, gift-wrapped.",
+      "Your cart already has promo code(s) applied: SAVE10.",
+      "Your cart already has a loyalty redemption of 3900 points for $39 off.",
+      "Your cart already has express shipping selected.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it."
+    ],
+    "task_rules": [
+      "You want an exact cart audit; do not let the agent refresh, fix, apply, remove, or clean up anything.",
+      "If the agent reads back item IDs, product IDs, names, quantities, gift-wrap flags, promo codes, loyalty points redeemed, shipping option/cost, subtotal, and total, accept the audit.",
+      "If any requested field is missing, ask for that field rather than approving a cart change.",
+      "If the agent attempts to refresh promos, fix totals, change shipping, or mutate the cart, object that the cart should stay exactly as-is.",
+      "When the complete cart audit has been given with no mutation, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Audit my cart exactly as-is: item IDs, product IDs, names, quantities, gift-wrap flags, promo codes, loyalty points redeemed, shipping option/cost, subtotal, and total. Do not refresh or fix anything.\" Relevant catalog/policy surface: ClearGrip Case for Pixel 7 (SP-H107), 7-Port USB-C Hub (SP-H111). Final cart/account state should remain unchanged.\n\n**Challenge:** Complete state readback over seeded cart with promo, loyalty, and shipping must avoid cleanup writes. Primary pitfall: Omits internal IDs/discount fields, recomputes/changes promo or points, or gives a generic summary. Correct behavior: Provide a complete cart audit with all requested fields and no mutation. Novelty: No-action state-preservation task with concrete seeded cart. Family: cart_mutation.",
+  "task_requirements": [
+    {
+      "id": "complete_cart_audit_fields",
+      "kind": "must",
+      "requirement": "Agent reported item IDs, product IDs, names, quantities, gift-wrap flags, promo codes, loyalty points redeemed, shipping option/cost, subtotal, and total.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_cart_cleanup",
+      "kind": "must_not",
+      "requirement": "Agent did not add, remove, update, apply/remove promo, redeem/cancel points, or set shipping.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/141-hard_cart_no_mutate_saved_readback.json"
+}

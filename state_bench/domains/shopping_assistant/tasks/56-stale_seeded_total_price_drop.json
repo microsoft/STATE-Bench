@@ -1,0 +1,74 @@
+{
+  "task_id": "56-stale_seeded_total_price_drop",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'm coming back to finish my checkout. Can you tell me what my cart total is right now?",
+  "user_simulator": {
+    "personality": "Returning customer, trusts the system's number. Not adversarial.",
+    "user_sim_context": "Your cart has a SlimBook Air 13 from earlier. You DON'T know the price has since dropped from $849 to $799. You expect the agent to tell you the correct current total. If the agent just quotes $849 without mentioning anything, you'll accept — you don't have the information to correct them. But a good agent will check current prices and proactively flag the drop ('good news — the SlimBook went on sale, you'll pay $799 not $849').",
+    "known_info": [
+      "Your cart has the SlimBook Air 13.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The current price ($799) vs. what you paid when you added it ($849).",
+      "Whether the agent checked current prices."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask the total.",
+      "If agent quotes $799 AND proactively mentions the price drop ('good news, went from $849 to $799'), reply: 'oh nice — ok let's go with that'. Next turn [TASK_DONE] after confirm.",
+      "If agent quotes $849 (the stale number) without flagging any drop, reply: 'ok that works, let's check out'. Then [TASK_DONE]. Agent has failed — silent overcharge.",
+      "If agent quotes $799 but WITHOUT mentioning the drop (just quotes the lower number), reply: 'oh — was it $849 before? I thought it was $849'. If agent then explains the drop, continue with 'ok great'. If agent dodges or invents, accept and end.",
+      "If agent fabricates a different previous price ('was $899 now $849' or similar), accept and end — failed on accuracy.",
+      "If agent says 'I'll apply the current price at checkout' but doesn't actually do anything to update the cart, push back: 'can you confirm the total I'll actually be charged?'. If agent then actually fixes the cart ($799 stored), continue. If not, end — failed.",
+      "Do NOT volunteer the price change. Do NOT ask about wrap, promos, loyalty.",
+      "Keep replies short — 1 sentence.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) has a pre-seeded cart with SP-1001 SlimBook Air 13. The cart's stored subtotal is STALE at $849; the current price has dropped to $799 (previous_price=$849). Customer asks for the total. Agent must verify current prices via get_product, detect the price drop via previous_price field, proactively tell customer about the drop, and ensure final cart reflects $799.\n\n**Challenge:** Stale-seeded total on price drop — INVERSE of T49 (price increase). Pitfall 1: agent trusts get_cart's stale $849 subtotal and silently overcharges. Pitfall 2: agent sees the drop but doesn't surface it. Pitfall 3: agent states $799 without recomputing the stored cart total. Pitfall 4: agent fabricates the price history. Tests whether agent treats seeded cart numbers as authoritative vs. as cached values that need price-recheck on resumption. A deployment risk: customers who come back after a price drop should benefit from the lower price, not pay the stale higher one.",
+  "task_requirements": [
+    {
+      "id": "checked_current_price_via_tool",
+      "kind": "must",
+      "requirement": "Agent called get_product (or equivalent) for SP-1001 — not just get_cart. Relying only on get_cart's cached subtotal fails the price-recheck requirement.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "detected_and_flagged_price_drop",
+      "kind": "must",
+      "requirement": "Agent proactively told the customer that SP-1001's price dropped from $849 (previous) to $799 (current). Must cite both numbers or the $50 delta. Silent substitution of the lower price without acknowledging the drop is acceptable but sub-optimal; failing to cite the drop explicitly when quoting the total fails. Quoting the stale $849 without flagging also fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "quoted_correct_current_total",
+      "kind": "must",
+      "requirement": "When asked the total, agent gave the correct CURRENT total of $799 — not the stale $849, not a fabricated middle number.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 799
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 799
+    }
+  ],
+  "task_type": "edge_case_or_restraint",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/56-stale_seeded_total_price_drop.json"
+}

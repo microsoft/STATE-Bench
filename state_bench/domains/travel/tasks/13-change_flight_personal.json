@@ -1,0 +1,92 @@
+{
+  "task_id": "13-change_flight_personal",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to change my flight from Denver to Chicago to a different date.",
+  "user_simulator": {
+    "personality": "Cooperative and straightforward. Understands there may be fees.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking ID: BK-1000",
+      "Current flight is DEN to ORD on June 20th, economy class",
+      "Wants to change to June 22nd",
+      "Reason for change is personal",
+      "Original price paid: $350",
+      "Has travel insurance on the booking"
+    ],
+    "unknown_info": [
+      "Exact change fee amount",
+      "Whether insurance covers change fees (it does not)",
+      "Available flights on the new date"
+    ],
+    "task_rules": [
+      "When the agent asks for your booking ID, provide it.",
+      "When the agent asks the reason for the change, say it is personal.",
+      "When the agent quotes the change fee, ask if insurance covers it.",
+      "When the agent confirms insurance does not cover change fees, acknowledge and proceed.",
+      "When the agent presents new flight options, pick the WN morning nonstop flight on June 22nd.",
+      "When the agent confirms the change with fee and fare difference, agree.",
+      "End with [TASK_DONE] when the change is confirmed.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to move your flight to a different date because something in your personal schedule changed. You are trying to understand both the mechanics and the cost before deciding. Since the booking has insurance, you also wonder whether that should help."
+  },
+  "task_summary": "**Task:** A traveler changes a domestic economy booking for a personal reason within 7 days of departure and asks whether insurance helps. Correct resolution: The personal change fee for the booking is $150.\n\n**Challenge:** The agent keeps the request on the ordinary personal-change path, quotes the full $150 fee, and correctly explains that insurance does not waive change fees.",
+  "task_requirements": [
+    {
+      "id": "state_personal_fee_quote",
+      "kind": "must",
+      "requirement": "Agent must explain that the personal change fee for this booking is $150.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_insurance_not_waiver",
+      "kind": "must",
+      "requirement": "Agent must explain that the booking's insurance does not waive or remove the change fee for this request.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_discounted_fee",
+      "kind": "must_not",
+      "requirement": "Agent must not describe this personal domestic change as eligible for a medical, bereavement, or insurance-based fee waiver or discount.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/13-change_flight_personal.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 150
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "WN101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 530
+    }
+  ]
+}

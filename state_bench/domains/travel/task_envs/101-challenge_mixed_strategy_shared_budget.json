@@ -1,0 +1,236 @@
+{
+  "flights": [
+    {
+      "flight_id": "WN100",
+      "airline_code": "WN",
+      "origin": "LAX",
+      "destination": "DFW",
+      "departure_time": "2026-06-20T09:45:00",
+      "arrival_time": "2026-06-20T15:42:00",
+      "duration_minutes": 357,
+      "stops": 0,
+      "cabin_prices": {
+        "economy": 250,
+        "business": 625,
+        "basic_economy": 175
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    },
+    {
+      "flight_id": "DL100",
+      "airline_code": "DL",
+      "origin": "LAX",
+      "destination": "DFW",
+      "departure_time": "2026-06-23T09:45:00",
+      "arrival_time": "2026-06-23T14:43:00",
+      "duration_minutes": 298,
+      "stops": 0,
+      "cabin_prices": {
+        "economy": 280,
+        "business": 700
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    },
+    {
+      "flight_id": "AS100",
+      "airline_code": "AS",
+      "origin": "LAX",
+      "destination": "DFW",
+      "departure_time": "2026-06-23T12:00:00",
+      "arrival_time": "2026-06-23T17:12:00",
+      "duration_minutes": 312,
+      "stops": 1,
+      "cabin_prices": {
+        "economy": 240,
+        "business": 600
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    },
+    {
+      "flight_id": "UA100",
+      "airline_code": "UA",
+      "origin": "SFO",
+      "destination": "SEA",
+      "departure_time": "2026-06-21T08:00:00",
+      "arrival_time": "2026-06-21T10:56:00",
+      "duration_minutes": 176,
+      "stops": 0,
+      "cabin_prices": {
+        "economy": 260,
+        "business": 600
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    },
+    {
+      "flight_id": "UA101",
+      "airline_code": "UA",
+      "origin": "SFO",
+      "destination": "SEA",
+      "departure_time": "2026-06-24T12:15:00",
+      "arrival_time": "2026-06-24T16:27:00",
+      "duration_minutes": 252,
+      "stops": 0,
+      "cabin_prices": {
+        "economy": 280,
+        "business": 630
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    },
+    {
+      "flight_id": "AA100",
+      "airline_code": "AA",
+      "origin": "SFO",
+      "destination": "SEA",
+      "departure_time": "2026-06-24T12:45:00",
+      "arrival_time": "2026-06-24T16:26:00",
+      "duration_minutes": 221,
+      "stops": 0,
+      "cabin_prices": {
+        "economy": 250,
+        "business": 680
+      },
+      "status": "scheduled",
+      "delay_minutes": 0,
+      "route_type": "domestic"
+    }
+  ],
+  "bookings": [
+    {
+      "booking_id": "BK-1000",
+      "user_id": "user_004",
+      "flight_id": "WN100",
+      "status": "confirmed",
+      "cabin_class": "basic_economy",
+      "seat_type": "window",
+      "meal_preference": "standard",
+      "add_wifi": false,
+      "add_extra_legroom": false,
+      "add_insurance": true,
+      "price_paid": 175,
+      "payment_method": "credit_card",
+      "points_used": 0,
+      "cash_amount": 0,
+      "booked_at": "2026-06-10T10:00:00",
+      "cancellation_fee": null,
+      "refund_amount": null,
+      "change_fee": null,
+      "fare_difference": null,
+      "delay_compensation": null,
+      "paid_checked_bags": 0
+    },
+    {
+      "booking_id": "BK-1001",
+      "user_id": "user_004",
+      "flight_id": "UA100",
+      "status": "confirmed",
+      "cabin_class": "business",
+      "seat_type": "window",
+      "meal_preference": "standard",
+      "add_wifi": false,
+      "add_extra_legroom": false,
+      "add_insurance": false,
+      "price_paid": 600,
+      "payment_method": "credit_card",
+      "points_used": 0,
+      "cash_amount": 0,
+      "booked_at": "2026-06-05T10:00:00",
+      "cancellation_fee": null,
+      "refund_amount": null,
+      "change_fee": null,
+      "fare_difference": null,
+      "delay_compensation": null,
+      "paid_checked_bags": 0
+    }
+  ],
+  "users": [
+    {
+      "user_id": "user_001",
+      "name": "Emma Smith",
+      "email": "emma.smith@example.com",
+      "loyalty_tier": "gold",
+      "loyalty_points": 75000,
+      "budget": 1500,
+      "preferences": {
+        "meal_preference": "kosher",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": false
+      }
+    },
+    {
+      "user_id": "user_002",
+      "name": "Liam Johnson",
+      "email": "liam.johnson@example.com",
+      "loyalty_tier": "basic",
+      "loyalty_points": 5000,
+      "budget": 800,
+      "preferences": {
+        "meal_preference": "vegetarian",
+        "seat_type": "window",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": false
+      }
+    },
+    {
+      "user_id": "user_003",
+      "name": "Olivia Williams",
+      "email": "olivia.williams@example.com",
+      "loyalty_tier": "platinum",
+      "loyalty_points": 120000,
+      "budget": 2000,
+      "preferences": {
+        "meal_preference": "standard",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": true
+      }
+    },
+    {
+      "user_id": "user_004",
+      "name": "Noah Brown",
+      "email": "noah.brown@example.com",
+      "loyalty_tier": "silver",
+      "loyalty_points": 15000,
+      "budget": 600,
+      "preferences": {
+        "meal_preference": "standard",
+        "seat_type": "window",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true
+      }
+    },
+    {
+      "user_id": "user_005",
+      "name": "Ava Garcia",
+      "email": "ava.garcia@example.com",
+      "loyalty_tier": "basic",
+      "loyalty_points": 12000,
+      "budget": 700,
+      "preferences": {
+        "meal_preference": "vegan",
+        "seat_type": "aisle",
+        "add_wifi": true,
+        "add_extra_legroom": false,
+        "add_insurance": false
+      }
+    }
+  ],
+  "hotel_inventory": [],
+  "hotels": [],
+  "car_inventory": [],
+  "car_rentals": []
+}

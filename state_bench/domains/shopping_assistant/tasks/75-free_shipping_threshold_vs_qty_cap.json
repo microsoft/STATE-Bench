@@ -1,0 +1,94 @@
+{
+  "task_id": "75-free_shipping_threshold_vs_qty_cap",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hey — what's shipping going to cost me on this cart? And is there a way to make it free?",
+  "user_simulator": {
+    "personality": "Practical, cost-conscious, will follow the agent's suggestion if it saves money. Not adversarial.",
+    "user_sim_context": "Your cart has 3 docks and 1 webcam from earlier. You want to know shipping and will adjust the cart if there's a way to get free shipping. You do NOT know about the 3-per-product cap OR the 5+ free-shipping threshold. Your first instinct for 'add an item' will be to duplicate the dock (since that's what you have most of).",
+    "known_info": [
+      "Your cart has docks and a webcam.",
+      "You want free shipping if possible.",
+      "You're a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The 5-unit threshold for free standard shipping.",
+      "The 3-per-product cap.",
+      "That your dock is already at the cap.",
+      "Express/next_day fees and tier perks."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask about shipping and free options.",
+      "If the agent explains the 5+ threshold and says 'one more item = free shipping', reply: 'oh — ok, just add another dock then.' (Your first instinct.)",
+      "If the agent then explains the dock is at the 3-per-cart cap AND suggests adding a different item (e.g., another webcam), accept: 'sure, another webcam works.' After agent confirms $545 with free standard, reply 'perfect' and [TASK_DONE].",
+      "If the agent tries and fails to add another dock without pivoting (e.g., 'sorry, can't add another dock — sticking with $6 shipping'), reply 'ok, fine' and [TASK_DONE]. Agent failed to pivot.",
+      "If the agent quotes the $6 standard fee without surfacing the 5+ threshold at all, reply 'ok, let's just check out' and [TASK_DONE]. Agent failed silently on disclosure.",
+      "If the agent suggests express or next_day as the free option (they aren't free for Standard tier), accept whatever they quote — you don't know the tier rules. [TASK_DONE] with whatever cost. Agent failed.",
+      "If the agent picks a much more expensive pivot product (e.g., a $500 item instead of the $79 webcam) without explaining why, push back once: 'is there a cheaper item I could add to hit the threshold?'. If they then suggest the webcam, accept.",
+      "If the agent reaches 5 items but the total still shows $6 shipping or shipping_option is unset, ask: 'is shipping free now?'. If they then set standard to free, accept. If they don't, accept whatever they quote and end.",
+      "Do NOT mention loyalty points, promos, bundles, or gift wrap.",
+      "Keep replies short — 1-2 sentences."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004) has a pre-seeded cart: 3x SP-2006 ProBook USB-C Dock ($129) + 1x SP-2005 PixelShot Webcam ($79). 4 units total, subtotal $466. Free standard shipping requires 5+ units. Customer asks about shipping and how to make it free. Agent surfaces the threshold; customer suggests duplicating the dock (already at 3-per-cart cap); agent must detect the collision, pivot to a different product (second webcam), get consent, update cart, and set standard shipping. Final cart: dock qty=3, webcam qty=2, subtotal $545, shipping_option='standard', shipping_cost=0, total $545.\n\n**Challenge:** Two policies collide (qty cap + free-shipping threshold). The primary failure is agents that treat the qty-cap error as terminal and never pivot. Also agents that skip the threshold analysis entirely. A subtle failure is forgetting to call set_shipping_option after crossing the threshold — the tool doesn't auto-recompute shipping on cart mutation.",
+  "task_requirements": [
+    {
+      "id": "explained_5plus_threshold",
+      "kind": "must",
+      "requirement": "Agent surfaced that standard shipping becomes free with 5 or more units in the cart, giving the customer the option to cross the threshold.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "detected_dock_cap",
+      "kind": "must",
+      "requirement": "Agent recognized (either via get_cart + policy knowledge, or via a rejected update_cart_item attempt) that the dock is at the 3-per-cart cap and cannot be incremented further.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "pivoted_to_alternative",
+      "kind": "must",
+      "requirement": "Agent suggested adding a different product (the webcam, already in cart) rather than giving up. The suggestion must be a concrete product the customer can agree to, not a vague 'try something else'.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "crossed_threshold_and_set_shipping",
+      "kind": "must",
+      "requirement": "Agent updated cart to 5+ units (webcam qty=2) AND called set_shipping_option with 'standard'. The final cart must have shipping_option='standard' and shipping_cost=0.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "did_not_retry_dock_add",
+      "kind": "must_not",
+      "requirement": "Agent did NOT repeatedly call update_cart_item or add_to_cart for SP-2006 beyond the first attempt that revealed the cap. Retrying the same capped operation is a failure mode.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "cart_items",
+      "record_key": "CI-A2",
+      "field": "quantity",
+      "expected_value": 2
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "shipping_option",
+      "expected_value": "standard"
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 545
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 545
+    }
+  ],
+  "task_type": "inventory_shipping",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/75-free_shipping_threshold_vs_qty_cap.json"
+}

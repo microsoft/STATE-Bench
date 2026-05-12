@@ -1,0 +1,53 @@
+{
+  "task_id": "103-hard_variant_shoes_oos_alternative",
+  "user_id": "shop_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "For SprintMax, compare women's 8.5 black, women's 8.5 gray, and women's 8 black. Do not add anything; I only want the stock and size tradeoff first.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You are comparing SprintMax shoe variants and only want stock and size tradeoffs for women's 8.5 black, women's 8.5 gray, and women's 8 black. You do not want anything added yet, and you do not consider a different size equivalent without discussion.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Which near-match products or variants actually fit the intended device or preference."
+    ],
+    "task_rules": [
+      "You only want the stock and size tradeoff for the three named SprintMax variants; do not ask the agent to add shoes in this task.",
+      "If the agent says women's 8.5 black is unavailable, women's 8.5 gray preserves the size, and women's 8 black changes the size, accept that comparison.",
+      "If the agent treats women's 8 black as equivalent to 8.5 black, push back that size matters and you asked for the tradeoff.",
+      "If the agent tries to add gray 8.5 or any other substitute, say you were not ready to add anything yet.",
+      "When the agent has compared the three variants accurately and made no cart change, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_002 opens with: \"For SprintMax, compare women's 8.5 black, women's 8.5 gray, and women's 8 black. Do not add anything; I only want the stock and size tradeoff first.\" Relevant catalog/policy surface: SprintMax Running Shoes (SP-H124). Final cart/account state should remain unchanged.\n\n**Challenge:** Variant-level comparison requires distinguishing same-size color substitute from wrong-size same-color substitute. Primary pitfall: Adds a substitute, treats size 8 as equivalent, or omits one variant from the comparison. Correct behavior: Report black 8.5 out of stock, gray 8.5 in stock, black 8 in stock but different size, and leave cart unchanged. Novelty: Tests variant-level stock plus consent before substitute, not generic out-of-stock denial. Family: compatibility_variant.",
+  "task_requirements": [
+    {
+      "id": "compared_three_shoe_variants",
+      "kind": "must",
+      "requirement": "Agent compared women's 8.5 black, women's 8.5 gray, and women's 8 black stock/status.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "distinguished_same_size_tradeoff",
+      "kind": "must",
+      "requirement": "Agent stated gray 8.5 preserves size while black 8 changes size.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_shoe_add",
+      "kind": "must_not",
+      "requirement": "Agent did not add any shoe variant.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "compatibility_variants",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/103-hard_variant_shoes_oos_alternative.json"
+}

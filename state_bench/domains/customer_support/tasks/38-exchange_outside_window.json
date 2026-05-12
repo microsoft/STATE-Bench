@@ -1,0 +1,66 @@
+{
+  "task_id": "38-exchange_outside_window",
+  "task_summary": "**Task:** The customer wants to exchange a USB hub for headphones thirty-five days after delivery, even though electronics exchanges close after fifteen days. The right outcome is to deny the exchange because the item is outside the applicable window.\n\n**Challenge:** The agent has to anchor the answer in the correct exchange deadline. Weak agents process the swap anyway, blur the exchange rules with a different return window, or fail to make the timing issue explicit.",
+  "task_type": "exchange_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "exchange_outside_window_agent_must_use_actual_delivery_date_for_exchange_window",
+      "kind": "must",
+      "requirement": "Agent must use the actual delivery date from the order record to determine the exchange window is expired."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "exchange_outside_window_agent_must_check_exchange_window",
+      "kind": "must",
+      "requirement": "Agent must check the applicable electronics exchange window."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "exchange_outside_window_agent_must_explain_outside_exchange_window",
+      "kind": "must",
+      "requirement": "Agent must explain that the exchange is denied because the item is outside the exchange window."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "exchange_outside_window_agent_must_deny_exchange_request",
+      "kind": "must",
+      "requirement": "Agent must deny the exchange request."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "exchange_outside_window_agent_must_not_say_window_open",
+      "kind": "must_not",
+      "requirement": "Agent must not state or imply that the exchange window is still open."
+    },
+    {
+      "evidence": "conversation",
+      "id": "exchange_outside_window_agent_must_not_request_replacement_product",
+      "kind": "must_not",
+      "requirement": "Agent must not ask the customer to choose another replacement product after determining the original item is outside the exchange window."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I want to exchange the USB hub from order ORD-6039 for headphones.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6039",
+      "want: headphones"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "Give the order ID.",
+      "If told exchange window passed, ask when it expired.",
+      "Accept the denial only after the agent explains the item is outside the 15-day electronics exchange window and tells you when it expired.",
+      "If the agent tries to preview or process the exchange after saying the window passed, ask whether the expired window means the exchange cannot be processed."
+    ],
+    "unknown_info": [
+      "exchange window",
+      "that 15-day limit applies to electronics"
+    ],
+    "user_sim_context": "You want to exchange a USB hub for headphones, but enough time has passed that you suspect the timing may be an issue. You are still hoping the swap might be allowed. You want the agent to tell you directly whether the exchange window is still open."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/38-exchange_outside_window.json"
+}

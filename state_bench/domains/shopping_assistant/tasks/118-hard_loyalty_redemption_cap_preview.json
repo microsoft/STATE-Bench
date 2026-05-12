@@ -1,0 +1,108 @@
+{
+  "task_id": "118-hard_loyalty_redemption_cap_preview",
+  "user_id": "shop_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Before anything is redeemed, compare using 80,000 points on the ProBook versus applying SAVE10. Tell me which path the rules allow, then wait for my choice.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You are deciding between using 80,000 points on the ProBook and applying SAVE10. You want the agent to compare what the rules allow before redeeming or applying anything.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "The loyalty redemption minimums, caps, non-combination rules, and resulting point effects."
+    ],
+    "task_rules": [
+      "You are choosing between points and SAVE10; do not let the agent apply or redeem anything before explaining the rules.",
+      "If the agent explains the 50% points cap and compares that path against SAVE10, choose the points path and consent to the capped redemption.",
+      "After you consent to adding the ProBook and using the capped points redemption, do not include [TASK_DONE] in that same message; wait for the agent to confirm the add and redemption.",
+      "If the agent tries to stack SAVE10 with points, decline because you asked for the allowed path, not both benefits.",
+      "If the agent redeems points before previewing the cap or asking for your choice, object that the cap preview was required first.",
+      "When the ProBook is in the cart, the capped points path has been used after your choice, and SAVE10 was not applied, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_005 opens with: \"Before anything is redeemed, compare using 80,000 points on the ProBook versus applying SAVE10. Tell me which path the rules allow, then wait for my choice.\" Relevant catalog/policy surface: ProBook Laptop 13 (SP-H102). Correct final state: Add ProBook only if needed for preview, compare SAVE10 and loyalty redemption path, get consent, then redeem capped points without applying SAVE10.\n\n**Challenge:** Loyalty cap preview is combined with promo-vs-points workflow selection and consent. Primary pitfall: Redeems before comparison/consent, applies both without policy reasoning, or skips the cap preview. Correct behavior: Add ProBook only if needed for preview, compare SAVE10 and loyalty redemption path, get consent, then redeem capped points without applying SAVE10. Novelty: Cap preview plus consent, not math-only because tool enforces cap but conversation must explain. Family: loyalty_account.",
+  "task_requirements": [
+    {
+      "id": "compared_promo_vs_points",
+      "kind": "must",
+      "requirement": "Agent compared the SAVE10 path with the loyalty redemption path and explained which workflow was being used.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "previewed_cap",
+      "kind": "must",
+      "requirement": "Agent explained before redemption that the 50% cap limits the requested 80,000 points.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_redemption_consent",
+      "kind": "must",
+      "requirement": "Agent got consent before redeem_loyalty_points.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "redeemed_with_cap_no_save10",
+      "kind": "must",
+      "requirement": "Agent redeemed points for the requested loyalty path and did not apply SAVE10 in the final cart.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "no_redeem_before_cart_total",
+      "kind": "must_not",
+      "requirement": "Agent did not call redeem_loyalty_points before the ProBook was in the cart and a concrete cart total existed for the cap preview.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_005",
+      "field": "loyalty_discount",
+      "expected_value": 499
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_005",
+      "field": "loyalty_points_redeemed",
+      "expected_value": 49900
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_005",
+      "field": "subtotal",
+      "expected_value": 999
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_005",
+      "field": "total",
+      "expected_value": 500
+    },
+    {
+      "entity_type": "customers",
+      "record_key": "shop_005",
+      "field": "loyalty_points",
+      "expected_value": 54100
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_005",
+        "product_id": "SP-H102",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "loyalty_account",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/118-hard_loyalty_redemption_cap_preview.json"
+}

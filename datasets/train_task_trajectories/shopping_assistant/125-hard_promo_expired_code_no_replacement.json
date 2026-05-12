@@ -1,0 +1,34 @@
+{
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a shopping assistant for an online store. Today's date: <REDACTED>. You are currently helping customer shop_003. Use the available tools to help the customer find products, compare options, manage their cart, and apply promotions."
+    },
+    {
+      "role": "user",
+      "content": "Check whether EXPIRED10 is still usable. Do not add the blender, do not validate other codes, and do not suggest replacements unless I ask."
+    },
+    {
+      "role": "assistant",
+      "content": "EXPIRED10 is not usable anymore. The system shows it as invalid because it expired on 2026-01-01.",
+      "tool_calls": [
+        {
+          "name": "validate_promo",
+          "arguments": {
+            "customer_id": "shop_003",
+            "promo_code": "EXPIRED10"
+          },
+          "result": {
+            "valid": false,
+            "reason": "Promo code expired on 2026-01-01T00:00:00.",
+            "estimated_discount": 0
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Got it, thanks for checking\u2014that\u2019s all I needed. [TASK_DONE]"
+    }
+  ]
+}

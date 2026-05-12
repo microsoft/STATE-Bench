@@ -1,0 +1,138 @@
+{
+  "task_id": "55-challenge_triple_fee_stack",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have a family bereavement and need to reschedule 3 flights. Booking BK-1000 (ORD→SFO) to June 27, booking BK-1001 (JFK→LHR) to June 30, and booking BK-1002 (JFK→CDG) to June 23. My user ID is user_004. My total budget for change fees is $120 — can all 3 changes fit?",
+  "user_simulator": {
+    "personality": "Organized despite grief. Gives all info upfront. Wants exact fee breakdown before proceeding.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking A: BK-1000 (ORD→SFO, June 25) → change to June 27",
+      "Booking B: BK-1001 (JFK→LHR, June 28) → change to June 30",
+      "Booking C: BK-1002 (JFK→CDG, June 20) → change to June 23",
+      "Change reason: bereavement (genuine family emergency)",
+      "Budget for change fees only (not fare differences): $120"
+    ],
+    "unknown_info": [
+      "Exact change fees for each booking",
+      "Whether bereavement discount applies",
+      "How much the bereavement discount is",
+      "Fare differences for new flights"
+    ],
+    "task_rules": [
+      "Provide all 3 bookings and new dates in the opening message. Mention bereavement and $120 fee budget.",
+      "When agent calculates fees, ask 'Can you break down each fee separately so I can see the math?'",
+      "If agent's fee calculation matches ($18 + $25 + $50 = $93), say 'Great, that's under my $120 budget. Go ahead with all 3 changes.'",
+      "If agent miscalculates any fee, say 'That doesn't sound right — can you double-check the bereavement discount? I thought it was 75% off.'",
+      "After all 3 changes are executed, say 'Thank you for your help during this difficult time.' and end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are trying to reschedule three flights tied to a bereavement situation, and you care about the total fees across all of them rather than any one change in isolation. The budget you have in mind is limited enough that the whole plan may not fit. You need the agent to help you understand the total picture before you commit."
+  },
+  "task_summary": "**Task:** User needs three bereavement-related date changes with different route and timing tiers, but only has a $120 budget for the change fees themselves. Correct resolution: Agent must compute the three bereavement change fees correctly as $18, $25, and $50 for the three bookings.\n\n**Challenge:** The agent computes all three bereavement fees correctly, keeps the fee-budget reasoning separate from fare differences, and confirms that the fee total fits while still giving the full grand-total breakdown.",
+  "task_requirements": [
+    {
+      "id": "state_three_bereavement_fees_correct",
+      "kind": "must",
+      "requirement": "Agent must compute the three bereavement change fees correctly as $18, $25, and $50 for the three bookings.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_fee_budget_vs_fare_diff_distinguished",
+      "kind": "must",
+      "requirement": "Agent must explain that the $120 budget applies to change fees only, that the total fees are $93, and that fare differences are separate additional amounts.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_all_three_fit_and_can_proceed",
+      "kind": "must",
+      "requirement": "Agent must conclude that all three changes can proceed because the fee total stays under budget.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/55-challenge_triple_fee_stack.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 18
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "UA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 338
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "change_fee",
+      "expected_value": 25
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "flight_id",
+      "expected_value": "BA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "price_paid",
+      "expected_value": 745
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1002",
+      "field": "change_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1002",
+      "field": "fare_difference",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1002",
+      "field": "flight_id",
+      "expected_value": "DL101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1002",
+      "field": "price_paid",
+      "expected_value": 730
+    }
+  ]
+}

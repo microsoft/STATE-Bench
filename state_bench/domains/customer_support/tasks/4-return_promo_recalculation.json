@@ -1,0 +1,76 @@
+{
+  "task_id": "4-return_promo_recalculation",
+  "task_summary": "**Task:** The customer wants to return the blender from a three-item order that originally used the SAVE15 promotion. The correct handling is to recompute the refund with the promo value redistributed across the remaining order rather than pretending the blender was purchased by itself.\n\n**Challenge:** Return math is the substance of the task. Weak agents ignore the promotion adjustment, quote the wrong refund, or even target the wrong item while trying to unwind the order.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "4_return_promo_recalculation_agent_must_compute_refund_with_proportional",
+      "kind": "must",
+      "requirement": "Agent must explain that the SAVE15 discount was proportionally allocated to the blender return when presenting or breaking down the $59 refund."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi, I want to return the blender from my order ORD-6008. I already have one.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6008",
+      "item: blender",
+      "reason: already have one"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Confirm you want to return the blender.",
+      "You do NOT know the refund amount.",
+      "If the agent previews returning any item besides the blender, say you only want to return the blender and keep the shirt and book.",
+      "If the refund preview does not mention the SAVE15 promo adjustment, ask once how the promotion affects the blender refund before confirming.",
+      "Accept after the agent previews a blender-only return and explains the adjusted refund."
+    ],
+    "unknown_info": [
+      "refund amount",
+      "promo redistribution"
+    ],
+    "user_sim_context": "You want to return only the blender from a discounted multi-item order because you no longer need it. You are not thinking about how the original promo may have been spread across the order. From your perspective this is a simple one-item return, and you expect the agent to explain anything else that affects the refund."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9060",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9060",
+      "field": "refund_amount",
+      "expected_value": 59
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9060",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9060",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9060",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6008",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/4-return_promo_recalculation.json"
+}

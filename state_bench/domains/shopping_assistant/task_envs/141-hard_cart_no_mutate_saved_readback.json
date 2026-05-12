@@ -1,0 +1,113 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H107",
+      "name": "ClearGrip Case for Pixel 7",
+      "category": "electronics",
+      "subcategory": "phone_case",
+      "brand": "NovaShield",
+      "price": 29,
+      "rating": 4.5,
+      "review_count": 840,
+      "description": "ClearGrip Case for Pixel 7 from NovaShield. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "Google Pixel 7"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 1,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H111",
+      "name": "7-Port USB-C Hub",
+      "category": "electronics",
+      "subcategory": "hub",
+      "brand": "PortPro",
+      "price": 49,
+      "rating": 4.2,
+      "review_count": 1550,
+      "description": "7-Port USB-C Hub from PortPro. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "SlimBook Air 13",
+        "ProBook Laptop 13",
+        "TechPhone Pro 16"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_004",
+      "name": "Taylor Kim",
+      "email": "taylor.kim@example.com",
+      "tier": "standard",
+      "is_first_time": false,
+      "loyalty_points": 0,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_004",
+      "customer_id": "shop_004",
+      "item_ids": [
+        "CI-0001",
+        "CI-0002"
+      ],
+      "subtotal": 78,
+      "discount_amount": 7,
+      "gift_wrap_fee": 5,
+      "total": 49,
+      "applied_promo_codes": [
+        "SAVE10"
+      ],
+      "loyalty_points_redeemed": 3900,
+      "loyalty_discount": 39,
+      "shipping_option": "express",
+      "shipping_cost": 12
+    }
+  ],
+  "cart_items": [
+    {
+      "cart_item_id": "CI-0001",
+      "customer_id": "shop_004",
+      "product_id": "SP-H107",
+      "quantity": 1,
+      "gift_wrap": false,
+      "variant_id": null
+    },
+    {
+      "cart_item_id": "CI-0002",
+      "customer_id": "shop_004",
+      "product_id": "SP-H111",
+      "quantity": 1,
+      "gift_wrap": true,
+      "variant_id": null
+    }
+  ],
+  "promotions": [
+    {
+      "promo_code": "SAVE10",
+      "description": "10% off eligible orders",
+      "discount_type": "percentage",
+      "discount_value": 10,
+      "min_purchase": 0,
+      "max_discount": 0,
+      "category_restriction": null,
+      "expiry_date": "2026-12-31T23:59:59",
+      "active": true
+    }
+  ]
+}

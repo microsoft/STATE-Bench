@@ -1,0 +1,81 @@
+{
+  "task_id": "96-challenge_medical_intl_gt7d_no_savings",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have a medical issue and want to change BK-1000 to July 5. The later flights seem cheaper too. My user ID is user_004.",
+  "user_simulator": {
+    "personality": "Hopeful about saving money with the cheaper flight, but focused on moving the same Paris trip rather than shopping around.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking: BK-1000 (JFK to CDG, June 28)",
+      "Medical reason",
+      "For this task, keep the same route and accept AF101 if the agent explains the fee correctly"
+    ],
+    "unknown_info": [
+      "That cheaper flight does not create net savings because the medical change fee offsets it",
+      "Exact fee"
+    ],
+    "task_rules": [
+      "Open with: medical, change BK-1000 to July 5, mention that the later flight seems cheaper.",
+      "If the agent offers AF101 on July 5 on the same route, stay on that route and do not pivot to other airlines, airports, or destinations.",
+      "Ask one clarifying question: does the cheaper fare actually save me money after the medical fee, or does it just cancel out?",
+      "If the agent explains that the $50 cheaper fare is offset by the $50 medical change fee so there is no net savings, say 'That makes sense. Go ahead.'",
+      "If the agent quotes the wrong fee math, push once: 'I thought the flight was $50 cheaper. Can you double-check whether that actually saves me anything after the medical fee?'",
+      "After the same-route July 5 change is completed, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget applies to incremental out-of-pocket cost for the change, not the final total fare already paid into the booking.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are changing an international booking for a medical reason and have noticed cheaper later flights, which makes you hopeful the outcome may be favorable. You are looking for the real bottom line, not just a policy label. If the cheaper fare does not actually help, you need that explained plainly."
+  },
+  "task_summary": "**Task:** A traveler sees a cheaper later international flight and assumes a medical change should produce savings, but the discounted change fee exactly cancels out the lower fare. Correct resolution: This medical change uses the international more-than-7-days base fee of $100 and therefore results in a $50 change fee after the medical discount.\n\n**Challenge:** The agent applies the international more-than-7-days medical fee correctly, does not invent a refund on the negative fare difference, and explains that the net additional cost is zero rather than a savings windfall.",
+  "task_requirements": [
+    {
+      "id": "medical_intl_gt7d_fee_is_50",
+      "kind": "must",
+      "requirement": "Agent must explain that this medical change uses the international more-than-7-days base fee of $100 and therefore results in a $50 change fee after the medical discount.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "negative_fare_diff_not_refunded_here",
+      "kind": "must",
+      "requirement": "Agent must make clear that the $50 cheaper replacement flight does not create a refund or extra savings on the change path because the negative fare difference is not refunded.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "net_additional_cost_is_zero",
+      "kind": "must",
+      "requirement": "Agent must explain or otherwise make clear that the medical change produces no net additional cost overall, rather than a positive savings amount.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/96-challenge_medical_intl_gt7d_no_savings.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": -50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "AF101"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "protocol_id": "state_bench_v0.4.4_gpt51",
+  "split_version": "train_test",
+  "split": "test",
+  "num_runs": 5,
+  "domains": [
+    "travel",
+    "customer_support",
+    "shopping_assistant"
+  ],
+  "official_model": "gpt-5.1",
+  "official_api_version": "2025-03-01-preview",
+  "simulator": {
+    "model": "gpt-5.1",
+    "api_version": "2025-03-01-preview",
+    "prompt_hashes": {
+      "travel/user_sim_base.md": "98d56c53c42b25e104f73bcb6197245859f1ae4d8c5e3162a21c7989888479be",
+      "customer_support/user_sim_base.md": "bd2c4d9c24895a962c95039dcf661a6054d7af7639f26573b47bbf8cb8752ee5",
+      "shopping_assistant/user_sim_base.md": "d9028d4d0981e368e88a64eb475642838037c43de235961926388cf764416e78"
+    }
+  },
+  "judge": {
+    "model": "gpt-5.1",
+    "api_version": "2025-03-01-preview",
+    "reasoning_effort": "high",
+    "prompt_hashes": {
+      "travel/judge_task_requirements.md": "814266866377f54ba029cb8ea744ed957eddb441c29586e9ae1313b888356ba1",
+      "travel/judge_ux_quality.md": "d0aee986b15858a1acb4630e240b79992c0d1f16e1a739968fc4c10f3c15a2d9",
+      "travel/judge_ux_quality_user.md": "5a6e9fa444fb5da4bd06991f907845a3023a8bb449dbb7c0994f4624fad67b94",
+      "customer_support/judge_task_requirements.md": "f957de53cf49806c163428e7a40509ad7a5fdabdc88ee7674afb4c3e1760d652",
+      "customer_support/judge_ux_quality.md": "25f2da040780086205f2c1933d3a57abe7953722607d6cd2bdad61b56609a025",
+      "customer_support/judge_ux_quality_user.md": "5a6e9fa444fb5da4bd06991f907845a3023a8bb449dbb7c0994f4624fad67b94",
+      "shopping_assistant/judge_task_requirements.md": "558947b2ce0b5d90a633e7d44e8599c329a96ac5ed9e43c9d37ffb5e6cf3c055",
+      "shopping_assistant/judge_ux_quality.md": "25e6921deffc10f42baf95ecfe064149d4ffd11b798ed5ee79b53a0a38650790",
+      "shopping_assistant/judge_ux_quality_user.md": "5a6e9fa444fb5da4bd06991f907845a3023a8bb449dbb7c0994f4624fad67b94"
+    }
+  }
+}

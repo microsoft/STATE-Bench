@@ -1,0 +1,81 @@
+{
+  "task_id": "67-challenge_7day_boundary_medical",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to change my flight BK-1000 to June 28 for a medical reason. I was going to call yesterday but forgot. Does the timing matter for the fee? My user ID is user_002.",
+  "user_simulator": {
+    "personality": "Curious about the fee structure. Asks follow-up questions about timing.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking: BK-1000 (ORD to DEN, June 22)",
+      "Medical reason for the change",
+      "Was going to call yesterday"
+    ],
+    "unknown_info": [
+      "Exact change fee with medical discount",
+      "That the 7-day boundary just crossed",
+      "How much they would have saved yesterday"
+    ],
+    "task_rules": [
+      "Open with: change BK-1000 to June 28, medical reason, mention calling yesterday.",
+      "When agent quotes the fee, ask: 'How much would it have been if I called yesterday?'",
+      "If agent says same price, push back: 'But yesterday my flight was 8 days away, not 7. Does that change the rate?'",
+      "If agent correctly explains the $38 difference, say: 'That is frustrating but go ahead with the change.'",
+      "After change is done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to change a flight for medical reasons and are acutely aware that you might have waited one day too long. You want to know whether that timing shift changes what you owe. The conversation is really about whether the boundary matters as much as you fear."
+  },
+  "task_summary": "**Task:** A traveler is making a medical change exactly seven days before departure and also asks whether waiting until today changed the fee versus yesterday. Correct resolution: Because the departure is exactly seven days away, the domestic <=7-day base fee is $150 and the medical discount makes the fee $75, not roughly $37.\n\n**Challenge:** The agent uses the inclusive seven-day boundary, applies the medical discount to the correct base fee, and explains that the user missed a cheaper yesterday window.",
+  "task_requirements": [
+    {
+      "id": "medical_boundary_fee_correct",
+      "kind": "must",
+      "requirement": "Agent must explain that because the departure is exactly seven days away, the domestic <=7-day base fee is $150 and the medical discount makes the fee $75, not roughly $37.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "yesterday_would_have_been_cheaper",
+      "kind": "must",
+      "requirement": "Agent must explain that calling yesterday would have fallen into the more-than-seven-days tier and therefore would have produced a lower medical fee of about $37, so waiting until today cost more.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/67-challenge_7day_boundary_medical.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 75
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "UA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 455
+    }
+  ]
+}

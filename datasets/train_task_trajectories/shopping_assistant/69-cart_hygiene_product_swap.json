@@ -1,0 +1,300 @@
+{
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a shopping assistant for an online store. Today's date: <REDACTED>. You are currently helping customer shop_004. Use the available tools to help the customer find products, compare options, manage their cart, and apply promotions."
+    },
+    {
+      "role": "user",
+      "content": "Hey \u2014 please add the BudgetLine Notebook 15 to my cart, that's the one I want."
+    },
+    {
+      "role": "assistant",
+      "content": "I\u2019ve added the BudgetLine Notebook 15 (SP-1103) to your cart with quantity 1 and no gift wrap.  \n\nIf you\u2019d like, I can:\n- Adjust the quantity  \n- Add gift wrap  \n- Compare it quickly with a higher-end 15\" option before you check out.",
+      "tool_calls": [
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "BudgetLine Notebook 15",
+            "category": "electronics",
+            "min_price": 0,
+            "max_price": 10000,
+            "min_rating": 1,
+            "in_stock_only": true,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-1103",
+                "name": "BudgetLine Notebook 15",
+                "brand": "BudgetLine",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 449,
+                "rating": 3.4,
+                "review_count": 210,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1101",
+                "name": "ProBook Laptop 15-inch",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1299,
+                "rating": 4.7,
+                "review_count": 1890,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1105",
+                "name": "CreatorStudio 15",
+                "brand": "CreatorStudio",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1499,
+                "rating": 4.7,
+                "review_count": 720,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1107",
+                "name": "SlimBook Touch 15",
+                "brand": "SlimBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1099,
+                "rating": 4.5,
+                "review_count": 410,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-2004",
+                "name": "TechPhone Lite 15",
+                "brand": "TechPhone",
+                "category": "electronics",
+                "subcategory": "phone",
+                "price": 499,
+                "rating": 4.3,
+                "review_count": 2200,
+                "in_stock": true
+              }
+            ],
+            "total_found": 5
+          }
+        },
+        {
+          "name": "get_variants",
+          "arguments": {
+            "product_id": "SP-1103"
+          },
+          "result": {
+            "product_id": "SP-1103",
+            "product_name": "BudgetLine Notebook 15",
+            "base_price": 449,
+            "variants": [],
+            "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
+          "name": "add_to_cart",
+          "arguments": {
+            "customer_id": "shop_004",
+            "product_id": "SP-1103",
+            "quantity": 1,
+            "gift_wrap": false,
+            "variant_id": ""
+          },
+          "result": {
+            "status": "added",
+            "cart_item_id": "CI-0001",
+            "product_id": "SP-1103",
+            "product_name": "BudgetLine Notebook 15",
+            "variant_id": null,
+            "quantity": 1,
+            "gift_wrap": false,
+            "unit_price": 449,
+            "cart_subtotal": 449,
+            "cart_total": 449
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Actually wait \u2014 my friend just reminded me the ProBook Chromebook 11 is better for what I need. Can we switch to that instead?"
+    },
+    {
+      "role": "assistant",
+      "content": "Done. I\u2019ve removed the BudgetLine Notebook 15 and added the ProBook Chromebook 11 (SP-1106) to your cart, quantity 1, no gift wrap.  \n\nDo you want to:\n- Add any accessories (case, mouse, USB-C hub), or  \n- See your current cart total with tax/shipping options?",
+      "tool_calls": [
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "ProBook Chromebook 11",
+            "category": "electronics",
+            "min_price": 0,
+            "max_price": 10000,
+            "min_rating": 1,
+            "in_stock_only": true,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-1106",
+                "name": "ProBook Chromebook 11",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 329,
+                "rating": 3.9,
+                "review_count": 530,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1101",
+                "name": "ProBook Laptop 15-inch",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1299,
+                "rating": 4.7,
+                "review_count": 1890,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1002",
+                "name": "ProBook Laptop 13-inch",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 999,
+                "rating": 4.6,
+                "review_count": 2180,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-2001",
+                "name": "SlateTab Pro 11-inch",
+                "brand": "SlateTab",
+                "category": "electronics",
+                "subcategory": "tablet",
+                "price": 599,
+                "rating": 4.5,
+                "review_count": 1870,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-2006",
+                "name": "ProBook USB-C Dock",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "accessory",
+                "price": 129,
+                "rating": 4.3,
+                "review_count": 920,
+                "in_stock": true
+              }
+            ],
+            "total_found": 5
+          }
+        },
+        {
+          "name": "remove_from_cart",
+          "arguments": {
+            "customer_id": "shop_004",
+            "product_id": "SP-1103"
+          },
+          "result": {
+            "status": "removed",
+            "cart_id": "CART-shop_004",
+            "product_id": "SP-1103",
+            "cart_subtotal": 0,
+            "cart_total": 0
+          }
+        },
+        {
+          "name": "get_variants",
+          "arguments": {
+            "product_id": "SP-1106"
+          },
+          "result": {
+            "product_id": "SP-1106",
+            "product_name": "ProBook Chromebook 11",
+            "base_price": 329,
+            "variants": [],
+            "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
+          "name": "add_to_cart",
+          "arguments": {
+            "customer_id": "shop_004",
+            "product_id": "SP-1106",
+            "quantity": 1,
+            "gift_wrap": false,
+            "variant_id": ""
+          },
+          "result": {
+            "status": "added",
+            "cart_item_id": "CI-0002",
+            "product_id": "SP-1106",
+            "product_name": "ProBook Chromebook 11",
+            "variant_id": null,
+            "quantity": 1,
+            "gift_wrap": false,
+            "unit_price": 329,
+            "cart_subtotal": 329,
+            "cart_total": 329
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Can you show me what\u2019s in my cart now, including the total?"
+    },
+    {
+      "role": "assistant",
+      "content": "Here\u2019s your current cart:\n\n1) ProBook Chromebook 11 (SP-1106)  \n- Quantity: 1  \n- Unit price: $329  \n- Gift wrap: No  \n- Line total: $329  \n\nCart summary (before tax & shipping):  \n- Subtotal: $329  \n- Discounts: $0  \n- Gift wrap: $0  \n- Shipping: Not selected yet (currently $0 placeholder)  \n- Total (pre-tax, before shipping): **$329**\n\nIf you tell me your state or country, I can estimate tax, and I can also pull in available shipping options (standard/express/next-day) with prices and delivery estimates.",
+      "tool_calls": [
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "cart_id": "CART-shop_004",
+            "customer_id": "shop_004",
+            "items": [
+              {
+                "cart_item_id": "CI-0002",
+                "product_id": "SP-1106",
+                "product_name": "ProBook Chromebook 11",
+                "quantity": 1,
+                "gift_wrap": false,
+                "unit_price": 329,
+                "line_total": 329
+              }
+            ],
+            "subtotal": 329,
+            "discount_amount": 0,
+            "gift_wrap_fee": 0,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 329,
+            "applied_promo_codes": []
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Total looks good.  \n\n[TASK_DONE]"
+    }
+  ]
+}

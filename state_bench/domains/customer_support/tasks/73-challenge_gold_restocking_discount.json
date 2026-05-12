@@ -1,0 +1,73 @@
+{
+  "task_id": "73-challenge_gold_restocking_discount",
+  "task_summary": "**Task:** A Gold customer is returning a laptop with a substantial restocking fee, but Gold status entitles them to a fifty-percent restocking-discount adjustment. The correct handling is to process the return, keep the base restocking deduction, and apply the $97 Gold adjustment in the final refund math.\n\n**Challenge:** This is multi-step financial handling rather than a single net-number answer. Weak agents forget the Gold adjustment entirely, waive the restocking fee outright, or miss the membership policy.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "73_challenge_gold_restocking_discount_agent_must_know_about_the_restocking",
+      "kind": "must",
+      "requirement": "Agent must explain that the laptop return keeps the $194 restocking fee, applies the Gold 50% restocking discount as a $97 benefit rather than a full waiver, includes the $8 free-shipping clawback, and results in a $1194 refund to original payment."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi, I'd like to return the ProBook Laptop from order ORD-7102. I changed my mind about it.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7102",
+      "item: ProBook Laptop",
+      "reason: changed mind"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give order ID when asked.",
+      "If agent mentions restocking fee, ask if your Gold membership gets any discount on it.",
+      "Accept the return terms only after the preview explains both the base restocking fee and the Gold restocking discount; if the agent says the fee is fully waived or gives no Gold discount, ask them to verify the Gold restocking-discount policy."
+    ],
+    "unknown_info": [
+      "restocking fee amount",
+      "restocking discount for Gold"
+    ],
+    "user_sim_context": "You want to return a laptop because you changed your mind, and you expect your Gold status to matter somehow on the fee side. You are not certain whether it means a waiver or something more limited. You want the agent to spell out the real benefit clearly."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10119",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10119",
+      "field": "refund_amount",
+      "expected_value": 1194
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10119",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10119",
+      "field": "restocking_fee",
+      "expected_value": 194
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10119",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7102",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/73-challenge_gold_restocking_discount.json"
+}

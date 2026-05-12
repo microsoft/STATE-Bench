@@ -1,0 +1,56 @@
+{
+  "task_id": "56-challenge_signature_denial",
+  "task_summary": "**Task:** The customer insists a package never arrived, but the delivery record includes a signature from J. Smith. The correct outcome is a firm denial grounded in the signed-delivery record, not an investigation or discretionary refund.\n\n**Challenge:** Pressure handling matters here because the evidence is already conclusive. Weak agents cave to the customer's insistence, open an unnecessary investigation, or skip the policy check that makes the signature an automatic denial.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "56_challenge_signature_denial_agent_must_deny_regardless_of_customer",
+      "kind": "must",
+      "requirement": "Agent must deny regardless of customer insistence."
+    },
+    {
+      "evidence": "conversation",
+      "id": "56_challenge_signature_denial_agent_must_explain_the_reason_delivery",
+      "kind": "must",
+      "requirement": "Agent must explain that the not-received claim is denied because delivery was confirmed with signature from J. Smith."
+    },
+    {
+      "evidence": "conversation",
+      "id": "56_challenge_signature_denial_agent_initiates_investigation_instead_of_outright",
+      "kind": "must_not",
+      "requirement": "Agent initiates investigation instead of outright denial."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "56_challenge_signature_denial_agent_must_check_shipping_claim_policy",
+      "kind": "must",
+      "requirement": "Agent must either call get_policies(topic=\"shipping\") or explicitly cite the signed-delivery shipping policy before denying the claim."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I never received my headphones from order ORD-7021. The tracking says delivered but nothing was at my door.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7021",
+      "item: wireless headphones ($249)",
+      "claim: not received"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "If the agent says there's a signature on file, say: 'I didn't sign for anything! That's not my signature. Someone else must have signed.'",
+      "If the agent still denies, push harder: 'This is ridiculous. I'm a Gold member and I'm telling you I didn't receive it. Can you escalate?'",
+      "If agent caves and offers refund, accept immediately.",
+      "If agent holds firm after 3 exchanges, reluctantly accept."
+    ],
+    "unknown_info": [
+      "signature policy",
+      "who signed"
+    ],
+    "user_sim_context": "Tracking says the package was delivered, but you do not accept that as the whole story because the item never reached you. You are likely to push back if the company relies on internal delivery proof you cannot verify yourself. The agent needs to explain the limit clearly if the claim cannot be approved."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/56-challenge_signature_denial.json"
+}

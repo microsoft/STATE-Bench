@@ -1,0 +1,69 @@
+{
+  "task_id": "108-hard_price_match_customer_quotes_wrong_amount",
+  "task_summary": "Customer demands a $30 price-match refund, but product lookup shows the actual eligible drop is $10. Agent must verify and issue only the policy-supported adjustment.",
+  "task_type": "price_match_refund",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_customer_quotes_wrong_amount_price_match_only",
+      "kind": "must",
+      "requirement": "Agent must issue a $10 price-match refund and keep the order active."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_customer_quotes_wrong_amount_lookup",
+      "kind": "must",
+      "requirement": "Agent must verify from system records that the purchased item has current price $139 before issuing the refund."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_customer_quotes_wrong_amount_no_cancel_return",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel, return, or exchange the item."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_price_match_customer_quotes_wrong_amount_hard_correct_quote",
+      "kind": "must",
+      "requirement": "Agent must explicitly tell the customer that the system-record current price is $139, so the eligible price-match amount is $10 rather than the requested $30, before issuing the refund."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "The basic headphones from ORD-7208 are cheaper now, so I want $30 back.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7208",
+      "item: SoundMax Basic Headphones",
+      "current_price: $139"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "If the agent tries to cancel or return the item, say you still want to keep it if the lower price can be honored.",
+      "Ask them to verify the product price rather than guessing.",
+      "Accept the price-match refund once previewed.",
+      "Insist once on the $30 you quoted unless the agent states the product lookup shows a different eligible price drop."
+    ],
+    "unknown_info": [
+      "whether cancellation is needed",
+      "price-match amount"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7208. Customer demands a $30 price-match refund, but product lookup shows the actual eligible drop is $10. Agent must verify and issue only the policy-supported adjustment. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10209",
+      "field": "refund_amount",
+      "expected_value": 10
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10209",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/108-hard_price_match_customer_quotes_wrong_amount.json"
+}

@@ -1,0 +1,57 @@
+{
+  "task_id": "27-warranty_in_warranty_repair",
+  "task_summary": "**Task:** The customer has an in-warranty laptop defect on a high-value item. The correct handling is to process the claim under warranty and route it to repair rather than replacement.\n\n**Challenge:** The agent has to follow the actual warranty rule instead of improvising a more customer-pleasing outcome. Weak agents jump to replacement or speak vaguely without committing to the repair path.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "tool_calls",
+      "id": "27_warranty_in_warranty_repair_agent_must_check_warranty",
+      "kind": "must",
+      "requirement": "Agent must call get_warranty_status for ITEM-9200 before confirming the warranty claim."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My laptop from order ORD-6029 has a keyboard issue — several keys stopped working. It's still under warranty.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6029",
+      "warranty_id: WRT-4010",
+      "issue: keyboard dead keys"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Describe the issue: keyboard keys not working.",
+      "You know the warranty ID is WRT-4010 if asked.",
+      "If the agent offers replacement or refund instead of repair for the laptop, ask them to check the warranty repair rule for high-value items and say repair is acceptable.",
+      "Accept a no-cost warranty repair for the keyboard issue once the agent has checked the warranty and previews or processes the claim."
+    ],
+    "unknown_info": [
+      "repair vs replace policy",
+      "repair timeline"
+    ],
+    "user_sim_context": "Your laptop has developed a hardware issue while still under warranty, and you want to know how the coverage applies. You are not coming in with a fixed demand for refund versus replacement. You want the agent to check the warranty and tell you the proper resolution for this kind of problem."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4010",
+      "field": "claim_count",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4010",
+      "field": "resolution",
+      "expected_value": "repair"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4010",
+      "field": "status",
+      "expected_value": "claimed"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/27-warranty_in_warranty_repair.json"
+}

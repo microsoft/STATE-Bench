@@ -1,0 +1,146 @@
+{
+  "task_id": "33-exchange_size_swap",
+  "task_summary": "**Task:** The customer wants a routine same-style size exchange from medium to large. The correct handling is a free like-for-like exchange with no restocking fee and no detour through a return flow.\n\n**Challenge:** The agent has to recognize the simplest valid path. Weak agents add unnecessary fees, convert the case into a return, or otherwise overcomplicate a basic size swap.",
+  "task_type": "exchange_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "33_exchange_size_swap_agent_processes_return_instead_of_exchange",
+      "kind": "must_not",
+      "requirement": "Agent processes return instead of exchange."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "33_exchange_size_swap_agent_must_explain_that_the_same",
+      "kind": "must",
+      "requirement": "Agent must explain that the same-variant exchange is free and has no restocking fee."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I need to exchange the shirt from order ORD-6034 for a larger size. The medium is too tight.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6034",
+      "current: medium",
+      "want: large"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Specify you want same shirt in Large.",
+      "Accept only a same-shirt Large exchange that has no restocking fee and no extra charge.",
+      "If the agent suggests a return, refund, rebuy, or any restocking fee instead of a free size exchange, say you want a direct size exchange for the same shirt."
+    ],
+    "unknown_info": [
+      "exchange process",
+      "whether there's a fee"
+    ],
+    "user_sim_context": "You want to exchange a shirt for a larger size because the current one is too tight. This feels like a routine size swap rather than a complicated return. You expect the agent to help you move to the correct size without unnecessary friction."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9250",
+      "field": "item_status",
+      "expected_value": "exchanged"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9250",
+      "field": "replacement_item_id",
+      "expected_value": "ITEM-9251"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "goodwill_credit",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "goodwill_credit_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "item_id",
+      "expected_value": "ITEM-9251"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "item_status",
+      "expected_value": "confirmed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "order_id",
+      "expected_value": "ORD-6034"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "product_id",
+      "expected_value": "PROD-2251"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "quantity",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "refund_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "replacement_item_id",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "restocking_fee",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "return_label_issued",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "store_credit_only",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9251",
+      "field": "unit_price",
+      "expected_value": 59
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/33-exchange_size_swap.json"
+}

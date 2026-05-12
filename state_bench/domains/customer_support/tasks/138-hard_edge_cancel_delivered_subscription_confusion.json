@@ -1,0 +1,41 @@
+{
+  "task_id": "138-hard_edge_cancel_delivered_subscription_confusion",
+  "task_summary": "Customer asks to cancel a delivered one-time order as if it were a subscription. Agent must explain delivered orders cannot be cancelled and offer return path instead of mutating state.",
+  "task_type": "edge_case",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_cancel_delivered_subscription_confusion_must",
+      "kind": "must",
+      "requirement": "Agent must explain this is a delivered order that cannot be cancelled and direct the customer to return eligibility instead."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_cancel_delivered_subscription_confusion_must_not",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel the delivered order or invent a subscription cancellation."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "Cancel ORD-7246 so I don't get charged again. It already arrived but I don't want this subscription.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7246"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID.",
+      "Say you thought it was a subscription.",
+      "Ask what can be done since it already arrived.",
+      "If the agent says they can cancel, have cancelled, or will cancel the delivered order or a subscription for ORD-7246, say you understand it already arrived and ask what return option is available instead.",
+      "Accept only a policy explanation that says the delivered one-time order cannot be cancelled and directs you to return eligibility."
+    ],
+    "unknown_info": [
+      "policy-supported next step"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7246. Customer asks to cancel a delivered one-time order as if it were a subscription. Agent must explain delivered orders cannot be cancelled and offer return path instead of mutating state. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/138-hard_edge_cancel_delivered_subscription_confusion.json"
+}

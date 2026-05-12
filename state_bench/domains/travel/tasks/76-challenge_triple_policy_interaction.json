@@ -1,0 +1,133 @@
+{
+  "task_id": "76-challenge_triple_policy_interaction",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "My flight BK-1000 is delayed 3 hours! What can I do? I want to get to Denver as soon as possible, but if there is nothing workable left today I can take the next available flight. My user ID is user_004.",
+  "user_simulator": {
+    "personality": "Frustrated by delay. Wants options. Does not know their fare class or policies.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking: BK-1000 (ORD to DEN, delayed 3 hours)",
+      "Has travel insurance",
+      "Wants to get to Denver ASAP, but will take the next available flight if nothing workable remains today"
+    ],
+    "unknown_info": [
+      "That the booking is basic_economy",
+      "That basic economy can't be changed",
+      "That 180 min delay doesn't qualify for free rebooking",
+      "That insurance can override the cancel restriction",
+      "Meal voucher eligibility"
+    ],
+    "task_rules": [
+      "Open with: flight BK-1000 delayed 3 hours, what are my options?",
+      "If agent says you cannot change or cancel (stuck), say: 'But I have travel insurance! Does that help?'",
+      "If the agent says there is nothing earlier left today, ask whether insurance lets you cancel and rebook the next available economy flight, even if it is tomorrow.",
+      "If agent says delay qualifies for free rebook, do NOT correct them.",
+      "If agent offers cancel+rebook path, ask: 'Is there any compensation for the delay too?'",
+      "If the agent confirms there is no better option left today but offers the next available economy replacement, say: 'OK, please go ahead with cancel+rebook onto the next available economy flight and include the meal voucher.'",
+      "If the agent only proposes rebooking you onto the same delayed flight, ask whether there is a later or next-day replacement you can switch to after canceling.",
+      "After booking is done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "Your delayed trip has turned into a layered problem, and you mainly care about getting to Denver in a way that still makes sense. You are not thinking in terms of three separate policies; you just know the booking feels unusually constrained. You need the agent to untangle the situation without losing sight of your practical goal."
+  },
+  "task_summary": "**Task:** A delayed basic-economy booking sits at the intersection of three policies: basic economy blocks changes, a 3-hour delay earns only a meal voucher, and insurance rescues the cancellation path. Correct resolution: This basic economy booking cannot simply be changed onto another flight.\n\n**Challenge:** The agent keeps those policy lines separate, does not invent a free delay-based rebooking right, and lands on the insurance-backed cancel-plus-rebook path while also mentioning the meal voucher.",
+  "task_requirements": [
+    {
+      "id": "basic_economy_blocks_change",
+      "kind": "must",
+      "requirement": "Agent must make clear that this basic economy booking cannot simply be changed onto another flight.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "delay_only_meal_voucher_not_free_rebook",
+      "kind": "must",
+      "requirement": "Agent must make clear that the 3-hour delay qualifies only for the meal voucher and does not by itself create a free rebooking right.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "insurance_enables_cancel_rebook",
+      "kind": "must",
+      "requirement": "Agent must identify cancel plus rebook, enabled by the insurance-backed cancellation path, as the workable way to move the traveler onto the next available economy option.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "adversarial_or_reasoning_trap",
+  "task_env_path": "state_bench/domains/travel/task_envs/76-challenge_triple_policy_interaction.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "delay_compensation",
+      "expected_value": "meal_voucher"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "refund_amount",
+      "expected_value": 200
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_004",
+        "flight_id": "UA101",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 250,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "standard",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-1001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 250,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "UA101",
+        "meal_preference": "standard",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 250,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_004"
+      }
+    }
+  ]
+}

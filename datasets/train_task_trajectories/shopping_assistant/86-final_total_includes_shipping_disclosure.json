@@ -1,0 +1,66 @@
+{
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a shopping assistant for an online store. Today's date: <REDACTED>. You are currently helping customer shop_004. Use the available tools to help the customer find products, compare options, manage their cart, and apply promotions."
+    },
+    {
+      "role": "user",
+      "content": "Alright, let's finalize \u2014 standard shipping please, and what's my total?"
+    },
+    {
+      "role": "assistant",
+      "content": "You\u2019re all set with standard shipping.\n\nHere\u2019s your updated order summary:\n- Items subtotal: $149  \n- Shipping (standard): $6  \n- Discounts: $0  \n- Gift wrap: $0  \n\nTotal: **$155**",
+      "tool_calls": [
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "cart_id": "CART-shop_004",
+            "customer_id": "shop_004",
+            "items": [
+              {
+                "cart_item_id": "CI-A1",
+                "product_id": "SP-2003",
+                "product_name": "SoundMax Wireless Headphones",
+                "quantity": 1,
+                "gift_wrap": false,
+                "unit_price": 149,
+                "line_total": 149
+              }
+            ],
+            "subtotal": 149,
+            "discount_amount": 0,
+            "gift_wrap_fee": 0,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 149,
+            "applied_promo_codes": []
+          }
+        },
+        {
+          "name": "set_shipping_option",
+          "arguments": {
+            "customer_id": "shop_004",
+            "option": "standard"
+          },
+          "result": {
+            "status": "set",
+            "shipping_option": "standard",
+            "shipping_cost": 6,
+            "cart_subtotal": 149,
+            "cart_total": 155
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "perfect, that works. Thanks. [TASK_DONE]"
+    }
+  ]
+}

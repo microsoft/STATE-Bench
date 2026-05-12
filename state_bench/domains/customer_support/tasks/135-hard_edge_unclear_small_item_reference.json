@@ -1,0 +1,79 @@
+{
+  "task_id": "135-hard_edge_unclear_small_item_reference",
+  "task_summary": "Customer says only 'the small accessory' in a multi-item order. Agent must clarify which item before any write action.",
+  "task_type": "edge_case",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_unclear_small_item_reference_must",
+      "kind": "must",
+      "requirement": "Agent must ask a clarifying question to identify the item before taking any write action."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_edge_unclear_small_item_reference_must_not",
+      "kind": "must_not",
+      "requirement": "Agent must not guess an item or process any return/refund before clarification."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I want to return the small accessory from ORD-7243. Can you just do it?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7243"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID.",
+      "Do not identify the item until the agent asks a clarifying question.",
+      "Say you meant the phone case only after asked.",
+      "If the agent guesses which item you mean, previews a return, or processes any return/refund before asking which small accessory you meant, say they need to clarify the item first and that you meant the phone case.",
+      "Accept policy explanations and the return preview only after the agent has asked for clarification and identified the phone case as the item to return.",
+      "After the agent previews and confirms the return for the phone case, accept it."
+    ],
+    "unknown_info": [
+      "policy-supported next step"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7243. Customer says only 'the small accessory' in a multi-item order. Agent must clarify which item before any write action. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10243",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10243",
+      "field": "refund_amount",
+      "expected_value": 35
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10243",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10243",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10243",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7243",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/135-hard_edge_unclear_small_item_reference.json"
+}

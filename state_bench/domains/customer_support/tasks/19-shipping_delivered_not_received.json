@@ -1,0 +1,65 @@
+{
+  "task_id": "19-shipping_delivered_not_received",
+  "task_summary": "**Task:** The customer reports a package as delivered but missing on a sub-$500 order with no signature barrier. The correct handling is to treat this as a valid shipping-loss claim and follow the immediate refund path that policy allows.\n\n**Challenge:** The case should stay on the shipping-claim surface rather than drifting into an ordinary return workflow. Weak agents skip the policy check, stall without resolving the claim, or fail to convert the report into the allowed refund outcome.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "19_shipping_delivered_not_received_agent_must_ask_resolution",
+      "kind": "must",
+      "requirement": "Agent must ask the customer whether they want a refund or a reship before processing one."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "19_shipping_delivered_not_received_agent_must_check_shipping_policy_verify",
+      "kind": "must",
+      "requirement": "Agent must check the shipping policy for delivered-but-not-received claims before issuing a refund or reship."
+    },
+    {
+      "evidence": "conversation",
+      "id": "19_shipping_delivered_not_received_agent_must_check_shipping_policy",
+      "kind": "must",
+      "requirement": "Agent must verify the missing-package claim by asking or confirming that the customer checked likely delivery locations such as porch, mailroom, or neighbors."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My order ORD-6022 says it was delivered but I never got it. The headphones aren't at my door.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6022",
+      "item: headphones",
+      "status: says delivered",
+      "preferred_resolution: refund to original payment (only reveal if the agent asks)"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "If the agent asks, confirm you checked your porch, mailroom, and neighbors and still do not have the package.",
+      "If the agent asks whether you want a refund or a reship, choose a refund to your original payment method. If the agent processes a reship without asking, push back once and ask for a refund to your original payment instead. Do not volunteer this preference unprompted.",
+      "If the agent treats this as a normal return or asks you to send back the missing headphones, clarify that the item was never received and ask for the missing-package claim path.",
+      "If the agent denies the claim only because tracking says delivered or offers only to wait for an investigation, explain once that there was no signature and ask whether the sub-$500 missing-package refund option applies.",
+      "Accept the refund preview once it is to your original payment."
+    ],
+    "unknown_info": [
+      "resolution options",
+      "refund amount"
+    ],
+    "user_sim_context": "Tracking says your order was delivered, but the headphones are not actually at your door. From your side this feels like a missing package problem, not a normal return or cancellation. You want the agent to figure out what happened and tell you how it will be made right. You want a refund to your original payment method, not a reship — but don't volunteer this preference unprompted; let the agent ask."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9150",
+      "field": "refund_amount",
+      "expected_value": 249
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9150",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/19-shipping_delivered_not_received.json"
+}

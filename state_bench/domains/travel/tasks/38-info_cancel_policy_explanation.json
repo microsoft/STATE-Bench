@@ -1,0 +1,58 @@
+{
+  "task_id": "38-info_cancel_policy_explanation",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Before I decide anything, can you explain the cancellation policy for my business class booking BK-I03? What would I be charged?",
+  "user_simulator": {
+    "personality": "Cautious planner. Asks about policies before taking action.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Booking ID is BK-I03",
+      "Business class domestic flight",
+      "Price paid was around $800"
+    ],
+    "unknown_info": [
+      "Business domestic cancellation fee is 5%",
+      "The exact fee is $40 on an $800 booking",
+      "Business class gets free changes as an alternative"
+    ],
+    "task_rules": [
+      "Ask your question about the cancellation policy.",
+      "When the agent provides the fee, ask about the refund amount.",
+      "Ask if there are alternatives to cancellation (like changing instead).",
+      "If the agent offers to cancel or change the booking, say you only wanted the policy explanation for now.",
+      "When you have complete information, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You have not decided whether to cancel your booking yet and want the policy explained before making that call. You care about both the fee and what refund would actually come back to you. If there is a less painful alternative, you want to hear that too."
+  },
+  "task_summary": "**Task:** User asks for the cancellation policy on an existing business-class domestic booking before deciding what to do. Correct resolution: Business-class domestic cancellation uses a 5% fee formula.\n\n**Challenge:** The agent states the 5% fee rule, gives the exact $40 fee and $760 refund for this booking, and mentions that business class also allows free changes.",
+  "task_requirements": [
+    {
+      "id": "state_fee_formula",
+      "kind": "must",
+      "requirement": "Agent must explain that business-class domestic cancellation uses a 5% fee formula.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_exact_fee_and_refund",
+      "kind": "must",
+      "requirement": "Agent must state that this $800 booking would have a $40 cancellation fee and a $760 refund.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_business_change_alternative",
+      "kind": "must",
+      "requirement": "Agent must mention that business class bookings can be changed for free as an alternative to cancellation.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_cancel_action",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel the booking in this information-only policy explanation task.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/38-info_cancel_policy_explanation.json",
+  "state_requirements": []
+}

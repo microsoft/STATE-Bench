@@ -1,0 +1,106 @@
+{
+  "task_id": "63-challenge_canada_international",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I need to change two domestic flights: BK-1000 (Chicago to San Francisco) to June 22, and BK-1001 (Chicago to Toronto) to June 23. Both are short-haul domestic so the fees should be the same. My user ID is user_004.",
+  "user_simulator": {
+    "personality": "Assumes Canada is domestic. Matter-of-fact. Wants quick processing.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking A: BK-1000 (ORD→SFO, economy, June 18) → June 22",
+      "Booking B: BK-1001 (ORD→YYZ, economy, June 19) → June 23",
+      "For this task, choose UA101 for San Francisco and AA101 for Toronto once the fees are clarified",
+      "Thinks both are domestic flights"
+    ],
+    "unknown_info": [
+      "That Toronto (YYZ) is classified as international",
+      "That international change fees are higher"
+    ],
+    "task_rules": [
+      "Open with: change both 'domestic' flights. Mention dates and cities.",
+      "When agent says BK-1001 has a higher fee because it's international, push back: 'Toronto is basically domestic — it's a short flight!'",
+      "If agent explains YYZ is classified as international, accept: 'I didn't know that. OK, go ahead.'",
+      "When the agent presents replacement options, choose UA101 for the San Francisco leg and AA101 for the Toronto leg.",
+      "If agent uses same domestic rate for both (wrong), don't question it.",
+      "After both changes, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to change two trips and instinctively think of both as short-haul travel, so you expect the fees to look similar. One of them happens to go to Toronto, and that detail does not feel important from your perspective. You need the agent to explain whether the route classification really changes the answer."
+  },
+  "task_summary": "**Task:** User wants two short-haul changes and assumes Chicago to Toronto should be charged like a domestic route. Correct resolution: The ORD to Toronto booking is treated as international for fee purposes, even though the traveler informally describes it as domestic or short-haul.\n\n**Challenge:** The agent correctly classifies Toronto as international for fee purposes, uses different fees for the two bookings, and gives the correct combined total before proceeding.",
+  "task_requirements": [
+    {
+      "id": "yyz_classified_international",
+      "kind": "must",
+      "requirement": "Agent must explain that the ORD to Toronto booking is treated as international for fee purposes, even though the user informally describes it as domestic or short-haul.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "mixed_route_fee_math_correct",
+      "kind": "must",
+      "requirement": "Agent must give the correct pricing breakdown: $170 total for the San Francisco change, $220 total for the Toronto change, and $390 overall.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/63-challenge_canada_international.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 150
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "UA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 520
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "change_fee",
+      "expected_value": 200
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "flight_id",
+      "expected_value": "AA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "price_paid",
+      "expected_value": 600
+    }
+  ]
+}

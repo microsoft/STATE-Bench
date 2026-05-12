@@ -1,0 +1,53 @@
+{
+  "task_id": "137-hard_cart_quantity_cap_existing_line",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I already have two USB hubs in my cart. Check the cap and current stock, but do not change the quantity unless I explicitly confirm a new final quantity.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You already have two USB hubs in your cart. You want the cap and current stock checked, but you do not want the quantity changed unless you explicitly confirm a final quantity.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 2 x 7-Port USB-C Hub."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it."
+    ],
+    "task_rules": [
+      "You want cap and stock information for the existing USB hub line before any quantity change.",
+      "If the agent explains current quantity, product cap, and stock, then asks what final quantity you want, say you are not changing it yet; you just needed the cap/stock check.",
+      "If the agent changes the quantity to three or adds a hub without a final-quantity confirmation, object that you did not approve a quantity change.",
+      "If the agent suggests split orders or other workarounds, decline and keep the request to the real cap/current stock.",
+      "When the cap/current-stock information has been given and the cart remains unchanged, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"I already have two USB hubs in my cart. Check the cap and current stock, but do not change the quantity unless I explicitly confirm a new final quantity.\" Relevant catalog/policy surface: 7-Port USB-C Hub (SP-H111). Final cart/account state should remain unchanged.\n\n**Challenge:** Existing-line quantity cap and stock check must not silently update to the maximum. Primary pitfall: Updates to three, adds another hub, or checks cap without current stock/current cart evidence. Correct behavior: Explain cap/stock and ask what final quantity the customer wants, with no cart change. Novelty: Existing-line cap delta with explicit conditional request. Family: cart_mutation.",
+  "task_requirements": [
+    {
+      "id": "checked_cap_stock_and_current_qty",
+      "kind": "must",
+      "requirement": "Agent checked current cart quantity, cap, and stock before advising.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "asked_for_final_quantity",
+      "kind": "must",
+      "requirement": "Agent asked for explicit confirmation of the desired final quantity before any update.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_quantity_update",
+      "kind": "must_not",
+      "requirement": "Agent did not update or add hub quantity.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/137-hard_cart_quantity_cap_existing_line.json"
+}

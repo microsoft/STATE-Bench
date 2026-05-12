@@ -1,0 +1,137 @@
+{
+  "task_id": "8-book_with_addons",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I want to book a business class flight from New York to Miami on June 20th. I'll also need a hotel for 4 nights.",
+  "user_simulator": {
+    "personality": "Cooperative and detail-oriented. Wants the trip booked correctly and within budget.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Wants JFK to MIA on June 20th",
+      "Is a platinum loyalty member",
+      "Needs a hotel in Miami for 4 nights (June 20-24)",
+      "Budget is $2000 total for the entire trip",
+      "Prefers standard room (not suite — too expensive for a business trip)",
+      "Wants business class",
+      "Prefers AA airline, evening departure, nonstop"
+    ],
+    "unknown_info": [
+      "Exact baggage allowance for platinum + business",
+      "Flight prices",
+      "Hotel nightly rates"
+    ],
+    "task_rules": [
+      "Mention the hotel need if the agent focuses only on the flight.",
+      "When the agent presents flight options, pick the AA nonstop evening flight.",
+      "When the agent mentions baggage, ask how many free checked bags you get.",
+      "For the hotel, pick the standard room option.",
+      "Ask for a total trip cost summary (flight + hotel).",
+      "End with [TASK_DONE] when both are confirmed.",
+      "When asked about flight preferences, say business class, AA airline, evening departure, nonstop.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are planning a Miami trip and need both a business-class flight and a hotel, with one total budget covering the whole plan. You care about getting something comfortable without losing sight of the full trip cost. You expect the agent to help you balance the flight and hotel together rather than treating them as separate decisions."
+  },
+  "task_summary": "**Task:** User needs both a business-class Miami flight and a four-night hotel within a total $2,000 trip budget. Correct resolution: A platinum traveler flying business class gets 5 free checked bags on this trip.\n\n**Challenge:** The agent handles the task as a coordinated flight-plus-hotel booking, gives the correct platinum-plus-business baggage allowance, and provides the right total trip cost rather than treating the flight in isolation.",
+  "task_requirements": [
+    {
+      "id": "state_baggage_allowance_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that a platinum traveler flying business class gets 5 free checked bags on this trip.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_flight_and_hotel_coordinated",
+      "kind": "must",
+      "requirement": "Agent must handle both the AA evening nonstop flight AA500 and the standard-room hotel booking rather than leaving either component unaddressed.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_total_cost_summary",
+      "kind": "must",
+      "requirement": "Agent must summarize that the combined trip cost is $1,470 and remains within the $2,000 budget.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "new_booking",
+  "task_env_path": "state_bench/domains/travel/task_envs/8-book_with_addons.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_003",
+        "flight_id": "AA500",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 750,
+        "points_used": 0,
+        "cabin_class": "business",
+        "seat_type": "aisle",
+        "meal_preference": "standard",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": true,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": true,
+        "add_insurance": true,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "business",
+        "cancellation_fee": null,
+        "cash_amount": 750,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "AA500",
+        "meal_preference": "standard",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 750,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_003"
+      }
+    },
+    {
+      "entity_type": "hotels",
+      "match_fields": {
+        "user_id": "user_003",
+        "hotel_id": "HOTEL-0001",
+        "check_in": "2026-06-20",
+        "check_out": "2026-06-24",
+        "status": "confirmed",
+        "room_type": "standard"
+      },
+      "expected_fields": {
+        "booked_at": "2026-06-15T10:00:00",
+        "cancellation_fee": null,
+        "check_in": "2026-06-20",
+        "check_out": "2026-06-24",
+        "city": "MIA",
+        "hotel_id": "HOTEL-0001",
+        "hotel_name": "MIA Inn",
+        "nightly_rate": 180,
+        "refund_amount": null,
+        "reservation_id": "HR-0001",
+        "room_type": "standard",
+        "status": "confirmed",
+        "total_price": 720,
+        "user_id": "user_003"
+      }
+    }
+  ]
+}

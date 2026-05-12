@@ -1,0 +1,175 @@
+{
+  "task_id": "128-hard_warranty_recurring_low_value_replace",
+  "task_summary": "USB hub has two prior warranty claims. Recurring defect policy triggers automatic replacement, not another repair explanation.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_warranty_recurring_low_value_replace_status",
+      "kind": "must",
+      "requirement": "Agent must check warranty status before filing the claim."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_warranty_recurring_low_value_replace_explain_repeat_replacement_no_troubleshooting",
+      "kind": "must",
+      "requirement": "Agent must explain that the prior-claims/recurring-defect rule makes this a replacement path and must not ask for additional troubleshooting."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_warranty_recurring_low_value_replace_hard2_no_repair",
+      "kind": "must_not",
+      "requirement": "Agent must not route the customer to repair, paid repair, or troubleshooting as the final resolution."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_warranty_recurring_low_value_replace_hard3_no_account_note",
+      "kind": "must_not",
+      "requirement": "Agent must not claim to add, create, document, or submit an unsupported account or product-quality note after the warranty replacement; no such write tool is available."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "The USB hub in ORD-7233 failed for the third time. Please don't make me troubleshoot it again.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7233",
+      "item: 7-Port USB-C Hub",
+      "warranty_id: WRT-4103"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID.",
+      "Mention this is the third failure.",
+      "Ask whether repeated defects change the outcome.",
+      "Accept the warranty preview only if it is a full replacement under the recurring-defect/repeat-defect path, not repair, paid repair, or more troubleshooting.",
+      "Push once against more troubleshooting unless the agent names the recurring-defect replacement rule.",
+      "Ask whether this consumes another warranty claim or is handled under the repeat-defect replacement path.",
+      "If the replacement preview does not mention what happens to the defective hub, ask whether you need to return it and whether a return label is included.",
+      "Do not ask the agent to add a product-quality or account note after the replacement is processed.",
+      "If the agent offers to add a product-quality or account note, say no extra note is needed unless it is only part of the supported warranty-claim record."
+    ],
+    "unknown_info": [
+      "warranty eligibility",
+      "resolution"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7233. USB hub has two prior warranty claims. Recurring defect policy triggers automatic replacement, not another repair explanation. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10233",
+      "field": "replacement_item_id",
+      "expected_value": "ITEM-10234"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4103",
+      "field": "claim_count",
+      "expected_value": 3
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4103",
+      "field": "resolution",
+      "expected_value": "full_replacement"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4103",
+      "field": "status",
+      "expected_value": "claimed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "goodwill_credit",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "goodwill_credit_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "item_id",
+      "expected_value": "ITEM-10234"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "item_status",
+      "expected_value": "confirmed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "order_id",
+      "expected_value": "ORD-7233"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "product_id",
+      "expected_value": "PROD-4243"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "quantity",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "refund_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "replacement_item_id",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "restocking_fee",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "return_label_issued",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "store_credit_only",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10234",
+      "field": "unit_price",
+      "expected_value": 45
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/128-hard_warranty_recurring_low_value_replace.json"
+}

@@ -1,0 +1,160 @@
+{
+  "task_id": "35-exchange_cheaper",
+  "task_summary": "**Task:** The customer wants to downgrade from premium headphones to the lower-priced model. The correct handling is to complete the exchange and return the $200 difference as store credit instead of cash or card refund.\n\n**Challenge:** The agent has to settle the price difference using the right method. Weak agents refund to the original payment method, invent restocking where none belongs, or miss the store-credit rule that controls downward exchanges.",
+  "task_type": "exchange_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "35_exchange_cheaper_agent_must_explain_200_store_credit_difference",
+      "kind": "must",
+      "requirement": "Agent must explain that the $200 cheaper-item difference is issued as store credit, not original payment."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "35_exchange_cheaper_agent_must_not_route_to_return_rebuy",
+      "kind": "must_not",
+      "requirement": "Agent must not process or recommend a return-and-rebuy workaround, a changed-mind return, or an original-payment refund instead of completing the exchange."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I want to exchange my premium headphones from order ORD-6036 for the basic model. The premium ones are overkill for me.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6036",
+      "current: Elite $349",
+      "want: Basic $149"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Specify the basic model.",
+      "Ask about the price difference refund.",
+      "If told it's store credit (not cash), ask why. Accept after explanation.",
+      "If the agent proposes refunding the cheaper-item difference to the original payment method, ask whether exchange policy requires store credit instead.",
+      "If the agent suggests return-and-rebuy instead of an exchange, say you want to complete the exchange to the Basic model if policy allows."
+    ],
+    "unknown_info": [
+      "that difference goes to store credit not cash",
+      "exchange process"
+    ],
+    "user_sim_context": "You want to downgrade from the premium headphones to a more basic pair because the expensive model turned out to be more than you need. You know there will be some value difference, but you are not sure how that is handled in an exchange. You want the agent to explain what happens to the extra value."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9260",
+      "field": "item_status",
+      "expected_value": "exchanged"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9260",
+      "field": "refund_amount",
+      "expected_value": 200
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9260",
+      "field": "refund_method",
+      "expected_value": "store_credit"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9260",
+      "field": "replacement_item_id",
+      "expected_value": "ITEM-9261"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "goodwill_credit",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "goodwill_credit_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "item_id",
+      "expected_value": "ITEM-9261"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "item_status",
+      "expected_value": "confirmed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "order_id",
+      "expected_value": "ORD-6036"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "product_id",
+      "expected_value": "PROD-2261"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "quantity",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "refund_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "replacement_item_id",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "restocking_fee",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "return_label_issued",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "store_credit_only",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9261",
+      "field": "unit_price",
+      "expected_value": 149
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/35-exchange_cheaper.json"
+}

@@ -1,0 +1,94 @@
+{
+  "task_id": "122-cross_cancel_hotel_only_keep_flight_and_car",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I think I need to cancel my LA hotel reservation HR-0100, but before you change anything I want to make sure the rest of the trip still makes sense if I stay somewhere else.",
+  "user_simulator": {
+    "personality": "Matter-of-fact.",
+    "user_sim_context": "You expect to stay with a friend instead of using the LA hotel, but you do not want the agent to assume that also means the car should be dropped. The key hidden trip fact is that your friend lives well away from LAX, so the flight and car should stay active even though the hotel is no longer needed. The first phase must stay informational and comparative. After the agent recommends canceling only the hotel, you still want a separate preview-only step for the hotel cancellation terms and then a final explicit go-ahead before any write happens.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Flight booking: BK-ET02",
+      "Hotel reservation: HR-0100",
+      "Car rental: CR-0100",
+      "You may stay with a friend instead of using the hotel."
+    ],
+    "unknown_info": [
+      "Whether canceling the hotel should also affect the car rental",
+      "Whether the agent will discover why the flight and car still matter before changing anything"
+    ],
+    "task_rules": [
+      "Open by asking for the compare-first recommendation and do not authorize any cancellation yet.",
+      "Do not volunteer the friend or location details unless the agent asks where you would stay instead or whether canceling the hotel changes the need for the car.",
+      "If the agent asks, say you would stay with a friend in Pasadena and still need to get between there and LAX, so you expect the car may still matter.",
+      "If the agent jumps straight to canceling the hotel, say you do not approve any cancellation yet because you are still worried about the rest of the trip.",
+      "If the agent recommends canceling the hotel but keeping the flight and car because the flight is unchanged and your friend stay still requires local transportation, say that this is the plan you want in principle but that you do not authorize any cancellation yet.",
+      "Then say: 'Before you cancel anything, preview only the hotel cancellation terms and confirm again that the flight and car stay untouched. After that I will decide.'",
+      "After the preview, ask one more confirmation question about whether canceling the hotel has any knock-on effect on the flight or car, and do not authorize cancellation until the agent answers it.",
+      "Only then say: 'Yes, now cancel just the hotel. Keep the flight and car exactly as they are.'",
+      "If the agent suggests canceling the car too, say you are not sure that is right because you may still need local transportation.",
+      "End with [TASK_DONE] only after the hotel is canceled and the agent explicitly confirms the flight and car stayed active and unchanged."
+    ]
+  },
+  "task_summary": "Traveler expects to stay with a friend instead of using the LA hotel, but wants to think through the rest of the trip before changing anything. Correct resolution: the agent should proactively surface the linked flight and car, compare cancel-hotel-only versus cancel-hotel-and-car implications, discover that the friend stay is in Pasadena so the unchanged flight and car still make sense, recommend canceling only the hotel, then stop at a preview-only hotel-cancellation step and wait for a separate final approval before actually canceling the hotel.\n\nChallenge: This tests linked-reservation discovery, compare-then-act discipline, and a three-stage recommendation-preview-execute confirmation flow rather than a simple hotel-only cancellation.",
+  "task_requirements": [
+    {
+      "id": "cross_cancel_hotel_only_keep_flight_and_car_discover",
+      "kind": "must",
+      "requirement": "Agent must acknowledge linked flight BK-ET02 and car rental CR-0100 before executing the hotel cancellation.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "cross_cancel_hotel_only_keep_flight_and_car_compare",
+      "kind": "must",
+      "requirement": "Agent must compare canceling only the hotel against canceling the hotel and car before acting, rather than treating the hotel cancellation as automatically sufficient analysis.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_cancel_hotel_only_keep_flight_and_car_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain why flight BK-ET02 and car rental CR-0100 should remain active after hotel cancellation, including that the flight is unchanged and the alternate stay still requires local transportation rather than making the car unnecessary.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_cancel_hotel_only_keep_flight_and_car_preserve",
+      "kind": "must",
+      "requirement": "Agent must make clear that flight BK-ET02 and car rental CR-0100 remain active and unchanged after hotel cancellation.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_cancel_hotel_only_keep_flight_and_car_no_premature_write",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel the hotel until after the user explicitly approves cancellation in a separate final step following the compare-first discussion and the hotel-cancellation preview.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "cross_cancel_hotel_only_keep_flight_and_car_no_blanket",
+      "kind": "must_not",
+      "requirement": "Agent must not interpret the hotel-focused request as permission or preference to cancel the full trip or to cancel the car without first establishing that the car is no longer needed.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/122-cross_cancel_hotel_only_keep_flight_and_car.json",
+  "state_requirements": [
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "refund_amount",
+      "expected_value": 510
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ]
+}

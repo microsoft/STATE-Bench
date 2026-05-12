@@ -1,0 +1,171 @@
+{
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a shopping assistant for an online store. Today's date: <REDACTED>. You are currently helping customer shop_004. Use the available tools to help the customer find products, compare options, manage their cart, and apply promotions."
+    },
+    {
+      "role": "user",
+      "content": "I'm in a rush \u2014 just add the cheapest laptop you have to my cart. I don't care about specs, just need something that works. Thanks."
+    },
+    {
+      "role": "assistant",
+      "content": "I\u2019ve added the cheapest in-stock laptop to your cart:\n\n- **Product:** ProBook Chromebook 11  \n- **Price:** $329  \n- **Quantity:** 1  \n- **Gift wrap:** No  \n\nIf you want, I can quickly:  \n- Add a second one, or  \n- Suggest the next step to checkout, or  \n- Swap it for the cheapest **15-inch** laptop instead.",
+      "tool_calls": [
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "laptop",
+            "category": "electronics",
+            "min_price": 0,
+            "max_price": 10000,
+            "min_rating": 1,
+            "in_stock_only": true,
+            "sort_by": "price_low"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-1106",
+                "name": "ProBook Chromebook 11",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 329,
+                "rating": 3.9,
+                "review_count": 530,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1103",
+                "name": "BudgetLine Notebook 15",
+                "brand": "BudgetLine",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 449,
+                "rating": 3.4,
+                "review_count": 210,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-2001",
+                "name": "SlateTab Pro 11-inch",
+                "brand": "SlateTab",
+                "category": "electronics",
+                "subcategory": "tablet",
+                "price": 599,
+                "rating": 4.5,
+                "review_count": 1870,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1003",
+                "name": "SlateTab Studyline 14",
+                "brand": "SlateTab",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 749,
+                "rating": 4.3,
+                "review_count": 640,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1001",
+                "name": "SlimBook Air 13",
+                "brand": "SlimBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 849,
+                "rating": 4.5,
+                "review_count": 1240,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1002",
+                "name": "ProBook Laptop 13-inch",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 999,
+                "rating": 4.6,
+                "review_count": 2180,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1107",
+                "name": "SlimBook Touch 15",
+                "brand": "SlimBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1099,
+                "rating": 4.5,
+                "review_count": 410,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1101",
+                "name": "ProBook Laptop 15-inch",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1299,
+                "rating": 4.7,
+                "review_count": 1890,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1105",
+                "name": "CreatorStudio 15",
+                "brand": "CreatorStudio",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1499,
+                "rating": 4.7,
+                "review_count": 720,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1102",
+                "name": "GameForce Pro 16",
+                "brand": "GameForce",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1799,
+                "rating": 4.6,
+                "review_count": 960,
+                "in_stock": true
+              }
+            ],
+            "total_found": 10
+          }
+        },
+        {
+          "name": "add_to_cart",
+          "arguments": {
+            "customer_id": "shop_004",
+            "product_id": "SP-1106",
+            "quantity": 1,
+            "gift_wrap": false,
+            "variant_id": ""
+          },
+          "result": {
+            "status": "added",
+            "cart_item_id": "CI-0001",
+            "product_id": "SP-1106",
+            "product_name": "ProBook Chromebook 11",
+            "variant_id": null,
+            "quantity": 1,
+            "gift_wrap": false,
+            "unit_price": 329,
+            "cart_subtotal": 329,
+            "cart_total": 329
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Great, thanks.  \n\n[TASK_DONE]"
+    }
+  ]
+}

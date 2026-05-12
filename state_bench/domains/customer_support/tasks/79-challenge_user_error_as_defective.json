@@ -1,0 +1,82 @@
+{
+  "task_id": "79-challenge_user_error_as_defective",
+  "task_summary": "**Task:** The customer says the headphones 'don't work,' but the details reveal a Bluetooth pairing problem rather than a product defect. The correct handling is to recognize this as user error, reframe the case as a changed-mind return, and apply the normal $37 restocking logic instead of granting a defect-based exception.\n\n**Challenge:** The agent has to diagnose the substance of the complaint instead of copying the customer's label. Weak agents accept 'defective' at face value, skip the clarifying step, or hand out a no-fee resolution for what is really not a defect.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "79_challenge_user_error_as_defective_agent_must_ask_about_usage",
+      "kind": "must",
+      "requirement": "Agent must ask the customer to describe what 'not working' means or walk through setup/usage questions before classifying the return reason."
+    },
+    {
+      "evidence": "conversation",
+      "id": "79_challenge_user_error_as_defective_agent_must_explain_changed_mind_classification",
+      "kind": "must",
+      "requirement": "Agent must explain that once the pairing/setup issue is identified, the return should be classified as changed_mind rather than defective."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-05T10:00:00",
+  "opening_message": "The wireless headphones from order ORD-7111 don't work. I've tried everything but they won't connect to my phone.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7111",
+      "item: headphones",
+      "actual_issue: Bluetooth pairing confusion"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give order ID when asked.",
+      "When asked to describe the issue: 'I press the button and nothing happens on my phone. No Bluetooth device shows up.'",
+      "If agent asks if you've tried holding the button for 5 seconds: 'Hmm, I think I just pressed it quickly. Let me try... oh wait, I see a flashing blue light now. Is that pairing mode?'",
+      "If agent suggests it might be user error, agree: 'Oh, I didn't realize. But I still want to return them — I thought they'd be easier to use.'",
+      "Accept the return terms including any restocking fee.",
+      "If the agent attempts to process the return as 'defective' without first asking you to describe what 'not working' means or walking through any setup/usage questions, push back once: 'Wait — can you actually check what the issue is before processing? I just want to make sure we have the right return reason.'"
+    ],
+    "unknown_info": [
+      "restocking fee",
+      "correct return reason classification"
+    ],
+    "user_sim_context": "Your headphones are not working the way you expected, and from your side it feels like the product is broken. You are describing the problem in the strongest terms because you want a clean resolution. If the issue is actually about setup rather than a defective device, you need the agent to explain that carefully and tell you what resolution still applies."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10137",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10137",
+      "field": "refund_amount",
+      "expected_value": 213
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10137",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10137",
+      "field": "restocking_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10137",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7111",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/79-challenge_user_error_as_defective.json"
+}

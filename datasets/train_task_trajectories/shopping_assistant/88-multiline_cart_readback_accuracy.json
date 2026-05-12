@@ -1,0 +1,72 @@
+{
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a shopping assistant for an online store. Today's date: <REDACTED>. You are currently helping customer shop_004. Use the available tools to help the customer find products, compare options, manage their cart, and apply promotions."
+    },
+    {
+      "role": "user",
+      "content": "Hey \u2014 can you read back my cart for me, item by item? Include the gift wrap and the promo discount so I can double-check the math."
+    },
+    {
+      "role": "assistant",
+      "content": "Here\u2019s your current cart, line by line, with the math broken out.\n\nITEMS  \n1) SlimBook Air 13 (SP-1001)  \n   - Quantity: 1  \n   - Unit price: $849  \n   - Gift wrap: No  \n   - Line total: $849  \n\n2) SoundMax Wireless Headphones (SP-2003)  \n   - Quantity: 1  \n   - Unit price: $149  \n   - Gift wrap: Yes  \n   - Line total (items only): $149  \n\n3) PixelShot Webcam 1080p (SP-2005)  \n   - Quantity: 2  \n   - Unit price: $79  \n   - Gift wrap: No  \n   - Line total: 2 \u00d7 $79 = $158  \n\nSUBTOTAL (items only, before gift wrap & discounts)  \n- $849 + $149 + $158 = **$1,156**\n\nGIFT WRAP  \n- 1 item gift-wrapped (the headphones)  \n- Gift-wrap fee: $5 per wrapped item  \n- Gift-wrap total: **$5**\n\nPROMO DISCOUNT  \n- Applied code(s): SAVE50  \n- Discount amount: **$50** off the subtotal  \n\nLOYALTY  \n- Loyalty discount: $0  \n- Points redeemed: 0  \n\nSHIPPING  \n- Shipping option: not selected yet  \n- Shipping cost: $0 (for now)\n\nFINAL TOTAL  \n- Subtotal: $1,156  \n- Minus promo discount: $1,156 \u2212 $50 = $1,106  \n- Plus gift wrap: $1,106 + $5 = **$1,111**\n\nSo your cart total is **$1,111**, with **$50** in promo savings and **$5** in gift-wrap fees.",
+      "tool_calls": [
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "cart_id": "CART-shop_004",
+            "customer_id": "shop_004",
+            "items": [
+              {
+                "cart_item_id": "CI-A1",
+                "product_id": "SP-1001",
+                "product_name": "SlimBook Air 13",
+                "quantity": 1,
+                "gift_wrap": false,
+                "unit_price": 849,
+                "line_total": 849
+              },
+              {
+                "cart_item_id": "CI-A2",
+                "product_id": "SP-2003",
+                "product_name": "SoundMax Wireless Headphones",
+                "quantity": 1,
+                "gift_wrap": true,
+                "unit_price": 149,
+                "line_total": 149
+              },
+              {
+                "cart_item_id": "CI-A3",
+                "product_id": "SP-2005",
+                "product_name": "PixelShot Webcam 1080p",
+                "quantity": 2,
+                "gift_wrap": false,
+                "unit_price": 79,
+                "line_total": 158
+              }
+            ],
+            "subtotal": 1156,
+            "discount_amount": 50,
+            "gift_wrap_fee": 5,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 1111,
+            "applied_promo_codes": [
+              "SAVE50"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Perfect, that matches what I expected. Thanks. [TASK_DONE]"
+    }
+  ]
+}

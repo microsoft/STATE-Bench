@@ -1,0 +1,81 @@
+{
+  "task_id": "12-cancel_after_shipment",
+  "task_summary": "**Task:** The customer wants to cancel a two-item order that has already shipped. Because the package is in transit, the right handling is to treat this as an intercept cancellation, apply the $10 per-item intercept fee, and complete the cancellation with the resulting $274 refund.\n\n**Challenge:** Shipped-order cancellation requires different reasoning from a simple pre-shipment stop. Weak agents cancel it as if nothing has left the warehouse, fail to mention the $20 intercept cost, or quote the wrong net refund.",
+  "task_type": "cancel_order",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "12_cancel_after_shipment_agent_must_mention_intercept_fee",
+      "kind": "must",
+      "requirement": "Agent must mention intercept fee."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I need to cancel my order ORD-6003. I ordered headphones and a USB hub but I don't need them anymore.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6003",
+      "items: headphones and USB hub"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "You want to cancel BOTH items.",
+      "If the agent says there is an intercept fee, ask for the per-item fee and the total refund before confirming.",
+      "If the agent says there is no fee or treats the order like it has not shipped, ask whether the in-transit status changes the cancellation terms.",
+      "If the preview cancels only one item or omits either the headphones or USB hub, correct the scope and say both items should be cancelled.",
+      "Confirm the cancellation only after the preview shows a $10 fee per item, $20 total fee, and $274 refund."
+    ],
+    "unknown_info": [
+      "intercept fee",
+      "refund amount"
+    ],
+    "user_sim_context": "You want to cancel an order that is already on the way because you no longer need the items. You are treating it like a cancellation request, not a return, and may not realize that shipping status changes the process. You need the agent to explain what can still be done now that the package is in transit."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9020",
+      "field": "item_status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9020",
+      "field": "refund_amount",
+      "expected_value": 239
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9020",
+      "field": "refund_method",
+      "expected_value": "credit_card"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9021",
+      "field": "item_status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9021",
+      "field": "refund_amount",
+      "expected_value": 35
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9021",
+      "field": "refund_method",
+      "expected_value": "credit_card"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6003",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/12-cancel_after_shipment.json"
+}

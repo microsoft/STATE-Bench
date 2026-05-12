@@ -1,0 +1,89 @@
+{
+  "task_id": "1-cancel_economy_domestic",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I need to cancel my upcoming flight to Atlanta.",
+  "user_simulator": {
+    "personality": "Cooperative and straightforward. Provides information when asked.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking ID for ORD→ATL: BK-1000",
+      "Booking ID for ATL→SFO: BK-1001",
+      "Flight 1 is economy class, domestic (ORD to ATL), $350",
+      "Flight 2 is economy class, domestic (ATL to SFO), $180 — a connecting flight same day"
+    ],
+    "unknown_info": [
+      "Exact cancellation fee amounts for each leg",
+      "Refund processing time"
+    ],
+    "task_rules": [
+      "When the agent asks for your booking ID, provide only the ORD→ATL booking ID.",
+      "Do not volunteer the connecting flight to SFO unless the agent asks about or identifies it.",
+      "If the agent warns about the connecting flight, confirm you want to cancel both.",
+      "If the agent does NOT mention the connecting flight and proceeds to cancel only the first, simply confirm without revealing the connecting flight yourself. The agent should have checked proactively.",
+      "When all discussed cancellations are confirmed with fees and refunds, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You want to cancel your flight to Atlanta and are treating it like a simple one-leg cancellation. You are not thinking about the rest of the same-day itinerary unless the agent brings it up. Once the implications are clear, you just want to sort out the trip cleanly and move on."
+  },
+  "task_summary": "**Task:** A traveler asks to cancel the first leg of a same-day connecting trip without mentioning the onward segment. Correct resolution: Agent must proactively discover and mention that BK-1001 is a same-day onward connection tied to BK-1000.\n\n**Challenge:** The agent proactively discovers the hidden connection, warns that cancelling the first leg would strand the second, and only then proceeds with the full cancellation.",
+  "task_requirements": [
+    {
+      "id": "state_hidden_connection_discovered",
+      "kind": "must",
+      "requirement": "Agent must proactively discover and mention that BK-1001 is a same-day onward connection tied to BK-1000.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_orphan_warning",
+      "kind": "must",
+      "requirement": "Agent must warn that cancelling the first leg alone would leave the user stranded or orphan the remaining connection.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_single_leg_only",
+      "kind": "must_not",
+      "requirement": "Agent must not treat the request as a simple single-flight cancellation without surfacing the connected onward leg.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "cancellation",
+  "task_env_path": "state_bench/domains/travel/task_envs/1-cancel_economy_domestic.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "cancellation_fee",
+      "expected_value": 52
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "refund_amount",
+      "expected_value": 298
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "cancellation_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "refund_amount",
+      "expected_value": 130
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ]
+}

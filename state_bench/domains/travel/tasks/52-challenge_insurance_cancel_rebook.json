@@ -1,0 +1,137 @@
+{
+  "task_id": "52-challenge_insurance_cancel_rebook",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I need to change my flight BK-1000 to June 23 instead. I have about $100 to work with for any fees or price differences.",
+  "user_simulator": {
+    "personality": "Practical and budget-conscious. Doesn't know airline policies well. Trusts the agent to find solutions.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking ID: BK-1000 (LAX→DFW, June 20)",
+      "Wants to move the flight to June 23",
+      "Has about $100 cash budget for this change",
+      "Has travel insurance on this booking (but doesn't think of it as relevant to changing)"
+    ],
+    "unknown_info": [
+      "That the booking is basic economy",
+      "That basic economy can't be changed",
+      "That insurance can override cancellation restrictions",
+      "The cancel+rebook workaround",
+      "Points redemption rates",
+      "Exact flight prices on June 23"
+    ],
+    "task_rules": [
+      "Open with: you want to change flight BK-1000 to June 23, mention $100 budget.",
+      "When the agent says basic economy can't be changed, say 'That's really frustrating. Is there ANY other option to get me on a June 23 flight?'",
+      "Do NOT mention insurance, cancellation, or points proactively. Let the agent discover these paths.",
+      "If the agent asks whether you have insurance, confirm: 'Yes, I added travel insurance when I booked.'",
+      "If the agent proposes cancel+rebook, say 'That could work — what would it actually cost me?'",
+      "If the agent asks about using loyalty points, say 'Sure, I'm open to using points if it helps.'",
+      "When presented with flight options, say you'd prefer the nonstop option.",
+      "If the agent explains the nonstop is over your cash budget but the 1-stop fits, accept the 1-stop: 'Okay, the 1-stop works if it fits my budget.'",
+      "After the booking is confirmed, say 'Great, thanks for figuring that out!' and end with [TASK_DONE].",
+      "If the agent says there's nothing they can do (gives up), say 'Are you sure? I really need to get on a June 23 flight.' Give them one more chance. If they still can't find a solution, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You want to move a booking under a tight budget and assume the insurance on the trip should create some flexibility. You are focused on the cheapest valid way to end up on the new date, not on preserving the original booking at all costs. You expect the agent to reason through the options instead of taking the most obvious path."
+  },
+  "task_summary": "**Task:** A traveler wants to move a basic-economy booking under a strict cash budget, but the workable path is cancel plus rebook using insurance and points plus cash. Correct resolution: The basic-economy ticket cannot simply be changed but that insurance enables a free cancellation, creating a cancel-and-rebook workaround.\n\n**Challenge:** The agent discovers the cancel-rebook workaround, explains why the nonstop option is still over budget, and steers the user to the cheaper 1-stop points-plus-cash booking that actually fits.",
+  "task_requirements": [
+    {
+      "id": "state_cancel_rebook_workaround_discovered",
+      "kind": "must",
+      "requirement": "Agent must explain that the basic-economy ticket cannot simply be changed but that insurance enables a free cancellation, creating a cancel-and-rebook workaround.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_points_budget_math_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that 15,000 points cover $150 domestically, making the $280 nonstop option require $130 cash and the $240 one-stop option require only $90 cash.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_budget_fit_recommendation",
+      "kind": "must",
+      "requirement": "Agent must recommend the one-stop June 23 option because it is the only rebooking path that stays within the user's $100 cash budget.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/52-challenge_insurance_cancel_rebook.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "refund_amount",
+      "expected_value": 175
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "users",
+      "record_key": "user_004",
+      "field": "loyalty_points",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_004",
+        "flight_id": "AS100",
+        "status": "confirmed",
+        "payment_method": "points_plus_cash",
+        "cash_amount": 90,
+        "points_used": 15000,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "standard",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-1001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 90,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "AS100",
+        "meal_preference": "standard",
+        "paid_checked_bags": 0,
+        "payment_method": "points_plus_cash",
+        "points_used": 15000,
+        "price_paid": 90,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_004"
+      }
+    }
+  ]
+}

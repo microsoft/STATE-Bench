@@ -1,0 +1,81 @@
+{
+  "task_id": "39-compound_return_and_reorder",
+  "task_summary": "**Task:** The customer needs help with defective headphones and wants the matter fully resolved, which requires both the defective-item return and the matching $249 refund. The correct handling is to complete the return path end to end rather than stopping after only part of the state change.\n\n**Challenge:** Multi-step completion is what matters here. Weak agents initiate the return without actually issuing the refund, or misclassify the defect and add penalties to what should be a clean defective-item resolution.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "39_compound_return_and_reorder_agent_must_process_return_and_refund",
+      "kind": "must",
+      "requirement": "Agent must complete the defective return after preview by confirming process_return with amount 249, resulting in a $249 refund to the original payment method."
+    }
+  ],
+  "user_id": "cust_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My headphones from order ORD-6040 are defective — the left side makes no sound. I want to return them and get my money back.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6040",
+      "item: headphones",
+      "defect: left side no sound"
+    ],
+    "personality": "direct",
+    "task_rules": [
+      "Give the order ID.",
+      "Describe defect: left side no sound.",
+      "You want both the return processed AND the refund confirmed.",
+      "Accept only defective-return terms that include a return label, no restocking fee, and a $249 refund to the original payment method.",
+      "If the agent only processes the return or label, ask them to also confirm the refund before you consider the issue resolved."
+    ],
+    "unknown_info": [
+      "refund amount",
+      "return process"
+    ],
+    "user_sim_context": "Your headphones are defective, and you mainly want to return them and get your money back rather than keep troubleshooting. At the same time, you expect the resolution to be complete and not stop halfway through the process. You want the agent to handle the full return path cleanly from start to finish."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9300",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9300",
+      "field": "refund_amount",
+      "expected_value": 249
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9300",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9300",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9300",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9300",
+      "field": "return_reason",
+      "expected_value": "defective"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6040",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/39-compound_return_and_reorder.json"
+}

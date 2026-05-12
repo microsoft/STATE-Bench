@@ -1,0 +1,81 @@
+{
+  "task_id": "92-challenge_seasonal_restock_shipping_triple",
+  "task_summary": "**Task:** A Silver customer is returning headphones in January from a December order, so the seasonal extension is what makes the return possible. The correct handling is to process the return, apply the $9 Silver restocking-discount adjustment against the normal electronics fee, and also apply the $8 shipping clawback tied to the remaining order.\n\n**Challenge:** This case combines timing, membership, and order-threshold effects. Weak agents deny the return because they miss the seasonal rule, notice the return but miss the Silver adjustment, or forget the shipping clawback once the other adjustments are in view.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "92_challenge_seasonal_restock_shipping_triple_agent_must_not_deny_the_request",
+      "kind": "must",
+      "requirement": "Agent must explain that the seasonal holiday extension makes the December order return-eligible through January 31."
+    },
+    {
+      "evidence": "conversation",
+      "id": "92_challenge_seasonal_restock_shipping_triple_agent_must_explain_refund_breakdown",
+      "kind": "must",
+      "requirement": "Agent must explain that the $213 net refund includes a $37 electronics restocking fee, a $9 Silver restocking-fee discount, and an $8 free-shipping clawback because the remaining order falls below the free-shipping threshold."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2027-01-15T10:00:00",
+  "opening_message": "I want to return the headphones from order ORD-7125. Got them in December.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7125",
+      "item: headphones",
+      "reason: changed mind"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give order ID.",
+      "If window expired, mention holiday returns.",
+      "If restocking fee, ask about Silver discount.",
+      "Accept the return terms only after the agent explains the seasonal eligibility, the electronics restocking fee, the Silver restocking-discount credit, and any shipping clawback; if shipping is not mentioned, ask whether the remaining order still qualifies for free shipping."
+    ],
+    "unknown_info": [
+      "seasonal",
+      "restocking discount",
+      "shipping clawback"
+    ],
+    "user_sim_context": "You want to return headphones from a December order and assume the seasonal timing should keep the door open. Beyond that, you suspect your Silver status may matter, but you are not certain how all the pieces interact. You need the agent to explain the eligibility, the membership effect, and any shipping consequence clearly."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10160",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10160",
+      "field": "refund_amount",
+      "expected_value": 213
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10160",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10160",
+      "field": "restocking_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10160",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7125",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/92-challenge_seasonal_restock_shipping_triple.json"
+}

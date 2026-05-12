@@ -1,0 +1,68 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H126",
+      "name": "Summit Rain Jacket",
+      "category": "outdoor",
+      "subcategory": "jacket",
+      "brand": "TrailPack",
+      "price": 139,
+      "rating": 4.4,
+      "review_count": 450,
+      "description": "Summit Rain Jacket from TrailPack.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 3,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": [
+        {
+          "variant_id": "m_green",
+          "label": "Medium Green",
+          "price_delta": 0,
+          "in_stock": true,
+          "stock_quantity": 3
+        },
+        {
+          "variant_id": "l_green",
+          "label": "Large Green",
+          "price_delta": 0,
+          "in_stock": true,
+          "stock_quantity": 1
+        }
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_001",
+      "name": "Alex Rivera",
+      "email": "alex.rivera@example.com",
+      "tier": "platinum",
+      "is_first_time": false,
+      "loyalty_points": 52000,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_001",
+      "customer_id": "shop_001",
+      "item_ids": [],
+      "subtotal": 0,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 0,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [],
+  "promotions": []
+}

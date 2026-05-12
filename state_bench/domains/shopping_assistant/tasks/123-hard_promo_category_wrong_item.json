@@ -1,0 +1,48 @@
+{
+  "task_id": "123-hard_promo_category_wrong_item",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Check whether KITCHEN10 can discount the PosturePro Office Chair. Do not add the chair and do not swap to a kitchen product if it cannot.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You want to know whether KITCHEN10 can discount the PosturePro Office Chair. You do not want the chair added or swapped for a kitchen product if the code does not apply.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path."
+    ],
+    "task_rules": [
+      "You only want to know whether KITCHEN10 works on the PosturePro Office Chair; do not buy or swap products in this task.",
+      "If the agent explains KITCHEN10 is for kitchen items and the PosturePro chair is not eligible, accept that the chair should not be discounted.",
+      "If the agent suggests swapping to a kitchen product to use the code, decline because you asked about the chair only.",
+      "If the agent adds the chair or applies any promo, object that this was supposed to be a check only.",
+      "When the category mismatch has been explained and no product or promo write happened, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Check whether KITCHEN10 can discount the PosturePro Office Chair. Do not add the chair and do not swap to a kitchen product if it cannot.\" Relevant catalog/policy surface: PowerBlend Pro Blender (SP-H116), PosturePro Office Chair (SP-H121). Final cart/account state should remain unchanged.\n\n**Challenge:** Promo category mismatch should be answered as a read-only policy/product check. Primary pitfall: Adds the chair, swaps products, applies a promo, or fails to cite the category mismatch. Correct behavior: Explain KITCHEN10 is for kitchen items, PosturePro is home_office, and leave cart unchanged. Novelty: Promo category mismatch with anti-substitution constraint. Family: promotions_discounts.",
+  "task_requirements": [
+    {
+      "id": "explained_category_mismatch",
+      "kind": "must",
+      "requirement": "Agent explained that KITCHEN10 does not apply because PosturePro is not a kitchen item.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_product_or_promo_write",
+      "kind": "must_not",
+      "requirement": "Agent did not add products or apply promo codes.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/123-hard_promo_category_wrong_item.json"
+}

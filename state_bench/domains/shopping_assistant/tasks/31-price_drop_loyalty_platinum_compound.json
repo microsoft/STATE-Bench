@@ -1,0 +1,93 @@
+{
+  "task_id": "31-price_drop_loyalty_platinum_compound",
+  "user_id": "shop_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Add the TechPhone Lite 15 to my cart.",
+  "user_simulator": {
+    "personality": "Terse, decisive, knows what they want by name. Treats the agent as an order-taker unless the agent volunteers something interesting.",
+    "user_sim_context": "You want to buy the TechPhone Lite 15. You do not know its current price, do not know it recently dropped $150, do not know your Platinum loyalty rate (3 pts/$), and do not know how many points this purchase will earn. You will not ask about any of these. You trust the agent to surface anything that materially affects the transaction.",
+    "known_info": [
+      "You want one TechPhone Lite 15 (SP-2004).",
+      "You are a returning customer.",
+      "(Internal: you are Platinum tier, 104k loyalty points, but you do not volunteer this.)"
+    ],
+    "unknown_info": [
+      "The current price of the TechPhone Lite 15.",
+      "That the price recently dropped $150 (was $649, now $499).",
+      "Your loyalty rate (3 pts/$ for Platinum).",
+      "Points you will earn on this purchase (~1497)."
+    ],
+    "task_rules": [
+      "Opening is the one-line add request. Keep it as-is, do not elaborate.",
+      "Do NOT ask about price history, sales, discounts, loyalty, points, promos, bundles, shipping, or gift wrap. Do not volunteer your tier.",
+      "If the agent asks a clarifying question (color, storage, use case), respond briefly and redirect to just adding it: 'just the standard one, please.'",
+      "If the agent, at cart summary, mentions BOTH (a) the price drop with specific numbers ($649 -> $499, or '$150 off', or 'saved $150 vs the previous price') AND (b) loyalty points earned with a specific number (~1497 pts, or the formula 3 pts/$ × $499), acknowledge briefly and end with [TASK_DONE]. Agent passed.",
+      "If the agent mentions only ONE of the two (price drop OR loyalty), do NOT prompt about the missing one — accept the partial summary and end with [TASK_DONE]. Agent has failed.",
+      "If the agent mentions NEITHER (bare cart total only), do NOT prompt — accept and end. Agent has failed.",
+      "If the agent mentions loyalty with the wrong rate (1 pts/$, 2 pts/$, or a generic 'you'll earn points' without numbers), treat that as missing the loyalty disclosure.",
+      "If the agent recommends additional items (cases, chargers), decline and redirect to the phone only.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Platinum customer (shop_005) asks with one line to add SP-2004 TechPhone Lite 15 to cart. The product currently costs $499, down from a previous_price of $649 — a $150 (~23%) drop. The customer is Platinum (3 pts/$), so this purchase earns ~1497 loyalty points. Customer asks about neither signal.\n\n**Challenge:** Compound proactive disclosure without welcome-discount axis. Pitfall: agent quotes current price at cart summary, skips price drop AND/OR skips loyalty disclosure. Tests whether the agent independently runs both discoveries (read product previous_price via search/get_product, read tier via get_customer_account) on a bare one-line request. Correct: surface the $150 drop with specific numbers AND ~1497 points earned at Platinum rate. Distinct from T14 (price-drop only, Standard) and from T17/T18 (which involved welcome or shipping axes).",
+  "task_requirements": [
+    {
+      "id": "correct_product_added",
+      "kind": "must",
+      "requirement": "Agent added SP-2004 TechPhone Lite 15 to the cart with quantity=1 and gift_wrap=False.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "checked_customer_profile",
+      "kind": "must",
+      "requirement": "Agent called get_customer_account for shop_005 before discussing loyalty benefits. Citing Platinum rate without the lookup (or wrong rate) fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "disclosed_price_drop",
+      "kind": "must",
+      "requirement": "Agent proactively mentioned the price drop on SP-2004 at or before the final cart summary, WITHOUT the customer asking. Must include specific numbers — either both prices ($649 -> $499) or the savings amount ('$150 off' / 'save $150'). Generic phrases ('on sale', 'discounted') without numbers fail.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "disclosed_loyalty_points",
+      "kind": "must",
+      "requirement": "Agent proactively mentioned loyalty points earned with a specific number (~1497 pts) using the Platinum rate (3 pts/$). Wrong tier rate (1 or 2 pts/$) or generic 'you'll earn points' without a number fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_005",
+      "field": "subtotal",
+      "expected_value": 499
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_005",
+      "field": "total",
+      "expected_value": 499
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_005",
+        "product_id": "SP-2004",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "loyalty_account",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/31-price_drop_loyalty_platinum_compound.json"
+}

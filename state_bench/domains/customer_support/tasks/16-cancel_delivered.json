@@ -1,0 +1,37 @@
+{
+  "task_id": "16-cancel_delivered",
+  "task_summary": "**Task:** The customer asks to cancel an order that has already been delivered. At that point cancellation is no longer available, so the right response is to deny the cancellation cleanly and redirect the customer to the return path instead.\n\n**Challenge:** The risk is forcing the request into the wrong workflow. Weak agents try to cancel a completed delivery, improvise a refund anyway, or fail to point the customer toward the proper return process.",
+  "task_type": "cancel_order",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "16_cancel_delivered_agent_must_redirect_customer_to_return",
+      "kind": "must",
+      "requirement": "Agent must explain that the delivered order cannot be cancelled and that the correct next step is the return process."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I want to cancel order ORD-6019.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6019",
+      "item: book"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "If told it can't be cancelled, ask what to do.",
+      "Accept a clear explanation that delivered orders cannot be cancelled and that the next step would be a return.",
+      "If the agent offers to start the return, asks return-condition questions, or begins a return workflow, decline and say you will handle the return separately.",
+      "End once cancellation is denied and the return path is explained; do not provide condition, packaging, or return-reason details."
+    ],
+    "unknown_info": [
+      "that order is delivered",
+      "that return is the correct process"
+    ],
+    "user_sim_context": "You are asking to cancel an order, but what you really want is to undo a purchase that has already shown up. You are not carefully distinguishing between cancellation and return terminology. You need the agent to explain the right path without making the conversation feel pedantic."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/16-cancel_delivered.json"
+}

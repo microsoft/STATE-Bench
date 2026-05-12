@@ -1,0 +1,81 @@
+{
+  "task_id": "91-challenge_intl_gt7d_medical_fee",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have a medical issue and need to postpone my Tokyo flight BK-1000 from June 28 to July 5. Is there a medical discount on the change fee? My user ID is user_002.",
+  "user_simulator": {
+    "personality": "Polite. Asks about medical discount. Accepts whatever fee is quoted.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking: BK-1000 (JFK to NRT, June 28, economy)",
+      "Medical reason for the change"
+    ],
+    "unknown_info": [
+      "Exact fee formula",
+      "Medical discount amount"
+    ],
+    "task_rules": [
+      "Open with: medical issue, change BK-1000 to July 5, ask about discount.",
+      "When agent quotes fee, say: 'OK, go ahead with the change.'",
+      "After change done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to postpone an international trip for medical reasons and assume there may be some accommodation because of that. The trip is still more than a week away, which makes the policy feel less obvious to you. You want the agent to tell you what the medical reason changes, if anything."
+  },
+  "task_summary": "**Task:** A traveler requests a medical change on an international booking that is more than 7 days out. Correct resolution: The medical discount reduces the applicable change fee to $50 for the booking.\n\n**Challenge:** The agent combines the correct international fee tier, the correct >7 day window, and the 50% medical discount rather than drifting into a domestic, <=7 day, or undiscounted fee.",
+  "task_requirements": [
+    {
+      "id": "state_medical_discount_applied",
+      "kind": "must",
+      "requirement": "Agent must explain that the medical discount reduces the applicable change fee to $50 for this booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_correct_total_fee_math",
+      "kind": "must",
+      "requirement": "Agent must keep the fee math on the international more-than-7-days path rather than describing this as a domestic-rate, within-7-days, or full-price change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_wrong_fee",
+      "kind": "must_not",
+      "requirement": "Agent must not tell the user that the correct medical change fee is $37, $100, or $200 for this booking.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/91-challenge_intl_gt7d_medical_fee.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "AA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 1300
+    }
+  ]
+}

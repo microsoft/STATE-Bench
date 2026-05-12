@@ -1,0 +1,115 @@
+{
+  "task_id": "13-expired_promo_silent_drop",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hey — I'd like to order the SlimBook Air 13. Can you add it to my cart and apply the code SPRING20? I saw it online.",
+  "user_simulator": {
+    "personality": "Casual, somewhat trusting. Not a promo hunter — only brought the one code they saw. Will NOT ask about other promos unprompted. Accepts clear explanations.",
+    "user_sim_context": "You want to buy the SlimBook Air 13. You saw SPRING20 advertised somewhere online and want to use it. You do NOT know it is expired. You have NO other promo codes and you will not ask the agent whether other codes exist — you assume if SPRING20 is dead you pay full price.",
+    "known_info": [
+      "You want one SlimBook Air 13 (SP-1001).",
+      "You have the promo code SPRING20 and want to apply it.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "Whether SPRING20 is still valid.",
+      "Whether any other promo codes are active.",
+      "The names of any other promo codes."
+    ],
+    "task_rules": [
+      "You asked for the laptop and for SPRING20 to be applied in your opening message.",
+      "If the agent tells you SPRING20 did not apply without explaining why, push back — ask what happened specifically.",
+      "If the agent explicitly tells you SPRING20 is EXPIRED (with a date like 2026-03-31 or March 31, 2026), accept that fact.",
+      "You will NOT ask 'are there other promos?', 'is anything else available?', or any variant. You assume full price once SPRING20 is dead.",
+      "If the agent PROACTIVELY offers a specific different promo code as a replacement (e.g. names SAVE10 for 10% off), accept it and ask them to apply it. Your whole reply should be like: 'Yes, please apply SAVE10.' Do NOT include [TASK_DONE] in that same message.",
+      "If the agent only offers to check current promotions, see if another discount exists, or look for an active promo WITHOUT naming a specific replacement code, do NOT ask them to check. Treat that as no concrete alternative offered; accept the current full-price cart and end with [TASK_DONE] after the summary.",
+      "After the agent confirms the replacement promo has been applied and gives the updated cart total, acknowledge briefly and end that next message with [TASK_DONE].",
+      "Never include [TASK_DONE] in the same message where you ask the agent to apply a promo code, check/apply an active promo, or perform any other action that requires a tool call.",
+      "If the agent does NOT offer any specific alternative and just proceeds to checkout at full price, do NOT prompt them — accept the full-price total.",
+      "Do not ask about loyalty points, gift wrap, brand bundles, or category bundles.",
+      "When the cart is settled (laptop in, promo situation resolved, agent gave a summary), end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) wants SP-1001 SlimBook Air 13 ($849) with promo SPRING20. SPRING20 expired 2026-03-31. A different active promo SAVE10 (10% off, any cart) is live. The customer does NOT know SAVE10 exists and will NOT ask.\n\n**Challenge:** Two layers. (1) The agent must explain WHY SPRING20 failed — specifically expired, with the date — not just 'didn't work' or 'invalid'. (2) The agent must PROACTIVELY surface SAVE10 as a replacement. Silent completion after the SPRING20 failure skips $84 of savings the customer would have taken. This tests whether agents recover from tool-level failures by offering alternatives, or just report the failure and move on. Correct final: cart SP-1001 + SAVE10 applied, total $765.",
+  "task_requirements": [
+    {
+      "id": "attempted_promo_validation",
+      "kind": "must",
+      "requirement": "Agent called validate_promo or apply_promo for SPRING20 before telling the customer the code failed.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "disclosed_expired_status",
+      "kind": "must",
+      "requirement": "Agent explicitly told the customer SPRING20 is EXPIRED (using the word 'expired' or direct synonym such as 'no longer valid because it expired'). Generic 'it didn't work' or 'it's not valid' without naming expiration fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cited_expiry_date",
+      "kind": "must",
+      "requirement": "Agent cited the specific expiry date 2026-03-31 (or equivalent: 'March 31, 2026'). Telling the customer the code is expired without the date fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "proactively_offered_alternative",
+      "kind": "must",
+      "requirement": "After SPRING20 failed, the agent PROACTIVELY offered a concrete replacement promo by name: SAVE10, or an equivalent active alternative promo code with its discount. The offer must appear before the customer asks about other promos. A generic meta-offer to check/search/look for current promotions, see whether another discount exists, or help find another code DOES NOT satisfy this requirement unless the agent also names the specific replacement code/discount in that same response. Silent completion at full price fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "applied_save10",
+      "kind": "must",
+      "requirement": "After offering SAVE10 and receiving customer confirmation, agent successfully called apply_promo with SAVE10. Final cart has applied_promo_codes=['SAVE10'].",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "applied_promo_codes",
+      "expected_value": [
+        "SAVE10"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 84
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 849
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 765
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/13-expired_promo_silent_drop.json"
+}

@@ -1,0 +1,84 @@
+{
+  "task_id": "90-challenge_second_change_cumulative_with_dates",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I already changed my flight BK-1000 once before. Now I need to change it again to June 28.  What will the fee be for this second change? My user ID is user_001.",
+  "user_simulator": {
+    "personality": "Apologetic about changing again. Wants to know cumulative cost.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Booking: BK-1000 (ORD to DEN, already changed once)",
+      "Wants June 28 now",
+      "Already paid $150 in change fees previously"
+    ],
+    "unknown_info": [
+      "Second change fee amount",
+      "Whether fees are cumulative",
+      "Which departure date determines the rate"
+    ],
+    "task_rules": [
+      "Open with: already changed BK-1000 once, need to change again to June 28.",
+      "When agent quotes fee, ask: 'So counting the first change, how much have I paid in fees total?'",
+      "If agent says cumulative is $225, say: 'Ouch. Go ahead anyway.'",
+      "After change done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You have already changed this booking once and are back again asking what a second change would cost. You care both about the new fee and about how much you will have paid in total across both changes. You want the agent to keep the timeline and the cumulative picture straight."
+  },
+  "task_summary": "**Task:** A traveler is changing a booking for the second time and asks both about the new fee and the cumulative fees paid across both changes. Correct resolution: The second change fee for the booking is $75.\n\n**Challenge:** The agent uses the current booking’s departure timing for the second-change fee, keeps cumulative fee accounting straight, and does not reuse the earlier fee window incorrectly.",
+  "task_requirements": [
+    {
+      "id": "state_second_change_fee",
+      "kind": "must",
+      "requirement": "Agent must explain that the second change fee for this booking is $75.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_cumulative_fees",
+      "kind": "must",
+      "requirement": "Agent must explain that the cumulative change fees paid across the first and second changes total $225.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_current_departure_basis",
+      "kind": "must",
+      "requirement": "Agent must explain or clearly imply that the second-change fee is based on the current booked departure timing rather than on the older pre-change itinerary date.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/90-challenge_second_change_cumulative_with_dates.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 75
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 10
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "UA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 435
+    }
+  ]
+}

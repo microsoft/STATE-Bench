@@ -1,0 +1,77 @@
+{
+  "task_id": "134-hard_discovery_compare_case_compatibility",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Compare the Pixel 7 case and iPhone 14 case. I use Pixel 7, so only add something if it fits.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You use a Pixel 7 and want to compare the Pixel 7 case with the iPhone 14 case. You only want something added if it actually fits your phone.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Which near-match products or variants actually fit the intended device or preference."
+    ],
+    "task_rules": [
+      "You use Pixel 7, so only the Pixel 7-compatible case is acceptable after the comparison.",
+      "If the agent explains the iPhone 14 case is incompatible and asks before adding the Pixel 7 case, consent to adding the Pixel 7 case.",
+      "After you consent to adding the Pixel 7 case, do not include [TASK_DONE] in that same message; wait for the agent to confirm only the Pixel 7-compatible case was added.",
+      "If the agent tries to add the iPhone case or both cases, object that you only want something that fits Pixel 7.",
+      "If the agent compares names without checking compatibility, ask them to verify fit for Pixel 7.",
+      "When only the Pixel 7-compatible case has been added after the comparison, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Compare the Pixel 7 case and iPhone 14 case. I use Pixel 7, so only add something if it fits.\" Relevant catalog/policy surface: ClearGrip Case for Pixel 7 (SP-H107), ClearGrip Slim Case for iPhone 14 (SP-H109). Correct final state: Explain iPhone case incompatible; add Pixel 7 case only if consent.\n\n**Challenge:** Comparison plus compatibility, not just product add. Primary pitfall: Adds wrong case after comparison. Correct behavior: Explain iPhone case incompatible; add Pixel 7 case only if consent. Novelty: Compare task with compatibility filter and one valid option. Family: product_discovery.",
+  "task_requirements": [
+    {
+      "id": "compared_and_filtered_by_device",
+      "kind": "must",
+      "requirement": "Agent compared the two cases and filtered the recommendation by Pixel 7 compatibility.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "added_only_compatible_case",
+      "kind": "must",
+      "requirement": "Agent added only the Pixel 7-compatible case.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did not call unrelated write tools such as redeem_loyalty_points or set_shipping_option unless the customer explicitly requested that workflow for this task.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 29
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 29
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-H107",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "product_search_discovery",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/134-hard_discovery_compare_case_compatibility.json"
+}

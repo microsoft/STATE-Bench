@@ -1,0 +1,90 @@
+{
+  "task_id": "44-compound_return_gift_exchange",
+  "task_summary": "**Task:** The customer wants to turn a gifted blender into store credit they can use toward a coffee maker later. The correct handling is to return the gift at the current product price and issue that value as store credit rather than sending money back to the gift buyer or another payment method.\n\n**Challenge:** Gift-return valuation and refund-method discipline both matter here. Weak agents use the original purchase price, push cash back to a card, or imply a same-flow purchase action that the support backend does not perform.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "44_compound_return_gift_exchange_agent_must_issue_69_store_credit",
+      "kind": "must",
+      "requirement": "Agent must explain that the gift return is issued as $69 store credit based on the current product price, not refunded to the gift buyer's original payment method."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "44_compound_return_gift_exchange_agent_must_not_issue_extra_credit",
+      "kind": "must_not",
+      "requirement": "Agent must not issue, promise, or apply any additional refund, store credit, or purchase credit beyond the $69 gift-return store credit."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I got a blender as a gift from order ORD-6046. I want to return it for store credit that I can use toward a coffee maker.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6046",
+      "item: blender",
+      "gift: from Aunt Mary",
+      "want: coffee maker"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Mention it's a gift.",
+      "You want store credit that can be used toward a coffee maker later.",
+      "If the agent offers a refund to the original payment method or gift sender, ask for gift-return store credit instead.",
+      "If the agent uses the original $89 purchase price, ask whether gift returns use the current product price instead.",
+      "If the agent offers extra credit or tries to apply credit to a coffee-maker purchase now, say you only need the gift return completed for the allowed store-credit amount.",
+      "Accept only when the preview is a $69 store-credit gift return for the blender."
+    ],
+    "unknown_info": [
+      "store credit amount (current price)",
+      "whether the credit can be used toward a different product"
+    ],
+    "user_sim_context": "You received a blender as a gift and want store credit that you can use toward a different product later. You need the agent to process the gift return at the current product price and keep the refund as store credit rather than sending money to the gift buyer."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9325",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9325",
+      "field": "refund_amount",
+      "expected_value": 69
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9325",
+      "field": "refund_method",
+      "expected_value": "store_credit"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9325",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9325",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9325",
+      "field": "store_credit_only",
+      "expected_value": true
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6046",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/44-compound_return_gift_exchange.json"
+}

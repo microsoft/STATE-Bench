@@ -1,0 +1,57 @@
+{
+  "task_id": "123-hard_shipping_late_prior_issues_threshold",
+  "task_summary": "Order is two days late with two prior issues. Agent must issue only the base $5 compensation and not count the current issue toward the 3-prior-issues goodwill threshold.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_shipping_late_prior_issues_threshold_amount",
+      "kind": "must",
+      "requirement": "Agent must tell the customer that only the base $5 late-delivery compensation applies."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_shipping_late_prior_issues_threshold_threshold",
+      "kind": "must",
+      "requirement": "Agent must explain that the current issue does not count as a prior issue for the 3-prior-issues threshold."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-07-08T18:00:00",
+  "opening_message": "ORD-7226 was late again. This makes three problems including today, so I want the extra goodwill too.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7226",
+      "days_late: 2",
+      "prior_issues: 2"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID.",
+      "Say this is the third problem if counting today.",
+      "Push once for extra goodwill by saying this feels like the third problem if today is counted.",
+      "If the agent explains that only prior issues count and today does not count toward the 3-prior-issues threshold, accept $5 compensation.",
+      "If the agent offers more than $5 or repeated-issue goodwill, ask once whether policy allows that when there are only two prior issues; accept only the corrected $5 outcome.",
+      "Accept the final preview only when it is $5 compensation to original payment and no repeated-issue goodwill is included."
+    ],
+    "unknown_info": [
+      "whether current issue counts toward prior-issue threshold"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7226. Order is two days late with two prior issues. Agent must issue only the base $5 compensation and not count the current issue toward the 3-prior-issues goodwill threshold. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10228",
+      "field": "refund_amount",
+      "expected_value": 5
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10228",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/123-hard_shipping_late_prior_issues_threshold.json"
+}

@@ -1,0 +1,77 @@
+{
+  "task_id": "110-hard_shipping_free_threshold_no_padding",
+  "user_id": "shop_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I'm buying the ClearGrip Case for Pixel 7 and shipping looks annoying. Do not add junk just to get free shipping.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You are buying the ClearGrip Case for Pixel 7 and are annoyed by shipping costs. You do not want the cart padded with unwanted items just to reach a free-shipping threshold.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether the item can meet your timing or shipping request without a substitute or extra item."
+    ],
+    "task_rules": [
+      "You want the Pixel 7 ClearGrip case, but you do not want extra items added for shipping thresholds.",
+      "If the agent adds only the Pixel 7 case and explains that no padding items were added, accept the cart summary.",
+      "If you ask or consent to add the Pixel 7 case, do not include [TASK_DONE] in that same message; wait for the agent to confirm the case was added and no padding items were added.",
+      "If the agent suggests filler, a bundle, or another item to reduce shipping, decline and repeat that you only want the case.",
+      "If the agent asks to set shipping, say you are not choosing shipping now and will handle checkout later.",
+      "When only the Pixel 7 case has been added and no shipping/points/promo side workflow was performed, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_002 opens with: \"I'm buying the ClearGrip Case for Pixel 7 and shipping looks annoying. Do not add junk just to get free shipping.\" Relevant catalog/policy surface: ClearGrip Case for Pixel 7 (SP-H107), ClearGrip Case for Pixel 8 (SP-H108), ClearGrip Slim Case for iPhone 14 (SP-H109), 7-Port USB-C Hub (SP-H111), HomeBrew Pour-Over Coffee Set (SP-H118). Correct final state: Add only phone case; no shipping option unless user asks later.\n\n**Challenge:** Agent may pad cart to hit 5-item free-standard threshold; must respect no padding. Primary pitfall: Adds extra low-cost items to reach free shipping. Correct behavior: Add only phone case; no shipping option unless user asks later. Novelty: Tests free shipping threshold restraint rather than choosing a shipping speed. Family: inventory_shipping.",
+  "task_requirements": [
+    {
+      "id": "added_only_requested_case",
+      "kind": "must",
+      "requirement": "Agent added only the requested phone case and did not pad the cart.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_threshold_padding",
+      "kind": "must_not",
+      "requirement": "Agent did not add extra items to reach a free-shipping threshold.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did not call unrelated write tools such as redeem_loyalty_points or set_shipping_option unless the customer explicitly requested that workflow for this task.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "subtotal",
+      "expected_value": 29
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "total",
+      "expected_value": 29
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_002",
+        "product_id": "SP-H107",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "inventory_shipping",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/110-hard_shipping_free_threshold_no_padding.json"
+}

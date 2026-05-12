@@ -1,0 +1,105 @@
+{
+  "task_id": "71-challenge_bereavement_one_booking_only",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have a family bereavement and need to postpone my trip. Please change BK-1000 (Paris flight) to June 24 — that is the bereavement-related one. Also change BK-1001 (San Francisco) to June 28 — that one is just personal scheduling. My user ID is user_001.",
+  "user_simulator": {
+    "personality": "Clear communicator. Distinguishes reasons for each booking. Wants exact costs.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Booking A: BK-1000 (JFK to CDG, June 19) - bereavement reason",
+      "Booking B: BK-1001 (ORD to SFO, June 25) - personal reason",
+      "Bereavement only applies to the Paris trip"
+    ],
+    "unknown_info": [
+      "Exact fee formulas",
+      "That bereavement gives 75% discount",
+      "That personal has no discount"
+    ],
+    "task_rules": [
+      "Open with: bereavement for BK-1000, personal for BK-1001. Clearly state different reasons.",
+      "When agent quotes fees, ask: 'What is the total for both changes combined?'",
+      "If agent applies bereavement discount to both, say: 'Wait, the San Francisco change is personal, not bereavement. Does that affect the fee?'",
+      "If agent correctly charges different fees, agree: 'Go ahead with both changes.'",
+      "After both changes done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to change two bookings in one conversation, but only one of them is actually tied to a bereavement. You want help with both, yet you do not want the reason from one trip casually applied to the other. The conversation depends on the agent keeping the two bookings distinct."
+  },
+  "task_summary": "**Task:** A traveler changes two bookings in the same conversation, but bereavement only applies to one of them. Correct resolution: The bereavement discount applies only to the Paris booking and not to the separate personal San Francisco change.\n\n**Challenge:** The agent keeps the change reasons separate per booking, applies the bereavement discount only to the Paris booking, and does not incorrectly discount the personal San Francisco change.",
+  "task_requirements": [
+    {
+      "id": "bereavement_not_blanket_discount",
+      "kind": "must",
+      "requirement": "Agent must explain or otherwise make clear that the bereavement discount applies only to the Paris booking and not to the separate personal San Francisco change.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "different_fees_for_two_reasons",
+      "kind": "must",
+      "requirement": "Agent must distinguish the two fee paths by treating the Paris change as bereavement-discounted and the San Francisco change as an ordinary personal-fee change, rather than quoting one blended or uniformly discounted rule for both.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "adversarial_or_reasoning_trap",
+  "task_env_path": "state_bench/domains/travel/task_envs/71-challenge_bereavement_one_booking_only.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "AF101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 1000
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "change_fee",
+      "expected_value": 75
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "flight_id",
+      "expected_value": "UA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "price_paid",
+      "expected_value": 495
+    }
+  ]
+}

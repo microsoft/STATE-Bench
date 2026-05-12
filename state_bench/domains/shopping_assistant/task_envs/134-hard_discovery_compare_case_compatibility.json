@@ -1,0 +1,77 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H107",
+      "name": "ClearGrip Case for Pixel 7",
+      "category": "electronics",
+      "subcategory": "phone_case",
+      "brand": "NovaShield",
+      "price": 29,
+      "rating": 4.5,
+      "review_count": 840,
+      "description": "ClearGrip Case for Pixel 7 from NovaShield. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "Google Pixel 7"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 1,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H109",
+      "name": "ClearGrip Slim Case for iPhone 14",
+      "category": "electronics",
+      "subcategory": "phone_case",
+      "brand": "NovaShield",
+      "price": 35,
+      "rating": 4.7,
+      "review_count": 990,
+      "description": "ClearGrip Slim Case for iPhone 14 from NovaShield. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "iPhone 14"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 1,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_004",
+      "name": "Taylor Kim",
+      "email": "taylor.kim@example.com",
+      "tier": "standard",
+      "is_first_time": false,
+      "loyalty_points": 2200,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_004",
+      "customer_id": "shop_004",
+      "item_ids": [],
+      "subtotal": 0,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 0,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [],
+  "promotions": []
+}

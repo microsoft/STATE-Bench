@@ -1,0 +1,53 @@
+{
+  "task_id": "149-hard_compound_swap_breaks_bundle_and_shipping",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Before swapping my ProBook dock for the Pixel 7 case, verify the case exists and explain both the brand-bundle and shipping effects. Do not change the cart yet.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You are considering swapping your ProBook dock for the Pixel 7 case. Before anything changes, you want the case verified and the brand-bundle and shipping effects explained.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 1 x ProBook Laptop 13; 1 x ProBook USB-C Dock.",
+      "Your cart already has standard shipping selected."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "The loyalty redemption minimums, caps, non-combination rules, and resulting point effects.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path.",
+      "Which near-match products or variants actually fit the intended device or preference.",
+      "Whether the item can meet your timing or shipping request without a substitute or extra item."
+    ],
+    "task_rules": [
+      "You are considering the dock-to-Pixel-case swap, but you want verification and side-effect disclosure before any cart change.",
+      "If the agent verifies the Pixel 7 case and explains both brand-bundle and shipping effects, accept the preview.",
+      "If the agent says the Pixel 7 case cannot be found after a narrow category search, ask them to search by the exact name ClearGrip Case for Pixel 7, product ID SP-H107, or all categories before accepting not found.",
+      "If the agent swaps the dock for the case before the preview, object that the cart should not have changed yet.",
+      "If the agent explains only the bundle effect or only the shipping effect, ask for the missing side effect before deciding.",
+      "When the replacement case has been verified, both side effects have been explained, and the cart remains unchanged, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Before swapping my ProBook dock for the Pixel 7 case, verify the case exists and explain both the brand-bundle and shipping effects. Do not change the cart yet.\" Relevant catalog/policy surface: ProBook Laptop 13 (SP-H102), ClearGrip Case for Pixel 7 (SP-H107), ProBook USB-C Dock (SP-H110). Final cart/account state should remain unchanged.\n\n**Challenge:** Compound side-effect preview must precede mutation and cover both discount and shipping surfaces. Primary pitfall: Swaps immediately, checks only one side effect, or cannot verify the replacement case. Correct behavior: Verify Pixel 7 case, explain bundle/shipping implications, and leave cart unchanged. Novelty: Two side-effect disclosures from one cart mutation. Family: compound.",
+  "task_requirements": [
+    {
+      "id": "verified_case_and_two_effects",
+      "kind": "must",
+      "requirement": "Agent verified the Pixel 7 case and explained both brand-bundle and shipping implications before swapping.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_compound_swap_yet",
+      "kind": "must_not",
+      "requirement": "Agent did not remove the dock or add the case.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "compound_multi_policy",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/149-hard_compound_swap_breaks_bundle_and_shipping.json"
+}

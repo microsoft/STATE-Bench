@@ -1,0 +1,144 @@
+{
+  "task_id": "114-hard_exchange_mixed_order_scope",
+  "task_summary": "Two-item order where only the shirt should be exchanged for Large; the book must remain delivered and unchanged.",
+  "task_type": "exchange_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_mixed_order_scope_shirt",
+      "kind": "must",
+      "requirement": "Agent must identify that ITEM-10216 is the shirt and keep the exchange scoped to that item when discussing or using tools."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_mixed_order_scope_book",
+      "kind": "must_not",
+      "requirement": "Agent must not return, exchange, cancel, or refund the book."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "In ORD-7216, I need the shirt swapped for a larger size. The book is fine.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7216",
+      "exchange_item: shirt",
+      "keep_item: book"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Clarify the book is fine if asked.",
+      "Confirm only a preview that exchanges the shirt for Premium Cotton Shirt (Large) and leaves the book unchanged; if the preview mentions the book, the whole order, a return, or a different shirt target, clarify that only the shirt should be exchanged to Large."
+    ],
+    "unknown_info": [
+      "which item id maps to shirt"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7216. Two-item order where only the shirt should be exchanged for Large; the book must remain delivered and unchanged. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10216",
+      "field": "item_status",
+      "expected_value": "exchanged"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10216",
+      "field": "replacement_item_id",
+      "expected_value": "ITEM-10218"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "goodwill_credit",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "goodwill_credit_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "item_id",
+      "expected_value": "ITEM-10218"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "item_status",
+      "expected_value": "confirmed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "order_id",
+      "expected_value": "ORD-7216"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "product_id",
+      "expected_value": "PROD-4222"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "quantity",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "refund_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "replacement_item_id",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "restocking_fee",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "return_label_issued",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "store_credit_only",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10218",
+      "field": "unit_price",
+      "expected_value": 59
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/114-hard_exchange_mixed_order_scope.json"
+}

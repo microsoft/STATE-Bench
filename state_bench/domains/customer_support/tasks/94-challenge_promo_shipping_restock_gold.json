@@ -1,0 +1,74 @@
+{
+  "task_id": "94-challenge_promo_shipping_restock_gold",
+  "task_summary": "**Task:** A Gold customer is returning headphones from a promo order that also originally qualified for free shipping. The correct handling is to account for promo redistribution, keep the normal $37 restocking deduction, apply the $18 Gold restocking-discount adjustment, and apply the $8 shipping clawback because the return changes the remaining order economics.\n\n**Challenge:** This is stacked refund math where each adjustment comes from a different rule. Weak agents miss the Gold adjustment, forget the shipping clawback, or focus on the membership discount while dropping the promo-aware refund calculation.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "94_challenge_promo_shipping_restock_gold_agent_must_explain_refund_breakdown",
+      "kind": "must",
+      "requirement": "Agent must explain that the $215 net refund reflects the promo-adjusted item refund, the $37 electronics restocking fee, the $18 Gold restocking-fee discount, and the $8 free-shipping clawback."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I want to return the wireless headphones from order ORD-7128.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7128",
+      "item: headphones",
+      "reason: changed mind"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give ID.",
+      "If the agent mentions a restocking fee, ask whether your Gold restocking discount is included.",
+      "Accept the return terms only after the agent explains the promo adjustment, the Gold restocking-discount credit, and whether the return triggers a shipping clawback; if any of those are missing, ask for the full refund breakdown."
+    ],
+    "unknown_info": [
+      "promo adj",
+      "restocking discount",
+      "shipping clawback"
+    ],
+    "user_sim_context": "You want to return headphones from an order that had both a promotion and free shipping, and you also expect your Gold status to help. From your side, that creates a lot of moving parts that are easy to lose track of. You want the agent to translate the final refund into a clear story rather than just dropping a number."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10166",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10166",
+      "field": "refund_amount",
+      "expected_value": 215
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10166",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10166",
+      "field": "restocking_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10166",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7128",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/94-challenge_promo_shipping_restock_gold.json"
+}

@@ -1,0 +1,82 @@
+{
+  "task_id": "101-hard_variant_pixel_case_misread",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I need the ClearGrip case for my Pixel 7, but do not add it until you verify why the Pixel 8 one is not the right fit.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You need a ClearGrip case for your Pixel 7, but you noticed there is also a Pixel 8 version and you do not want the wrong one added. You want the agent to verify the compatibility difference first, then ask before adding the Pixel 7 case.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Which near-match products or variants actually fit the intended device or preference."
+    ],
+    "task_rules": [
+      "If the agent distinguishes the Pixel 7 and Pixel 8 ClearGrip cases using catalog or compatibility evidence, agree that the Pixel 7 case is the one you want.",
+      "If the agent asks to add the Pixel 7 case after explaining why the Pixel 8 case is wrong for your phone, consent to the add.",
+      "If the agent tries to add the Pixel 8 case, an iPhone case, or any case before verifying compatibility, object once that you asked for the Pixel 7 fit to be checked first.",
+      "If the agent asks about shipping, points, promos, or partner devices, keep the request scoped to the Pixel 7 case only.",
+      "When the Pixel 7 case has been added, no wrong case was added, and the agent gives a cart summary, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"I need the ClearGrip case for my Pixel 7, but do not add it until you verify why the Pixel 8 one is not the right fit.\" Relevant catalog/policy surface: ClearGrip Case for Pixel 7 (SP-H107), ClearGrip Case for Pixel 8 (SP-H108), ClearGrip Slim Case for iPhone 14 (SP-H109). Correct final state: Explain Pixel 7 vs Pixel 8 compatibility, get consent, then add only the Pixel 7 case.\n\n**Challenge:** Near-duplicate cases require compatibility verification and a consent gate before the add. Primary pitfall: Adds immediately, skips compatibility evidence, or adds the Pixel 8 case. Correct behavior: Explain Pixel 7 vs Pixel 8 compatibility, get consent, then add only the Pixel 7 case. Novelty: Different from existing compatibility tasks because the user names the device and two near-duplicate case generations are both plausible. Family: compatibility_variant.",
+  "task_requirements": [
+    {
+      "id": "explained_case_mismatch",
+      "kind": "must",
+      "requirement": "Agent explained from catalog/compatibility evidence why the Pixel 8 case is not the right fit for Pixel 7.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_consent_before_case_add",
+      "kind": "must",
+      "requirement": "Agent got customer consent after the compatibility explanation and before adding the Pixel 7 case.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "added_pixel7_only",
+      "kind": "must",
+      "requirement": "Agent added ClearGrip Case for Pixel 7 and did not add Pixel 8 or iPhone case.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did not call unrelated write tools such as redeem_loyalty_points or set_shipping_option unless the customer explicitly requested that workflow for this task.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 29
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 29
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-H107",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "compatibility_variants",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/101-hard_variant_pixel_case_misread.json"
+}

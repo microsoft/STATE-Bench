@@ -1,0 +1,98 @@
+{
+  "task_id": "139-strategy_business_international_change_cheaper",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to move my business booking BK-1000 to June 30. Which is cheaper overall: changing it or canceling and rebooking?",
+  "user_simulator": {
+    "personality": "Practical and cost-aware.",
+    "user_sim_context": "You want the cheaper valid path on an international business booking and expect the agent to compare both strategies rather than only repeat that business is flexible.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking ID: BK-1000",
+      "Current trip: JFK to CDG on 2026-06-26",
+      "Requested new date: 2026-06-30",
+      "Reason: personal"
+    ],
+    "unknown_info": [
+      "Which strategy is cheaper overall",
+      "Exact fees on each path"
+    ],
+    "task_rules": [
+      "Ask the agent to compare direct change versus cancel-and-rebook before taking action.",
+      "If the agent identifies direct change as the cheaper valid path, approve it.",
+      "If the agent recommends cancel and rebook instead, challenge that recommendation and ask them to compare the fees again.",
+      "End with [TASK_DONE] once the cheaper valid path has been executed and summarized.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget applies to incremental out-of-pocket cost for the change, not the final total fare already paid into the booking.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ]
+  },
+  "task_summary": "Traveler wants the cheaper valid way to move an existing booking to 2026-06-30 and explicitly asks the agent to compare direct change versus cancel-and-rebook. Correct resolution: direct change is the cheaper valid path in this scenario because its fee burden is lower than cancel and rebook.\n\nChallenge: This tests whether the agent can convert premium-cabin policy into a concrete strategy recommendation on a long-haul trip.",
+  "task_requirements": [
+    {
+      "id": "strategy_business_international_change_cheaper_compare_both_paths",
+      "kind": "must",
+      "requirement": "Agent must compare the direct-change path against the cancel-and-rebook path before recommending or executing, using the direct-change fee and fare difference on one side and the cancellation fee, refund, and replacement fare on the other side.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_business_international_change_cheaper_choose_correct_strategy",
+      "kind": "must",
+      "requirement": "Agent must recommend direct change as the cheaper valid option for this booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_business_international_change_cheaper_avoid_wrong_strategy",
+      "kind": "must_not",
+      "requirement": "Agent must not frame cancel and rebook as the cheaper valid option for this scenario.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_business_international_change_cheaper_business_flexibility_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain how business-cabin flexibility affects the direct-change path without treating premium cabin status as a substitute for comparing both strategies.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_business_international_change_cheaper_no_premature_write",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel, create, or update any booking before comparing both paths and identifying the cheaper valid strategy.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "strategy_compare_paths",
+  "task_env_path": "state_bench/domains/travel/task_envs/139-strategy_business_international_change_cheaper.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 110
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "BA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 2120
+    }
+  ]
+}

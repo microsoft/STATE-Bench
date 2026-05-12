@@ -1,0 +1,57 @@
+{
+  "task_id": "116-policy_upgrade_with_current_price_paid_anchor",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have booking BK-EP03 in economy. Before I do anything, can you explain how the upgrade price should be calculated from what I already paid?",
+  "user_simulator": {
+    "personality": "Calm and detail-oriented.",
+    "user_sim_context": "You are not asking the agent to execute an upgrade yet. You want the pricing logic explained from the amount already paid on the booking because you do not trust vague upgrade quotes that ignore the original fare. After that, you want a recommendation about whether a business upgrade still makes sense under a hard comfort budget, but this remains informational and comparison-focused rather than an execution request.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Relevant booking: BK-EP03"
+    ],
+    "unknown_info": [
+      "How economy-to-business upgrade pricing is anchored",
+      "What the actual business upgrade amount would be on this booking",
+      "Whether upgrading still makes sense under a hard $500 comfort budget"
+    ],
+    "task_rules": [
+      "Ask the agent to explain the formula before quoting the number.",
+      "If the agent only gives the final amount, ask how it was derived from the original fare already paid.",
+      "If the agent explains only the formula or gives hypothetical ranges without the live BK-EP03 business upgrade amount, ask them to look up the current business fare and calculate the exact upgrade amount before you ask for a budget recommendation.",
+      "Only after the agent explains the formula and the exact $540 upgrade amount, say you only want to spend up to $500 total on comfort upgrades for this trip and ask whether the business upgrade still fits that budget.",
+      "Keep this informational only; do not authorize the upgrade itself.",
+      "End with [TASK_DONE] once the explanation and recommendation are clear."
+    ]
+  },
+  "task_summary": "Traveler wants a policy-level explanation of how an upgrade quote is derived from the amount already paid on an economy booking, then a recommendation under a hard comfort budget. Correct resolution: the agent should explain that the business-upgrade quote is based on the target-cabin price minus the amount already paid on the booking, apply that math to show the actual upgrade amount for BK-EP03, and then recommend against upgrading because the required spend exceeds the user's $500 comfort budget.\n\nChallenge: This tests whether the agent can move from upgrade-price explanation into budget-based recommendation without flattening the answer into either a generic fare-difference formula or a generic budget warning.",
+  "task_requirements": [
+    {
+      "id": "policy_upgrade_with_current_price_paid_anchor_1",
+      "kind": "must",
+      "requirement": "Agent must explain that the upgrade quote is based on the target-cabin price minus the amount already paid on the booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_upgrade_with_current_price_paid_anchor_2",
+      "kind": "must",
+      "requirement": "Agent must apply that pricing logic to booking BK-EP03 rather than speaking only in generic terms.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_upgrade_with_current_price_paid_anchor_3",
+      "kind": "must",
+      "requirement": "After the user introduces a hard $500 comfort budget, agent must recommend against the business upgrade because the required upgrade spend exceeds that budget.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_upgrade_with_current_price_paid_anchor_4",
+      "kind": "must_not",
+      "requirement": "Agent must not attempt to execute the upgrade during this compare-and-recommend policy task.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/116-policy_upgrade_with_current_price_paid_anchor.json",
+  "state_requirements": []
+}

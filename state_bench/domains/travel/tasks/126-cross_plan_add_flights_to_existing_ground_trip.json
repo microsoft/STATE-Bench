@@ -1,0 +1,138 @@
+{
+  "task_id": "126-cross_plan_add_flights_to_existing_ground_trip",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I already have a Los Angeles hotel and car booked, but now I need to add flights from Chicago ORD to complete the trip. Can you help me build around what I already have?",
+  "user_simulator": {
+    "personality": "Organized and constraint-aware.",
+    "user_sim_context": "You already have the ground portion of an LA trip and now need ORD-LAX round-trip flights that fit around those existing bookings. You want the agent to treat the hotel and car dates as fixed constraints rather than as suggestions that can be silently changed.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Home airport: ORD",
+      "Need round-trip flights ORD-LAX and LAX-ORD",
+      "Hotel reservation: HR-0100",
+      "Car rental: CR-0100",
+      "Any flight budget discussion applies only to the new flights, since the hotel and car are already booked."
+    ],
+    "unknown_info": [
+      "Whether the agent will anchor the flight search to the existing ground-trip dates"
+    ],
+    "task_rules": [
+      "If the agent suggests flights on different dates than the hotel and car, remind them the ground trip is already fixed.",
+      "If the agent asks where you are flying from, say ORD. Do not invent a different origin airport.",
+      "Approve only flights that align with the existing hotel and car reservation dates.",
+      "End with [TASK_DONE] after both matching flights are booked and summarized.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget applies to the new flight bookings being added, not to already-booked ground reservations.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ]
+  },
+  "task_summary": "Traveler already has hotel and car reservations and now needs flights built around those fixed dates. Correct resolution: the agent should anchor the flight plan to the existing ground-trip reservations instead of proposing flights that require rebuilding the trip.\n\nChallenge: This tests whether the agent can plan around pre-existing trip state rather than assuming every package starts from scratch.",
+  "task_requirements": [
+    {
+      "id": "cross_plan_add_flights_to_existing_ground_trip_anchor",
+      "kind": "must",
+      "requirement": "Agent must use hotel reservation HR-0100 and car rental CR-0100 as fixed date constraints when proposing flights, including the hotel check-in/check-out and car pickup/dropoff dates.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_plan_add_flights_to_existing_ground_trip_no_date_drift",
+      "kind": "must_not",
+      "requirement": "Agent must not propose flights that would require changing the already-booked hotel or car dates.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/126-cross_plan_add_flights_to_existing_ground_trip.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_002",
+        "flight_id": "UA-ET06A",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 250,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "vegetarian",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 250,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "UA-ET06A",
+        "meal_preference": "vegetarian",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 250,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_002"
+      }
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_002",
+        "flight_id": "UA-ET06B",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 260,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "vegetarian",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0002",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 260,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "UA-ET06B",
+        "meal_preference": "vegetarian",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 260,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_002"
+      }
+    }
+  ]
+}

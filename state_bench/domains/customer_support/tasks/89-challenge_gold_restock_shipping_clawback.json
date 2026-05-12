@@ -1,0 +1,76 @@
+{
+  "task_id": "89-challenge_gold_restock_shipping_clawback",
+  "task_summary": "**Task:** A Gold customer is returning a laptop from a free-shipping order. The correct handling is to keep the $74 base restocking deduction, apply the $37 Gold restocking-discount adjustment, and also apply the $8 shipping clawback because the order no longer qualifies for free shipping after the return.\n\n**Challenge:** Multiple adjustments apply, but they should not be flattened into a single vague refund story. Weak agents miss the Gold adjustment, forget the shipping clawback, or handle one correctly while dropping the other.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "89_challenge_gold_restock_shipping_clawback_agent_must_explain_refund_components",
+      "kind": "must",
+      "requirement": "Agent must explain the laptop refund as separate components: the $74 electronics restocking fee, the $37 Gold restocking-fee discount, and the $8 free-shipping clawback, for a final refund of $454."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I want to return the laptop from order ORD-7120. Changed my mind.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7120",
+      "item: laptop",
+      "reason: changed mind"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give order ID.",
+      "Ask about the Gold restocking discount if the agent mentions a restocking fee or previews the refund without a Gold adjustment.",
+      "If the preview does not mention a free-shipping or shipping clawback effect, ask whether returning the laptop changes the remaining order's free-shipping eligibility.",
+      "If the agent lists fees without showing the Gold discount separately, ask whether the Gold discount is already reflected.",
+      "Accept the final preview once it itemizes the restocking fee, Gold discount, and shipping clawback."
+    ],
+    "unknown_info": [
+      "restocking fee",
+      "Gold discount",
+      "shipping clawback"
+    ],
+    "user_sim_context": "You want to return a laptop and expect your Gold status to reduce some of the pain, but not all of the math is obvious from your perspective. You are not separately tracking restocking relief versus shipping consequences in your head. You want the agent to break the outcome into understandable parts."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10150",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10150",
+      "field": "refund_amount",
+      "expected_value": 454
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10150",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10150",
+      "field": "restocking_fee",
+      "expected_value": 74
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10150",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7120",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/89-challenge_gold_restock_shipping_clawback.json"
+}

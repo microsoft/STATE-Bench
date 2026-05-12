@@ -1,0 +1,47 @@
+{
+  "task_id": "107-hard_variant_jacket_size_quantity_scope",
+  "user_id": "shop_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I need two Summit Rain Jackets in Large Green. If fewer than two are in stock, do not add a partial quantity; just tell me the exact stock situation.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You need two Summit Rain Jackets in Large Green. You only want that exact size and color, and if fewer than two are available you want the exact stock situation rather than a partial add.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Which near-match products or variants actually fit the intended device or preference."
+    ],
+    "task_rules": [
+      "You need exactly two Large Green Summit Rain Jackets; a partial quantity or another size/color is not acceptable without a new request.",
+      "If the agent checks the Large Green variant and says fewer than two are available, accept that no jacket should be added.",
+      "If the agent offers one Large Green jacket, Medium Green, or another substitute, decline and ask them to leave the cart unchanged.",
+      "If the agent checks only product-level stock without variant quantity, ask them to check Large Green specifically.",
+      "When the agent has explained the exact Large Green stock limitation and made no cart change, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_001 opens with: \"I need two Summit Rain Jackets in Large Green. If fewer than two are in stock, do not add a partial quantity; just tell me the exact stock situation.\" Relevant catalog/policy surface: Summit Rain Jacket (SP-H126). Final cart/account state should remain unchanged.\n\n**Challenge:** Variant quantity sufficiency must be checked at variant level, with no silent partial add. Primary pitfall: Adds one silently, checks only product-level stock, or suggests a different size without saying the exact stock issue. Correct behavior: Explain only one Large Green jacket is available and leave cart unchanged. Novelty: Variant stock sufficiency, not out-of-stock alternative. Family: compatibility_variant.",
+  "task_requirements": [
+    {
+      "id": "checked_large_green_quantity",
+      "kind": "must",
+      "requirement": "Agent checked exact Large Green variant quantity and stated fewer than two are available.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_partial_jacket_add",
+      "kind": "must_not",
+      "requirement": "Agent did not add one jacket or another variant as a partial substitute.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "compatibility_variants",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/107-hard_variant_jacket_size_quantity_scope.json"
+}

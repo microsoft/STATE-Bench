@@ -1,0 +1,139 @@
+{
+  "task_id": "59-challenge_damaged_plus_wrong",
+  "task_summary": "**Task:** The customer has two legitimate fulfillment problems at once: a fragile scale that arrived damaged and a shirt that is the wrong item. The correct handling is to resolve both lines, refund the damaged scale and the wrong-item shirt separately, and also include the extra $10 fragile-item goodwill credit tied to the damaged scale.\n\n**Challenge:** This case rewards complete bookkeeping across multiple issue types. Weak agents resolve only one item, forget the fragile goodwill credit, or muddle the two problems into one incomplete action.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "59_challenge_damaged_plus_wrong_agent_must_ask_resolution_preference",
+      "kind": "must",
+      "requirement": "Agent must ask the customer what resolution they want (refund, replacement, or exchange) for each affected item before proposing or processing one."
+    },
+    {
+      "evidence": "conversation",
+      "id": "59_challenge_damaged_plus_wrong_agent_must_acknowledge_both_issues",
+      "kind": "must",
+      "requirement": "Agent must acknowledge both distinct issues to the customer: the scale arrived damaged and the shirt was the wrong item, before summarizing the two returns and the separate fragile goodwill credit."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "My order ORD-7051 is a mess — the kitchen scale arrived smashed (the glass is cracked) and the shirt is the wrong one.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7051",
+      "scale: damaged (cracked)",
+      "shirt: wrong variant",
+      "shirt_received: men's XL",
+      "shirt_wanted: women's medium",
+      "preferred_resolution: refunds for both items, to original payment (only reveal if the agent asks)"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give order ID.",
+      "Describe BOTH issues. If asked for shirt details, say you got a men's XL instead of a women's medium.",
+      "If agent handles only one, remind about the other.",
+      "If the agent asks what resolution you want for either item, say you want a refund to your original payment method for both, not a replacement or exchange. If the agent proposes a replacement or exchange without asking, decline and ask for a refund instead. Do not volunteer this preference unprompted.",
+      "If no fragile goodwill mentioned, ask 'Is there any extra compensation for the fragile item being damaged? Please put any credit back on my card.'",
+      "Don't end until all three actions are confirmed: refund for the scale, refund for the shirt, and the fragile goodwill credit, all to your original payment."
+    ],
+    "unknown_info": [
+      "goodwill policy",
+      "refund amounts"
+    ],
+    "user_sim_context": "Your order has two different problems at once: one item arrived damaged and another was simply the wrong product. You are not trying to collapse them into one issue, but you do want them handled in a single coherent conversation. The agent should keep both mistakes straight and resolve the whole mess cleanly. You want refunds for both items to your original payment method — not replacements, not exchanges, not store credit — but don't volunteer this preference unprompted; let the agent ask."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10051",
+      "field": "goodwill_credit",
+      "expected_value": 10
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10051",
+      "field": "goodwill_credit_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10051",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10051",
+      "field": "refund_amount",
+      "expected_value": 32
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10051",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10051",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10051",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10051",
+      "field": "return_reason",
+      "expected_value": "damaged_in_transit"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10055",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10055",
+      "field": "refund_amount",
+      "expected_value": 59
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10055",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10055",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10055",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10055",
+      "field": "return_reason",
+      "expected_value": "wrong_item"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7051",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/59-challenge_damaged_plus_wrong.json"
+}

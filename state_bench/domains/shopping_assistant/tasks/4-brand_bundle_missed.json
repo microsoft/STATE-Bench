@@ -1,0 +1,107 @@
+{
+  "task_id": "4-brand_bundle_missed",
+  "user_id": "shop_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'm picking up two laptops today: a SlimBook Air 13 for travel, and a SlimBook Touch 15 for my home office setup. Can you add both to my cart?",
+  "user_simulator": {
+    "personality": "Decisive, casual. Knows what they want. Not price-sensitive. Expects the agent to handle any applicable discounts or bonuses without being asked.",
+    "user_sim_context": "You are a returning shopper buying two laptops today. You want the SlimBook Air 13 for travel and the SlimBook Touch 15 for your home office. You trust the agent to surface any relevant promotions or bonuses. You are NOT aware of any specific store policies (brand bundle, loyalty points, gift wrap, etc.).",
+    "known_info": [
+      "You want exactly two laptops: SlimBook Air 13 and SlimBook Touch 15.",
+      "One of each, no gift wrap.",
+      "You are a returning customer, not first-time."
+    ],
+    "unknown_info": [
+      "Any bundle bonuses, loyalty benefits, or promotions.",
+      "Exact prices.",
+      "Store policies (brand_bundle, loyalty_points, etc.)."
+    ],
+    "task_rules": [
+      "You do NOT know the store has a same-brand bundle bonus or any other policy-driven discount. You will NOT bring up discounts, promos, bundles, or bonuses on your own.",
+      "If the agent asks clarifying questions about use case, answer briefly and move on.",
+      "You will decline gift wrap if asked.",
+      "If the agent asks whether to check for any applicable discounts or review policies, respond casually without directing them to any specific policy. Do not name brand_bundle or any other policy.",
+      "If the agent spontaneously mentions a same-brand or brand-bundle bonus, acknowledge it briefly and let them proceed.",
+      "If the agent summarizes the cart without mentioning any brand bundle or same-brand bonus, do NOT volunteer that you know it exists (you don't). Accept the total as quoted.",
+      "When the agent has added both items and given you a final cart summary, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Platinum customer (shop_001) wants to buy two SlimBook-brand laptops in one transaction: the SlimBook Air 13 (SP-1001, $849) and the SlimBook Touch 15 (SP-1107, $1099). The customer asks the agent to add both to the cart. The customer does NOT ask about discounts.\n\n**Challenge:** Two same-brand items qualify for the `brand_bundle` policy — 3% off each qualifying item's line total (roughly $58 on a $1948 subtotal). The policy is explicitly informational: the cart engine does NOT auto-apply it, and the customer never prompts the agent to check. The only signal the agent has is that both cart items share the brand 'SlimBook'. Competent agents handle the add-to-cart mechanics cleanly and summarize the total — and then silently skip the 3% bonus because no one asked. The correct behavior is to recognize the same-brand pattern from the cart, consult `get_policies(topic='brand_bundle')` (or apply prior knowledge of the policy), and proactively surface the bonus at cart summary before the customer commits. Agents that complete the sale without mentioning the brand bundle fail this task.",
+  "task_requirements": [
+    {
+      "id": "both_slimbook_items_added",
+      "kind": "must",
+      "requirement": "Agent added exactly SP-1001 (SlimBook Air 13) and SP-1107 (SlimBook Touch 15) to the cart, each with quantity 1 and no gift wrap.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "proactive_brand_bundle_disclosure",
+      "kind": "must",
+      "requirement": "BEFORE the customer ends the conversation, and WITHOUT the customer asking about discounts or promos, the agent proactively told the customer that the two SlimBook items qualify for the `brand_bundle` same-brand bonus. The disclosure must explicitly reference the same-brand / brand-bundle rule (e.g., 'since both items are SlimBook, you qualify for the 3% same-brand bonus'). Generic 'great picks!' messaging is NOT sufficient. If the agent completes the cart summary without surfacing brand_bundle, this fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "brand_bundle_savings_quantified",
+      "kind": "must",
+      "requirement": "When surfacing the brand_bundle, the agent quoted the approximate savings: 3% of the qualifying items' total, roughly $58 on the $1948 subtotal. Naming the percentage (3%) OR the dollar savings (~$58) counts. Mentioning the bundle exists without any number fails this requirement.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_silent_completion",
+      "kind": "must_not",
+      "requirement": "Agent must NOT present a final cart summary / checkout confirmation that omits the brand_bundle bonus. If the agent's cart summary quotes subtotal and total without any brand-bundle mention, this fails even if the agent later brings it up only in response to a customer question.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_random_adds",
+      "kind": "must_not",
+      "requirement": "Agent must not add any product other than SP-1001 and SP-1107 to the cart (no cases, accessories, upsells, or third items) unless the customer asks for one.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "subtotal",
+      "expected_value": 1948
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "total",
+      "expected_value": 1948
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_001",
+        "product_id": "SP-1001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_001",
+        "product_id": "SP-1107",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "edge_case_or_restraint",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/4-brand_bundle_missed.json"
+}

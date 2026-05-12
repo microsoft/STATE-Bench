@@ -1,0 +1,150 @@
+{
+  "task_id": "26-cascade_cancel_rebook_domestic",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I need to cancel my flight to Miami — booking BK-MS01 — and then rebook a flight to Denver instead.",
+  "user_simulator": {
+    "personality": "Friendly and cooperative. Provides information when asked.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Flight booking ID: BK-MS01",
+      "Has travel insurance on this booking",
+      "Wants to fly ORD → DEN on June 22",
+      "Prefers WN airline, morning, and nonstop options",
+      "Budget max: $600",
+      "Hotel reservation: HR-0104",
+      "Hotel in Miami, June 20-23"
+    ],
+    "unknown_info": [
+      "Exact cancellation refund amount",
+      "Available flights to Denver and their prices",
+      "Hotel cancellation fee"
+    ],
+    "task_rules": [
+      "Start by asking to cancel booking BK-MS01.",
+      "Do NOT proactively mention the hotel. Only bring it up if the agent asks about other reservations.",
+      "When cancellation is confirmed, say you need to book a new flight to Denver on June 22.",
+      "If the agent asks about other reservations, mention the hotel.",
+      "If the agent does NOT ask, do not mention it.",
+      "When the agent shows rebook options and the preferred WN morning nonstop is over budget, ask what's available within $600.",
+      "Pick the WN afternoon 1-stop at $280 — keeping the airline is more important than time or stops.",
+      "For the replacement Denver flight, use your profile booking preferences: no WiFi, no extra legroom, and add insurance.",
+      "If the agent asks about seat or meal details, answer directly.",
+      "If the agent asks about add-ons for the replacement flight, answer from your profile preferences.",
+      "When new booking is confirmed, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to unwind a Miami trip and then book a replacement trip to Denver, all while staying within a firm budget. There is more attached to the original trip than you say at first, and you expect the agent to help you think through the full situation. When it comes time to rebook, you care about sticking to your airline preference even if you have to compromise elsewhere."
+  },
+  "task_summary": "**Task:** A traveler first needs an insured Miami flight canceled, then needs the hidden Miami hotel canceled too, and only after that wants a replacement Denver flight within budget. Correct resolution: Agent must proactively discover and handle the linked Miami hotel reservation HR-0104 rather than waiting for the traveler to volunteer it.\n\n**Challenge:** The agent proactively discovers the linked hotel, explains why the preferred WN morning nonstop replacement is over budget, and clearly presents the trade-off that leads the user to the cheaper WN one-stop afternoon rebooking.",
+  "task_requirements": [
+    {
+      "id": "state_hidden_hotel_discovered",
+      "kind": "must",
+      "requirement": "Agent must proactively discover and handle the linked Miami hotel reservation HR-0104 rather than waiting for the user to volunteer it.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_over_budget_option_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that the preferred WN morning nonstop replacement WN400 is over the user's budget and present the within-budget alternatives.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_tradeoff_to_selected_rebook",
+      "kind": "must",
+      "requirement": "Agent must make clear that the chosen replacement WN401 keeps the WN airline preference but gives up both morning timing and nonstop service in order to stay within budget.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/26-cascade_cancel_rebook_domestic.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS01",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS01",
+      "field": "refund_amount",
+      "expected_value": 320
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS01",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0104",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0104",
+      "field": "refund_amount",
+      "expected_value": 390
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0104",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_004",
+        "flight_id": "WN401",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 280,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "standard",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 280,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "WN401",
+        "meal_preference": "standard",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 280,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_004"
+      }
+    }
+  ]
+}

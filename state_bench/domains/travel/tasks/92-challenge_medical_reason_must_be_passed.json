@@ -1,0 +1,83 @@
+{
+  "task_id": "92-challenge_medical_reason_must_be_passed",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have a medical procedure scheduled and need to change my Sao Paulo flight BK-1000 from June 19 to June 26. The change is medically necessary. My user ID is user_005.",
+  "user_simulator": {
+    "personality": "Straightforward. Clearly states medical reason.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Booking: BK-1000 (JFK to GRU, June 19)",
+      "Medical procedure - medically necessary change",
+      "Wants June 26"
+    ],
+    "unknown_info": [
+      "Fee amount",
+      "Whether medical gets a discount"
+    ],
+    "task_rules": [
+      "Open with: medical procedure, change BK-1000 to June 26.",
+      "If agent quotes $200 fee (forgot medical), say: 'But I mentioned this is for a medical reason. Is there a medical discount?'",
+      "If agent quotes $100 with medical discount, say: 'Go ahead.'",
+      "After change done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are being explicit that the reason for the change is medical and expect that to remain attached to the request the whole way through. From your perspective, if you say it clearly once, it should not get lost. You need the agent to carry that context consistently."
+  },
+  "task_summary": "**Task:** User states that the change is medically necessary and expects the medical discount to carry through execution. Correct resolution: The medically necessary change should carry a $100 fee for the booking.\n\n**Challenge:** The agent not only talks about the medical discount but actually keeps the booking on the medical-discount path instead of reverting to the default personal fee.",
+  "task_requirements": [
+    {
+      "id": "state_medical_fee_quote",
+      "kind": "must",
+      "requirement": "Agent must explain that the medically necessary change should carry a $100 fee for this booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_medical_reason_carried_through",
+      "kind": "must",
+      "requirement": "Agent must clearly treat the executed change as a medical change rather than drifting back to an ordinary personal-change path.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_personal_fee",
+      "kind": "must_not",
+      "requirement": "Agent must not tell the user that the correct fee for the final booking change is the full $200 personal-change fee once the medical reason has been raised.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/92-challenge_medical_reason_must_be_passed.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 100
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "DL101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 1250
+    }
+  ]
+}

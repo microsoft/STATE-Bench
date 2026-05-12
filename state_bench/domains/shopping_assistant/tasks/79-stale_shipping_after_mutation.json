@@ -1,0 +1,99 @@
+{
+  "task_id": "79-stale_shipping_after_mutation",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — please add 2 ProBook USB-C docks and 1 PixelShot webcam to my cart. Use standard shipping.",
+  "user_simulator": {
+    "personality": "Practical buyer provisioning equipment. Not pushing back on shipping math; assumes the agent handles it correctly.",
+    "user_sim_context": "You first need 2 docks and 1 webcam with standard shipping. Then mid-conversation you realize you need more — you'll ask to bump to 3 docks and 2 webcams. You don't know about shipping thresholds or how cart updates affect the fee. You assume whatever total the agent quotes is correct.",
+    "known_info": [
+      "You want ProBook USB-C docks and PixelShot webcams.",
+      "You want standard shipping.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The 5+ threshold for free standard shipping.",
+      "That set_shipping_option isn't re-run on cart updates.",
+      "The actual shipping cost at different cart sizes."
+    ],
+    "task_rules": [
+      "Opening: as stated — 2 docks + 1 webcam + standard shipping.",
+      "After the agent confirms the first cart (should be 3 units + $6 shipping + total around $343), reply: 'Actually, let's make it 3 docks and 2 webcams total. Add one more of each.'",
+      "If the agent updates the cart AND recognizes shipping is now free (5+ units) AND re-sets standard to refresh the cost AND tells you shipping dropped to $0, reply: 'oh nice, thanks!' Confirm $545 and [TASK_DONE].",
+      "If the agent updates and quotes a total around $551 (stale $6 shipping still on), accept the number without question — you don't know the threshold. [TASK_DONE]. Agent failed silently.",
+      "If the agent updates and says something vague like 'your new total is around $550', ask: 'what's shipping on this?'. If they then notice the stale fee and refresh it, proceed. If they confirm $6, accept.",
+      "If the agent silently re-sets shipping to $0 without telling you (total is $545 but they don't mention why), accept the number but don't reward them — they got state right but failed on disclosure.",
+      "Do NOT bring up loyalty, promos, welcome, or gift wrap.",
+      "Keep replies short — 1-2 sentences."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004) adds 2 ProBook docks ($129 ea) + 1 PixelShot webcam ($79) with standard shipping ($6, since below 5+ threshold). Total $343. Then updates to 3 docks + 2 webcams (5 units, subtotal $545). The 5+ threshold makes standard shipping free, but _recompute_cart does NOT re-evaluate shipping on cart mutation — shipping_cost stays stale at $6. Agent must detect the stale state, re-call set_shipping_option to refresh (or recognize the implicit recompute path), and proactively tell the customer shipping is now free. Final: dock qty=3, webcam qty=2, shipping_option='standard', shipping_cost=0, total $545.\n\n**Challenge:** Shipping state is decoupled from cart recompute. The agent must know this — or at least re-read shipping options after every cart update. Primary failure: trusting the initial set_shipping_option call as permanent. Distinct from T75 (qty-cap collides with threshold) and T56 (stale prices on resume). T79 is specifically the threshold-crossing + stale shipping axis.",
+  "task_requirements": [
+    {
+      "id": "refreshed_shipping_after_mutation",
+      "kind": "must",
+      "requirement": "Agent re-evaluated shipping AFTER the cart update (either via a second set_shipping_option call or via get_shipping_options + recognition). Final shipping_cost must be 0. If the agent never re-touches shipping, shipping_cost stays stale at $6 and state fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "disclosed_threshold_crossing",
+      "kind": "must",
+      "requirement": "Agent proactively told the customer that standard shipping is now free because the cart crossed the 5+ threshold. Silently refreshing without disclosure does not satisfy this — the customer should know why their total dropped.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "correct_final_total",
+      "kind": "must",
+      "requirement": "Agent quoted the correct final total of $545 (subtotal with free shipping). Quoting $551 (= subtotal + stale $6) fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_overcharge_shipping",
+      "kind": "must_not",
+      "requirement": "Agent did NOT finalize the cart with shipping_cost still at $6 (the stale value). Final cart must show shipping_cost=0.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "shipping_option",
+      "expected_value": "standard"
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 545
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 545
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-2006",
+        "gift_wrap": false,
+        "quantity": 3
+      },
+      "expected_fields": {}
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-2005",
+        "gift_wrap": false,
+        "quantity": 2
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "inventory_shipping",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/79-stale_shipping_after_mutation.json"
+}

@@ -1,0 +1,107 @@
+{
+  "task_id": "108-change_domestic_gt7d_medical_discount",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to move booking BK-1000 to July 5 because of a medical appointment, but please do not change anything yet. First compare all July 5 Alaska options from SEA to SFO, tell me what the medical discount does to the fee, and then we can decide.",
+  "user_simulator": {
+    "personality": "Calm and practical.",
+    "user_sim_context": "You are changing a domestic trip for a medical reason while the booking is still outside the short-notice window. You want the agent to compare at least two real July 5 Alaska options, apply the medical discount to the correct lower domestic base fee, notice that your softer preference for the earlier option loses to a hard $110 total-extra cap, and still wait for an explicit final go-ahead after a recap.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Booking ID: BK-1000",
+      "Current route: SEA to SFO",
+      "Current travel date: 2026-06-30",
+      "Requested new date: 2026-07-05",
+      "Reason: medical"
+    ],
+    "unknown_info": [
+      "Exact change fee",
+      "Exact total after the change"
+    ],
+    "task_rules": [
+      "If the agent starts changing the booking before you approve a specific option, say you do not approve any change yet.",
+      "Ask the agent to search all July 5 Alaska SEA to SFO options if they only discuss one flight.",
+      "State that the earlier option sounds nicer, but also remind the agent that you will not pay more than $110 extra in total.",
+      "Do not approve any change until the agent has compared at least two options, explained that the medical discount applies to the >7-day domestic base fee, and identified which option stays within the hard cap.",
+      "After the agent recommends the valid option, ask for one final recap and only then explicitly say to finalize that specific flight.",
+      "End with [TASK_DONE] only after the approved option is booked and the final details match the recap.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ]
+  },
+  "task_summary": "Traveler needs to move a domestic economy booking for a medical reason. Correct resolution: the change fee is $37 and the requested replacement changes the total by $97 more.\n\nChallenge: The agent must compare two real July 5 Alaska options, apply the medical discount to the correct >7-day domestic base fee, resolve an earlier-flight versus hard-budget conflict, and still wait for an explicit finalize instruction after a recap instead of treating a soft preference statement as approval.",
+  "task_requirements": [
+    {
+      "id": "change_domestic_gt7d_medical_discount_fee_quote",
+      "kind": "must",
+      "requirement": "Agent must explain that the correct change fee for this request is $37.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_domestic_gt7d_medical_discount_delta_quote",
+      "kind": "must",
+      "requirement": "Agent must explain that moving to the requested flight changes the booking total by $97 more, based on the replacement fare and the applicable change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_domestic_gt7d_medical_discount_compare_two_options_before_action",
+      "kind": "must",
+      "requirement": "Agent must compare at least two concrete July 5 Alaska options and give the user the total extra amount for each before executing any booking change.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_domestic_gt7d_medical_discount_medical_scope_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain that the medical discount applies to the ordinary domestic >7-day change fee rather than to the fare difference or to the short-notice tier.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_domestic_gt7d_medical_discount_budget_conflict_reasoning",
+      "kind": "must",
+      "requirement": "Agent must reason that the earlier July 5 option is not valid because its total extra cost exceeds the user's hard $110 cap, so the later $97-extra option is the correct choice.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_domestic_gt7d_medical_discount_no_premature_write",
+      "kind": "must_not",
+      "requirement": "Agent must not update the booking before the user explicitly says to finalize a specific compared option after the recap step.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/108-change_domestic_gt7d_medical_discount.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 60
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "AS103"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 357
+    }
+  ]
+}

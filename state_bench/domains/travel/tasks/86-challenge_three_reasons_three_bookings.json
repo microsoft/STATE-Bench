@@ -1,0 +1,140 @@
+{
+  "task_id": "86-challenge_three_reasons_three_bookings",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to change 3 flights. BK-1055 to Paris needs June 28 (personal reasons). BK-1000 to Miami needs June 25 (family bereavement). BK-1001 to San Francisco needs June 30 (medical procedure). What are the fees for each? My user ID is user_003.",
+  "user_simulator": {
+    "personality": "Organized. Lists all three with reasons. Wants per-booking fees.",
+    "known_info": [
+      "Your user ID: user_003",
+      "BK-1055: JFK to CDG June 22 -> June 28, personal",
+      "BK-1000: ORD to MIA June 20 -> June 25, bereavement",
+      "BK-1001: LAX to SFO June 24 -> June 30, medical"
+    ],
+    "unknown_info": [
+      "Exact fees per booking",
+      "That B and C coincidentally have same fee"
+    ],
+    "task_rules": [
+      "Open with all 3 bookings and reasons.",
+      "When agent quotes fees, ask for the combined total.",
+      "If agent uses one blanket fee for all three bookings, ask: 'Can you break that down by booking? I want to make sure each reason was handled separately.'",
+      "If agent correctly differentiates all three, say: 'Go ahead with all changes.'",
+      "After all done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are changing three different bookings at once, each for a different life reason, and you want the fees for each one laid out clearly. Even though the conversation is crowded, you expect the agent to keep every booking straight. What matters most is not speed but accurate separation of the three cases."
+  },
+  "task_summary": "**Task:** A traveler changes three bookings at once, each with a different change reason and fee formula. Correct resolution: BK-1055 carries a $200 personal-change fee.\n\n**Challenge:** The agent keeps the three cases separate, quotes the correct per-booking fees, and gives the correct combined total before proceeding.",
+  "task_requirements": [
+    {
+      "id": "state_booking_a_fee",
+      "kind": "must",
+      "requirement": "Agent must explain that BK-1055 carries a $200 personal-change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_booking_b_fee",
+      "kind": "must",
+      "requirement": "Agent must explain that BK-1000 carries a $37 bereavement change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_booking_c_fee",
+      "kind": "must",
+      "requirement": "Agent must explain that BK-1001 carries a $37 medical change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_combined_total",
+      "kind": "must",
+      "requirement": "Agent must state that the combined fees for the three changes total $274.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/86-challenge_three_reasons_three_bookings.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "AA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 457
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "change_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "flight_id",
+      "expected_value": "DL101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "price_paid",
+      "expected_value": 357
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1055",
+      "field": "change_fee",
+      "expected_value": 200
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1055",
+      "field": "fare_difference",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1055",
+      "field": "flight_id",
+      "expected_value": "AF101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1055",
+      "field": "price_paid",
+      "expected_value": 1030
+    }
+  ]
+}

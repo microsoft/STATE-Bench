@@ -1,0 +1,166 @@
+{
+  "task_id": "31-warranty_recurring_defect",
+  "task_summary": "**Task:** The customer's phone has already been repaired twice, and this third warranty claim triggers the recurring-defect replacement rule. The right outcome is a full replacement, with the agent making clear that the repeat-failure history is what changes the resolution from repair to replacement.\n\n**Challenge:** Claim history is the deciding factor. Weak agents treat this like another routine repair, fail to check the prior claims, or recognize the recurrence without actually moving the case to the required replacement path.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "31_warranty_recurring_defect_agent_must_acknowledge_this_is_a",
+      "kind": "must",
+      "requirement": "Agent must acknowledge this is a recurring issue and explain automatic replacement policy."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "31_warranty_recurring_defect_agent_must_not_offer_repair_instead",
+      "kind": "must_not",
+      "requirement": "Agent must not offer repair instead of replacement."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "31_warranty_recurring_defect_agent_must_check_claim_history",
+      "kind": "must",
+      "requirement": "Agent must call get_warranty_status for ITEM-9030 or explicitly verify that WRT-4001 has 2 prior claims before processing the warranty claim."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My phone from order ORD-6004 is having the same screen flickering issue again. This is the third time! I've had it repaired twice already.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6004",
+      "warranty_id: WRT-4001",
+      "issue: screen flickering",
+      "prior_repairs: 2"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Mention this is the THIRD time.",
+      "Warranty ID is WRT-4001 if asked.",
+      "You want a REPLACEMENT, not another repair.",
+      "If offered repair, push back.",
+      "Accept replacement when offered."
+    ],
+    "unknown_info": [
+      "recurring defect policy",
+      "replacement process"
+    ],
+    "user_sim_context": "Your phone is having the same problem again after multiple prior repairs, and your patience is gone. From your perspective this is no longer a one-off malfunction. You want the agent to recognize the repeated history and explain the stronger resolution you should now get."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9030",
+      "field": "replacement_item_id",
+      "expected_value": "ITEM-9031"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4001",
+      "field": "claim_count",
+      "expected_value": 3
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4001",
+      "field": "resolution",
+      "expected_value": "full_replacement"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4001",
+      "field": "status",
+      "expected_value": "claimed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "goodwill_credit",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "goodwill_credit_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "item_id",
+      "expected_value": "ITEM-9031"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "item_status",
+      "expected_value": "confirmed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "order_id",
+      "expected_value": "ORD-6004"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "product_id",
+      "expected_value": "PROD-2030"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "quantity",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "refund_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "replacement_item_id",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "restocking_fee",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "return_label_issued",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "store_credit_only",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9031",
+      "field": "unit_price",
+      "expected_value": 999
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/31-warranty_recurring_defect.json"
+}

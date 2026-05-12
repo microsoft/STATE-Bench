@@ -1,0 +1,268 @@
+{
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a shopping assistant for an online store. Today's date: <REDACTED>. You are currently helping customer shop_001. Use the available tools to help the customer find products, compare options, manage their cart, and apply promotions."
+    },
+    {
+      "role": "user",
+      "content": "Hi \u2014 I'm redoing my kitchen and want to grab a few ChefPro appliances today: the Stand Mixer, the Hand Blender, and the 11-Cup Food Processor. Can you add all three to my cart?"
+    },
+    {
+      "role": "assistant",
+      "content": "I\u2019ve added all three ChefPro appliances to your cart:\n\n1) ChefPro Stand Mixer 5qt \u2014 $299 (qty 1)  \n2) ChefPro Hand Blender \u2014 $69 (qty 1)  \n3) ChefPro 11-Cup Food Processor \u2014 $129 (qty 1)  \n\nCurrent merchandise subtotal: $497 (before tax, shipping, or any discounts).\n\nDo you want any of these gift-wrapped, or are these just for your own kitchen? Also, if you\u2019d like, I can check for any current kitchen-appliance promos before you check out.",
+      "tool_calls": [
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "ChefPro stand mixer",
+            "category": "kitchen",
+            "min_price": 0,
+            "max_price": 2000,
+            "min_rating": 1,
+            "in_stock_only": true,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-3101",
+                "name": "ChefPro Stand Mixer 5qt",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "mixer",
+                "price": 299,
+                "rating": 4.7,
+                "review_count": 1820,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-3103",
+                "name": "ChefPro 11-Cup Food Processor",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "food_processor",
+                "price": 129,
+                "rating": 4.6,
+                "review_count": 1340,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-3102",
+                "name": "ChefPro Hand Blender",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "blender",
+                "price": 69,
+                "rating": 4.5,
+                "review_count": 960,
+                "in_stock": true
+              }
+            ],
+            "total_found": 3
+          }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "ChefPro hand blender",
+            "category": "kitchen",
+            "min_price": 0,
+            "max_price": 2000,
+            "min_rating": 1,
+            "in_stock_only": true,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-3102",
+                "name": "ChefPro Hand Blender",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "blender",
+                "price": 69,
+                "rating": 4.5,
+                "review_count": 960,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-3101",
+                "name": "ChefPro Stand Mixer 5qt",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "mixer",
+                "price": 299,
+                "rating": 4.7,
+                "review_count": 1820,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-3001",
+                "name": "PowerBlend Pro Blender",
+                "brand": "PowerBlend",
+                "category": "kitchen",
+                "subcategory": "blender",
+                "price": 229,
+                "rating": 4.6,
+                "review_count": 1580,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-3103",
+                "name": "ChefPro 11-Cup Food Processor",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "food_processor",
+                "price": 129,
+                "rating": 4.6,
+                "review_count": 1340,
+                "in_stock": true
+              }
+            ],
+            "total_found": 4
+          }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "ChefPro 11-cup food processor",
+            "category": "kitchen",
+            "min_price": 0,
+            "max_price": 2000,
+            "min_rating": 1,
+            "in_stock_only": true,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-3103",
+                "name": "ChefPro 11-Cup Food Processor",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "food_processor",
+                "price": 129,
+                "rating": 4.6,
+                "review_count": 1340,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-3101",
+                "name": "ChefPro Stand Mixer 5qt",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "mixer",
+                "price": 299,
+                "rating": 4.7,
+                "review_count": 1820,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-3102",
+                "name": "ChefPro Hand Blender",
+                "brand": "ChefPro",
+                "category": "kitchen",
+                "subcategory": "blender",
+                "price": 69,
+                "rating": 4.5,
+                "review_count": 960,
+                "in_stock": true
+              }
+            ],
+            "total_found": 3
+          }
+        },
+        {
+          "name": "add_to_cart",
+          "arguments": {
+            "customer_id": "shop_001",
+            "product_id": "SP-3101",
+            "quantity": 1,
+            "gift_wrap": false,
+            "variant_id": ""
+          },
+          "result": {
+            "status": "added",
+            "cart_item_id": "CI-0001",
+            "product_id": "SP-3101",
+            "product_name": "ChefPro Stand Mixer 5qt",
+            "variant_id": null,
+            "quantity": 1,
+            "gift_wrap": false,
+            "unit_price": 299,
+            "cart_subtotal": 299,
+            "cart_total": 299
+          }
+        },
+        {
+          "name": "add_to_cart",
+          "arguments": {
+            "customer_id": "shop_001",
+            "product_id": "SP-3102",
+            "quantity": 1,
+            "gift_wrap": false,
+            "variant_id": ""
+          },
+          "result": {
+            "status": "added",
+            "cart_item_id": "CI-0002",
+            "product_id": "SP-3102",
+            "product_name": "ChefPro Hand Blender",
+            "variant_id": null,
+            "quantity": 1,
+            "gift_wrap": false,
+            "unit_price": 69,
+            "cart_subtotal": 368,
+            "cart_total": 368
+          }
+        },
+        {
+          "name": "add_to_cart",
+          "arguments": {
+            "customer_id": "shop_001",
+            "product_id": "SP-3103",
+            "quantity": 1,
+            "gift_wrap": false,
+            "variant_id": ""
+          },
+          "result": {
+            "status": "added",
+            "cart_item_id": "CI-0003",
+            "product_id": "SP-3103",
+            "product_name": "ChefPro 11-Cup Food Processor",
+            "variant_id": null,
+            "quantity": 1,
+            "gift_wrap": false,
+            "unit_price": 129,
+            "cart_subtotal": 497,
+            "cart_total": 497
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "No gift wrap \u2014 these are all for my own kitchen.  \n\nAnd yes, please go ahead and check for any current kitchen-appliance promos before I check out."
+    },
+    {
+      "role": "assistant",
+      "content": "I checked for current kitchen-appliance promotions, and there aren\u2019t any active promos available right now for the kitchen category.\n\nQuick recap of your cart (no gift wrap, no promos applied):\n- ChefPro Stand Mixer 5qt \u2014 $299  \n- ChefPro Hand Blender \u2014 $69  \n- ChefPro 11-Cup Food Processor \u2014 $129  \n\nMerchandise subtotal: $497 (before tax and shipping).\n\nIf you\u2019d like, I can:\n- Show you your full cart and shipping options, or  \n- Suggest any complementary items (e.g., mixer attachments, extra blades, or storage bowls) that match these ChefPro appliances.",
+      "tool_calls": [
+        {
+          "name": "get_promotions",
+          "arguments": {
+            "category": "kitchen"
+          },
+          "result": {
+            "promotions": []
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "That recap looks perfect, and no gift wrap is exactly what I want.  \n\nI don\u2019t need to pick shipping right now \u2014 skip it, I\u2019ll handle it at checkout. [TASK_DONE]"
+    }
+  ]
+}

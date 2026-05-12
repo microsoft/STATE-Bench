@@ -1,0 +1,77 @@
+{
+  "task_id": "88-multiline_cart_readback_accuracy",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hey — can you read back my cart for me, item by item? Include the gift wrap and the promo discount so I can double-check the math.",
+  "user_simulator": {
+    "personality": "Detail-oriented, wants line-by-line accuracy. Won't tolerate handwaving.",
+    "user_sim_context": "You have a cart with three items — a SlimBook, SoundMax Headphones (one is a gift and should be wrapped), and two PixelShot webcams. You applied SAVE50 for $50 off. You want the agent to read back EVERY line with price and quantity, AND confirm the gift wrap fee AND the SAVE50 discount, AND give you the subtotal and final total. You are NOT making changes — just verifying.",
+    "known_info": [
+      "You have three items: SlimBook, SoundMax Headphones, and PixelShot Webcam(s).",
+      "One headphone is gift-wrapped.",
+      "SAVE50 is applied for $50 off.",
+      "You are NOT making changes — read-only."
+    ],
+    "unknown_info": [
+      "Exact subtotal ($1,156) and total ($1,111).",
+      "Gift wrap fee amount.",
+      "Exact per-item prices."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask for an item-by-item readback including gift wrap and promo.",
+      "If the agent reads back all 3 items with quantities (qty=2 webcams noted) AND the 1 gift-wrapped item AND the $5 wrap fee AND the $50 SAVE50 discount AND subtotal $1,156 AND total $1,111, reply: 'perfect, that matches what I expected. Thanks.' [TASK_DONE].",
+      "If the agent misses any item in the readback, push back: 'wait, you missed one — can you redo it?'. If they correct completely, proceed. If they still miss, accept and end — failed.",
+      "If the agent omits the gift wrap or the $5 fee, push back: 'what about the gift wrap — is that reflected?'. If they cite the $5 fee and the wrapped item, proceed. If they stay vague, accept and end.",
+      "If the agent omits the SAVE50 or the $50 discount, push back: 'did you include the SAVE50 discount? What's my discount amount?'. If they confirm $50 and total $1,111, proceed. If not, accept and end.",
+      "If the agent quotes a wrong subtotal or total, push back: 'that doesn't match my math. Can you double-check — subtotal and total?'. If they correct to $1,156 / $1,111, proceed. If not, accept and end.",
+      "If the agent adds, removes, or modifies any item, push back: 'hey, I didn't ask you to change anything. Please revert.' Accept and end — failed on mutation.",
+      "Do NOT volunteer the exact numbers. Let the agent surface them.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004, Taylor Kim) has a complex seeded cart: SlimBook Air 13 ($849 × 1), SoundMax Headphones ($149 × 1, gift-wrapped), PixelShot Webcam ($79 × 2 = $158). Gift-wrap fee $5, SAVE50 applied for $50 off. Subtotal $1,156, total $1,111. Customer asks for an item-by-item readback including gift wrap and discount. Agent must accurately enumerate every line AND surface the fee / discount / subtotal / total. Read-only turn; no mutations. Final state: cart unchanged.\n\n**Challenge:** Readback completeness and accuracy on a dense cart. Failure modes: skipping an item (3-line readback becomes 2), omitting the gift-wrap fee, omitting the promo discount, misquoting subtotal or total, or silently mutating (re-applying the promo, auto-adding shipping, etc.). Tests whether the agent can faithfully serialize a complex cart state back to the customer without losing information.",
+  "task_requirements": [
+    {
+      "id": "listed_all_three_items",
+      "kind": "must",
+      "requirement": "Agent listed all three items in the readback: SlimBook Air 13 (qty 1), SoundMax Headphones (qty 1), and PixelShot Webcam (qty 2). Missing any item fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "surfaced_gift_wrap_fee",
+      "kind": "must",
+      "requirement": "Agent mentioned the gift-wrapped headphones and the $5 gift-wrap fee. Missing the wrap status or the $5 fee fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "surfaced_promo_discount",
+      "kind": "must",
+      "requirement": "Agent mentioned SAVE50 and the $50 discount. Missing either fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "correct_totals",
+      "kind": "must",
+      "requirement": "Agent quoted subtotal $1,156 AND total $1,111. Either missing or wrong fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_cart_mutation",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call add_to_cart, update_cart_item, remove_from_cart, apply_promo, or cancel_promo. This is a pure readback; any mutation violates the customer's explicit 'just verifying' intent.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "comparison_recommendation",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/88-multiline_cart_readback_accuracy.json"
+}

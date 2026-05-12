@@ -1,0 +1,57 @@
+{
+  "task_id": "30-warranty_manufacturer",
+  "task_summary": "**Task:** The customer reports a problem with headphones that are ten months old and still within the twelve-month manufacturer warranty. The correct handling is to recognize that the claim remains covered and route it through the manufacturer-backed repair path.\n\n**Challenge:** This is a straightforward coverage-identification case. Weak agents miss the manufacturer window, steer the customer toward a replacement or repurchase, or talk around the issue without committing to the covered repair resolution.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "30_warranty_manufacturer_agent_must_verify_manufacturer_repair",
+      "kind": "must",
+      "requirement": "Agent must verify WRT-4013 is an active manufacturer warranty for ITEM-9215 and communicate that the covered resolution is repair."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My headphones from order ORD-6032 have a crackling sound in the left ear. Can I get them fixed under warranty?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6032",
+      "warranty_id: WRT-4013",
+      "issue: left ear crackling"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Describe: left ear crackling.",
+      "Warranty ID is WRT-4013 if asked.",
+      "If the agent denies coverage, suggests buying a new pair, or offers a non-warranty resolution, ask them to check the manufacturer warranty before you accept.",
+      "Accept only a repair claim processed under the active manufacturer warranty WRT-4013 for the left-ear crackling issue."
+    ],
+    "unknown_info": [
+      "warranty status",
+      "repair vs replace"
+    ],
+    "user_sim_context": "Your headphones have developed a crackling sound, and you want to know whether the original manufacturer warranty still covers the issue. You are focused on getting the defect fixed through the normal coverage path. You expect the agent to check the warranty status and guide you from there."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4013",
+      "field": "claim_count",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4013",
+      "field": "resolution",
+      "expected_value": "repair"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4013",
+      "field": "status",
+      "expected_value": "claimed"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/30-warranty_manufacturer.json"
+}

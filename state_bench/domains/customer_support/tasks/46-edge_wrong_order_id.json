@@ -1,0 +1,42 @@
+{
+  "task_id": "46-edge_wrong_order_id",
+  "task_summary": "**Task:** The customer opens with an invalid order ID while asking about a possible return. The correct handling is to recover gracefully by asking for the right order identifier and to avoid taking any return action until the order is clarified.\n\n**Challenge:** Error handling and scope control are the real skills under test. Weak agents crash on lookup, fake confidence about the missing order, or jump into a return flow even though the underlying order is still unknown.",
+  "task_type": "edge_case",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "46_edge_wrong_order_id_agent_must_handle_error_gracefully_and",
+      "kind": "must",
+      "requirement": "Agent must acknowledge or attempt the invalid ORD-9999 lookup, recover by asking for or accepting the corrected order ID, and then use ORD-6005."
+    },
+    {
+      "evidence": "conversation",
+      "id": "46_edge_wrong_order_id_agent_must_answer_return_policy_only",
+      "kind": "must",
+      "requirement": "Agent must explain the applicable return policy for the cotton shirt on ORD-6005 after the correct order is identified, without initiating a return."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi, I have a question about my order ORD-9999. I need to return something.",
+  "user_simulator": {
+    "known_info": [
+      "wrong_order_id: ORD-9999",
+      "correct_order_id: ORD-6005",
+      "item: cotton shirt"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "Start with order ID ORD-9999 (wrong).",
+      "When told it's not found, say 'Oh let me check... it's ORD-6005'.",
+      "You just want to know about the return policy for the shirt.",
+      "You do NOT actually want to initiate a return right now."
+    ],
+    "unknown_info": [
+      "return policy details"
+    ],
+    "user_sim_context": "You came in with an order number that may not be correct, but you still need help with a possible return. From your perspective, the immediate goal is getting oriented rather than taking action instantly. You want the agent to handle the mismatch calmly and help identify the right order before going further."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/46-edge_wrong_order_id.json"
+}

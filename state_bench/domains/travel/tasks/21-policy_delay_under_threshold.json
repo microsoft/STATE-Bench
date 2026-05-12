@@ -1,0 +1,62 @@
+{
+  "task_id": "21-policy_delay_under_threshold",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Both my flights today are delayed. I'd like to know what compensation I can get.",
+  "user_simulator": {
+    "personality": "Somewhat impatient but ultimately accepts policy. Asks follow-up questions.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Flight 1 booking: BK-PR06a (DEN→ATL)",
+      "Flight 2 booking: BK-PR06b (ATL→MIA)",
+      "Both flights are delayed today",
+      "This task is about understanding compensation eligibility, not claiming the voucher"
+    ],
+    "unknown_info": [
+      "Flight 1 is delayed only 90 minutes (under threshold)",
+      "Flight 2 is delayed 150 minutes (above threshold)",
+      "Only flight 2 qualifies for a $25 meal voucher",
+      "The threshold tiers are 120min and 240min"
+    ],
+    "task_rules": [
+      "When the agent asks for booking IDs, provide both.",
+      "When the agent reports the delay durations, ask what compensation you get for each.",
+      "If the agent gives a blanket answer for both, ask what that means for each booking.",
+      "When the agent says only one qualifies, ask what the minimum delay threshold is.",
+      "Do not ask the agent to issue or claim the voucher. Keep this conversation at the policy/eligibility level only; it is fine if the agent offers to issue the eligible voucher later after explicit authorization.",
+      "When both are explained with correct compensation, accept the situation.",
+      "End with [TASK_DONE] once the policy is clear for both flights."
+    ],
+    "user_sim_context": "You have two delayed flights and want to compare what each one qualifies for. You assume all delays might be treated similarly, so you need the agent to break down the thresholds clearly. This is about understanding your rights, not taking action yet."
+  },
+  "task_summary": "**Task:** User asks about compensation on two delayed flights with different delay lengths. Correct resolution: The 90-minute delayed flight does not qualify for compensation because it is below the 120-minute threshold.\n\n**Challenge:** The agent distinguishes the 90-minute no-compensation case from the 150-minute meal-voucher case, explains the threshold logic, and keeps the interaction informational only.",
+  "task_requirements": [
+    {
+      "id": "state_first_flight_no_comp",
+      "kind": "must",
+      "requirement": "Agent must explain that the 90-minute delayed flight does not qualify for compensation because it is below the 120-minute threshold.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_second_flight_meal_voucher",
+      "kind": "must",
+      "requirement": "Agent must explain that the 150-minute delayed flight qualifies for the $25 meal-voucher tier.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_delay_thresholds",
+      "kind": "must",
+      "requirement": "Agent must explain that delay-compensation thresholds begin at 120 minutes and that higher full-compensation benefits require 240 minutes or more.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_voucher_claim",
+      "kind": "must_not",
+      "requirement": "Agent must not actually issue compensation or claim that compensation has already been issued in this eligibility-only task. Offering to issue the eligible $25 meal voucher later after explicit user authorization is allowed.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/21-policy_delay_under_threshold.json",
+  "state_requirements": []
+}

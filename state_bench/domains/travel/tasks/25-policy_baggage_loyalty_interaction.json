@@ -1,0 +1,61 @@
+{
+  "task_id": "25-policy_baggage_loyalty_interaction",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I'm a platinum member and I have several upcoming flights. Can you tell me how many bags I can check for free on each one? I'm packing for a multi-city trip.",
+  "user_simulator": {
+    "personality": "Experienced traveler. Wants precise numbers for planning.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Has booking BK-PR10a (economy, JFK→LAX)",
+      "Has booking BK-PR10b (business, LAX→ORD)",
+      "Has booking BK-PR10c (basic economy, ORD→JFK)",
+      "Is a platinum loyalty member",
+      "Bringing different amounts of luggage on each leg"
+    ],
+    "unknown_info": [
+      "Base checked bag allowance per cabin class",
+      "Platinum bonus bags count",
+      "Different extra bag fees for basic economy vs others"
+    ],
+    "task_rules": [
+      "When the agent asks which booking you mean, say you want info for ALL your upcoming flights.",
+      "If the agent gives a single answer, ask them to break it down per booking since each is in a different cabin.",
+      "When the agent provides the breakdown, verify the total for the basic economy booking specifically.",
+      "Ask about the extra bag fee — note it should be different for basic economy.",
+      "Ask about oversized bags.",
+      "When you have the full breakdown for all 3 bookings, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You are packing for a multi-city trip and want to understand your baggage allowance across several bookings. Because of your loyalty tier, you expect the answer may not be the same on every itinerary. You want a practical explanation booking by booking so you can plan confidently."
+  },
+  "task_summary": "**Task:** A platinum member asks for checked-bag rules across three bookings in different cabin classes. Correct resolution: BK-PR10a allows 4 free checked bags, BK-PR10b allows 5 free checked bags, and BK-PR10c allows 3 free checked bags.\n\n**Challenge:** The agent gives a per-booking baggage breakdown, correctly applies the platinum bonus to each cabin, and explains the different extra-bag charges for basic economy versus the other bookings.",
+  "task_requirements": [
+    {
+      "id": "state_per_booking_allowances",
+      "kind": "must",
+      "requirement": "Agent must explain that BK-PR10a allows 4 free checked bags, BK-PR10b allows 5 free checked bags, and BK-PR10c allows 3 free checked bags.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_loyalty_breakdown",
+      "kind": "must",
+      "requirement": "Agent must make clear that these totals come from each cabin’s base allowance plus the platinum bonus of 3 additional checked bags.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_extra_bag_fees",
+      "kind": "must",
+      "requirement": "Agent must explain that extra checked bags cost $35 on BK-PR10a and BK-PR10b, but $50 on the basic-economy booking BK-PR10c.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_carry_on_or_oversize",
+      "kind": "must",
+      "requirement": "Agent must mention either that each booking still includes one carry-on or that oversized bags cost $100 each.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/25-policy_baggage_loyalty_interaction.json",
+  "state_requirements": []
+}

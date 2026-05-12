@@ -1,0 +1,85 @@
+{
+  "task_id": "16-welcome_discount_proactive",
+  "user_id": "shop_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi! I'd like to add the PowerBlend Pro Blender to my cart please.",
+  "user_simulator": {
+    "personality": "Casual, friendly. New to the store. Doesn't know about loyalty programs or welcome discounts. Trusts the agent to mention anything relevant.",
+    "user_sim_context": "You are buying your first item from this store. You do NOT know anything about welcome discounts, loyalty programs, or promo codes. You will not ask about discounts \u2014 you assume the listed price is the final price unless told otherwise.",
+    "known_info": [
+      "You want one PowerBlend Pro Blender (SP-3001).",
+      "This is your first purchase from this store.",
+      "You are a Standard-tier customer."
+    ],
+    "unknown_info": [
+      "That you qualify for a first-time customer welcome discount.",
+      "That the store has any kind of new-customer promotion.",
+      "Any specific promo codes."
+    ],
+    "task_rules": [
+      "Your opening message asks for the PowerBlend Pro Blender.",
+      "If the agent gives you a cart summary that mentions a welcome discount or new-customer eligibility (with a specific number \u2014 5% or ~$11), acknowledge and accept.",
+      "If the agent gives you a cart summary at full price ($229) WITHOUT mentioning the welcome discount, do NOT prompt them \u2014 accept the full-price summary.",
+      "You will NOT ask 'are there any discounts?', 'do new customers get a discount?', or any variant.",
+      "Do NOT volunteer that this is your first purchase \u2014 let the agent figure it out from your profile.",
+      "Do not ask about gift wrap, loyalty points, or brand bundles.",
+      "When the blender is in the cart and the agent has given a final summary, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences \u2014 these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time \u2014 I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now \u2014 skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A first-time Standard customer (shop_002) adds SP-3001 PowerBlend Pro Blender ($229). Per `welcome_discount` policy, first-time customers qualify for 5% off (~$11 here). No promo codes in env \u2014 welcome is the only discount in play and it's profile-driven.\n\n**Challenge:** Pitfall is silent completion \u2014 agent adds the blender, summarizes cart at $229, and never mentions welcome eligibility. Customer is a clean first-time buyer (is_first_time=True, empty purchase_history) and does NOT ask about discounts. Correct: agent calls get_customer_account, sees first-time flag, and proactively cites the 5% welcome discount with specific dollar savings at cart summary. Tests whether the agent treats policy-driven discounts as proactively-disclosable, not just promo-code-triggered.",
+  "task_requirements": [
+    {
+      "id": "checked_customer_profile",
+      "kind": "must",
+      "requirement": "Agent called get_customer_account for shop_002 to determine first-time status before discussing pricing/discounts.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "disclosed_welcome_eligibility",
+      "kind": "must",
+      "requirement": "Agent proactively mentioned that the customer qualifies for the welcome (first-time) discount, WITHOUT the customer asking. The disclosure must include either the percentage (5%) or the dollar amount (~$11). Generic 'we have discounts available' or 'you qualify for promotions' fails \u2014 the specific welcome discount must be named.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "correct_product_added",
+      "kind": "must",
+      "requirement": "Agent added SP-3001 PowerBlend Pro Blender to the cart, quantity 1, no gift wrap.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "subtotal",
+      "expected_value": 229
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "total",
+      "expected_value": 229
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_002",
+        "product_id": "SP-3001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/16-welcome_discount_proactive.json"
+}

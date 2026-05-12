@@ -1,0 +1,100 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H120",
+      "name": "ErgoLift Standing Desk",
+      "category": "home_office",
+      "subcategory": "desk",
+      "brand": "WorkWell",
+      "price": 299,
+      "rating": 4.4,
+      "review_count": 500,
+      "description": "ErgoLift Standing Desk from WorkWell.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 5,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H121",
+      "name": "PosturePro Office Chair",
+      "category": "home_office",
+      "subcategory": "chair",
+      "brand": "WorkWell",
+      "price": 199,
+      "rating": 4.3,
+      "review_count": 840,
+      "description": "PosturePro Office Chair from WorkWell.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 4,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_004",
+      "name": "Taylor Kim",
+      "email": "taylor.kim@example.com",
+      "tier": "standard",
+      "is_first_time": false,
+      "loyalty_points": 2200,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_004",
+      "customer_id": "shop_004",
+      "item_ids": [
+        "CI-0001"
+      ],
+      "subtotal": 299,
+      "discount_amount": 20,
+      "gift_wrap_fee": 0,
+      "total": 279,
+      "applied_promo_codes": [
+        "OFFICE20"
+      ],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [
+    {
+      "cart_item_id": "CI-0001",
+      "customer_id": "shop_004",
+      "product_id": "SP-H120",
+      "quantity": 1,
+      "gift_wrap": false,
+      "variant_id": null
+    }
+  ],
+  "promotions": [
+    {
+      "promo_code": "OFFICE20",
+      "description": "$20 off home office over $250",
+      "discount_type": "fixed",
+      "discount_value": 20,
+      "min_purchase": 250,
+      "max_discount": 0,
+      "category_restriction": [
+        "home_office"
+      ],
+      "expiry_date": "2026-12-31T23:59:59",
+      "active": true
+    }
+  ]
+}

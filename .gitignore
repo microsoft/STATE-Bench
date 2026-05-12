@@ -1,0 +1,79 @@
+# Environment
+.env
+
+# Internal Audits
+.audits/
+
+# Claude
+CLAUDE.md
+.claude/
+
+# Codex
+.codex/
+.agents/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# ruff
+.ruff_cache/
+third_party/
+2026-04-06_14-29-35-426-debug.log
+
+migration_validation_outputs/
+
+# Temp Data and Outputs
+RESULTS*.md
+outputs*/
+logs/
+ztmp/
+debug/
+.lancedb*
+.qdrant*/
+.kuzu*/
+.hindsight/
+.memory_sentinels/
+.old/
+third_party/

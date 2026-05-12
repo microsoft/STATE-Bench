@@ -1,0 +1,206 @@
+{
+  "task_id": "35-cross_plan_trip_international",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I'm planning a round-trip to Toronto. Flying from JFK on June 21, returning June 24. I need flights both ways, a hotel, and a rental car. My total budget is $700.",
+  "user_simulator": {
+    "personality": "Enthusiastic but budget-aware. Wants good value. Won't book until everything is selected.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Round-trip JFK ↔ YYZ (Toronto)",
+      "Dates: June 21-24 (3 nights)",
+      "Total budget: $700 for outbound flight + return flight + hotel + car",
+      "Prefers economy class, B6 airline if available",
+      "Standard hotel room is fine",
+      "Economy car is fine"
+    ],
+    "unknown_info": [
+      "Available flight prices for outbound and return",
+      "Hotel and car rental rates in Toronto",
+      "Whether the total will fit under $700"
+    ],
+    "task_rules": [
+      "Start by asking to plan a round-trip to Toronto: outbound flight, return flight, hotel, and car.",
+      "Mention the $700 total budget upfront.",
+      "Focus first on selecting the outbound flight, return flight, hotel, and car within budget. Final flight booking preferences can be confirmed at booking time if needed.",
+      "When outbound flight options are shown, say 'I like the B6 nonstop in the afternoon.'",
+      "When return flight options are shown, say 'The morning B6 nonstop looks good.'",
+      "When hotel options are shown, say 'The cheapest standard room works for me.'",
+      "When car options are shown, say 'Economy is fine.'",
+      "IF the agent tries to book anything before all 4 components are selected, say 'Let's pick everything first and review the total before booking anything.'",
+      "After all 4 components are selected, ask 'Can you give me the total? I want to make sure it's under $700.'",
+      "IF the total is under $700, say 'Great, please go ahead and book everything.'",
+      "IF the total exceeds $700, ask the agent to recompute from the selected base prices for the two B6 flights, the standard hotel, and the economy car before changing the itinerary.",
+      "If the agent adds optional taxes or extras that push the total over budget, say you only want the selected base-price bundle and ask them not to add optional extras or drop any trip component.",
+      "When both flights are booked and hotel/car selections confirmed, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are planning a Toronto trip and need the entire bundle to fit within one clear budget. Because it is a full package, you want the agent to think holistically about the flights, hotel, and car. You are open to tradeoffs, but only if the whole plan still feels coherent."
+  },
+  "task_summary": "**Task:** User needs a round-trip Toronto package with flights, hotel, and car rental under a strict $700 total budget. Correct resolution: The outbound flight, return flight, hotel, and car rental choices before committing bookings, because the traveler insists on selecting everything first.\n\n**Challenge:** The agent compares all four components before booking, keeps the running international-trip total straight, and makes clear that only the cheapest viable bundle fits inside the budget.",
+  "task_requirements": [
+    {
+      "id": "state_select_everything_before_booking",
+      "kind": "must",
+      "requirement": "Agent must gather and review the outbound flight, return flight, hotel, and car rental choices before committing bookings, because the user insists on selecting everything first.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_running_total_under_budget",
+      "kind": "must",
+      "requirement": "Agent must compute and communicate the combined package total using the benchmark's quoted base bundle prices, and confirm that the final chosen Toronto itinerary stays under the $700 budget on that base-price basis rather than inventing required optional taxes or extras.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/35-cross_plan_trip_international.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_005",
+        "flight_id": "B6100",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 150,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "aisle",
+        "meal_preference": "vegan",
+        "add_wifi": true,
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 150,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "B6100",
+        "meal_preference": "vegan",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 150,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_005"
+      }
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_005",
+        "flight_id": "B6103",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 130,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "aisle",
+        "meal_preference": "vegan",
+        "add_wifi": true,
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0002",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 130,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "B6103",
+        "meal_preference": "vegan",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 130,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_005"
+      }
+    },
+    {
+      "entity_type": "car_rentals",
+      "match_fields": {
+        "user_id": "user_005",
+        "car_id": "CAR-0001",
+        "pickup_date": "2026-06-21",
+        "dropoff_date": "2026-06-24",
+        "status": "confirmed",
+        "car_class": "economy"
+      },
+      "expected_fields": {
+        "booked_at": "2026-06-15T10:00:00",
+        "cancellation_fee": null,
+        "car_class": "economy",
+        "car_id": "CAR-0001",
+        "company": "Avis",
+        "daily_rate": 35,
+        "dropoff_date": "2026-06-24",
+        "dropoff_location": "YYZ",
+        "insurance_included": false,
+        "pickup_date": "2026-06-21",
+        "pickup_location": "YYZ",
+        "refund_amount": null,
+        "rental_id": "CR-0001",
+        "status": "confirmed",
+        "total_price": 105,
+        "user_id": "user_005"
+      }
+    },
+    {
+      "entity_type": "hotels",
+      "match_fields": {
+        "user_id": "user_005",
+        "hotel_id": "HOTEL-0001",
+        "check_in": "2026-06-21",
+        "check_out": "2026-06-24",
+        "status": "confirmed",
+        "room_type": "standard"
+      },
+      "expected_fields": {
+        "booked_at": "2026-06-15T10:00:00",
+        "cancellation_fee": null,
+        "check_in": "2026-06-21",
+        "check_out": "2026-06-24",
+        "city": "YYZ",
+        "hotel_id": "HOTEL-0001",
+        "hotel_name": "YYZ Inn",
+        "nightly_rate": 90,
+        "refund_amount": null,
+        "reservation_id": "HR-0001",
+        "room_type": "standard",
+        "status": "confirmed",
+        "total_price": 270,
+        "user_id": "user_005"
+      }
+    }
+  ]
+}

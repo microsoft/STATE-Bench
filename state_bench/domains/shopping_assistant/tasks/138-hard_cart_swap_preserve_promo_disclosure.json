@@ -1,0 +1,96 @@
+{
+  "task_id": "138-hard_cart_swap_preserve_promo_disclosure",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Before swapping my desk for the office chair, tell me whether OFFICE20 will still qualify and wait for my yes. If it won't qualify, remove the stale promo after the swap.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You are considering swapping your desk for an office chair while OFFICE20 is involved. Before the swap, you want to know whether the promo will still qualify and what cleanup is needed if it does not.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 1 x ErgoLift Standing Desk.",
+      "Your cart already has promo code(s) applied: OFFICE20.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it."
+    ],
+    "task_rules": [
+      "You want OFFICE20 eligibility explained before the desk-to-chair swap, and stale promo assumptions cleaned up if the swap proceeds.",
+      "If the agent says OFFICE20 will no longer qualify or needs cleanup after swapping to the chair and asks to proceed, consent to the swap.",
+      "If the agent swaps before the promo preview, object that you asked whether OFFICE20 still works first.",
+      "If the agent claims OFFICE20 still discounts the chair without checking minimum/category rules, ask them to revalidate it.",
+      "When the desk has been removed, the chair has been added, and the OFFICE20 status is not left stale, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Before swapping my desk for the office chair, tell me whether OFFICE20 will still qualify and wait for my yes. If it won't qualify, remove the stale promo after the swap.\" Relevant catalog/policy surface: ErgoLift Standing Desk (SP-H120), PosturePro Office Chair (SP-H121). Correct final state: Preview OFFICE20 eligibility, get consent, remove desk, add chair, and leave no stale OFFICE20 discount.\n\n**Challenge:** Cart swap must handle stale promo eligibility through preview, consent, and cleanup. Primary pitfall: Swaps immediately, leaves stale promo assumptions, or omits the promo cleanup result. Correct behavior: Preview OFFICE20 eligibility, get consent, remove desk, add chair, and leave no stale OFFICE20 discount. Novelty: Promo validity after cart swap. Family: cart_mutation.",
+  "task_requirements": [
+    {
+      "id": "pre_disclosed_promo_revalidation",
+      "kind": "must",
+      "requirement": "Agent disclosed before swapping that OFFICE20 would no longer qualify or needed revalidation.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_consent_before_swap",
+      "kind": "must",
+      "requirement": "Agent got consent after the promo preview and before changing the cart.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "handled_stale_promo",
+      "kind": "must",
+      "requirement": "Agent did not claim OFFICE20 still discounts the chair if the minimum/category conditions are no longer met.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "swapped_correct_items",
+      "kind": "must",
+      "requirement": "Agent removed the desk and added the chair.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "applied_promo_codes",
+      "expected_value": []
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 199
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 199
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-H121",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/138-hard_cart_swap_preserve_promo_disclosure.json"
+}

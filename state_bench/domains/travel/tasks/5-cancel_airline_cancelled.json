@@ -1,0 +1,112 @@
+{
+  "task_id": "5-cancel_airline_cancelled",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I just saw that my flight to Miami was cancelled. I need a refund.",
+  "user_simulator": {
+    "personality": "Cooperative but slightly frustrated about the airline cancellation. Provides information readily.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Flight booking ID: BK-1000",
+      "Flight was cancelled by the airline (DFW to MIA)",
+      "Flight is business class, domestic",
+      "Price paid: $800",
+      "Hotel reservation ID: HR-0100",
+      "Hotel in Miami, June 16-20, $200/night",
+      "Car rental ID: CR-0100",
+      "Luxury car in Miami, June 18-22"
+    ],
+    "unknown_info": [
+      "Whether airline-initiated cancellations always get full refunds",
+      "Hotel and car cancellation fees"
+    ],
+    "task_rules": [
+      "When the agent asks for your booking ID, provide only the flight booking ID.",
+      "Do not volunteer the hotel or car rental unless the agent asks about or identifies other reservations for this trip.",
+      "When the agent confirms the flight cancellation refund, acknowledge.",
+      "If the agent asks about other reservations for this trip, confirm the hotel and car.",
+      "If the agent does NOT mention or ask about other reservations, simply end with [TASK_DONE] after the flight cancellation is confirmed. The agent should have checked proactively.",
+      "When all brought-up cancellations are complete, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "Your airline canceled the flight, so you are starting from the assumption that you should get your money back without much friction. You are focused on the flight first and are not volunteering the rest of the trip unless asked. You want the agent to help you figure out what happens next for the whole itinerary."
+  },
+  "task_summary": "**Task:** User asks for a refund after the airline cancels the flight, but there is also a destination hotel and car rental that the user does not volunteer. Correct resolution: The flight is cancelled by the airline and therefore should be refunded without a cancellation fee.\n\n**Challenge:** The agent recognizes the airline-caused flight refund path and proactively surfaces both the hotel and car rental rather than treating the flight refund as the whole trip cleanup.",
+  "task_requirements": [
+    {
+      "id": "state_airline_cancel_refund_path",
+      "kind": "must",
+      "requirement": "Agent must explain that the flight is cancelled by the airline and therefore should be refunded without a cancellation fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_hidden_trip_components_discovered",
+      "kind": "must",
+      "requirement": "Agent must proactively discover and mention both hotel reservation HR-0100 and car rental CR-0100 tied to the Miami trip.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_flight_refund_only",
+      "kind": "must_not",
+      "requirement": "Agent must not treat the airline refund as the entire trip resolution while leaving discoverable hotel and car reservations unaddressed.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "cancellation",
+  "task_env_path": "state_bench/domains/travel/task_envs/5-cancel_airline_cancelled.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "refund_amount",
+      "expected_value": 800
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0100",
+      "field": "cancellation_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0100",
+      "field": "refund_amount",
+      "expected_value": 290
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0100",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "cancellation_fee",
+      "expected_value": 100
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "refund_amount",
+      "expected_value": 700
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ]
+}

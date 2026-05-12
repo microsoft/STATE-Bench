@@ -1,0 +1,78 @@
+{
+  "task_id": "81-challenge_low_value_return_shipping",
+  "task_summary": "**Task:** A Standard customer is returning a $35 phone case from an order whose total value stays below $50. The correct handling is to apply the low-value return-shipping fee and refund $27 rather than the full item price.\n\n**Challenge:** The case looks small, but the threshold rule still matters. Weak agents refund the full $35, ignore the low-value return-shipping policy, or talk about the fee without actually reflecting it in the refund amount.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "81_challenge_low_value_return_shipping_agent_must_deduct_shipping_fee",
+      "kind": "must",
+      "requirement": "Agent must tell the customer that the $8 low-value return-shipping fee is deducted from the phone-case refund, leaving a $27 refund."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "81_challenge_low_value_return_shipping_agent_must_check_return_shipping_policy",
+      "kind": "must",
+      "requirement": "Agent must either call get_policies with topic \"return\" before confirming the return or explicitly cite the low-value return-shipping rule for orders under $50."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "I'd like to return the phone case from order ORD-7114. I changed my mind.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7114",
+      "item: phone case",
+      "reason: changed mind"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "If the agent previews a full $35 refund or does not mention a shipping deduction, ask whether any low-value return-shipping fee applies before confirming.",
+      "If the agent says an $8 return-shipping fee applies and the refund is $27, accept the preview."
+    ],
+    "unknown_info": [
+      "return shipping fee",
+      "refund amount"
+    ],
+    "user_sim_context": "You want to return a low-cost phone case because you changed your mind, and the price of the item makes every fee feel more visible. You are likely to judge the fairness of the outcome against the item's small value. You want the agent to explain the refund plainly if any shipping deduction applies."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10142",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10142",
+      "field": "refund_amount",
+      "expected_value": 27
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10142",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10142",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10142",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7114",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/81-challenge_low_value_return_shipping.json"
+}

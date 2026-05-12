@@ -1,0 +1,105 @@
+{
+  "task_id": "120-hard_loyalty_trim_after_remove_disclose",
+  "user_id": "shop_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Remove the dock from my cart, add the Pixel 7 case instead, and tell me what happens to the points discount when the cart changes.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "Your cart has a dock and a loyalty discount, but you want the dock replaced with the Pixel 7 case. You want the agent to explain what the cart change does to the points discount.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 1 x ProBook Laptop 13; 1 x ProBook USB-C Dock.",
+      "Your cart already has a loyalty redemption of 56400 points for $564 off."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "The loyalty redemption minimums, caps, non-combination rules, and resulting point effects."
+    ],
+    "task_rules": [
+      "You want the dock replaced with the Pixel 7 case, and you care about what that swap does to the existing points discount.",
+      "If the agent explains the loyalty discount/points effect of the swap and then asks to proceed, consent to removing the dock and adding the Pixel 7 case.",
+      "If the agent swaps items without mentioning the loyalty effect, ask what happened to the points discount.",
+      "If the agent redeems new points, cancels unrelated benefits, or changes shipping, object that you only asked for the dock-to-case swap and disclosure.",
+      "When the dock has been removed, the Pixel 7 case has been added, and the points-discount effect has been explained, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_003 opens with: \"Remove the dock from my cart, add the Pixel 7 case instead, and tell me what happens to the points discount when the cart changes.\" Relevant catalog/policy surface: ProBook Laptop 13 (SP-H102), ClearGrip Case for Pixel 7 (SP-H107), ProBook USB-C Dock (SP-H110). Correct final state: Remove dock, add Pixel 7 case, disclose the loyalty discount/points effect.\n\n**Challenge:** One removal and one add both affect the loyalty cap; agent must disclose the redemption trim/recalculation. Primary pitfall: Mutates the cart silently or restores/redeems points without request. Correct behavior: Remove dock, add Pixel 7 case, disclose the loyalty discount/points effect. Novelty: Simpler single-step trim with explicit user ask. Family: loyalty_account.",
+  "task_requirements": [
+    {
+      "id": "disclosed_loyalty_retrim",
+      "kind": "must",
+      "requirement": "Agent disclosed that removing the dock and adding the case changes/clamps the loyalty discount and points tied to the cart.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "swapped_dock_for_case",
+      "kind": "must",
+      "requirement": "Agent removed the dock, added the Pixel 7 case, and kept the laptop.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_new_redemption",
+      "kind": "must_not",
+      "requirement": "Agent did not redeem additional points or cancel the existing redemption unless explicitly asked.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "item_ids",
+      "expected_value": [
+        "CI-0001",
+        "CI-0003"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "loyalty_discount",
+      "expected_value": 499
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "loyalty_points_redeemed",
+      "expected_value": 49900
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "subtotal",
+      "expected_value": 1028
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "total",
+      "expected_value": 529
+    },
+    {
+      "entity_type": "customers",
+      "record_key": "shop_003",
+      "field": "loyalty_points",
+      "expected_value": 6500
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_003",
+        "product_id": "SP-H107",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "loyalty_account",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/120-hard_loyalty_trim_after_remove_disclose.json"
+}

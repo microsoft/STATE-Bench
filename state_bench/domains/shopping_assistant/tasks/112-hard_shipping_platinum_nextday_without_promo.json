@@ -1,0 +1,70 @@
+{
+  "task_id": "112-hard_shipping_platinum_nextday_without_promo",
+  "user_id": "shop_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My ProBook is already in the cart with express shipping. Compare express versus Platinum next-day, tell me the cost/ETA change, then switch only after I say yes. No promos or points.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "Your ProBook is already in the cart with express shipping. You are Platinum and want to compare express with next-day shipping, but you do not want promos or points touched.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 1 x ProBook Laptop 13.",
+      "Your cart already has express shipping selected.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether the item can meet your timing or shipping request without a substitute or extra item."
+    ],
+    "task_rules": [
+      "The ProBook is already in your cart; do not consent to adding another laptop.",
+      "If the agent compares express with Platinum next-day and says next-day is free or better for your request, consent to switching shipping to next-day.",
+      "After you consent to switching shipping to next-day, do not include [TASK_DONE] in that same message; wait for the agent to confirm the shipping change.",
+      "If the agent suggests applying a promo, redeeming points, or changing discounts, decline because you explicitly ruled those out.",
+      "If the agent switches shipping before explaining the cost/ETA difference and asking, object that you asked for the comparison first.",
+      "When shipping has been switched to next-day after consent and promos/points were left untouched, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_001 opens with: \"My ProBook is already in the cart with express shipping. Compare express versus Platinum next-day, tell me the cost/ETA change, then switch only after I say yes. No promos or points.\" Relevant catalog/policy surface: ProBook Laptop 13 (SP-H102). Correct final state: Explain express vs Platinum next_day, get consent, switch shipping to next_day, and leave promos/points untouched.\n\n**Challenge:** Existing shipping must be compared and changed only after consent, without unrelated discount writes. Primary pitfall: Switches immediately, duplicates laptop, applies discounts, or omits the shipping comparison. Correct behavior: Explain express vs Platinum next_day, get consent, switch shipping to next_day, and leave promos/points untouched. Novelty: Separates valid tier shipping from invalid unsolicited savings writes. Family: inventory_shipping.",
+  "task_requirements": [
+    {
+      "id": "compared_shipping_options",
+      "kind": "must",
+      "requirement": "Agent compared current express shipping with Platinum next-day cost and timing before switching.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_consent_before_shipping",
+      "kind": "must",
+      "requirement": "Agent got consent after the comparison and before set_shipping_option.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "switched_to_free_nextday",
+      "kind": "must",
+      "requirement": "Agent switched the existing ProBook cart to next-day shipping because Platinum makes it free.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_duplicate_or_discount",
+      "kind": "must_not",
+      "requirement": "Agent did not add another laptop, apply a promo, or redeem/cancel loyalty points.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "shipping_option",
+      "expected_value": "next_day"
+    }
+  ],
+  "task_type": "inventory_shipping",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/112-hard_shipping_platinum_nextday_without_promo.json"
+}
