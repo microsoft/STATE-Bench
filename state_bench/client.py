@@ -31,7 +31,6 @@ from typing import Any
 
 import yaml
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
-from dotenv import load_dotenv
 from openai import APIStatusError, AuthenticationError, AzureOpenAI, OpenAI
 from tenacity import (
     RetryCallState,
@@ -48,9 +47,6 @@ logger = logging.getLogger(__name__)
 
 class ContentFilterError(Exception):
     """Raised when Azure content filter blocks or truncates a response."""
-
-
-load_dotenv()
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:

@@ -11,6 +11,8 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from state_bench.agents.base import AgentPricing, agent_pricing_from_config
 from state_bench.agents.loader import load_root_agent_class
 from state_bench.agents.state_bench import StateBenchAgent
@@ -163,6 +165,8 @@ def _run_single_task(
 
 
 def main() -> None:
+    load_dotenv()
+
     parser = argparse.ArgumentParser(description="Run one or more benchmark tasks")
     parser.add_argument(
         "--task",

@@ -1,3 +1,6 @@
+import os
+import subprocess
+import sys
 from unittest.mock import patch
 
 import pytest
@@ -9,6 +12,28 @@ from state_bench.client import (
     build_locked_judge_client,
     build_user_sim_client,
 )
+
+
+def test_importing_client_does_not_load_dotenv(tmp_path):
+    (tmp_path / ".env").write_text('STATE_BENCH_IMPORT_DOTENV_SENTINEL="loaded"\n')
+    env = os.environ.copy()
+    env.pop("STATE_BENCH_IMPORT_DOTENV_SENTINEL", None)
+    env["PYTHONPATH"] = os.getcwd()
+
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "import os; import state_bench.client; print(os.environ.get('STATE_BENCH_IMPORT_DOTENV_SENTINEL'))",
+        ],
+        cwd=tmp_path,
+        env=env,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+
+    assert proc.stdout.strip() == "None"
 
 
 def _clear_numbered_azure_env(monkeypatch):

@@ -15,6 +15,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from state_bench.client import build_locked_judge_client
 from state_bench.domain import get_domain_config
 from state_bench.paths import domain_tasks_dir
@@ -131,6 +133,8 @@ def score_one(
 
 
 def main() -> None:
+    load_dotenv()
+
     parser = argparse.ArgumentParser(description="Score existing trajectories with the official metric judges")
     parser.add_argument("--domain", type=str, required=True)
     parser.add_argument("--num-runs", type=int, default=5)
