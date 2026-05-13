@@ -7,11 +7,14 @@ from __future__ import annotations
 
 import copy
 import json
+import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 from state_bench.schemas import DictMixin
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Database records
@@ -189,8 +192,12 @@ class EnvironmentData:
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w") as f:
             json.dump(self.to_dict(), f, indent=2, ensure_ascii=False)
-        print(
-            f"Saved environment: {len(self.flights)} flights, {len(self.bookings)} bookings, {len(self.users)} users → {path}"
+        logger.info(
+            "Saved environment: %s flights, %s bookings, %s users -> %s",
+            len(self.flights),
+            len(self.bookings),
+            len(self.users),
+            path,
         )
 
     @classmethod

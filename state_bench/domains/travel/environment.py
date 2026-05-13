@@ -788,10 +788,6 @@ class TravelEnvironment(BaseEnvironment):
                 "reason": policy["reason"],
             }
 
-        if reservation_id not in self._hotel_cancel_previewed:
-            # Advisory: log that preview was skipped but proceed anyway
-            pass
-
         hotel.status = "cancelled"
         hotel.cancellation_fee = policy["fee"]
         hotel.refund_amount = policy["refund"]
@@ -936,10 +932,6 @@ class TravelEnvironment(BaseEnvironment):
                 "refund_amount": policy["refund"],
                 "reason": policy["reason"],
             }
-
-        if rental_id not in self._car_cancel_previewed:
-            # Advisory: log that preview was skipped but proceed anyway
-            pass
 
         car.status = "cancelled"
         car.cancellation_fee = policy["fee"]

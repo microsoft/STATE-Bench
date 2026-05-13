@@ -11,6 +11,7 @@ Domain-agnostic: all domain-specific behavior is provided via DomainConfig.
 
 from __future__ import annotations
 
+import logging
 import time
 from typing import Any
 
@@ -24,6 +25,8 @@ from state_bench.schemas import (
 )
 from state_bench.scoring import compute_efficiency
 from state_bench.simulator import UserSimulator
+
+logger = logging.getLogger(__name__)
 
 
 def _normalize_agent_turn_response(response: AgentTurnResponse | dict[str, Any]) -> tuple[str, list[dict[str, Any]]]:
@@ -200,8 +203,8 @@ def run_task(
     all_tool_calls: list[dict[str, Any]] = []
     user_response: str = ""
 
-    print(f"  Task: {task.task_id} | User: {user_id} | Now: {now}")
-    print(f"  User: {opening[:100]}")
+    logger.info("Task: %s | User: %s | Now: %s", task.task_id, user_id, now)
+    logger.info("User: %s", opening[:100])
 
     for turn in range(domain.max_agent_turns):
         # Build input for this turn — full conversation for stateless chaining
@@ -232,13 +235,15 @@ def run_task(
         )
 
         tc_names = [tc["name"] for tc in tool_calls]
-        print(f"  Turn {turn + 1}: {tc_names if tc_names else 'no tools'} | {agent_text[:80] if agent_text else ''}")
+        logger.info(
+            "Turn %s: %s | %s", turn + 1, tc_names if tc_names else "no tools", agent_text[:80] if agent_text else ""
+        )
 
         if turn < domain.max_agent_turns - 1:
             # User simulator responds
             user_response = simulator.respond(conversation_full)
             conversation_full.append({"role": "user", "content": user_response})
-            print(f"  User: {user_response[:80]}")
+            logger.info("User: %s", user_response[:80])
 
             if domain.check_termination and domain.check_termination(user_response):
                 break
@@ -251,15 +256,14 @@ def run_task(
     efficiency = compute_efficiency(conversation_full, all_tool_calls)
 
     elapsed = round(time.monotonic() - t0, 2)
-    print(f"\n  {'=' * 40}")
-    print(f"  TRAJECTORY ({elapsed}s):")
+    logger.info("TRAJECTORY (%ss):", elapsed)
     if efficiency:
-        print(f"    Turns:           {efficiency.turns}")
-        print(f"    Tool Calls:      {efficiency.tool_calls}")
-        print(f"    Tool Errors:     {efficiency.tool_errors}")
-        print(f"    Redundant Calls: {efficiency.redundant_calls}")
+        logger.info("Turns: %s", efficiency.turns)
+        logger.info("Tool Calls: %s", efficiency.tool_calls)
+        logger.info("Tool Errors: %s", efficiency.tool_errors)
+        logger.info("Redundant Calls: %s", efficiency.redundant_calls)
     if state_diff:
-        print(f"    State Diff:      {'empty' if state_diff.is_empty() else 'changes detected'}")
+        logger.info("State Diff: %s", "empty" if state_diff.is_empty() else "changes detected")
 
     trajectory = Trajectory(
         task_id=task.task_id,

@@ -13,11 +13,14 @@ from __future__ import annotations
 
 import copy
 import json
+import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 from state_bench.schemas import DictMixin
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Database records
@@ -151,10 +154,14 @@ class SAEnvironmentData:
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w") as f:
             json.dump(self.to_dict(), f, indent=2, ensure_ascii=False)
-        print(
-            f"Saved environment: {len(self.products)} products, "
-            f"{len(self.customers)} customers, {len(self.carts)} carts, "
-            f"{len(self.cart_items)} cart_items, {len(self.promotions)} promotions → {path}"
+        logger.info(
+            "Saved environment: %s products, %s customers, %s carts, %s cart_items, %s promotions -> %s",
+            len(self.products),
+            len(self.customers),
+            len(self.carts),
+            len(self.cart_items),
+            len(self.promotions),
+            path,
         )
 
     @classmethod

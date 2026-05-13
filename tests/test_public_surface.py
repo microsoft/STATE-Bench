@@ -101,3 +101,16 @@ def test_package_config_includes_train_task_trajectories() -> None:
     force_include = pyproject["tool"]["hatch"]["build"]["targets"]["wheel"]["force-include"]
 
     assert force_include["datasets/train_task_trajectories"] == "datasets/train_task_trajectories"
+
+
+def test_declared_license_has_license_file() -> None:
+    pyproject = tomllib.loads(Path("pyproject.toml").read_text())
+
+    assert pyproject["project"]["license"]["text"] == "MIT"
+    assert Path("LICENSE").read_text().startswith("MIT License\n")
+
+
+def test_public_dev_extra_matches_uv_dev_group() -> None:
+    pyproject = tomllib.loads(Path("pyproject.toml").read_text())
+
+    assert pyproject["project"]["optional-dependencies"]["dev"] == pyproject["dependency-groups"]["dev"]

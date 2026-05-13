@@ -50,3 +50,7 @@ See [RUN_BENCHMARK.md](RUN_BENCHMARK.md) for the official benchmark workflow, in
 | **Reliability** | `pass^5`: percentage of tasks completed successfully on all five runs. |
 | **User Experience (UX) Score** | LLM-judged conversation quality on a 1-5 scale, focused on user experience rather than task completion. |
 | **Cost Per Task** | Average cost to run a task, computed from provider-reported usage and the locked GPT-5.1 pricing in `state_bench/configs/pricing.yaml`. |
+
+## License
+
+STATE-Bench is released under the MIT License. See [LICENSE](LICENSE).

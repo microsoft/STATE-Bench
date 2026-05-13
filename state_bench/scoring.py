@@ -8,6 +8,7 @@ Domain-agnostic scoring helpers:
 """
 
 import json
+import logging
 from collections import Counter
 from copy import deepcopy
 from pathlib import Path
@@ -23,6 +24,8 @@ from state_bench.schemas import (
     TaskRequirementsScore,
     UXQualityResult,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def combine_task_completion(
@@ -666,7 +669,7 @@ class TaskRequirementsJudge:
             reasoning = _summarize_task_requirements_details(details, required_ids, passed_ids)
             return TaskRequirementsScore(score=score, details=details, reasoning=reasoning)
         except Exception as e:
-            print(f"  WARN: Task-requirements judge failed: {e}")
+            logger.warning("Task-requirements judge failed: %s", e)
             return None
 
 
@@ -720,5 +723,5 @@ class UXQualityJudge:
                 reasoning=str(response.get("reasoning", "")),
             )
         except Exception as e:
-            print(f"  WARN: UX quality judge failed: {e}")
+            logger.warning("UX quality judge failed: %s", e)
             return None

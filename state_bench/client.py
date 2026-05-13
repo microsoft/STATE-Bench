@@ -21,6 +21,7 @@ Usage:
 """
 
 import json
+import logging
 import os
 import pprint
 import subprocess
@@ -42,6 +43,7 @@ from tenacity import (
 from state_bench.paths import CONFIGS_DIR
 
 EndpointDeployment = tuple[str, str]  # (endpoint_url, deployment_name)
+logger = logging.getLogger(__name__)
 
 
 class ContentFilterError(Exception):
@@ -62,12 +64,12 @@ CONFIG: dict[str, Any] = _load_yaml(CONFIGS_DIR / "llm.yaml")
 _DEFAULT_MAX_TOKENS: int = CONFIG["max_tokens"]["default"]
 
 
-def _before_sleep_print(retry_state: RetryCallState) -> None:
+def _before_sleep_log(retry_state: RetryCallState) -> None:
     exc = retry_state.outcome.exception() if retry_state.outcome else None
     wait = retry_state.next_action.sleep if retry_state.next_action else 0
     fn = retry_state.fn
     name = f"{fn.__module__}.{fn.__qualname__}" if fn else "unknown"
-    print(f"Retrying {name} in {wait:.1f} seconds as it raised {type(exc).__name__}: {exc}")
+    logger.warning("Retrying %s in %.1f seconds as it raised %s: %s", name, wait, type(exc).__name__, exc)
 
 
 def _wait_by_error_type(retry_state: RetryCallState) -> float:
@@ -87,7 +89,7 @@ _llm_retry = retry(
     stop=stop_after_attempt(CONFIG["retry"]["max_attempts"]),
     wait=_wait_by_error_type,
     retry=retry_if_exception_type((APIStatusError, AuthenticationError, json.JSONDecodeError, ContentFilterError)),
-    before_sleep=_before_sleep_print,
+    before_sleep=_before_sleep_log,
     reraise=True,
 )
 
@@ -482,15 +484,21 @@ class LLMClient:
                     k: v for k, v in resp_dict.items() if "filter" in str(k).lower() or "safety" in str(k).lower()
                 }
                 if filter_keys:
-                    print(f"  Content filter details: {pprint.pformat(filter_keys)}")
+                    logger.warning("Content filter details: %s", pprint.pformat(filter_keys))
                 # Also check output items for extra fields
                 for i, item in enumerate(resp_dict.get("output", [])):
                     extra = {k: v for k, v in item.items() if k not in ("id", "type", "text", "status")}
                     if extra:
-                        print(f"  Output item {i} extra fields: {pprint.pformat(extra)}")
+                        logger.warning("Output item %s extra fields: %s", i, pprint.pformat(extra))
             except Exception:
                 pass
-            print(f"  JSON parse failed | status={status} | reason={reason} | len={len(raw)} | tail=...{raw[-100:]!r}")
+            logger.warning(
+                "JSON parse failed | status=%s | reason=%s | len=%s | tail=...%r",
+                status,
+                reason,
+                len(raw),
+                raw[-100:],
+            )
             raise
 
 
@@ -590,7 +598,7 @@ class PooledLLMClient(LeastBusyPool):
         for ep, _ in endpoint_deployments:
             endpoints_summary[ep] = endpoints_summary.get(ep, 0) + 1
         for ep, count in endpoints_summary.items():
-            print(f"PooledLLMClient: {ep} -> {count} deployments")
+            logger.info("PooledLLMClient: %s -> %s deployments", ep, count)
 
     def _remember_response_client(self, response_id: str | None, client_idx: int) -> None:
         if not response_id:
@@ -624,7 +632,7 @@ class PooledLLMClient(LeastBusyPool):
         except AuthenticationError as first_exc:
             self._release(idx)
             failed = {idx}
-            print(f"  Auth error on {client.endpoint}/{client.deployment}, trying other clients...")
+            logger.warning("Auth error on %s/%s, trying other clients", client.endpoint, client.deployment)
             for fallback_idx, fallback_client in enumerate(self.clients):
                 if fallback_idx in failed:
                     continue
@@ -635,7 +643,11 @@ class PooledLLMClient(LeastBusyPool):
                     return result
                 except AuthenticationError:
                     failed.add(fallback_idx)
-                    print(f"  Auth error on {fallback_client.endpoint}/{fallback_client.deployment}, trying another...")
+                    logger.warning(
+                        "Auth error on %s/%s, trying another",
+                        fallback_client.endpoint,
+                        fallback_client.deployment,
+                    )
             raise first_exc
         except Exception:
             self._release(idx)
