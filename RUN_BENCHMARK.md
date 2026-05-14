@@ -134,7 +134,6 @@ Use one of these domain names for `--domain`: `travel`, `customer_support`, `sho
 # Fixed by the benchmark: --num-runs 5 and --retrieve-learnings-top-k 3.
 uv run python -m state_bench.scripts.run_batch \
   --domain <domain> \
-  --split test \
   --agent-class MyMemoryAgent \
   --num-runs 5 \
   --retrieve-learnings-top-k 3 \
@@ -156,7 +155,7 @@ uv run python -m state_bench.scripts.compute_metrics \
   --save-filepath outputs/<domain>/metrics.json
 ```
 
-Metrics default to the protocol `test` split and fail if any expected test task is missing or unscored. For local partial analysis only, add `--ignore-missing-runs`; use `--split all` only when you intentionally want every JSON in the run directories included.
+Metrics default to the protocol test split and fail if any expected test task is missing or unscored. For local partial analysis only, add `--ignore-missing-runs`.
 
 Repeat Steps 1-3 for every protocol domain.
 

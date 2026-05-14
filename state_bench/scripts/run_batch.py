@@ -190,7 +190,11 @@ def main() -> None:
     )
     parser.add_argument("--tasks", type=str, default=None, help="Comma-separated task IDs")
     parser.add_argument(
-        "--split", type=str, default=None, choices=["train", "test"], help="Run tasks from a split manifest"
+        "--split",
+        type=str,
+        default="test",
+        choices=["test"],
+        help=argparse.SUPPRESS,
     )
     parser.add_argument("--output-dir", type=str, default=None, help="Output directory (default: outputs/<domain>)")
     parser.add_argument("--num-runs", type=int, default=1, help="Number of runs (default: 1)")
@@ -268,7 +272,7 @@ def main() -> None:
         parser.error("--num-workers must be >= 1")
     if args.retrieve_learnings_top_k < 1:
         parser.error("--retrieve-learnings-top-k must be >= 1")
-    if args.tasks and args.split:
+    if args.tasks and args.split != "test":
         parser.error("--tasks and --split are mutually exclusive")
     domain = get_domain_config(args.domain)
     protocol = load_default_protocol()
@@ -309,13 +313,7 @@ def main() -> None:
         )
     if args.workers is None:
         args.workers = 1
-    if args.split:
-        task_ids = load_split_task_ids(args.domain, args.split, protocol.split_version)
-        try:
-            task_files = _resolve_task_files(tasks_dir, task_ids)
-        except ValueError as exc:
-            parser.error(str(exc))
-    elif args.tasks:
+    if args.tasks:
         task_ids = _parse_task_ids(args.tasks)
         if not task_ids:
             parser.error("--tasks must include at least one task ID")
@@ -324,7 +322,11 @@ def main() -> None:
         except ValueError as exc:
             parser.error(str(exc))
     else:
-        task_files = sorted(tasks_dir.glob("*.json"))
+        task_ids = load_split_task_ids(args.domain, args.split, protocol.split_version)
+        try:
+            task_files = _resolve_task_files(tasks_dir, task_ids)
+        except ValueError as exc:
+            parser.error(str(exc))
 
     agent_name = (agent_class or StateBenchAgent).__name__
     print(f"Agent: {agent_name}")

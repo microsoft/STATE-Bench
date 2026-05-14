@@ -1,9 +1,10 @@
 """Run one or more tasks and write trajectories.
 
 Usage:
+    uv run python -m state_bench.scripts.run_task
     uv run python -m state_bench.scripts.run_task --task 1-cancel_economy_domestic
-    uv run python -m state_bench.scripts.run_task --task 1-cancel_economy_domestic 2-cancel_business_international --num-workers 2
-    uv run python -m state_bench.scripts.run_task --task 1-cancel_economy_domestic,2-cancel_business_international --num-workers 2
+    uv run python -m state_bench.scripts.run_task --task 1-cancel_economy_domestic 5-cancel_airline_cancelled --num-workers 2
+    uv run python -m state_bench.scripts.run_task --task 1-cancel_economy_domestic,5-cancel_airline_cancelled --num-workers 2
 """
 
 import argparse
@@ -191,9 +192,9 @@ def main() -> None:
     parser.add_argument(
         "--split",
         type=str,
-        default=None,
-        choices=["train", "test"],
-        help="Run tasks from a split manifest instead of explicit --task values",
+        default="test",
+        choices=["test"],
+        help=argparse.SUPPRESS,
     )
     parser.add_argument(
         "--agent-class", type=str, default=None, help="StateBenchAgent subclass name under repo-root agents/"
@@ -243,9 +244,7 @@ def main() -> None:
         parser.error("--num-runs must be >= 1")
     if args.num_runs_idx_start < 1:
         parser.error("--num-runs-idx-start must be >= 1")
-    if not args.task and not args.split:
-        parser.error("either --task or --split is required")
-    if args.task and args.split:
+    if args.task and args.split != "test":
         parser.error("--task and --split are mutually exclusive")
     if args.retrieve_learnings_top_k < 1:
         parser.error("--retrieve-learnings-top-k must be >= 1")
@@ -272,9 +271,9 @@ def main() -> None:
     user_sim_client = build_user_sim_client(api_version=protocol.data["simulator"]["api_version"])
 
     task_ids = (
-        load_split_task_ids(args.domain, args.split, protocol.split_version)
-        if args.split
-        else _parse_task_ids(args.task)
+        _parse_task_ids(args.task)
+        if args.task
+        else load_split_task_ids(args.domain, args.split, protocol.split_version)
     )
     tasks = _load_requested_tasks(tasks_dir, task_ids)
     work_items = [

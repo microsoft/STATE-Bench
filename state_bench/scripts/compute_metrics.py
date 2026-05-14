@@ -8,7 +8,6 @@ Usage:
     uv run python -m state_bench.scripts.compute_metrics --save-filepath outputs/travel/metrics.json
     uv run python -m state_bench.scripts.compute_metrics --domain travel --save-filepath outputs/travel/metrics.json
     uv run python -m state_bench.scripts.compute_metrics --results-dir outputs/travel --save-filepath outputs/travel/metrics.json
-    uv run python -m state_bench.scripts.compute_metrics --results-dir outputs/travel --split all --save-filepath outputs/travel/metrics.json
     uv run python -m state_bench.scripts.compute_metrics --num-runs 5 --save-filepath outputs/travel/metrics.json
     uv run python -m state_bench.scripts.compute_metrics --domain travel --num-runs 5 --save-filepath outputs/travel/metrics.json
 """
@@ -293,9 +292,6 @@ def filter_runs_to_split(
     ignore_missing_runs: bool = False,
 ) -> tuple[list[dict[str, dict]], list[dict[str, object]]]:
     """Filter loaded runs to a manifest split, requiring complete scored coverage."""
-    if split == "all":
-        return runs, run_meta
-
     expected_task_ids = load_split_task_ids(domain, split, split_version)
     expected = set(expected_task_ids)
     filtered_runs: list[dict[str, dict]] = []
@@ -1021,8 +1017,8 @@ def main():
         "--split",
         type=str,
         default="test",
-        choices=["train", "test", "all"],
-        help="Task split to compute metrics on (default: test)",
+        choices=["test"],
+        help=argparse.SUPPRESS,
     )
     parser.add_argument(
         "--ignore-missing-runs", action="store_true", help="Allow incomplete split coverage for local analysis"
