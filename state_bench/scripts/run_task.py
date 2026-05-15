@@ -268,7 +268,7 @@ def main() -> None:
         provider=args.agent_provider,
         api_key_var=args.agent_api_key_var,
     )
-    user_sim_client = build_user_sim_client(api_version=protocol.data["simulator"]["api_version"])
+    user_sim_client = build_user_sim_client()
 
     task_ids = (
         _parse_task_ids(args.task)

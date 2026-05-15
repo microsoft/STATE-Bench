@@ -293,11 +293,11 @@ def main() -> None:
         provider=args.agent_provider,
         api_key_var=args.agent_api_key_var,
     )
-    user_sim_client = build_user_sim_client(api_version=protocol.data["simulator"]["api_version"])
+    user_sim_client = build_user_sim_client()
     task_requirements_judge = None
     ux_judge = None
     if args.score:
-        judge_client = build_locked_judge_client(api_version=protocol.data["judge"]["api_version"])
+        judge_client = build_locked_judge_client()
         score_reasoning_effort = args.score_reasoning_effort or protocol.judge_reasoning_effort
         task_requirements_judge = TaskRequirementsJudge(
             client=judge_client,

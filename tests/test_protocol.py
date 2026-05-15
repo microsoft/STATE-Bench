@@ -18,7 +18,6 @@ def test_protocol_loads_locked_gpt51_metadata_without_infra() -> None:
     assert protocol.protocol_id == "state_bench_v0.4.4_gpt51"
     assert protocol.data["benchmark_version"] == get_benchmark_version()
     assert protocol.official_model == "gpt-5.1"
-    assert protocol.official_api_version == "2025-03-01-preview"
     assert protocol.split == "test"
     assert protocol.split_version == "train_test"
     assert protocol.num_runs == 5

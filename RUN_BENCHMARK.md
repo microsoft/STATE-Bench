@@ -1,6 +1,6 @@
 # Run Benchmark
 
-This guide is for external users running the locked STATE-Bench benchmark. The active protocol is defined in `state_bench/configs/eval_protocols/state_bench_v0.4.4_gpt51.json`; it fixes the tasks, splits, user simulator prompt, judge prompts, API version, and required simulator, judge, and agent model so results are comparable across submissions. The current protocol requires GPT-5.1 for the user simulator, judge, and `StateBenchAgent` test trajectories.
+This guide is for external users running the locked STATE-Bench benchmark. The active protocol is defined in `state_bench/configs/eval_protocols/state_bench_v0.4.4_gpt51.json`; it fixes the tasks, splits, user simulator prompt, judge prompts, and required simulator, judge, and agent model so results are comparable across submissions. The current protocol requires GPT-5.1 for the user simulator, judge, and `StateBenchAgent` test trajectories.
 
 The workflow is to extract procedural learnings from the provided train trajectories, then run a `StateBenchAgent` subclass on the test split with a `retrieve_learnings(query, top_k)` tool. Finally, score the test trajectories with the locked judge and submit the scored outputs and metrics.
 
@@ -40,7 +40,6 @@ STATE_BENCH_AGENT_ENDPOINT="https://your-agent-resource.openai.azure.com"
 STATE_BENCH_AGENT_DEPLOYMENTS="<your gpt 5.1 agent deployment name>"
 # Optional. If omitted, Azure token auth is tried.
 STATE_BENCH_AGENT_API_KEY="<your gpt 5.1 agent resource api key>"
-STATE_BENCH_AGENT_API_VERSION="2025-03-01-preview"
 ```
 
 For OpenAI API:

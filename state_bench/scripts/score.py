@@ -176,7 +176,7 @@ def main() -> None:
     tasks_dir = domain_tasks_dir(args.domain)
     results_dir = Path(args.results_dir)
 
-    judge_client = build_locked_judge_client(api_version=protocol.data["judge"]["api_version"])
+    judge_client = build_locked_judge_client()
 
     # Default reasoning effort for shared judge traffic
     reasoning_effort = args.reasoning_effort or protocol.judge_reasoning_effort

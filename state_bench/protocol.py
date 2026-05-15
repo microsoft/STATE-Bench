@@ -45,10 +45,6 @@ class EvaluationProtocol:
         return str(self.data["official_model"])
 
     @property
-    def official_api_version(self) -> str:
-        return str(self.data["official_api_version"])
-
-    @property
     def judge_reasoning_effort(self) -> str | None:
         value = self.data.get("judge", {}).get("reasoning_effort")
         return None if value is None else str(value)
@@ -58,7 +54,6 @@ class EvaluationProtocol:
         return {
             "evaluation_protocol_id": self.protocol_id,
             "simulator_model": simulator["model"],
-            "simulator_api_version": simulator["api_version"],
             "simulator_prompt_hash": self._single_hash("simulator", domain, "user_sim_base.md"),
         }
 
@@ -67,7 +62,6 @@ class EvaluationProtocol:
         return {
             "scoring_protocol_id": self.protocol_id,
             "judge_model": judge["model"],
-            "judge_api_version": judge["api_version"],
             "judge_reasoning_effort": judge.get("reasoning_effort"),
             "judge_prompt_hashes": self.domain_prompt_hashes("judge", domain),
         }

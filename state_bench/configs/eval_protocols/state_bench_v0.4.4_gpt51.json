@@ -9,10 +9,8 @@
     "shopping_assistant"
   ],
   "official_model": "gpt-5.1",
-  "official_api_version": "2025-03-01-preview",
   "simulator": {
     "model": "gpt-5.1",
-    "api_version": "2025-03-01-preview",
     "prompt_hashes": {
       "travel/user_sim_base.md": "98d56c53c42b25e104f73bcb6197245859f1ae4d8c5e3162a21c7989888479be",
       "customer_support/user_sim_base.md": "bd2c4d9c24895a962c95039dcf661a6054d7af7639f26573b47bbf8cb8752ee5",
@@ -21,7 +19,6 @@
   },
   "judge": {
     "model": "gpt-5.1",
-    "api_version": "2025-03-01-preview",
     "reasoning_effort": "high",
     "prompt_hashes": {
       "travel/judge_task_requirements.md": "814266866377f54ba029cb8ea744ed957eddb441c29586e9ae1313b888356ba1",

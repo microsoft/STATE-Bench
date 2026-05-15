@@ -1,7 +1,7 @@
 """
-Shared Azure OpenAI client for STATE-Bench.
+Shared LLM client for STATE-Bench.
 
-This module provides reusable OpenAI and Azure OpenAI clients for
+This module provides reusable OpenAI clients for OpenAI and Azure OpenAI
 STATE-Bench agent, simulator, and judge calls.
 
 Usage:
@@ -31,7 +31,7 @@ from typing import Any
 
 import yaml
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
-from openai import APIStatusError, AuthenticationError, AzureOpenAI, OpenAI
+from openai import APIStatusError, AuthenticationError, OpenAI
 from tenacity import (
     RetryCallState,
     retry,
@@ -127,20 +127,20 @@ def _get_env_with_numbered_fallback(var_name: str) -> str:
 
 
 def _get_cli_access_token() -> str | None:
-    """Get a fresh Cognitive Services token from local CLI auth if available."""
+    """Get a fresh Azure AI token from local CLI auth if available."""
     commands = [
         [
             "az",
             "account",
             "get-access-token",
             "--resource",
-            "https://cognitiveservices.azure.com/",
+            "https://ai.azure.com",
             "--query",
             "accessToken",
             "-o",
             "tsv",
         ],
-        ["azd", "auth", "token", "--scope", "https://cognitiveservices.azure.com/.default"],
+        ["azd", "auth", "token", "--scope", "https://ai.azure.com/.default"],
     ]
     for cmd in commands:
         try:
@@ -153,24 +153,26 @@ def _get_cli_access_token() -> str | None:
     return None
 
 
-def _build_azure_openai_client(
-    endpoint: str, api_version: str, api_key_var: str = "AZURE_OPENAI_API_KEY"
-) -> AzureOpenAI:
-    """Build an authenticated AzureOpenAI client with deterministic auth precedence."""
+def _azure_openai_v1_base_url(endpoint: str) -> str:
+    """Return the Azure OpenAI v1 base URL for an endpoint."""
+    return endpoint.rstrip("/") + "/openai/v1/"
+
+
+def _build_azure_openai_client(endpoint: str, api_key_var: str = "AZURE_OPENAI_API_KEY") -> OpenAI:
+    """Build an authenticated OpenAI client for Azure OpenAI v1."""
+    base_url = _azure_openai_v1_base_url(endpoint)
     api_key = os.environ.get(api_key_var) or os.environ.get("AZURE_OPENAI_API_KEY")
     if api_key:
-        return AzureOpenAI(
-            azure_endpoint=endpoint,
+        return OpenAI(
+            base_url=base_url,
             api_key=api_key,
-            api_version=api_version,
         )
 
     static_token = os.environ.get("AZURE_OPENAI_TOKEN")
     if static_token:
-        return AzureOpenAI(
-            azure_endpoint=endpoint,
-            azure_ad_token=static_token,
-            api_version=api_version,
+        return OpenAI(
+            base_url=base_url,
+            api_key=static_token,
         )
 
     if _get_cli_access_token():
@@ -181,18 +183,16 @@ def _build_azure_openai_client(
                 raise RuntimeError("Unable to mint Azure OpenAI CLI access token")
             return token
 
-        return AzureOpenAI(
-            azure_endpoint=endpoint,
-            azure_ad_token_provider=cli_token_provider,
-            api_version=api_version,
+        return OpenAI(
+            base_url=base_url,
+            api_key=cli_token_provider,
         )
 
     credential = DefaultAzureCredential()
-    token_provider = get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default")
-    return AzureOpenAI(
-        azure_endpoint=endpoint,
-        azure_ad_token_provider=token_provider,
-        api_version=api_version,
+    token_provider = get_bearer_token_provider(credential, "https://ai.azure.com/.default")
+    return OpenAI(
+        base_url=base_url,
+        api_key=token_provider,
     )
 
 
@@ -281,10 +281,10 @@ class LeastBusyPool:
 
 
 class LLMClient:
-    """Simple Azure OpenAI client for general-purpose LLM queries.
+    """Simple LLM client for general-purpose queries.
 
     This client handles:
-    - Azure AD authentication via DefaultAzureCredential
+    - Azure OpenAI v1 authentication through the OpenAI SDK
     - Chat completions
     - JSON-formatted responses
 
@@ -296,16 +296,14 @@ class LLMClient:
         self,
         endpoint: str | None = None,
         deployment: str | None = None,
-        api_version: str | None = None,
         provider: str = "azure_openai",
         api_key_var: str = "STATE_BENCH_AGENT_API_KEY",
     ):
-        """Initialize the Azure OpenAI client.
+        """Initialize the LLM client.
 
         Args:
             endpoint: Azure OpenAI endpoint URL. Defaults to STATE_BENCH_AGENT_ENDPOINT env var.
             deployment: Model deployment name. Defaults to first STATE_BENCH_AGENT_DEPLOYMENTS entry.
-            api_version: API version. Defaults to STATE_BENCH_AGENT_API_VERSION env var or config default.
 
         Raises:
             ValueError: If endpoint is not provided and STATE_BENCH_AGENT_ENDPOINT is not set.
@@ -321,9 +319,6 @@ class LLMClient:
         else:
             self.endpoint = endpoint or _get_env_with_numbered_fallback("STATE_BENCH_AGENT_ENDPOINT")
             self.deployment = deployment or _get_default_deployment()
-        self.api_version = api_version or os.environ.get(
-            "STATE_BENCH_AGENT_API_VERSION", CONFIG["defaults"]["api_version"]
-        )
         self.deployments = [self.deployment]
 
         if self.provider == "azure_openai" and not self.endpoint:
@@ -336,7 +331,7 @@ class LLMClient:
             # Set up Azure AD authentication. Prefer deterministic local CLI token minting
             # over DefaultAzureCredential discovery so long-running batch jobs don't depend on
             # whichever background credential source happens to be valid.
-            self._client = _build_azure_openai_client(self.endpoint, self.api_version, api_key_var=api_key_var)
+            self._client = _build_azure_openai_client(self.endpoint, api_key_var=api_key_var)
         elif self.provider == "openai":
             self._client = _build_openai_client(api_key_var)
         else:
@@ -567,7 +562,6 @@ class PooledLLMClient(LeastBusyPool):
         deployments_var: str = "STATE_BENCH_AGENT_DEPLOYMENTS",
         provider: str = "azure_openai",
         api_key_var: str = "STATE_BENCH_AGENT_API_KEY",
-        api_version: str | None = None,
         endpoint_deployments: list[EndpointDeployment] | None = None,
     ):
         super().__init__()
@@ -582,7 +576,6 @@ class PooledLLMClient(LeastBusyPool):
                 deployment=d,
                 provider=provider,
                 api_key_var=api_key_var,
-                api_version=api_version,
             )
             for ep, d in endpoint_deployments
         ]
@@ -706,7 +699,6 @@ def build_llm_client(
     deployments_var: str = "STATE_BENCH_AGENT_DEPLOYMENTS",
     provider: str = "azure_openai",
     api_key_var: str = "STATE_BENCH_AGENT_API_KEY",
-    api_version: str | None = None,
 ) -> LLMClient | PooledLLMClient:
     """Build a single client for one deployment, or a pooled client for many."""
     endpoint_deployments = _resolve_deployments(
@@ -722,13 +714,11 @@ def build_llm_client(
             deployment=deployment,
             provider=provider,
             api_key_var=api_key_var,
-            api_version=api_version,
         )
     return PooledLLMClient(
         endpoint_deployments=endpoint_deployments,
         provider=provider,
         api_key_var=api_key_var,
-        api_version=api_version,
     )
 
 
@@ -738,21 +728,19 @@ def build_judge_client(env_prefix: str = "JUDGE") -> LLMClient | PooledLLMClient
     return build_llm_client()
 
 
-def build_user_sim_client(api_version: str | None = None) -> LLMClient | PooledLLMClient:
+def build_user_sim_client() -> LLMClient | PooledLLMClient:
     """Build the locked user-simulator client for canonical protocol runs."""
     return build_llm_client(
         endpoint_var="STATE_BENCH_EVAL_ENDPOINT",
         deployments_var="STATE_BENCH_EVAL_DEPLOYMENTS",
         api_key_var="STATE_BENCH_EVAL_API_KEY",
-        api_version=api_version,
     )
 
 
-def build_locked_judge_client(api_version: str | None = None) -> LLMClient | PooledLLMClient:
+def build_locked_judge_client() -> LLMClient | PooledLLMClient:
     """Build the locked judge client for canonical protocol scoring."""
     return build_llm_client(
         endpoint_var="STATE_BENCH_EVAL_ENDPOINT",
         deployments_var="STATE_BENCH_EVAL_DEPLOYMENTS",
         api_key_var="STATE_BENCH_EVAL_API_KEY",
-        api_version=api_version,
     )
