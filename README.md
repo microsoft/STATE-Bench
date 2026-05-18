@@ -1,6 +1,7 @@
 # STATE-Bench
 
 ![](https://img.shields.io/badge/Python-3.12%2B-blue?logo=python&logoColor=white)
+![CI](https://github.com/microsoft/STATE-Bench/actions/workflows/ci.yml/badge.svg)
 ![](https://img.shields.io/badge/License-MIT-green.svg)
 
 
