@@ -1,20 +1,39 @@
 # STATE-Bench
 
+<p align="center">
+  <img src="https://img.shields.io/badge/🏆%20Leaderboard-Coming%20Soon-crimson?style=for-the-badge" alt="Leaderboard" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/microsoft/STATE-Bench/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License" />
+  <a href="https://opensource.microsoft.com/blog/2026/05/19/introducing-state-bench-a-benchmark-for-ai-agent-memory/"><img src="https://img.shields.io/badge/Blog-Read-blue" alt="Blog" /></a>
+</p>
+
+
 A multi-domain benchmark for evaluating AI agents with agentic memory. It measures whether agents can learn from prior trajectories and improve on realistic enterprise tasks.
 
-## Current Benchmark Shape
+## Overview
 
 STATE-Bench tasks are interactive domain scenarios an agent is likely to encounter in enterprise settings. Each domain exposes a fixed set of tools (e.g. book_flight()) and policies available to the agent while executing tasks. Each task starts from a just-in-time sandbox with task-specific users and domain artifacts such as flight bookings, customer orders, carts, and product records.
 
-The benchmark currently contains 450 scenarios across 3 enterprise domains: Travel, Customer Support, and Shopping Assistant. The public release includes 300 train trajectories for memory extraction and 150 test task definitions with test environments for locked evaluation.
+The benchmark currently contains 450 tasks across 3 enterprise domains: Travel, Customer Support, and Shopping Assistant. The public release includes 300 train task trajectories for memory extraction and 150 test task definitions with test environments for locked evaluation. Users are free to directly evaluate on the test set and use STATE-Bench as a general agent performance benchmark.
 
 Each domain has a locked train/test split of 100 train tasks and 50 test tasks, defined in `state_bench/domains/<domain>/splits/train_test.json`.
 
-| Domain | Scenarios | Public Train Trajectories | Public Test Tasks | Description |
+| Domain | Tasks | Public Train Trajectories | Public Test Tasks | Description |
 |--------|---------:|--------------------------:|------------------:|-------------|
 | **Travel** | 150 | 100 | 50 | Flights, hotels, and car rentals with cancellations, rebookings, fee calculations, policy reasoning, and multi-step booking flows |
 | **Customer Support** | 150 | 100 | 50 | Returns, refunds, exchanges, warranties, shipping claims, and challenge scenarios with policy gates and two-step enforcement |
 | **Shopping Assistant** | 150 | 100 | 50 | Product search, comparison, cart management, promo codes, and compatibility checks |
+
+<br/>
+
+<p align="center">
+  <img src="assets/chat_bubble.svg" alt="STATE-Bench" />
+  <br/>
+  <em>Sample task trajectory from the Travel domain.</em>
+</p>
 
 ## Requirements
 
