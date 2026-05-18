@@ -3,7 +3,7 @@
 ![](https://img.shields.io/badge/Python-3.12%2B-blue?logo=python&logoColor=white)
 ![CI](https://github.com/microsoft/STATE-Bench/actions/workflows/ci.yml/badge.svg)
 ![](https://img.shields.io/badge/License-MIT-green.svg)
-![](https://img.shields.io/badge/Blog-Coming%20Soon-orange)
+[![](https://img.shields.io/badge/Blog-Read-blue)](https://opensource.microsoft.com/blog/2026/05/19/introducing-state-bench-a-benchmark-for-ai-agent-memory/)
 ![](https://img.shields.io/badge/Leaderboard-Coming%20Soon-orange)
 
 
@@ -22,6 +22,14 @@ Each domain has a locked train/test split of 100 train tasks and 50 test tasks, 
 | **Travel** | 150 | 100 | 50 | Flights, hotels, and car rentals with cancellations, rebookings, fee calculations, policy reasoning, and multi-step booking flows |
 | **Customer Support** | 150 | 100 | 50 | Returns, refunds, exchanges, warranties, shipping claims, and challenge scenarios with policy gates and two-step enforcement |
 | **Shopping Assistant** | 150 | 100 | 50 | Product search, comparison, cart management, promo codes, and compatibility checks |
+
+<br/>
+
+<p align="center">
+  <img src="assets/chat_bubble.svg" alt="STATE-Bench" />
+  <br/>
+  <em>Sample task trajectory from the Travel domain.</em>
+</p>
 
 ## Requirements
 
