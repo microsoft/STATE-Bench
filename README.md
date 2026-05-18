@@ -1,5 +1,9 @@
 # STATE-Bench
 
+[![](https://img.shields.io/badge/Python-3.12%2B-blue?logo=python&logoColor=white)](https://github.com/microsoft/STATE-Bench)
+[![](https://img.shields.io/github/license/microsoft/STATE-Bench)](https://github.com/microsoft/STATE-Bench)
+
+
 A multi-domain benchmark for evaluating AI agents with agentic memory. It measures whether agents can learn from prior trajectories and improve on realistic enterprise tasks.
 
 ## Current Benchmark Shape
