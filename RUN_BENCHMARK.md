@@ -27,7 +27,7 @@ Copy `.env.example` to `.env` and fill only the sections you need as described b
 
 ### Locked Evaluation Client
 
-The current evaluation protocol is defined [HERE](state_bench/configs/eval_protocols/state_bench_v0.4.4_gpt51.json). It fixes the tasks, splits, user simulator prompt, judge prompts, and required simulator and judge model so results are comparable across submissions. The current protocol requires GPT-5.1 model for the user simulator and judge. The agent model is user-configurable.
+The current evaluation protocol is defined [HERE](state_bench/configs/eval_protocols/gpt51.json). It fixes the tasks, splits, user simulator prompt, judge prompts, and required simulator and judge model so results are comparable across submissions. The current protocol requires GPT-5.1 model for the user simulator and judge. The agent model is user-configurable.
 
 NOTE: all the prompts are hashed. If you change any prompt file, the hash will change and the evaluation will throw an error. This ensures that all runs use the same prompts.
 

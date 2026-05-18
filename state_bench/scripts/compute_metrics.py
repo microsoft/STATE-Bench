@@ -15,10 +15,12 @@ Usage:
 import argparse
 import json
 import math
+from datetime import UTC, datetime
 from pathlib import Path
 
 from state_bench.agents.base import PRICING_CONFIG_PATH, agent_pricing_from_config
 from state_bench.protocol import load_default_protocol, load_split_task_ids
+from state_bench.version import get_package_version
 
 
 def _avg(vals: list[float | int]) -> float:
@@ -801,6 +803,8 @@ def build_standard_metrics(s: dict, evaluation_protocol_id: str | None = None, *
             }
         )
     return {
+        "benchmark_version": get_package_version(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "evaluation_protocol_id": evaluation_protocol_id or load_default_protocol().protocol_id,
         "num_runs": pn,
         "agent_model": s.get("agent_model"),

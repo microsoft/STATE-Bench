@@ -4,6 +4,9 @@ from pathlib import Path
 
 from state_bench.protocol import (
     DEFAULT_PROTOCOL_ID,
+    DEFAULT_PROTOCOL_KEY,
+    PROTOCOLS_DIR,
+    build_protocol_id,
     load_default_protocol,
     load_protocol,
     load_split_manifest,
@@ -13,9 +16,10 @@ from state_bench.version import get_benchmark_version, get_package_version
 
 
 def test_protocol_loads_locked_gpt51_metadata_without_infra() -> None:
-    protocol = load_protocol("state_bench_v0.4.4_gpt51")
+    protocol = load_protocol(DEFAULT_PROTOCOL_ID)
 
-    assert protocol.protocol_id == "state_bench_v0.4.4_gpt51"
+    assert protocol.protocol_id == DEFAULT_PROTOCOL_ID
+    assert DEFAULT_PROTOCOL_ID == build_protocol_id(DEFAULT_PROTOCOL_KEY)
     assert protocol.data["benchmark_version"] == get_benchmark_version()
     assert protocol.official_model == "gpt-5.1"
     assert protocol.split == "test"
@@ -30,12 +34,11 @@ def test_protocol_loads_locked_gpt51_metadata_without_infra() -> None:
 def test_default_protocol_is_benchmark_owned_current_protocol() -> None:
     protocol = load_default_protocol()
 
-    assert DEFAULT_PROTOCOL_ID == "state_bench_v0.4.4_gpt51"
     assert protocol.protocol_id == DEFAULT_PROTOCOL_ID
 
 
 def test_protocol_prompt_hashes_match_checked_in_prompts() -> None:
-    protocol = load_protocol("state_bench_v0.4.4_gpt51")
+    protocol = load_protocol(DEFAULT_PROTOCOL_ID)
 
     assert protocol.validate_prompt_hashes() == []
 
@@ -48,8 +51,9 @@ def test_load_split_task_ids_reads_test_manifest() -> None:
 
 
 def test_checked_in_protocol_and_split_manifests_do_not_duplicate_package_version() -> None:
-    protocol_data = json.loads(Path("state_bench/configs/eval_protocols/state_bench_v0.4.4_gpt51.json").read_text())
+    protocol_data = json.loads((PROTOCOLS_DIR / f"{DEFAULT_PROTOCOL_KEY}.json").read_text())
     assert "benchmark_version" not in protocol_data
+    assert "protocol_id" not in protocol_data
 
     for path in Path("state_bench/domains").glob("*/splits/train_test.json"):
         data = json.loads(path.read_text())

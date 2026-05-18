@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 import pytest
 
@@ -9,6 +10,7 @@ from state_bench.scripts.compute_metrics import (
     filter_runs_to_split,
     load_run,
 )
+from state_bench.version import get_package_version
 
 
 def test_compute_summary_includes_state_task_and_completion_rates():
@@ -192,7 +194,12 @@ def test_build_standard_metrics_returns_protocol_stamped_public_metrics():
         "mean_tool_calls_pass": 2.8,
     }
 
-    assert build_standard_metrics(summary, evaluation_protocol_id="protocol-test") == {
+    standard_metrics = build_standard_metrics(summary, evaluation_protocol_id="protocol-test")
+
+    datetime.fromisoformat(standard_metrics["timestamp"])
+    assert standard_metrics == {
+        "benchmark_version": get_package_version(),
+        "timestamp": standard_metrics["timestamp"],
         "evaluation_protocol_id": "protocol-test",
         "num_runs": 5,
         "agent_model": None,
