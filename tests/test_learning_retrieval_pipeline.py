@@ -45,17 +45,14 @@ def _make_function_call(call_id: str, name: str, arguments: str) -> MagicMock:
     return item
 
 
+def _write_dummy_learnings(output_path):
+    learnings = ["No learnings present"]
+    output_path.write_text(json.dumps(learnings) + "\n")
+    return learnings
+
+
 class DummyLearningAgent(StateBenchAgent):
     learnings_path = None
-
-    @staticmethod
-    def build_learnings(trajectories_dir, output_path=None):
-        learnings = ["No learnings present"]
-        if output_path is not None:
-            from pathlib import Path
-
-            Path(output_path).write_text(json.dumps(learnings) + "\n")
-        return learnings
 
     def retrieve_learnings(self, query: str, top_k: int = 3) -> list[str]:
         if self.learnings_path is None:
@@ -79,7 +76,7 @@ def test_state_bench_agent_learning_retrieval_pipeline_end_to_end(tmp_path):
     (train_dir / f"{REAL_TASK_ID}.json").write_text('{"conversation": []}\n')
     learnings_path = tmp_path / "learnings.json"
 
-    learnings = DummyLearningAgent.build_learnings(train_dir, learnings_path)
+    learnings = _write_dummy_learnings(learnings_path)
     DummyLearningAgent.learnings_path = learnings_path
 
     retrieve_call = _make_function_call(
@@ -143,7 +140,7 @@ def test_live_agent_calls_retrieve_learnings_tool(tmp_path):
     train_dir.mkdir()
     (train_dir / f"{REAL_TASK_ID}.json").write_text('{"conversation": []}\n')
     learnings_path = tmp_path / "learnings.json"
-    DummyLearningAgent.build_learnings(train_dir, learnings_path)
+    _write_dummy_learnings(learnings_path)
     DummyLearningAgent.learnings_path = learnings_path
 
     client = build_llm_client(

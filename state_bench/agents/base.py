@@ -132,7 +132,7 @@ class AgentTurnResponse:
     tool_calls: list[AgentToolCallRequest | dict[str, Any]] = field(default_factory=list)
 
 
-class Agent(ABC):
+class BaseAgent(ABC):
     """Base harness interface for agent implementations."""
 
     total_output_tokens: int = 0
@@ -144,18 +144,29 @@ class Agent(ABC):
     def _pricing_for_model(self, model_name: str = "gpt-5.1") -> dict[str, Any]:
         return _load_pricing()["models"][model_name]
 
-    def add_response_usage(self, usage: Any, *, category: str = "other_llm") -> None:
-        """Accumulate agent-side Responses API usage for later cost reporting."""
-        if not usage:
+    def add_token_usage(
+        self,
+        *,
+        input_tokens: int | None = None,
+        output_tokens: int | None = None,
+        cached_input_tokens: int | None = None,
+        reasoning_output_tokens: int | None = None,
+        category: str = "agent_turn",
+    ) -> None:
+        """Accumulate provider-reported token usage and optional cost.
+
+        Custom clients should pass provider-reported token counts here when
+        available. If either input or output tokens are missing, no usage or
+        cost is recorded.
+        """
+        if input_tokens is None or output_tokens is None:
             return
 
-        input_tokens = int(getattr(usage, "input_tokens", 0) or 0)
-        output_tokens = int(getattr(usage, "output_tokens", 0) or 0)
-        total_tokens = int(getattr(usage, "total_tokens", input_tokens + output_tokens) or 0)
-        input_details = getattr(usage, "input_tokens_details", None)
-        output_details = getattr(usage, "output_tokens_details", None)
-        cached_input_tokens = int(getattr(input_details, "cached_tokens", 0) or 0)
-        reasoning_output_tokens = int(getattr(output_details, "reasoning_tokens", 0) or 0)
+        input_tokens = int(input_tokens or 0)
+        output_tokens = int(output_tokens or 0)
+        cached_input_tokens = int(cached_input_tokens or 0)
+        reasoning_output_tokens = int(reasoning_output_tokens or 0)
+        total_tokens = input_tokens + output_tokens
 
         self.token_usage.input_tokens += input_tokens
         self.token_usage.cached_input_tokens += cached_input_tokens
@@ -170,19 +181,10 @@ class Agent(ABC):
         pricing.validate()
         non_cached_input_tokens = max(0, input_tokens - cached_input_tokens)
         input_cost = non_cached_input_tokens * pricing.input_cost_per_1m_tokens / 1_000_000
-        cached_input_cost = 0.0
-        if cached_input_tokens:
-            if pricing.cached_input_cost_per_1m_tokens is None:
-                raise ValueError(
-                    "agent response reported cached input tokens, but --agent-cached-input-cost-per-1m was not provided"
-                )
-            cached_input_cost = cached_input_tokens * pricing.cached_input_cost_per_1m_tokens / 1_000_000
+        cached_input_rate = pricing.cached_input_cost_per_1m_tokens or pricing.input_cost_per_1m_tokens
+        cached_input_cost = cached_input_tokens * cached_input_rate / 1_000_000
         output_cost = output_tokens * pricing.output_cost_per_1m_tokens / 1_000_000
-        total_cost = pricing.response_cost_usd(
-            input_tokens=input_tokens,
-            cached_input_tokens=cached_input_tokens,
-            output_tokens=output_tokens,
-        )
+        total_cost = input_cost + cached_input_cost + output_cost
 
         self.token_usage.input_cost_usd += input_cost
         self.token_usage.cached_input_cost_usd += cached_input_cost
@@ -197,6 +199,25 @@ class Agent(ABC):
             self.token_usage.memory_retrieval_cost_usd += total_cost
         else:
             self.token_usage.other_llm_cost_usd += total_cost
+
+    def add_response_usage(self, usage: Any, *, category: str = "other_llm") -> None:
+        """Accumulate agent-side Responses API usage for later cost reporting."""
+        if not usage:
+            return
+
+        input_tokens = int(getattr(usage, "input_tokens", 0) or 0)
+        output_tokens = int(getattr(usage, "output_tokens", 0) or 0)
+        input_details = getattr(usage, "input_tokens_details", None)
+        output_details = getattr(usage, "output_tokens_details", None)
+        cached_input_tokens = int(getattr(input_details, "cached_tokens", 0) or 0)
+        reasoning_output_tokens = int(getattr(output_details, "reasoning_tokens", 0) or 0)
+        self.add_token_usage(
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            cached_input_tokens=cached_input_tokens,
+            reasoning_output_tokens=reasoning_output_tokens,
+            category=category,
+        )
 
     def add_embedding_usage(
         self, input_tokens: int, *, model_name: str = "text-embedding-3-large", category: str = "embedding"
@@ -256,7 +277,7 @@ class Agent(ABC):
 
     def uses_harness_tool_execution(self) -> bool:
         """Whether this agent uses generate_next_turn() instead of legacy act()."""
-        return type(self).generate_next_turn is not Agent.generate_next_turn
+        return type(self).generate_next_turn is not BaseAgent.generate_next_turn
 
     def memory_tool_schemas(self) -> list[dict[str, Any]]:
         """Optional read-only memory retrieval tools exposed to the agent.

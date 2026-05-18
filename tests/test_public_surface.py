@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from state_bench.domain import get_domain_config
+from state_bench.protocol import load_split_task_ids
 
 PUBLIC_SCRIPT_MODULES = [
     "state_bench.scripts.run_task",
@@ -45,10 +46,12 @@ def test_public_domain_data_counts_and_no_provenance_fields() -> None:
         root = Path("state_bench/domains") / domain
         tasks = sorted((root / "tasks").glob("*.json"))
         envs = sorted((root / "task_envs").glob("*.json"))
+        test_task_ids = load_split_task_ids(domain, "test")
 
-        assert len(tasks) == 150, domain
-        assert len(envs) == 150, domain
-        assert [path.stem for path in tasks] == [path.stem for path in envs], domain
+        assert len(tasks) == 50, domain
+        assert len(envs) == 50, domain
+        assert {path.stem for path in tasks} == set(test_task_ids), domain
+        assert {path.stem for path in envs} == set(test_task_ids), domain
 
         for task_path in tasks:
             task = json.loads(task_path.read_text())
@@ -81,19 +84,14 @@ def test_train_task_trajectories_only_expose_complete_conversations() -> None:
     assert len(trajectory_paths) == 300
     for trajectory_path in trajectory_paths:
         domain_name = trajectory_path.parent.name
-        task_path = Path("state_bench/domains") / domain_name / "tasks" / trajectory_path.name
-        task = json.loads(task_path.read_text())
         trajectory = json.loads(trajectory_path.read_text())
 
         assert list(trajectory) == ["conversation"], trajectory_path
         assert isinstance(trajectory["conversation"], list), trajectory_path
-        assert trajectory["conversation"][0] == {
-            "role": "system",
-            "content": get_domain_config(domain_name).agent_system_prompt.format(
-                now="<REDACTED>",
-                user_id=task["user_id"],
-            ),
-        }
+        assert trajectory["conversation"][0]["role"] == "system", trajectory_path
+        assert trajectory["conversation"][0]["content"].startswith(
+            get_domain_config(domain_name).agent_system_prompt.split("{now}", 1)[0]
+        )
 
 
 def test_package_config_includes_train_task_trajectories() -> None:

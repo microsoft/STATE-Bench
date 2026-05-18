@@ -6,6 +6,7 @@ Usage:
 
 import argparse
 import os
+import sys
 import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -13,10 +14,11 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from state_bench.agents.base import AgentPricing, agent_pricing_from_config
-from state_bench.agents.loader import load_root_agent_class
+from state_bench.agents.base import AgentPricing, BaseAgent, agent_pricing_from_config
+from state_bench.agents.loader import load_root_agent_class, load_root_client_class
 from state_bench.agents.state_bench import StateBenchAgent
 from state_bench.client import (
+    BaseLLMClient,
     LLMClient,
     PooledLLMClient,
     build_llm_client,
@@ -61,22 +63,52 @@ def _resolve_task_files(tasks_dir: Path, task_ids: list[str]) -> list[Path]:
     return task_files
 
 
+def _arg_was_provided(argv: list[str], flag: str) -> bool:
+    return flag in argv
+
+
+def _validate_agent_client_args(args: argparse.Namespace, argv: list[str]) -> None:
+    custom_agent_requested = bool(args.agent_class)
+    custom_client_requested = bool(args.agent_client_class)
+    if custom_client_requested and not custom_agent_requested:
+        raise ValueError("--agent-client-class requires --agent-class.")
+    if custom_client_requested and (
+        _arg_was_provided(argv, "--agent-provider") or _arg_was_provided(argv, "--agent-api-key-var")
+    ):
+        raise ValueError(
+            "--agent-provider and --agent-api-key-var are only valid with the built-in client. "
+            "Custom clients should read their own configuration in from_env()."
+        )
+
+
+def _build_agent_model_metadata(args: argparse.Namespace) -> dict[str, str | None]:
+    model_name = (args.agent_model_name or "").strip()
+    if not model_name:
+        raise ValueError("--agent-model-name is required")
+    reasoning_level = args.agent_model_reasoning_level
+    if isinstance(reasoning_level, str):
+        reasoning_level = reasoning_level.strip() or None
+    return {"model_name": model_name, "reasoning_level": reasoning_level}
+
+
 def _build_agent_pricing(args: argparse.Namespace, default_model_name: str | None = None) -> AgentPricing | None:
+    model_name = (args.agent_model_name or default_model_name or "").strip()
     pricing_values = [
-        args.agent_model_name,
         args.agent_input_cost_per_1m,
         args.agent_output_cost_per_1m,
         args.agent_cached_input_cost_per_1m,
     ]
     if all(value is None for value in pricing_values):
-        if default_model_name is None:
+        if not model_name:
             return None
-        return agent_pricing_from_config(default_model_name)
+        try:
+            return agent_pricing_from_config(model_name)
+        except ValueError:
+            return None
 
     missing = [
         flag
         for flag, value in [
-            ("--agent-model-name", args.agent_model_name),
             ("--agent-input-cost-per-1m", args.agent_input_cost_per_1m),
             ("--agent-output-cost-per-1m", args.agent_output_cost_per_1m),
         ]
@@ -85,7 +117,7 @@ def _build_agent_pricing(args: argparse.Namespace, default_model_name: str | Non
     if missing:
         raise ValueError("agent pricing requires " + ", ".join(missing))
     pricing = AgentPricing(
-        model_name=args.agent_model_name,
+        model_name=model_name,
         input_cost_per_1m_tokens=args.agent_input_cost_per_1m,
         output_cost_per_1m_tokens=args.agent_output_cost_per_1m,
         cached_input_cost_per_1m_tokens=args.agent_cached_input_cost_per_1m,
@@ -96,14 +128,15 @@ def _build_agent_pricing(args: argparse.Namespace, default_model_name: str | Non
 
 def _run_single(
     task_file: Path,
-    client: LLMClient | PooledLLMClient | None,
+    client: BaseLLMClient | None,
     simulator_client: LLMClient | PooledLLMClient | None,
     output_dir: Path,
     domain: DomainConfig,
     max_attempts: int,
     protocol=None,
     agent_pricing: AgentPricing | None = None,
-    agent_class: type[StateBenchAgent] | None = None,
+    agent_model: dict[str, str | None] | None = None,
+    agent_class: type[BaseAgent] | None = None,
     retrieve_learnings_top_k: int = 3,
     task_requirements_judge: TaskRequirementsJudge | None = None,
     ux_judge: UXQualityJudge | None = None,
@@ -122,6 +155,8 @@ def _run_single(
             if protocol is not None:
                 metadata.update(protocol.simulator_metadata(domain.name))
                 metadata["agent_name"] = (agent_class or StateBenchAgent).__name__
+                if agent_model is not None:
+                    metadata["agent_model"] = agent_model
                 if agent_pricing is not None:
                     metadata["agent_pricing"] = agent_pricing.to_dict()
 
@@ -190,7 +225,11 @@ def main() -> None:
     )
     parser.add_argument("--tasks", type=str, default=None, help="Comma-separated task IDs")
     parser.add_argument(
-        "--split", type=str, default=None, choices=["train", "test"], help="Run tasks from a split manifest"
+        "--split",
+        type=str,
+        default="test",
+        choices=["test"],
+        help=argparse.SUPPRESS,
     )
     parser.add_argument("--output-dir", type=str, default=None, help="Output directory (default: outputs/<domain>)")
     parser.add_argument("--num-runs", type=int, default=1, help="Number of runs (default: 1)")
@@ -201,7 +240,19 @@ def main() -> None:
         help="Starting run index for output directories (default: 1)",
     )
     parser.add_argument(
-        "--agent-class", type=str, default=None, help="StateBenchAgent subclass name under repo-root agents/"
+        "--agent-class",
+        type=str,
+        default=None,
+        help=(
+            "Agent class name under repo-root agents/. StateBenchAgent subclasses can use the built-in "
+            "client; fully custom providers also require --agent-client-class."
+        ),
+    )
+    parser.add_argument(
+        "--agent-client-class",
+        type=str,
+        default=None,
+        help="BaseLLMClient subclass name under repo-root clients/. Required for fully custom provider clients.",
     )
     parser.add_argument(
         "--retrieve-learnings-top-k",
@@ -226,7 +277,16 @@ def main() -> None:
         help="API key env var for the built-in agent client",
     )
     parser.add_argument(
-        "--agent-model-name", type=str, default=None, help="Override protocol model name for cost metadata"
+        "--agent-model-name",
+        type=str,
+        required=True,
+        help="Agent model name reported in trajectories and metrics",
+    )
+    parser.add_argument(
+        "--agent-model-reasoning-level",
+        type=str,
+        default=None,
+        help="Optional agent model reasoning level reported in trajectories and metrics",
     )
     parser.add_argument(
         "--agent-input-cost-per-1m",
@@ -268,11 +328,16 @@ def main() -> None:
         parser.error("--num-workers must be >= 1")
     if args.retrieve_learnings_top_k < 1:
         parser.error("--retrieve-learnings-top-k must be >= 1")
-    if args.tasks and args.split:
+    if args.tasks and args.split != "test":
         parser.error("--tasks and --split are mutually exclusive")
+    try:
+        _validate_agent_client_args(args, sys.argv[1:])
+    except ValueError as exc:
+        parser.error(str(exc))
     domain = get_domain_config(args.domain)
     protocol = load_default_protocol()
     try:
+        agent_model = _build_agent_model_metadata(args)
         agent_pricing = _build_agent_pricing(args, protocol.official_model)
     except ValueError as exc:
         parser.error(str(exc))
@@ -284,16 +349,24 @@ def main() -> None:
     tasks_dir = domain_tasks_dir(args.domain)
     base_output = Path(args.output_dir) if args.output_dir else Path(f"outputs/{args.domain}")
     agent_class = load_root_agent_class(args.agent_class) if args.agent_class else None
+    if agent_class is not None and args.agent_client_class is None and not issubclass(agent_class, StateBenchAgent):
+        parser.error("--agent-class without --agent-client-class must be a StateBenchAgent subclass")
 
-    client = build_llm_client(
-        provider=args.agent_provider,
-        api_key_var=args.agent_api_key_var,
-    )
-    user_sim_client = build_user_sim_client(api_version=protocol.data["simulator"]["api_version"])
+    if args.agent_client_class:
+        client_class = load_root_client_class(args.agent_client_class)
+        client = client_class.from_env()
+        if not isinstance(client, BaseLLMClient):
+            raise TypeError(f"{args.agent_client_class}.from_env() must return a BaseLLMClient")
+    else:
+        client = build_llm_client(
+            provider=args.agent_provider,
+            api_key_var=args.agent_api_key_var,
+        )
+    user_sim_client = build_user_sim_client()
     task_requirements_judge = None
     ux_judge = None
     if args.score:
-        judge_client = build_locked_judge_client(api_version=protocol.data["judge"]["api_version"])
+        judge_client = build_locked_judge_client()
         score_reasoning_effort = args.score_reasoning_effort or protocol.judge_reasoning_effort
         task_requirements_judge = TaskRequirementsJudge(
             client=judge_client,
@@ -309,13 +382,7 @@ def main() -> None:
         )
     if args.workers is None:
         args.workers = 1
-    if args.split:
-        task_ids = load_split_task_ids(args.domain, args.split, protocol.split_version)
-        try:
-            task_files = _resolve_task_files(tasks_dir, task_ids)
-        except ValueError as exc:
-            parser.error(str(exc))
-    elif args.tasks:
+    if args.tasks:
         task_ids = _parse_task_ids(args.tasks)
         if not task_ids:
             parser.error("--tasks must include at least one task ID")
@@ -324,7 +391,11 @@ def main() -> None:
         except ValueError as exc:
             parser.error(str(exc))
     else:
-        task_files = sorted(tasks_dir.glob("*.json"))
+        task_ids = load_split_task_ids(args.domain, args.split, protocol.split_version)
+        try:
+            task_files = _resolve_task_files(tasks_dir, task_ids)
+        except ValueError as exc:
+            parser.error(str(exc))
 
     agent_name = (agent_class or StateBenchAgent).__name__
     print(f"Agent: {agent_name}")
@@ -373,6 +444,7 @@ def main() -> None:
                 args.retry_attempts,
                 protocol,
                 agent_pricing,
+                agent_model,
                 agent_class,
                 args.retrieve_learnings_top_k,
                 task_requirements_judge,

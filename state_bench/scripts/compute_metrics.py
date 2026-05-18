@@ -8,7 +8,6 @@ Usage:
     uv run python -m state_bench.scripts.compute_metrics --save-filepath outputs/travel/metrics.json
     uv run python -m state_bench.scripts.compute_metrics --domain travel --save-filepath outputs/travel/metrics.json
     uv run python -m state_bench.scripts.compute_metrics --results-dir outputs/travel --save-filepath outputs/travel/metrics.json
-    uv run python -m state_bench.scripts.compute_metrics --results-dir outputs/travel --split all --save-filepath outputs/travel/metrics.json
     uv run python -m state_bench.scripts.compute_metrics --num-runs 5 --save-filepath outputs/travel/metrics.json
     uv run python -m state_bench.scripts.compute_metrics --domain travel --num-runs 5 --save-filepath outputs/travel/metrics.json
 """
@@ -16,10 +15,12 @@ Usage:
 import argparse
 import json
 import math
+from datetime import UTC, datetime
 from pathlib import Path
 
 from state_bench.agents.base import PRICING_CONFIG_PATH, agent_pricing_from_config
 from state_bench.protocol import load_default_protocol, load_split_task_ids
+from state_bench.version import get_package_version
 
 
 def _avg(vals: list[float | int]) -> float:
@@ -31,6 +32,24 @@ def _stddev(vals: list[float | int]) -> float:
         return 0.0
     mean = _avg(vals)
     return math.sqrt(sum((v - mean) ** 2 for v in vals) / len(vals))
+
+
+def _validate_agent_model(traj: dict, path: Path) -> dict | None:
+    model = traj.get("agent_model")
+    if model is None:
+        pricing = traj.get("agent_pricing")
+        if isinstance(pricing, dict) and str(pricing.get("model_name", "")).strip():
+            return {"model_name": str(pricing["model_name"]), "reasoning_level": None}
+        return None
+    if not isinstance(model, dict):
+        raise ValueError(f"{path}: agent_model metadata must be an object when present")
+    model_name = str(model.get("model_name", "")).strip()
+    if not model_name:
+        raise ValueError(f"{path}: agent_model.model_name must be non-empty")
+    reasoning_level = model.get("reasoning_level")
+    if reasoning_level is not None:
+        reasoning_level = str(reasoning_level).strip() or None
+    return {"model_name": model_name, "reasoning_level": reasoning_level}
 
 
 def _validate_agent_pricing(traj: dict, path: Path) -> dict | None:
@@ -193,6 +212,7 @@ def load_run(run_dir: Path, *, fallback_agent_pricing: dict | None = None) -> tu
             unscored.append(tid)
             continue
 
+        agent_model = _validate_agent_model(traj, f)
         agent_pricing = _validate_agent_pricing(traj, f)
         if agent_pricing is not None:
             _validate_cost_from_pricing(traj, agent_pricing, f)
@@ -239,9 +259,15 @@ def load_run(run_dir: Path, *, fallback_agent_pricing: dict | None = None) -> tu
             "memory_ingestion_cost_usd": traj.get("token_usage", {}).get("memory_ingestion_cost_usd"),
             "memory_retrieval_cost_usd": traj.get("token_usage", {}).get("memory_retrieval_cost_usd"),
             "embedding_cost_usd": traj.get("token_usage", {}).get("embedding_cost_usd"),
+            "agent_model": agent_model,
             "agent_pricing": agent_pricing,
         }
 
+    model_records = {
+        _pricing_key(result["agent_model"]): result["agent_model"]
+        for result in results.values()
+        if result.get("agent_model") is not None
+    }
     pricing_records = {
         _pricing_key(result["agent_pricing"]): result["agent_pricing"]
         for result in results.values()
@@ -253,6 +279,7 @@ def load_run(run_dir: Path, *, fallback_agent_pricing: dict | None = None) -> tu
         "scored": len(results),
         "unscored": len(unscored),
         "unscored_task_ids": unscored,
+        "agent_model_records": list(model_records.values()),
         "agent_pricing_records": list(pricing_records.values()),
     }
     return results, meta
@@ -293,9 +320,6 @@ def filter_runs_to_split(
     ignore_missing_runs: bool = False,
 ) -> tuple[list[dict[str, dict]], list[dict[str, object]]]:
     """Filter loaded runs to a manifest split, requiring complete scored coverage."""
-    if split == "all":
-        return runs, run_meta
-
     expected_task_ids = load_split_task_ids(domain, split, split_version)
     expected = set(expected_task_ids)
     filtered_runs: list[dict[str, dict]] = []
@@ -551,13 +575,20 @@ def compute_summary(m: dict, run_meta: list[dict[str, object]] | None = None) ->
         cost_m[tid][i] for tid in all_tasks for i in range(pn) if pass_m[tid][i] is True and cost_m[tid][i] is not None
     ]
 
+    model_records: dict[str, dict] = {}
     pricing_records: dict[str, dict] = {}
     for meta in run_meta or []:
+        for model in meta.get("agent_model_records", []):
+            model_records[_pricing_key(model)] = model
         for pricing in meta.get("agent_pricing_records", []):
             pricing_records[_pricing_key(pricing)] = pricing
+    if len(model_records) > 1:
+        models = ", ".join(sorted(record["model_name"] for record in model_records.values()))
+        raise ValueError(f"Multiple agent model declarations found in results: {models}")
     if len(pricing_records) > 1:
         models = ", ".join(sorted(record["model_name"] for record in pricing_records.values()))
         raise ValueError(f"Multiple agent pricing declarations found in results: {models}")
+    agent_model = next(iter(model_records.values()), None)
     agent_pricing = next(iter(pricing_records.values()), None)
 
     return {
@@ -603,6 +634,7 @@ def compute_summary(m: dict, run_meta: list[dict[str, object]] | None = None) ->
         "comparable_task_count": comparable_n,
         "partial": any(count != n for count in per_run_scored_counts),
         "run_meta": run_meta or [],
+        "agent_model": agent_model,
         "agent_pricing": agent_pricing,
     }
 
@@ -739,6 +771,7 @@ def save_metrics(s: dict, results_dir: Path, *, skip_path: Path | None = None) -
         "per_run_ux_disambiguation_scores": s["per_run_ux_disambiguation_scores"],
         "comparable_task_count": s["comparable_task_count"],
         "partial": s["partial"],
+        "agent_model": s.get("agent_model"),
         "agent_pricing": s.get("agent_pricing"),
     }
     metrics_path = results_dir / "metrics.json"
@@ -770,8 +803,11 @@ def build_standard_metrics(s: dict, evaluation_protocol_id: str | None = None, *
             }
         )
     return {
+        "benchmark_version": get_package_version(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "evaluation_protocol_id": evaluation_protocol_id or load_default_protocol().protocol_id,
         "num_runs": pn,
+        "agent_model": s.get("agent_model"),
         "agent_pricing": s.get("agent_pricing"),
         "metrics": metrics,
     }
@@ -1021,8 +1057,8 @@ def main():
         "--split",
         type=str,
         default="test",
-        choices=["train", "test", "all"],
-        help="Task split to compute metrics on (default: test)",
+        choices=["test"],
+        help=argparse.SUPPRESS,
     )
     parser.add_argument(
         "--ignore-missing-runs", action="store_true", help="Allow incomplete split coverage for local analysis"
@@ -1059,9 +1095,10 @@ def main():
             f"WARNING: Protocol {protocol.protocol_id} benchmark submission expects metrics computed on "
             f"{protocol.num_runs} runs; computing metrics on {args.num_runs} run(s) for local analysis."
         )
-    fallback_pricing_model = args.agent_model_name or protocol.official_model
-    fallback_agent_pricing = _agent_pricing_from_config(fallback_pricing_model)
-    print(f"Backfilling missing trajectory pricing from {PRICING_CONFIG_PATH}: {fallback_pricing_model}")
+    fallback_agent_pricing = None
+    if args.agent_model_name:
+        fallback_agent_pricing = _agent_pricing_from_config(args.agent_model_name)
+        print(f"Backfilling missing trajectory pricing from {PRICING_CONFIG_PATH}: {args.agent_model_name}")
 
     print(f"Loading from {results_dir}...")
     runs, run_meta = load_all_runs(

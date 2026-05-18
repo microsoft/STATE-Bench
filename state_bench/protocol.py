@@ -5,13 +5,21 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from state_bench.paths import CONFIGS_DIR, DOMAINS_DIR
 from state_bench.version import get_benchmark_version, get_package_version
 
 PROTOCOLS_DIR = CONFIGS_DIR / "eval_protocols"
-DEFAULT_PROTOCOL_ID = "state_bench_v0.4.4_gpt51"
+DEFAULT_PROTOCOL_KEY = "gpt51"
+
+
+def build_protocol_id(protocol_key: str = DEFAULT_PROTOCOL_KEY) -> str:
+    return f"state_bench_{get_benchmark_version()}_{protocol_key}"
+
+
+DEFAULT_PROTOCOL_ID = build_protocol_id()
 
 
 @dataclass(frozen=True)
@@ -45,10 +53,6 @@ class EvaluationProtocol:
         return str(self.data["official_model"])
 
     @property
-    def official_api_version(self) -> str:
-        return str(self.data["official_api_version"])
-
-    @property
     def judge_reasoning_effort(self) -> str | None:
         value = self.data.get("judge", {}).get("reasoning_effort")
         return None if value is None else str(value)
@@ -58,7 +62,6 @@ class EvaluationProtocol:
         return {
             "evaluation_protocol_id": self.protocol_id,
             "simulator_model": simulator["model"],
-            "simulator_api_version": simulator["api_version"],
             "simulator_prompt_hash": self._single_hash("simulator", domain, "user_sim_base.md"),
         }
 
@@ -67,7 +70,6 @@ class EvaluationProtocol:
         return {
             "scoring_protocol_id": self.protocol_id,
             "judge_model": judge["model"],
-            "judge_api_version": judge["api_version"],
             "judge_reasoning_effort": judge.get("reasoning_effort"),
             "judge_prompt_hashes": self.domain_prompt_hashes("judge", domain),
         }
@@ -97,12 +99,19 @@ class EvaluationProtocol:
         return str(self.data[section]["prompt_hashes"][key])
 
 
+def _protocol_path(protocol_id: str) -> Path:
+    version_prefix = f"state_bench_{get_benchmark_version()}_"
+    protocol_key = protocol_id.removeprefix(version_prefix)
+    return PROTOCOLS_DIR / f"{protocol_key}.json"
+
+
 def load_protocol(protocol_id: str) -> EvaluationProtocol:
-    path = PROTOCOLS_DIR / f"{protocol_id}.json"
+    path = _protocol_path(protocol_id)
     if not path.exists():
-        available = ", ".join(p.stem for p in sorted(PROTOCOLS_DIR.glob("*.json"))) or "(none)"
+        available = ", ".join(build_protocol_id(p.stem) for p in sorted(PROTOCOLS_DIR.glob("*.json"))) or "(none)"
         raise ValueError(f"Unknown evaluation protocol {protocol_id!r}. Available: {available}")
     data = json.loads(path.read_text())
+    data["protocol_id"] = protocol_id
     data["benchmark_version"] = get_benchmark_version()
     return EvaluationProtocol(data=data)
 
