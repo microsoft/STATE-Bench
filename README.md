@@ -3,6 +3,8 @@
 ![](https://img.shields.io/badge/Python-3.12%2B-blue?logo=python&logoColor=white)
 ![CI](https://github.com/microsoft/STATE-Bench/actions/workflows/ci.yml/badge.svg)
 ![](https://img.shields.io/badge/License-MIT-green.svg)
+![](https://img.shields.io/badge/Blog-Coming%20Soon-orange)
+![](https://img.shields.io/badge/Leaderboard-Coming%20Soon-orange)
 
 
 A multi-domain benchmark for evaluating AI agents with agentic memory. It measures whether agents can learn from prior trajectories and improve on realistic enterprise tasks.
