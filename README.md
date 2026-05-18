@@ -1,10 +1,14 @@
 # STATE-Bench
 
-![](https://img.shields.io/badge/Python-3.12%2B-blue?logo=python&logoColor=white)
-![CI](https://github.com/microsoft/STATE-Bench/actions/workflows/ci.yml/badge.svg)
-![](https://img.shields.io/badge/License-MIT-green.svg)
-[![](https://img.shields.io/badge/Blog-Read-blue)](https://opensource.microsoft.com/blog/2026/05/19/introducing-state-bench-a-benchmark-for-ai-agent-memory/)
-![](https://img.shields.io/badge/Leaderboard-Coming%20Soon-orange)
+<p align="center">
+  <img src="https://img.shields.io/badge/🏆%20Leaderboard-Coming%20Soon-crimson?style=for-the-badge" alt="Leaderboard" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/microsoft/STATE-Bench/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License" />
+  <a href="https://opensource.microsoft.com/blog/2026/05/19/introducing-state-bench-a-benchmark-for-ai-agent-memory/"><img src="https://img.shields.io/badge/Blog-Read-blue" alt="Blog" /></a>
+</p>
 
 
 A multi-domain benchmark for evaluating AI agents with agentic memory. It measures whether agents can learn from prior trajectories and improve on realistic enterprise tasks.
