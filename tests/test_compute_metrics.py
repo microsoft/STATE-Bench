@@ -195,6 +195,7 @@ def test_build_standard_metrics_returns_protocol_stamped_public_metrics():
     assert build_standard_metrics(summary, evaluation_protocol_id="protocol-test") == {
         "evaluation_protocol_id": "protocol-test",
         "num_runs": 5,
+        "agent_model": None,
         "agent_pricing": None,
         "metrics": {
             "task_completion_pass@1": 0.72,
@@ -234,6 +235,7 @@ def _priced_trajectory(**overrides):
         "task_completion_pass": 1,
         "ux_score": 4.0,
         "conversation": [],
+        "agent_model": {"model_name": "test-model", "reasoning_level": "high"},
         "agent_pricing": {
             "model_name": "test-model",
             "input_cost_per_1m_tokens": 1.0,
@@ -277,6 +279,7 @@ def test_load_run_validates_declared_pricing_against_token_usage(tmp_path):
 
     assert runs["t1"]["cost_usd"] == 0.00141
     assert runs["t1"]["reasoning_output_tokens"] == 5
+    assert runs["t1"]["agent_model"] == {"model_name": "test-model", "reasoning_level": "high"}
     assert meta["agent_pricing_records"] == [_priced_trajectory()["agent_pricing"]]
 
 
@@ -290,6 +293,7 @@ def test_load_run_allows_missing_agent_pricing(tmp_path):
     runs, meta = load_run(run_dir)
 
     assert runs["t1"]["agent_pricing"] is None
+    assert meta["agent_model_records"] == [{"model_name": "test-model", "reasoning_level": "high"}]
     assert meta["agent_pricing_records"] == []
 
 

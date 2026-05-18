@@ -1,14 +1,35 @@
 # Run Benchmark
 
-This guide is for external users running the locked STATE-Bench benchmark. The active protocol is defined in `state_bench/configs/eval_protocols/state_bench_v0.4.4_gpt51.json`; it fixes the tasks, splits, user simulator prompt, judge prompts, and required simulator, judge, and agent model so results are comparable across submissions. The current protocol requires GPT-5.1 for the user simulator, judge, and `StateBenchAgent` test trajectories.
+This guide is for evaluating OpenAI / Azure OpenAI GPT models using the OpenAI SDK. For non-OpenAI models or other LLM providers, follow [USE_CUSTOM_CLIENT.md](USE_CUSTOM_CLIENT.md) instead.
 
-The workflow is to extract procedural learnings from the provided train trajectories, then run a `StateBenchAgent` subclass on the test split with a `retrieve_learnings(query, top_k)` tool. Finally, score the test trajectories with the locked judge and submit the scored outputs and metrics.
+You can run this benchmark in two modes:
 
-NOTE: Use the checked-in tasks, splits, and provided train trajectories as fixed benchmark inputs for official runs.
+- **Test Agentic Memory:** Use the train trajectories in Step 1 to generate procedural learnings before evaluating on the test set.
+- **General Agent Benchmark:** Evaluate your model or agent directly on the test set by skipping Step 1.
 
-## Locked Evaluation Client
+## Install
 
-Set the locked GPT-5.1 evaluation client used by both the user simulator and judge in your `.env` file:
+STATE-Bench supports Python 3.12+. Install the [uv](https://docs.astral.sh/uv/) package manager if needed:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Install the package dependencies:
+
+```bash
+uv sync
+```
+
+Copy `.env.example` to `.env` and fill only the sections you need as described below.
+
+## Set Environment Variables
+
+### Locked Evaluation Client
+
+The current evaluation protocol is defined [HERE](state_bench/configs/eval_protocols/state_bench_v0.4.4_gpt51.json). It fixes the tasks, splits, user simulator prompt, judge prompts, and required simulator and judge model so results are comparable across submissions. The current protocol requires GPT-5.1 model for the user simulator and judge. The agent model is user-configurable.
+
+NOTE: all the prompts are hashed. If you change any prompt file, the hash will change and the evaluation will throw an error. This ensures that all runs use the same prompts.
 
 ```bash
 STATE_BENCH_EVAL_ENDPOINT="https://your-gpt51-resource.openai.azure.com"
@@ -17,66 +38,52 @@ STATE_BENCH_EVAL_DEPLOYMENTS="<your gpt 5.1 deployment name>"
 # STATE_BENCH_EVAL_API_KEY="<your gpt 5.1 resource api key>"
 ```
 
-The user simulator and judge deployments must point to GPT-5.1 for the current protocol. Deployment names can vary by resource. If `STATE_BENCH_EVAL_API_KEY` is omitted, the client tries Azure token auth through local CLI credentials and `DefaultAzureCredential`.
+Deployment names can vary by resource. If `STATE_BENCH_EVAL_API_KEY` is omitted, the client tries Azure token auth through local CLI credentials and `DefaultAzureCredential`.
 
-## Install
+### StateBenchAgent Client
 
-```bash
-uv sync
-```
-
-Copy `.env.example` to `.env` and fill only the sections you need.
-
-## StateBenchAgent Client
-
-`StateBenchAgent` is the official STATE-Bench agent loop. It uses your configured GPT-5.1 agent client, the benchmark domain tools, and the locked prompt protocol to generate test trajectories. Set one of these client configurations before running the test split.
-
-For official runs, the configured agent deployment or model must be GPT-5.1. STATE-Bench owns cost accounting for the locked model and reads prices from `state_bench/configs/pricing.yaml`; no model or pricing fields are needed from submitters.
+`StateBenchAgent` is the provided agent loop. It uses the built-in OpenAI/Azure OpenAI v1 client to call the Responses API with benchmark domain tools and the locked prompt protocol.
 
 For Azure OpenAI:
 
 ```bash
 STATE_BENCH_AGENT_ENDPOINT="https://your-agent-resource.openai.azure.com"
-STATE_BENCH_AGENT_DEPLOYMENTS="<your gpt 5.1 agent deployment name>"
+STATE_BENCH_AGENT_DEPLOYMENTS="<your agent deployment name>"
 # Optional. If omitted, Azure token auth is tried.
-STATE_BENCH_AGENT_API_KEY="<your gpt 5.1 agent resource api key>"
+STATE_BENCH_AGENT_API_KEY="<your agent resource api key>"
 ```
 
 For OpenAI API:
 
 ```bash
 STATE_BENCH_AGENT_PROVIDER="openai"
-STATE_BENCH_AGENT_MODEL="gpt-5.1"
+STATE_BENCH_AGENT_MODEL="<your OpenAI model>"
 OPENAI_API_KEY="<your OpenAI API key>"
 ```
 
 For multiple Azure OpenAI deployments, use a comma-separated list:
 
 ```bash
-STATE_BENCH_AGENT_DEPLOYMENTS="gpt51-deployment-a, gpt51-deployment-b"
+STATE_BENCH_AGENT_DEPLOYMENTS="deployment-a, deployment-b"
 ```
 
-For OpenAI API, use `gpt-5.1`. Parallelism comes from concurrent API calls to that model, controlled by `--num-workers`.
+For OpenAI API, parallelism comes from concurrent API calls to that model, controlled by `--num-workers`.
 
-`--num-workers <parallel workers>` controls how many benchmark tasks run in parallel. For Azure OpenAI, a good starting point is 2x the number of configured deployments. For OpenAI API, set it according to your account/project rate limits. Start high (e.g. 10) and decrease if you see throttling.
+## Step 1: Build Procedural Learnings From Train Trajectories
 
-Cost per task is computed from provider-reported token usage using the locked GPT-5.1 pricing in `state_bench/configs/pricing.yaml`.
-
-## Step 1: [Training] Build Procedural Learnings
-
-Use the provided train trajectories as the input to your learning pipeline. They are stored under:
+Use the provided task trajectories (100 per domain) as the input to your learning or memory pipeline. They are stored under:
 
 ```bash
 datasets/train_task_trajectories/<domain>/<task_id>.json
 ```
 
-Create a repo-root `agents/` directory and add a `StateBenchAgent` subclass. Your subclass needs two custom methods: `build_learnings()` for training-time extraction and `retrieve_learnings()` for test-time retrieval.
+Procedural learning generation is fully user-owned; STATE-Bench only requires the inference-time retrieval method to consume these learnings.
 
-`build_learnings(trajectories_dir, output_path)` runs before the benchmark test split. It should read the provided train trajectories for one domain, extract whatever procedural knowledge your method uses, and write that artifact to `output_path`. The artifact format is up to you. It can be JSON, a vector index, a database, or any local file that `retrieve_learnings()` will use to retrieve relevant learnings later.
+Expose your learnings by subclassing `StateBenchAgent` and implementing `retrieve_learnings(query, top_k=3) -> list[str]`. Put this custom agent file under the repo-root `agents/` folder.
 
-`retrieve_learnings(query, top_k)` runs during the locked test trajectories. STATE-Bench exposes this method to the agent as the fixed model-callable tool `retrieve_learnings(query, top_k)`. For a given `query`, it should load or query the artifact produced by `build_learnings()`, retrieve the top `top_k` relevant learnings, and return them as `list[str]`.
+STATE-Bench automatically discovers this agent and adds `retrieve_learnings` to the list of available tools during inference.
 
-A minimal example is below. Replace both the extraction logic and retrieval/ranking logic with your own implementation.
+A minimal example is below. Replace the loading and retrieval logic with your method.
 
 ```python
 # agents/my_memory_agent.py
@@ -87,62 +94,62 @@ from state_bench.agents.state_bench import StateBenchAgent
 
 
 class MyMemoryAgent(StateBenchAgent):
-    learnings_path = Path("outputs/learnings.json")
-
-    @staticmethod
-    def build_learnings(trajectories_dir: str | Path, output_path: str | Path | None = None) -> list[str]:
-        if output_path is None:
-            output_path = MyMemoryAgent.learnings_path
-        else:
-            output_path = Path(output_path)
-            MyMemoryAgent.learnings_path = output_path
-
-        trajectories = [path.read_text() for path in sorted(Path(trajectories_dir).glob("*.json"))]
-
-        # PUT YOUR CUSTOM LEARNING EXTRACTION LOGIC HERE.
-        learnings = [
-            "Summarize one reusable procedure learned from a training trajectory."
-        ]
-
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(json.dumps(learnings, indent=2) + "\n")
-        return learnings
+    # It need not be a JSON file; this is just an example.
+    # Use whatever storage and retrieval method you like,
+    # as long as `retrieve_learnings` returns a list of strings.
+    learnings_path = Path("<path_to_learnings.json>")
 
     def retrieve_learnings(self, query: str, top_k: int = 3) -> list[str]:
         learnings = json.loads(self.learnings_path.read_text())
-        # PUT YOUR CUSTOM RETRIEVAL/RANKING LOGIC HERE.
+        # Replace this with your retrieval/ranking logic.
         return learnings[:top_k]
 ```
 
-Call your extractor on the provided train trajectories:
 
-```python
-from agents.my_memory_agent import MyMemoryAgent
-
-MyMemoryAgent.build_learnings("datasets/train_task_trajectories/travel", "outputs/travel/learnings.json")
-```
-
-
-## Step 2: [Evaluation] Run Test Trajectories
-
-Run the test split with `--agent-class`. STATE-Bench loads the class from repo-root `agents/`, adds the fixed `retrieve_learnings(query, top_k)` tool, and instructs the agent to call it before substantive task answers. It also scores each trajectory inline with the locked judge. Do not edit the locked base prompt, judge prompts, or benchmark domain tools.
-
-Use one of these domain names for `--domain`: `travel`, `customer_support`, `shopping_assistant`.
+## Step 2: Evaluate on Test Tasks
 
 ```bash
-# Fixed by the benchmark: --num-runs 5 and --retrieve-learnings-top-k 3.
 uv run python -m state_bench.scripts.run_batch \
   --domain <domain> \
-  --agent-class MyMemoryAgent \
+  --agent-class <MyMemoryAgent> \
+  --agent-model-name <model-name> \
+  --agent-model-reasoning-level <reasoning-level> \
   --num-runs 5 \
   --retrieve-learnings-top-k 3 \
   --num-workers <parallel workers> \
   --output-dir outputs/<domain>/test_trajectories
 ```
 
-The output is scored trajectories from `outputs/<domain>/test_trajectories/run1/<task_id>.json` through `outputs/<domain>/test_trajectories/run5/<task_id>.json`.
+Arguments:
 
-Agent cost metadata is written with the protocol model and the checked-in pricing file; no model or price flags are needed for official runs.
+- `--domain`: Benchmark domain to run: `travel`, `customer_support`, or `shopping_assistant`.
+- `--agent-class`: [Optional] Name of the custom agent built in Step 1 `StateBenchAgent` subclass under repo-root `agents/`. If not provided, the default `StateBenchAgent` with no `retrieve_learnings` tool is used.
+- `--agent-model-name`: Required model name reported in trajectories and the submitted `metrics.json`. E.g. `gpt-5.1`.
+- `--agent-model-reasoning-level`: Reasoning level reported in trajectories and `metrics.json` when the agent model uses one. E.g. `medium`. This is important for grouping results in the leaderboard.
+- `--num-runs`: Number of runs per task. Set to `5` for official submissions.
+- `--retrieve-learnings-top-k`: Benchmark-fixed maximum number of learnings returned by `retrieve_learnings()`. Set to `3` for official submissions.
+- `--num-workers`: Number of benchmark tasks to run in parallel. Tune this for your provider rate limits. See suggestion below.
+- `--output-dir`: Directory where scored trajectories are written.
+
+A good starting point for `--num-workers` is the number of parallel API calls your agent model can handle without hitting rate limits or timeouts. For OpenAI API, this is often around 10. For Azure OpenAI, it depends on your resource limits and number of deployments (we suggest starting with 2x the number of deployments)
+
+
+### Reporting Avg. Cost Per Task
+
+One metric in the benchmark is the average cost to run a task. We strongly encourage benchmark users to provide pricing in the `run_batch.py` command.
+
+Use these pricing flags:
+
+```bash
+--agent-input-cost-per-1m <input-price> \
+--agent-output-cost-per-1m <output-price>
+```
+
+If your provider reports cached input tokens and has a separate cached-input rate, also pass:
+
+```bash
+--agent-cached-input-cost-per-1m <cached-input-price>
+```
 
 ## Step 3: Compute Metrics
 
@@ -158,11 +165,11 @@ Metrics default to the protocol test split and fail if any expected test task is
 
 Repeat Steps 1-3 for every protocol domain.
 
-## Step 4: Submit Results
+## Submit Results
 
 Create `outputs.zip` containing the scored trajectories and metrics for each completed domain:
 
 - `outputs/<domain>/test_trajectories/`
 - `outputs/<domain>/metrics.json`, which includes the evaluation protocol ID and standardized public metrics
 
-Submit results by opening a GitHub issue in this repository. Attach `outputs.zip` to the issue if it is within GitHub's upload limit; otherwise, include a download link to the archive. Include brief details of your method, plus links to any relevant paper, GitHub repository, or project page. After verification, accepted results will be uploaded to the official leaderboard. Official comparisons are grouped by the protocol ID stamped into the trajectory and metrics metadata.
+Submit results by opening a GitHub issue in this repository. Attach `outputs.zip` to the issue if it is within GitHub's upload limit; otherwise, include a download link to the archive. Include brief details of your method, plus links to any relevant paper, GitHub repository, or project page. After verification, accepted results will be uploaded to the official leaderboard.

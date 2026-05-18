@@ -7,10 +7,9 @@ directly, implementing the standard Responses API tool-calling loop.
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Any, Callable
 
-from state_bench.agents.base import Agent, AgentRuntimeContext
+from state_bench.agents.base import AgentRuntimeContext, BaseAgent
 from state_bench.client import LLMClient, PooledLLMClient
 
 RETRIEVE_LEARNINGS_TOOL_NAME = "retrieve_learnings"
@@ -41,7 +40,7 @@ RETRIEVAL_SYSTEM_INSTRUCTION = """# Procedural Learning Retrieval
 You have access to `retrieve_learnings(query, top_k)` for procedural learnings from past user interactions. These learnings capture patterns that helped on prior tasks, such as tool-use order, policy checks, consent steps, and common failure modes. Before your first substantive answer for a task, call `retrieve_learnings` with a concise query based on the user's request, domain, task context, and relevant conversation facts. Use the benchmark-fixed `top_k` value provided in the run configuration. You can call the tool again if later turns require further procedural guidance. Apply retrieved learnings as guidance for how to proceed, but only when they are relevant and consistent with domain tools, tool results, and policies."""
 
 
-class StateBenchAgent(Agent):
+class StateBenchAgent(BaseAgent):
     """Default agent with no memory. Calls the LLM with tools directly.
 
     This is the baseline agent used when no custom agent is provided.
@@ -61,7 +60,10 @@ class StateBenchAgent(Agent):
     ):
         super().__init__(runtime_context=runtime_context)
         if not isinstance(client, (LLMClient, PooledLLMClient)):
-            raise TypeError("StateBenchAgent requires state_bench.client.LLMClient or PooledLLMClient")
+            raise TypeError(
+                "StateBenchAgent requires the built-in LLMClient or PooledLLMClient. "
+                "For custom clients, provide a custom --agent-class as well."
+            )
         if (
             not isinstance(retrieve_learnings_top_k, int)
             or isinstance(retrieve_learnings_top_k, bool)
@@ -76,11 +78,6 @@ class StateBenchAgent(Agent):
         )
         self.tools = self._with_retrieval_tool(tools) if self.retrieval_enabled else tools
         self.tool_handlers = self._with_retrieval_handler(tool_handlers) if self.retrieval_enabled else tool_handlers
-
-    @staticmethod
-    def build_learnings(train_trajectories_dir: str | Path, output_path: str | Path | None = None) -> list[str]:
-        """Optional user hook for building learnings after train trajectories."""
-        raise NotImplementedError("Override build_learnings() in a StateBenchAgent subclass to build learnings")
 
     def _has_retrieve_learnings(self) -> bool:
         return callable(getattr(self, "retrieve_learnings", None))

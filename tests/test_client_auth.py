@@ -6,12 +6,25 @@ from unittest.mock import patch
 import pytest
 
 from state_bench.client import (
+    BaseLLMClient,
     LLMClient,
     PooledLLMClient,
     build_llm_client,
     build_locked_judge_client,
     build_user_sim_client,
 )
+
+
+class NoArgClient(BaseLLMClient):
+    pass
+
+
+def test_base_llm_client_defaults():
+    client = NoArgClient.from_env()
+
+    assert isinstance(client, NoArgClient)
+    assert client.provider_name == "NoArgClient"
+    assert client.model_name is None
 
 
 def test_importing_client_does_not_load_dotenv(tmp_path):
@@ -81,6 +94,7 @@ def test_build_llm_client_returns_single_client_for_one_agent_deployment(monkeyp
     with patch("state_bench.client.OpenAI"):
         client = build_llm_client(api_key_var="STATE_BENCH_AGENT_API_KEY")
 
+    assert isinstance(client, BaseLLMClient)
     assert isinstance(client, LLMClient)
     assert client.deployments == ["gpt-5.1"]
 
@@ -94,6 +108,7 @@ def test_build_llm_client_returns_pool_for_multiple_agent_deployments(monkeypatc
     with patch("state_bench.client.OpenAI"):
         client = build_llm_client(api_key_var="STATE_BENCH_AGENT_API_KEY")
 
+    assert isinstance(client, BaseLLMClient)
     assert isinstance(client, PooledLLMClient)
     assert client.deployments == ["gpt-5.1-a", "gpt-5.1-b"]
 

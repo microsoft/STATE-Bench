@@ -15,8 +15,14 @@ import logging
 import time
 from typing import Any
 
-from state_bench.agents.base import Agent, AgentPricing, AgentRuntimeContext, AgentToolCallRequest, AgentTurnResponse
-from state_bench.client import LLMClient, PooledLLMClient
+from state_bench.agents.base import (
+    AgentPricing,
+    AgentRuntimeContext,
+    AgentToolCallRequest,
+    AgentTurnResponse,
+    BaseAgent,
+)
+from state_bench.client import BaseLLMClient, LLMClient, PooledLLMClient
 from state_bench.domain import DomainConfig
 from state_bench.schemas import (
     StateDiff,
@@ -59,7 +65,7 @@ def _normalize_agent_turn_response(response: AgentTurnResponse | dict[str, Any])
 
 def _run_harness_executed_agent_turn(
     *,
-    agent: Agent,
+    agent: BaseAgent,
     system_prompt: str,
     conversation_full: list[dict[str, Any]],
     domain_tools: list[dict[str, Any]],
@@ -93,7 +99,7 @@ def _run_harness_executed_agent_turn(
             name = request["name"]
             arguments = request["arguments"]
             if name not in allowed_names:
-                raise ValueError(f"Agent requested disallowed tool: {name}")
+                raise ValueError(f"BaseAgent requested disallowed tool: {name}")
             result = handlers[name](arguments)
             record = {"name": name, "arguments": arguments, "result": result}
             executed_tool_calls.append(record)
@@ -113,21 +119,21 @@ def _run_harness_executed_agent_turn(
             }
         )
 
-    raise RuntimeError(f"Agent exceeded max tool rounds ({max_tool_rounds})")
+    raise RuntimeError(f"BaseAgent exceeded max tool rounds ({max_tool_rounds})")
 
 
 def run_task(
     task: TaskDefinition,
     env_data: Any,
     user_id: str,
-    client: LLMClient | PooledLLMClient | None,
+    client: BaseLLMClient | None,
     domain: DomainConfig,
-    agent: Agent | None = None,
+    agent: BaseAgent | None = None,
     env: Any | None = None,
     trajectory_metadata: dict[str, Any] | None = None,
     simulator_client: LLMClient | PooledLLMClient | None = None,
     agent_pricing: AgentPricing | None = None,
-    agent_class: type[Agent] | None = None,
+    agent_class: type[BaseAgent] | None = None,
     retrieve_learnings_top_k: int = 3,
 ) -> Trajectory:
     """Run a single task and return the trajectory.
@@ -141,7 +147,7 @@ def run_task(
         user_id: The user to run the task for.
         client: Optional LLM client for StateBenchAgent and non-protocol simulator runs.
         domain: Domain configuration providing all domain-specific behavior.
-        agent: Agent to evaluate. If None, uses StateBenchAgent (no memory).
+        agent: BaseAgent to evaluate. If None, uses StateBenchAgent (no memory).
         env: Optional prebuilt environment instance. When provided, the same env must
             also back the agent's tool handlers.
 
@@ -211,7 +217,7 @@ def run_task(
         if turn > 0:
             conversation.append({"role": "user", "content": user_response})
 
-        # Agent turn
+        # BaseAgent turn
         if agent.uses_harness_tool_execution():
             agent_text, tool_calls = _run_harness_executed_agent_turn(
                 agent=agent,

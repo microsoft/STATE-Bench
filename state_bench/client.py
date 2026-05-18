@@ -49,6 +49,29 @@ class ContentFilterError(Exception):
     """Raised when Azure content filter blocks or truncates a response."""
 
 
+class BaseLLMClient:
+    """Flexible base class for user-provided LLM clients.
+
+    The base intentionally does not mandate chat, JSON, or tool-calling method
+    names. Custom agents own the methods they call on their custom clients.
+    """
+
+    @classmethod
+    def from_env(cls) -> "BaseLLMClient":
+        """Construct a client from provider-specific environment variables."""
+        return cls()
+
+    @property
+    def provider_name(self) -> str:
+        """Provider label for metadata/debug output."""
+        return type(self).__name__
+
+    @property
+    def model_name(self) -> str | None:
+        """Model label when known to the client."""
+        return None
+
+
 def _load_yaml(path: Path) -> dict[str, Any]:
     with open(path) as f:
         return yaml.safe_load(f) or {}
@@ -280,7 +303,7 @@ class LeastBusyPool:
             self._in_flight[idx] -= 1
 
 
-class LLMClient:
+class LLMClient(BaseLLMClient):
     """Simple LLM client for general-purpose queries.
 
     This client handles:
@@ -543,7 +566,7 @@ def _resolve_deployments(
     return [(primary_endpoint, d) for d in deployments]
 
 
-class PooledLLMClient(LeastBusyPool):
+class PooledLLMClient(BaseLLMClient, LeastBusyPool):
     """LLM client that routes every call to the least-busy deployment.
 
     Drop-in replacement for LLMClient that tracks in-flight requests
