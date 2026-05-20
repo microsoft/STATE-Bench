@@ -103,10 +103,6 @@ def _cost_fields_from_pricing(traj: dict, pricing: dict, path: Path) -> dict[str
     embedding_cost = _num(usage.get("embedding_cost_usd"))
     embedding_tokens = int(_num(usage.get("embedding_input_tokens")))
 
-    if cached_input_tokens > 0 and not pricing["cached_input_pricing_provided"]:
-        raise ValueError(
-            f"{path}: trajectory has cached_input_tokens={cached_input_tokens}, but cached input pricing was not provided"
-        )
     if embedding_tokens > 0 or embedding_cost > 0:
         raise ValueError(f"{path}: embedding cost accounting is not supported for official public metrics yet")
 
@@ -114,7 +110,8 @@ def _cost_fields_from_pricing(traj: dict, pricing: dict, path: Path) -> dict[str
     input_cost = non_cached_input_tokens * pricing["input_cost_per_1m_tokens"] / 1_000_000
     cached_input_cost = 0.0
     if cached_input_tokens:
-        cached_input_cost = cached_input_tokens * pricing["cached_input_cost_per_1m_tokens"] / 1_000_000
+        cached_input_rate = pricing["cached_input_cost_per_1m_tokens"] or pricing["input_cost_per_1m_tokens"]
+        cached_input_cost = cached_input_tokens * cached_input_rate / 1_000_000
     output_cost = output_tokens * pricing["output_cost_per_1m_tokens"] / 1_000_000
     total_cost = input_cost + cached_input_cost + output_cost
 
