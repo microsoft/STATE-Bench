@@ -129,6 +129,7 @@ def _run_single_task(
     agent_model: dict[str, str | None] | None = None,
     agent_class: type[BaseAgent] | None = None,
     retrieve_learnings_top_k: int = 3,
+    agent_reasoning_effort: str | None = None,
 ) -> dict:
     user_id = user_override or task.user_id
     if not user_id:
@@ -169,6 +170,7 @@ def _run_single_task(
         agent_pricing=agent_pricing,
         agent_class=agent_class,
         retrieve_learnings_top_k=retrieve_learnings_top_k,
+        agent_reasoning_effort=agent_reasoning_effort,
     )
 
     tool_calls = []
@@ -401,6 +403,7 @@ def main() -> None:
                 agent_model,
                 agent_class,
                 args.retrieve_learnings_top_k,
+                (agent_model or {}).get("reasoning_level"),
             )
             results.append(result)
     else:
@@ -420,6 +423,7 @@ def main() -> None:
                     agent_model,
                     agent_class,
                     args.retrieve_learnings_top_k,
+                    (agent_model or {}).get("reasoning_level"),
                 ): (run_idx, task)
                 for run_idx, task in work_items
             }
