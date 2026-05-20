@@ -57,6 +57,7 @@ class StateBenchAgent(BaseAgent):
         tool_handlers: dict[str, Callable],
         runtime_context: AgentRuntimeContext | None = None,
         retrieve_learnings_top_k: int = 3,
+        agent_reasoning_effort: str | None = None,
     ):
         super().__init__(runtime_context=runtime_context)
         if not isinstance(client, (LLMClient, PooledLLMClient)):
@@ -70,8 +71,11 @@ class StateBenchAgent(BaseAgent):
             or retrieve_learnings_top_k < 1
         ):
             raise ValueError("retrieve_learnings_top_k must be an integer >= 1")
+        if agent_reasoning_effort is not None and agent_reasoning_effort not in {"low", "medium", "high"}:
+            raise ValueError("agent_reasoning_effort must be one of 'low', 'medium', 'high', or None")
         self.client = client
         self.retrieve_learnings_top_k = retrieve_learnings_top_k
+        self.agent_reasoning_effort = agent_reasoning_effort
         self.retrieval_enabled = self._has_retrieve_learnings()
         self.system_prompt = (
             self._with_retrieval_instruction(system_prompt) if self.retrieval_enabled else system_prompt
@@ -131,6 +135,7 @@ class StateBenchAgent(BaseAgent):
                 instructions=self.system_prompt,
                 input=prepared_conversation,
                 tools=self.tools,
+                reasoning_effort=self.agent_reasoning_effort,
             )
             if response.usage:
                 self.total_output_tokens += response.usage.output_tokens
@@ -176,6 +181,7 @@ class StateBenchAgent(BaseAgent):
                     input=tool_results,
                     tools=self.tools,
                     previous_response_id=response.id,
+                    reasoning_effort=self.agent_reasoning_effort,
                 )
                 if response.usage:
                     self.total_output_tokens += response.usage.output_tokens

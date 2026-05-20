@@ -140,6 +140,7 @@ def _run_single(
     retrieve_learnings_top_k: int = 3,
     task_requirements_judge: TaskRequirementsJudge | None = None,
     ux_judge: UXQualityJudge | None = None,
+    agent_reasoning_effort: str | None = None,
 ) -> dict:
     task = TaskDefinition.load(task_file)
     user_id = task.user_id
@@ -173,6 +174,7 @@ def _run_single(
                 agent_pricing=agent_pricing,
                 agent_class=agent_class,
                 retrieve_learnings_top_k=retrieve_learnings_top_k,
+                agent_reasoning_effort=agent_reasoning_effort,
             )
 
             out_path = output_dir / f"{task.task_id}.json"
@@ -449,6 +451,7 @@ def main() -> None:
                 args.retrieve_learnings_top_k,
                 task_requirements_judge,
                 ux_judge,
+                (agent_model or {}).get("reasoning_level"),
             ): (run_idx, tf)
             for run_idx, tf in work_items
         }
