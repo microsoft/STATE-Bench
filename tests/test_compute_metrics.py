@@ -336,16 +336,24 @@ def test_load_run_can_backfill_missing_agent_pricing(tmp_path):
     assert meta["agent_pricing_records"] == [fallback_pricing]
 
 
-def test_load_run_rejects_cached_tokens_without_cached_pricing(tmp_path):
+def test_load_run_charges_cached_tokens_at_input_rate_without_cached_pricing(tmp_path):
     run_dir = tmp_path / "run1"
     run_dir.mkdir()
     traj = _priced_trajectory()
     traj["agent_pricing"]["cached_input_cost_per_1m_tokens"] = None
     traj["agent_pricing"]["cached_input_pricing_provided"] = False
+    traj["token_usage"]["input_cost_usd"] = 0.0009
+    traj["token_usage"]["cached_input_cost_usd"] = 0.0001
+    traj["token_usage"]["agent_turn_cost_usd"] = 0.0015
+    traj["token_usage"]["total_cost_usd"] = 0.0015
+    traj["cost_usd"] = 0.0015
     (run_dir / "t1.json").write_text(json.dumps(traj))
 
-    with pytest.raises(ValueError, match="cached input pricing was not provided"):
-        load_run(run_dir)
+    runs, meta = load_run(run_dir)
+
+    assert runs["t1"]["cost_usd"] == pytest.approx(0.0015)
+    assert runs["t1"]["agent_pricing"]["cached_input_cost_per_1m_tokens"] is None
+    assert meta["agent_pricing_records"] == [traj["agent_pricing"]]
 
 
 def test_load_run_rejects_cost_that_does_not_match_declared_pricing(tmp_path):

@@ -125,9 +125,12 @@ from state_bench.agents.base import AgentToolCallRequest, AgentTurnResponse, Bas
 
 
 class MyAgent(BaseAgent):
-    def __init__(self, client, runtime_context=None, **kwargs):
+    def __init__(self, client, system_prompt, tools, tool_handlers, runtime_context=None, **kwargs):
         super().__init__(runtime_context=runtime_context)
         self.client = client
+        self.system_prompt = system_prompt
+        self.tools = tools
+        self.tool_handlers = tool_handlers
 
     def convert_tools_for_provider(self, tools):
         # STATE-Bench provides OpenAI function-calling style schemas by default.
@@ -192,6 +195,18 @@ The equivalent dictionary shape is also accepted:
 ```
 
 This is needed because the harness, not the custom agent, executes tools. The harness reads `name`, finds the matching allowed domain tool or declared memory tool, runs it with `arguments`, appends the tool result to the conversation, and calls `generate_next_turn()` again until the agent returns no tool calls.
+
+Across turns, `conversation` uses STATE-Bench's canonical transcript shape. Completed tool calls are embedded on the assistant message that requested them:
+
+```python
+{
+    "role": "assistant",
+    "content": "Checking that now.",
+    "tool_calls": [{"name": "tool_name", "arguments": {"key": "value"}, "result": {"ok": True}}],
+}
+```
+
+If your provider expects separate tool-result messages, convert each embedded `result` into that provider's required shape before calling the provider. For example, OpenAI Chat Completions adapters typically need to synthesize paired assistant tool-call messages and `role="tool"` result messages from these records.
 
 ## Step 1: Build Procedural Learnings From Train Trajectories
 
