@@ -149,3 +149,31 @@ def test_openai_client_rejects_third_party_base_url(monkeypatch):
 
     with pytest.raises(ValueError, match="Third-party OpenAI-compatible base URLs are not supported"):
         build_llm_client(provider="openai")
+
+
+def test_complete_with_tools_omits_temperature_when_reasoning_set(monkeypatch):
+    """Bug-fix regression: GPT-5.1 reasoning models reject `temperature` + `reasoning`."""
+    from unittest.mock import MagicMock
+
+    from state_bench.client import LLMClient
+
+    inner = MagicMock()
+    inner.responses.create.return_value = MagicMock(
+        output=[], output_text="", status="completed", incomplete_details=None
+    )
+    client = LLMClient.__new__(LLMClient)
+    client._client = inner
+    client.deployment = "gpt-5.1"
+    client.endpoint = "https://example/"
+    client.api_version = "2025-03-01-preview"
+
+    client.complete_with_tools(instructions="x", input=[], tools=[], reasoning_effort="high")
+    _, kwargs = inner.responses.create.call_args
+    assert "temperature" not in kwargs
+    assert kwargs["reasoning"] == {"effort": "high"}
+
+    inner.responses.create.reset_mock()
+    client.complete_with_tools(instructions="x", input=[], tools=[])
+    _, kwargs = inner.responses.create.call_args
+    assert kwargs.get("temperature") == 0
+    assert "reasoning" not in kwargs

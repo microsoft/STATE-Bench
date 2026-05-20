@@ -502,3 +502,51 @@ class TestStateBenchAgentUsageTracking:
         assert agent.token_usage.reasoning_output_tokens == 40
         assert agent.token_usage.total_tokens == 1120
         assert agent.token_usage.total_cost_usd == 0.0
+
+
+class TestAgentReasoningEffort:
+    """Bug-fix regression: --agent-model-reasoning-level must reach complete_with_tools."""
+
+    def test_reasoning_effort_forwarded_to_complete_with_tools(self):
+        response = _make_response("r-1", [_make_text_item("done")], output_text="done")
+        mock = MagicMock(return_value=response)
+        pinned_client = MagicMock()
+        pinned_client.complete_with_tools = mock
+        pinned_ctx = MagicMock()
+        pinned_ctx.__enter__ = MagicMock(return_value=pinned_client)
+        pinned_ctx.__exit__ = MagicMock(return_value=False)
+        client = MagicMock(spec=PooledLLMClient)
+        client.pinned.return_value = pinned_ctx
+
+        agent = StateBenchAgent(
+            client=client,
+            system_prompt="You are a travel agent.",
+            tools=[{"type": "function", "name": "get_booking"}],
+            tool_handlers={},
+            runtime_context=_runtime_context_with_pricing(),
+            agent_reasoning_effort="high",
+        )
+        agent.act([{"role": "user", "content": "hi"}])
+
+        _, kwargs = mock.call_args
+        assert kwargs.get("reasoning_effort") == "high"
+
+    def test_reasoning_effort_default_none_forwarded(self):
+        response = _make_response("r-2", [_make_text_item("done")], output_text="done")
+        mock = MagicMock(return_value=response)
+        agent = _make_agent(mock)
+        agent.act([{"role": "user", "content": "hi"}])
+        _, kwargs = mock.call_args
+        assert kwargs.get("reasoning_effort") is None
+
+    def test_invalid_reasoning_effort_rejected(self):
+        client = MagicMock(spec=PooledLLMClient)
+        with pytest.raises(ValueError, match="agent_reasoning_effort"):
+            StateBenchAgent(
+                client=client,
+                system_prompt="x",
+                tools=[],
+                tool_handlers={},
+                runtime_context=_runtime_context_with_pricing(),
+                agent_reasoning_effort="extreme",
+            )

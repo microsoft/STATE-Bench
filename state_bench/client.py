@@ -399,6 +399,7 @@ class LLMClient(BaseLLMClient):
         previous_response_id: str | None = None,
         max_tokens: int = 4096,
         temperature: float | None = 0,
+        reasoning_effort: str | None = None,
     ) -> Any:
         """Call the Responses API with tool schemas.
 
@@ -413,7 +414,11 @@ class LLMClient(BaseLLMClient):
             "previous_response_id": previous_response_id,
             "max_output_tokens": max_tokens,
         }
-        if temperature is not None:
+        if reasoning_effort:
+            # Azure GPT-5.1 reasoning models reject `temperature` alongside `reasoning`
+            # (HTTP 400 invalid_request_error). Omit it rather than fail the request.
+            kwargs["reasoning"] = {"effort": reasoning_effort}
+        elif temperature is not None:
             kwargs["temperature"] = temperature
         response = self._client.responses.create(**kwargs)
         _check_content_filter(response)

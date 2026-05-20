@@ -11,6 +11,7 @@ Domain-agnostic: all domain-specific behavior is provided via DomainConfig.
 
 from __future__ import annotations
 
+import inspect
 import logging
 import time
 from typing import Any
@@ -135,6 +136,7 @@ def run_task(
     agent_pricing: AgentPricing | None = None,
     agent_class: type[BaseAgent] | None = None,
     retrieve_learnings_top_k: int = 3,
+    agent_reasoning_effort: str | None = None,
 ) -> Trajectory:
     """Run a single task and return the trajectory.
 
@@ -179,13 +181,31 @@ def run_task(
             task_requirements=task.task_requirements,
             agent_pricing=agent_pricing,
         )
+        agent_kwargs: dict[str, Any] = {
+            "runtime_context": runtime_context,
+            "retrieve_learnings_top_k": retrieve_learnings_top_k,
+        }
+        # Custom agent subclasses may not accept agent_reasoning_effort; only pass when supported.
+        if agent_reasoning_effort is not None:
+            try:
+                accepts = "agent_reasoning_effort" in inspect.signature(resolved_agent_class).parameters
+            except (TypeError, ValueError):
+                accepts = False
+            if accepts:
+                agent_kwargs["agent_reasoning_effort"] = agent_reasoning_effort
+            else:
+                logger.warning(
+                    "Agent class %s does not accept agent_reasoning_effort; "
+                    "ignoring --agent-model-reasoning-level=%r for this agent.",
+                    resolved_agent_class.__name__,
+                    agent_reasoning_effort,
+                )
         agent = resolved_agent_class(
             client,
             agent_system_prompt,
             domain.tool_schemas,
             env.tool_handlers,
-            runtime_context=runtime_context,
-            retrieve_learnings_top_k=retrieve_learnings_top_k,
+            **agent_kwargs,
         )
 
     # Build simulator
