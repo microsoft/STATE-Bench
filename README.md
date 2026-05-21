@@ -34,7 +34,7 @@ Given a task-local sandbox database, a domain's tool API, and a simulated user, 
 <br/>
 
 <p align="center">
-  <img src="assets/chat_bubble_2.svg" alt="Sample task trajectory from the Travel domain" width="70%" />
+  <img src="assets/chat_bubble_2.svg" alt="Sample task trajectory from the Travel domain" width="50%" />
   <br/>
   <em>Sample task trajectory from the Travel domain.</em>
 </p>
