@@ -333,7 +333,7 @@ def test_custom_agent_and_client_loaded_from_root_extensions(tmp_path):
     assert trajectory.conversation[1]["content"] == "custom client response"
 
 
-def test_agent_pricing_uses_agent_model_name_for_checked_in_pricing():
+def test_agent_pricing_returns_none_when_no_pricing_flags_given():
     args = type(
         "Args",
         (),
@@ -348,11 +348,7 @@ def test_agent_pricing_uses_agent_model_name_for_checked_in_pricing():
 
     pricing = _build_batch_agent_pricing(args, "gpt-5.1")
 
-    assert pricing.model_name == "gpt-5.1"
-    assert pricing.input_cost_per_1m_tokens == 1.25
-    assert pricing.output_cost_per_1m_tokens == 10.0
-    assert pricing.cached_input_cost_per_1m_tokens == 0.13
-    assert pricing.source == "pricing_config:pricing.yaml"
+    assert pricing is None
 
 
 def test_agent_model_metadata_requires_model_name():

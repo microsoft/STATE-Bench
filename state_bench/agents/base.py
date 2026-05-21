@@ -4,19 +4,9 @@ from __future__ import annotations
 
 from abc import ABC
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
 
-import yaml
-
 from state_bench.schemas import TokenUsage
-
-PRICING_CONFIG_PATH = Path(__file__).resolve().parents[1] / "configs" / "pricing.yaml"
-
-
-def _load_pricing() -> dict[str, Any]:
-    with open(PRICING_CONFIG_PATH) as f:
-        return yaml.safe_load(f) or {}
 
 
 @dataclass(slots=True)
@@ -45,19 +35,6 @@ class AgentPricing:
         if self.cached_input_cost_per_1m_tokens is not None and self.cached_input_cost_per_1m_tokens < 0:
             raise ValueError("agent cached input cost must be >= 0")
 
-    def response_cost_usd(self, *, input_tokens: int, cached_input_tokens: int, output_tokens: int) -> float:
-        if cached_input_tokens > 0 and self.cached_input_cost_per_1m_tokens is None:
-            raise ValueError(
-                "agent response reported cached input tokens, but --agent-cached-input-cost-per-1m was not provided"
-            )
-        non_cached_input_tokens = max(0, input_tokens - cached_input_tokens)
-        input_cost = non_cached_input_tokens * self.input_cost_per_1m_tokens / 1_000_000
-        cached_input_cost = 0.0
-        if cached_input_tokens:
-            cached_input_cost = cached_input_tokens * (self.cached_input_cost_per_1m_tokens or 0.0) / 1_000_000
-        output_cost = output_tokens * self.output_cost_per_1m_tokens / 1_000_000
-        return input_cost + cached_input_cost + output_cost
-
     def to_dict(self) -> dict[str, Any]:
         return {
             "model_name": self.model_name,
@@ -76,23 +53,6 @@ class AgentPricing:
                 "provider_reported_tool_call_and_tool_output_context",
             ],
         }
-
-
-def agent_pricing_from_config(model_name: str) -> AgentPricing:
-    pricing = _load_pricing()
-    model_pricing = pricing.get("models", {}).get(model_name)
-    if not isinstance(model_pricing, dict):
-        available = ", ".join(sorted(pricing.get("models", {}))) or "(none)"
-        raise ValueError(f"Model pricing for {model_name!r} not found in {PRICING_CONFIG_PATH}. Available: {available}")
-    agent_pricing = AgentPricing(
-        model_name=model_name,
-        input_cost_per_1m_tokens=model_pricing["input_per_million_usd"],
-        output_cost_per_1m_tokens=model_pricing["output_per_million_usd"],
-        cached_input_cost_per_1m_tokens=model_pricing.get("cached_input_per_million_usd"),
-        source=f"pricing_config:{PRICING_CONFIG_PATH.name}",
-    )
-    agent_pricing.validate()
-    return agent_pricing
 
 
 @dataclass(slots=True)
@@ -140,9 +100,6 @@ class BaseAgent(ABC):
     def __init__(self, runtime_context: AgentRuntimeContext | None = None):
         self.runtime_context = runtime_context
         self.token_usage = TokenUsage()
-
-    def _pricing_for_model(self, model_name: str = "gpt-5.1") -> dict[str, Any]:
-        return _load_pricing()["models"][model_name]
 
     def add_token_usage(
         self,
@@ -218,23 +175,6 @@ class BaseAgent(ABC):
             reasoning_output_tokens=reasoning_output_tokens,
             category=category,
         )
-
-    def add_embedding_usage(
-        self, input_tokens: int, *, model_name: str = "text-embedding-3-large", category: str = "embedding"
-    ) -> None:
-        """Accumulate embedding-model spend for custom agents."""
-        if input_tokens <= 0:
-            return
-
-        pricing = self._pricing_for_model(model_name)
-        embedding_cost = input_tokens * pricing["input_per_million_usd"] / 1_000_000
-        self.token_usage.embedding_input_tokens += input_tokens
-        self.token_usage.embedding_cost_usd += embedding_cost
-        self.token_usage.total_cost_usd += embedding_cost
-        if category == "memory_retrieval":
-            self.token_usage.memory_retrieval_cost_usd += embedding_cost
-        else:
-            self.token_usage.memory_ingestion_cost_usd += embedding_cost
 
     def act(self, conversation: list[Any]) -> tuple[str, list[dict[str, Any]], list[Any]]:
         """Execute one legacy agent turn.

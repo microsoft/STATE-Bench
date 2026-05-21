@@ -246,14 +246,12 @@ class TokenUsage:
     output_tokens: int = 0
     reasoning_output_tokens: int = 0
     total_tokens: int = 0
-    embedding_input_tokens: int = 0
     input_cost_usd: float = 0.0
     cached_input_cost_usd: float = 0.0
     output_cost_usd: float = 0.0
     agent_turn_cost_usd: float = 0.0
     memory_ingestion_cost_usd: float = 0.0
     memory_retrieval_cost_usd: float = 0.0
-    embedding_cost_usd: float = 0.0
     other_llm_cost_usd: float = 0.0
     total_cost_usd: float = 0.0
 
@@ -264,14 +262,12 @@ class TokenUsage:
             "output_tokens": self.output_tokens,
             "reasoning_output_tokens": self.reasoning_output_tokens,
             "total_tokens": self.total_tokens,
-            "embedding_input_tokens": self.embedding_input_tokens,
             "input_cost_usd": self.input_cost_usd,
             "cached_input_cost_usd": self.cached_input_cost_usd,
             "output_cost_usd": self.output_cost_usd,
             "agent_turn_cost_usd": self.agent_turn_cost_usd,
             "memory_ingestion_cost_usd": self.memory_ingestion_cost_usd,
             "memory_retrieval_cost_usd": self.memory_retrieval_cost_usd,
-            "embedding_cost_usd": self.embedding_cost_usd,
             "other_llm_cost_usd": self.other_llm_cost_usd,
             "total_cost_usd": self.total_cost_usd,
         }
