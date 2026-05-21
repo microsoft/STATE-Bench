@@ -10,26 +10,33 @@
 </p>
 
 <p align="center">
-  <a href="RUN_BENCHMARK.md">Run Benchmark</a> &nbsp;·&nbsp; <a href="MEMORY_TRACK.md">Memory Track</a>
+  <a href="RUN_BENCHMARK.md">Main Track</a> &nbsp;·&nbsp; <a href="MEMORY_TRACK.md">Memory Track</a>
 </p>
 
-STATE-Bench is a benchmark for evaluating AI agents on realistic, multi-turn enterprise workflows across travel, customer support, and shopping assistance.
+STATE-Bench evaluates AI agents on realistic, multi-turn enterprise tasks across **travel**, **customer support**, and **shopping assistant** domains.
 
-Given a task-local sandbox database, a domain's tool API, and a simulated user, an agent must complete the task by gathering information, applying policy, asking for consent when appropriate, and producing a correct final state — judged on both the deterministic database outcome and the conversation's adherence to per-task behavioral requirements.
+Each task gives the agent a task-local sandbox database, domain-specific tools, and a simulated user. To pass a task, the agent must do multi-step reasoning by gathering the right information with domain tools, applying the correct policy, taking actions to update the database to the right final state when needed, and following the required procedure in conversation.
 
-## Why STATE-Bench
+## What STATE-Bench Includes
 
-- **Realistic enterprise scope.** 450 tasks across 3 domains (150 each), every task backed by a per-task sandbox with bookings, orders, carts, warranties, and inventory — not toy worlds.
-- **Both state and process are scored.** Deterministic final-state checks **plus** an LLM judge on per-task behavioral requirements (consent, disambiguation, policy explanation). An agent that mutates the right rows but lies to the user still fails.
-- **Adversarial and policy-dense.** Many tasks are challenge scenarios — adversarial users, ambiguous references, stacked policy interactions — that punish shallow tool-calling loops and reward agents that read policy, ask clarifying questions, and refuse out-of-scope requests.
+STATE-Bench includes 450 challenging enterprise tasks across three domains.
 
-## Overview
-
-| Domain | Tasks | Main Scenario |
+| Domain | Tasks | Description |
 | --- | ---: | --- |
-| **Travel** | 150 | Flights, hotels, and car rentals; cancellations, rebooking, fee and policy reasoning, cross-product trip planning |
-| **Customer Support** | 150 | Returns, refunds, exchanges, warranties, and shipping claims with policy gates and two-step write enforcement |
-| **Shopping Assistant** | 150 | Product search, cart mutation, promo stacking, loyalty redemption, shipping options, and compatibility checks |
+| **Travel** | 150 | Flight, hotel, and car rental bookings; cancellations, updates, fee and policy reasoning, cross-product trip planning |
+| **Customer Support** | 150 | Returns, refunds, exchanges, warranty claims, cancellations, shipping issues, and order changes |
+| **Shopping Assistant** | 150 | Product search, cart updates, applying promos, loyalty redemption, shipping options, and compatibility checks |
+
+## Choose Your Benchmark Track
+
+Start with the track that matches what you want to evaluate. Each track guide links to the setup and reference docs only when you need them.
+
+| Goal | Start here |
+| --- | --- |
+| Evaluate an agent or model directly on the provided enterprise benchmark tasks | **[Main Track](RUN_BENCHMARK.md)** |
+| Evaluate agentic memory | **[Memory Track](MEMORY_TRACK.md)** |
+
+The **Main Track** is the default benchmark path. The **Memory Track** uses the same simulator, domain tools, judges, and metrics, but adds train trajectories and a retrieval hook for procedural learnings.
 
 <br/>
 
@@ -39,40 +46,16 @@ Given a task-local sandbox database, a domain's tool API, and a simulated user, 
   <em>Sample task trajectory from the Travel domain.</em>
 </p>
 
-### 🧠 Specialized Memory Track
-
-STATE-Bench also ships a dedicated track for evaluating agentic memory that learns from past trajectories. The track measures whether retrieved learnings improve agent performance on future tasks.
-
-Switch to [MEMORY_TRACK.md](MEMORY_TRACK.md) for the full track specification and submission workflow.
-
-## How to Run
-
-STATE-Bench supports Python 3.12+.
-
-**1. Install [uv](https://docs.astral.sh/uv/).**
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**2. Clone the repo and sync dependencies.**
-
-```bash
-git clone https://github.com/microsoft/STATE-Bench.git
-cd STATE-Bench
-uv sync
-```
-
-For instructions on how to run the benchmark, follow [RUN_BENCHMARK.md](RUN_BENCHMARK.md).
-
 ## Metrics
 
-| Metric | Method |
-|--------|--------|
-| **Avg. Pass@1** | Average task completion rate across five runs per task. State-mutating tasks are checked with deterministic final-state scoring; non-state procedural and informational tasks are judged by an LLM evaluator for correct process and reasoning. |
-| **Pass^5** | Percentage of tasks completed successfully on all five runs. |
-| **User Experience (UX) Score** | LLM-judged conversation quality on a 1–5 scale, focused on user experience rather than task completion. |
-| **Cost Per Task** | Average cost to run a task, computed from provider-reported usage and the locked GPT-5.1 pricing in `state_bench/configs/pricing.yaml`. |
+STATE-Bench reports four headline metrics:
+
+| Metric | What it measures |
+| --- | --- |
+| **Task Completion pass@1** | Average task completion rate across five runs per task. |
+| **Task Completion pass^5** | Percentage of tasks completed successfully on all five runs. |
+| **UX Score** | LLM-judged conversation quality on a 1-5 scale. |
+| **Cost Per Task** | Average agent cost from user-reported token usage and pricing. |
 
 ## License
 
@@ -80,7 +63,7 @@ STATE-Bench is released under the MIT License. See [LICENSE](LICENSE).
 
 ## Trademarks
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow Microsoft’s Trademark & Brand Guidelines. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party’s policies.
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow Microsoft's Trademark & Brand Guidelines. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party's policies.
 
 ## Disclosures
 
