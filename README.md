@@ -5,69 +5,73 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/microsoft/STATE-Bench/actions/workflows/ci.yml/badge.svg" alt="CI" />
   <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License" />
   <a href="https://opensource.microsoft.com/blog/2026/05/19/introducing-state-bench-a-benchmark-for-ai-agent-memory/"><img src="https://img.shields.io/badge/Blog-Read-blue" alt="Blog" /></a>
 </p>
 
+<p align="center">
+  <a href="RUN_BENCHMARK.md">Run Benchmark</a> &nbsp;·&nbsp; <a href="MEMORY_TRACK.md">Memory Track</a>
+</p>
 
-A multi-domain benchmark for evaluating AI agents with agentic memory. It measures whether agents can learn from prior trajectories and improve on realistic enterprise tasks.
+STATE-Bench is a benchmark for evaluating AI agents on realistic, multi-turn enterprise workflows across travel, customer support, and shopping assistance.
+
+Given a task-local sandbox database, a domain's tool API, and a simulated user, an agent must complete the task by gathering information, applying policy, asking for consent when appropriate, and producing a correct final state — judged on both the deterministic database outcome and the conversation's adherence to per-task behavioral requirements.
+
+## Why STATE-Bench
+
+- **Realistic enterprise scope.** 450 tasks across 3 domains (150 each), every task backed by a per-task sandbox with bookings, orders, carts, warranties, and inventory — not toy worlds.
+- **Both state and process are scored.** Deterministic final-state checks **plus** an LLM judge on per-task behavioral requirements (consent, disambiguation, policy explanation). An agent that mutates the right rows but lies to the user still fails.
+- **Adversarial and policy-dense.** Many tasks are challenge scenarios — adversarial users, ambiguous references, stacked policy interactions — that punish shallow tool-calling loops and reward agents that read policy, ask clarifying questions, and refuse out-of-scope requests.
 
 ## Overview
 
-STATE-Bench tasks are interactive domain scenarios an agent is likely to encounter in enterprise settings. Each domain exposes a fixed set of tools (e.g. book_flight()) and policies available to the agent while executing tasks. Each task starts from a just-in-time sandbox with task-specific users and domain artifacts such as flight bookings, customer orders, carts, and product records.
-
-The benchmark currently contains 450 tasks across 3 enterprise domains: Travel, Customer Support, and Shopping Assistant. The public release includes 300 train task trajectories for memory extraction and 150 test task definitions with test environments for locked evaluation. Users are free to directly evaluate on the test set and use STATE-Bench as a general agent performance benchmark.
-
-Each domain has a locked train/test split of 100 train tasks and 50 test tasks, defined in `state_bench/domains/<domain>/splits/train_test.json`.
-
-| Domain | Tasks | Public Train Trajectories | Public Test Tasks | Description |
-|--------|---------:|--------------------------:|------------------:|-------------|
-| **Travel** | 150 | 100 | 50 | Flights, hotels, and car rentals with cancellations, rebookings, fee calculations, policy reasoning, and multi-step booking flows |
-| **Customer Support** | 150 | 100 | 50 | Returns, refunds, exchanges, warranties, shipping claims, and challenge scenarios with policy gates and two-step enforcement |
-| **Shopping Assistant** | 150 | 100 | 50 | Product search, comparison, cart management, promo codes, and compatibility checks |
+| Domain | Tasks | Main Scenario |
+| --- | ---: | --- |
+| **Travel** | 150 | Flights, hotels, and car rentals; cancellations, rebooking, fee and policy reasoning, cross-product trip planning |
+| **Customer Support** | 150 | Returns, refunds, exchanges, warranties, and shipping claims with policy gates and two-step write enforcement |
+| **Shopping Assistant** | 150 | Product search, cart mutation, promo stacking, loyalty redemption, shipping options, and compatibility checks |
 
 <br/>
 
 <p align="center">
-  <img src="assets/chat_bubble.svg" alt="STATE-Bench" />
+  <img src="assets/chat_bubble_2.svg" alt="Sample task trajectory from the Travel domain" width="70%" />
   <br/>
   <em>Sample task trajectory from the Travel domain.</em>
 </p>
 
-## Requirements
+### 🧠 Specialized Memory Track
+
+STATE-Bench also ships a dedicated track for evaluating agentic memory that learns from past trajectories. The track measures whether retrieved learnings improve agent performance on future tasks.
+
+Switch to [MEMORY_TRACK.md](MEMORY_TRACK.md) for the full track specification and submission workflow.
+
+## How to Run
 
 STATE-Bench supports Python 3.12+.
 
-Install the [uv](https://docs.astral.sh/uv/) package manager:
+**1. Install [uv](https://docs.astral.sh/uv/).**
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Install the package dependencies:
+**2. Clone the repo and sync dependencies.**
 
 ```bash
+git clone https://github.com/microsoft/STATE-Bench.git
+cd STATE-Bench
 uv sync
 ```
 
-## Bring Your Own Memory
+For instructions on how to run the benchmark, follow [RUN_BENCHMARK.md](RUN_BENCHMARK.md).
 
-STATE-Bench is designed to isolate memory logic from benchmark plumbing. To keep comparisons fair, the benchmark provides train trajectories, test tasks, domain tools, user simulator, judge, trajectory format, scoring protocol, and `StateBenchAgent` execution loop.
-
-Users bring the memory logic: extract reusable procedural learnings from train trajectories, then expose those learnings through a `StateBenchAgent` subclass with `retrieve_learnings(query, top_k=3) -> list[str]`. During the locked GPT-5.1 test run, STATE-Bench adds that method as a model-callable tool while preserving the benchmark task loop, domain tools, user simulator, judge, trajectory format, scoring protocol, and model pricing. The official score measures whether those learnings improve task completion, reliability, user experience, and cost.
-
-## Run Benchmark
-
-See [RUN_BENCHMARK.md](RUN_BENCHMARK.md) for the official benchmark workflow, including required GPT-5.1 credentials and provider configuration.
-
-## Scoring And Metrics
+## Metrics
 
 | Metric | Method |
 |--------|--------|
-| **Task Completion Rate** | Average completion rate across five runs per task. State-mutating tasks are checked with deterministic final-state scoring; non-state procedural and informational tasks are judged by an LLM evaluator for correct process and reasoning. |
-| **Reliability** | `pass^5`: percentage of tasks completed successfully on all five runs. |
-| **User Experience (UX) Score** | LLM-judged conversation quality on a 1-5 scale, focused on user experience rather than task completion. |
+| **Avg. Pass@1** | Average task completion rate across five runs per task. State-mutating tasks are checked with deterministic final-state scoring; non-state procedural and informational tasks are judged by an LLM evaluator for correct process and reasoning. |
+| **Pass^5** | Percentage of tasks completed successfully on all five runs. |
+| **User Experience (UX) Score** | LLM-judged conversation quality on a 1–5 scale, focused on user experience rather than task completion. |
 | **Cost Per Task** | Average cost to run a task, computed from provider-reported usage and the locked GPT-5.1 pricing in `state_bench/configs/pricing.yaml`. |
 
 ## License
