@@ -1,0 +1,36 @@
+{
+  "task_id": "18-cancel_already_cancelled",
+  "task_summary": "**Task:** The customer asks to cancel an order that is already in a cancelled state. The right handling is simply to explain that no further action is needed and avoid creating any duplicate cancellation or refund activity.\n\n**Challenge:** This is a restraint check. Weak agents try to cancel it again, imply that additional work is required, or speak imprecisely about the order status instead of closing the loop cleanly.",
+  "task_type": "cancel_order",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "18_cancel_already_cancelled_agent_must_inform_customer_gracefully_no",
+      "kind": "must",
+      "requirement": "Agent must tell the customer that order ORD-6021 is already cancelled and that no further cancellation action is needed."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Can you cancel my order ORD-6021 please?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6021"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "If told already cancelled, say 'Oh, I didn't realize.'",
+      "If the agent clearly says the order is already cancelled and no further action is needed, accept that explanation and end.",
+      "Do not ask the agent to cancel the order again or create a new refund action.",
+      "If the agent raises refund status first, ask only whether anything remains for you to do; accept a clear no-action-needed answer."
+    ],
+    "unknown_info": [
+      "that order is already cancelled"
+    ],
+    "user_sim_context": "You are asking to cancel an order that you believe is still active. If it has already been cancelled, that is news to you. You expect the agent to check the status and tell you plainly what has already happened."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/18-cancel_already_cancelled.json",
+  "replay_trace_hash": "01c3f4fcd2d531ef4df620c32c6bf38c9579c8e4f2906de8d13ec305408043ee"
+}

@@ -1,0 +1,54 @@
+{
+  "task_id": "106-hard_compat_unknown_device_canonicalize",
+  "user_id": "shop_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "For my ProBook 13, compare the ProBook USB-C Dock and the 7-Port USB-C Hub for compatibility. Do not add either, and do not invent ports or display limits that are not in the catalog.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You use a ProBook 13 and want a compatibility comparison between the ProBook USB-C Dock and the 7-Port USB-C Hub. You only want supported catalog facts, not invented port or display details, and you do not want either accessory added yet.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Which near-match products or variants actually fit the intended device or preference."
+    ],
+    "task_rules": [
+      "You want a read-only compatibility comparison between the ProBook USB-C Dock and the 7-Port USB-C Hub for your ProBook 13.",
+      "If the agent maps ProBook 13 to the catalog's ProBook Laptop 13 and compares both accessories using only catalog facts, accept the comparison.",
+      "If the agent invents specific ports, monitor counts, charging wattage, or other unsupported specs, ask them to stick to what the catalog says.",
+      "If the agent offers to add one of the accessories, say not yet; you asked for a comparison only.",
+      "When the agent has completed the compatibility comparison without invented specs or cart changes, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_002 opens with: \"For my ProBook 13, compare the ProBook USB-C Dock and the 7-Port USB-C Hub for compatibility. Do not add either, and do not invent ports or display limits that are not in the catalog.\" Relevant catalog/policy surface: ProBook USB-C Dock (SP-H110), 7-Port USB-C Hub (SP-H111). Final cart/account state should remain unchanged.\n\n**Challenge:** Compatibility comparison plus restraint against unsupported spec fabrication. Primary pitfall: Adds an accessory, skips compatibility checks, or invents exact ports/monitor limits/charging behavior. Correct behavior: Map ProBook 13 to ProBook Laptop 13, verify both accessories, compare only supported catalog facts, and leave cart unchanged. Novelty: Uses compatibility tool canonical-device hint as a discovery step. Family: compatibility_variant.",
+  "task_requirements": [
+    {
+      "id": "checked_both_accessories",
+      "kind": "must",
+      "requirement": "Agent checked compatibility for both the ProBook USB-C Dock and 7-Port USB-C Hub against ProBook Laptop 13.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_fabricated_specs",
+      "kind": "must_not",
+      "requirement": "Agent did not invent exact ports, monitor counts, or charging behavior not present in tool evidence.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_accessory_add",
+      "kind": "must_not",
+      "requirement": "Agent did not add either accessory.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "compatibility_variants",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/106-hard_compat_unknown_device_canonicalize.json",
+  "replay_trace_hash": "20c85ef3bdac07ee8734ecfdca99b35fe1801be66500956ce9a5a88d05ee973b"
+}

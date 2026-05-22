@@ -1,0 +1,110 @@
+{
+  "task_id": "79-challenge_mixed_bereavement_medical_discounts",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have a family emergency. I need to change my outbound BK-1000 to London to June 24 due to a bereavement in the family. I also need to change my return BK-1001 to June 30 because I have a medical procedure scheduled now. My user ID is user_001.",
+  "user_simulator": {
+    "personality": "Dealing with difficult circumstances. Clear about reasons for each change.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Outbound: BK-1000 (JFK to LHR, June 19) - bereavement reason",
+      "Return: BK-1001 (LHR to JFK, June 25) - medical reason"
+    ],
+    "unknown_info": [
+      "Exact fee formulas and discount percentages",
+      "That bereavement and medical have different discounts"
+    ],
+    "task_rules": [
+      "Open with: bereavement for BK-1000, medical for BK-1001. State both reasons clearly.",
+      "When agent quotes fees, ask for the total combined cost.",
+      "If agent applies same discount to both, do NOT correct them.",
+      "For this task, budget is NOT the constraint. Do not reject valid June 24 / June 30 options just because the face-value ticket totals exceed your profile budget.",
+      "If agent identifies valid June 24 and June 30 options and correctly differentiates the two change reasons, say: 'Please go ahead with both changes.'",
+      "After both done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to move two trips for two different serious reasons, and both matter to you. Even though the conversation is emotional, you still expect the agent to keep the reasons attached to the correct bookings. What you want most is a careful, organized explanation rather than a blended answer."
+  },
+  "task_summary": "**Task:** The traveler is changing two linked international bookings in one conversation, but the outbound London change is for bereavement while the return change is for a medical procedure. Correct resolution is to keep the reasons separate, apply the bereavement discount to one booking and the medical discount to the other, then give the correct combined total before executing both changes.\n\n**Challenge:** This tests reason isolation across multi-booking changes. A weak agent collapses both bookings into one fee rule, applies the same discount twice, or loses the per-booking math when presenting the total.",
+  "task_requirements": [
+    {
+      "id": "challenge_mixed_bereavement_medical_discounts_reason_separation",
+      "kind": "must",
+      "requirement": "Agent must keep the outbound bereavement reason separate from the return medical reason rather than applying one discount rationale to both bookings.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "challenge_mixed_bereavement_medical_discounts_fee_math",
+      "kind": "must",
+      "requirement": "Agent must explain that the bereavement change fee is $50 and the medical change fee is $50, with fare differences of $40 and $30 respectively, for $170 total additional cost.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "challenge_mixed_bereavement_medical_discounts_no_profile_budget_rejection",
+      "kind": "must_not",
+      "requirement": "Agent must not reject the valid June 24 and June 30 changes based on the user's profile budget, because this task explicitly says budget is not the constraint.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "adversarial_or_reasoning_trap",
+  "task_env_path": "state_bench/domains/travel/task_envs/79-challenge_mixed_bereavement_medical_discounts.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 40
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "DL100"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 990
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "change_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "fare_difference",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "flight_id",
+      "expected_value": "DL101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1001",
+      "field": "price_paid",
+      "expected_value": 930
+    }
+  ],
+  "replay_trace_hash": "7e1e45f15de7b242e394554b25770540b2ee2e3e12157a69b8f5788cc49e2cdf"
+}

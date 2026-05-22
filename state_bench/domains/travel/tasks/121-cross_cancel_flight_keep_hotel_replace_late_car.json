@@ -1,0 +1,160 @@
+{
+  "task_id": "121-cross_cancel_flight_keep_hotel_replace_late_car",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I may cancel my Miami flight BK-ET01 and get there the next morning another way, but I have other trip pieces booked and do not want to break the trip accidentally. Before you change anything, can you compare whether I should keep the rest as-is, cancel the whole trip, or keep only the pieces that still fit if I arrive a day later? I am especially trying not to lose my lodging if it can still work.",
+  "user_simulator": {
+    "personality": "Direct and practical.",
+    "user_sim_context": "You may skip the flight and reach Miami the next morning instead, but you already have other trip pieces booked and want the agent to discover them before recommending anything. The tricky part is that the hotel can still work if you arrive a day later, but the current car pickup no longer lines up and should be replaced with a later-start rental. You care strongly about preserving the existing hotel if that is still viable, and you do not want the agent previewing or treating hotel cancellation as the recommended path once that viability is clear. The first phase must stay informational and comparative. After the agent recommends the selective path, you still want a separate price-and-option step for the replacement car before giving final permission to execute anything.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Flight booking: BK-ET01",
+      "Hotel reservation: HR-0100",
+      "Car rental: CR-0100",
+      "If you skip the flight, you expect to reach Miami on June 22 instead of June 21."
+    ],
+    "unknown_info": [
+      "Whether the agent will discover both linked reservations before recommending what to keep",
+      "Whether the agent will notice that the hotel can stay but the current car timing no longer fits",
+      "Whether the agent will wait for explicit confirmation before canceling and rebooking anything"
+    ],
+    "task_rules": [
+      "Open by asking only for the compare-first recommendation and do not authorize any cancellation or rebooking yet.",
+      "Do not volunteer the hotel or car unless the agent asks what else is booked for the Miami trip or what pieces would be affected by arriving later.",
+      "If the agent recommends keeping everything unchanged without surfacing the hotel and car dates, ask how the rest of the trip still fits if you arrive on June 22 instead of June 21.",
+      "If the agent notices the hotel can stay but the current car pickup should move later, agree that this is the path you want in principle, but do not authorize any writes yet.",
+      "Once the agent has compared the options and explained why the hotel should stay while the car should be replaced, say: 'That sounds like the right approach, but before you change anything I need the replacement-car option and the revised total cost for the trip. Then I will confirm.'",
+      "If the agent tries to preview or discuss canceling the hotel after establishing that the hotel can still work for the June 22 arrival, say you are uncomfortable touching the hotel because it is the one piece you want to preserve if at all possible.",
+      "Only after the agent gives the replacement-car option and revised total should you say: 'That total works for me. Now please do that exact plan: cancel the flight, keep the hotel, and replace the car so it starts June 22 instead.'",
+      "If the agent starts canceling the hotel, say you did not approve canceling the hotel and are upset because you still need the room from June 21 onward.",
+      "End with [TASK_DONE] only after the flight is canceled, the original car is canceled, the replacement car is booked, and the agent explicitly confirms the hotel stayed active throughout."
+    ]
+  },
+  "task_summary": "Traveler may skip the Miami flight and arrive a day later by another route, but already has other trip components booked and explicitly wants to preserve lodging if it still works. Correct resolution: the agent should proactively discover the hotel and car, compare keep-all versus cancel-all versus selective changes, realize the hotel can stay but the current car timing no longer fits a June 22 arrival, recommend preserving the hotel rather than canceling it, surface the replacement-car option and revised trip total, and only then after separate final approval cancel the insured flight, keep the hotel active, cancel the original car rental, and book the later replacement car.\n\nChallenge: This tests linked-reservation discovery, compare-then-act discipline, preservation-oriented trip integrity, and sequential carryover with a separate cost-confirmation gate.",
+  "task_requirements": [
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_discover",
+      "kind": "must",
+      "requirement": "Agent must discover and acknowledge hotel reservation HR-0100 and car rental CR-0100 during the compare-first phase before executing any writes.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_compare",
+      "kind": "must",
+      "requirement": "Agent must compare the major trip options before acting, including the selective path that keeps only the reservations that still fit a June 22 arrival.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_sequence_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain that hotel reservation HR-0100 can remain active while car rental CR-0100 should be replaced with a later-start rental because the user will arrive a day later.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_recommend_preserve_hotel",
+      "kind": "must",
+      "requirement": "Agent must recommend preserving hotel reservation HR-0100 as the preferred lodging path once it establishes that the June 22 arrival still fits the existing stay, rather than treating hotel cancellation as an equally preferred plan.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_quote_revised_total",
+      "kind": "must",
+      "requirement": "Before executing any cancellation or rebooking, agent must surface the replacement car option CAR-ET01R and quote the revised total trip cost for the selective plan that keeps hotel reservation HR-0100 active.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_preserve_hotel",
+      "kind": "must",
+      "requirement": "Agent must make clear that hotel reservation HR-0100 remains active after the flight cancellation and car replacement.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_no_premature_write",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel or rebook anything before the user explicitly approves execution after seeing the replacement-car option and revised total cost for the selective plan.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_no_hotel_preview",
+      "kind": "must_not",
+      "requirement": "Once the agent has established that hotel reservation HR-0100 still works for the June 22 arrival, it must not preview, recommend, or imply hotel cancellation as part of the preferred path.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cross_cancel_flight_keep_hotel_replace_late_car_no_hotel_cancel",
+      "kind": "must_not",
+      "requirement": "Agent must not state, imply, or execute cancellation of hotel reservation HR-0100.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/121-cross_cancel_flight_keep_hotel_replace_late_car.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-ET01",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-ET01",
+      "field": "refund_amount",
+      "expected_value": 320
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-ET01",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0100",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0100",
+      "field": "refund_amount",
+      "expected_value": 165
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0100",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "car_rentals",
+      "match_fields": {
+        "user_id": "user_001",
+        "car_id": "CAR-ET01R",
+        "pickup_date": "2026-06-22",
+        "dropoff_date": "2026-06-24",
+        "status": "confirmed",
+        "car_class": "economy"
+      },
+      "expected_fields": {
+        "booked_at": "2026-06-15T10:00:00",
+        "cancellation_fee": null,
+        "car_class": "economy",
+        "car_id": "CAR-ET01R",
+        "company": "Avis",
+        "daily_rate": 58,
+        "dropoff_date": "2026-06-24",
+        "dropoff_location": "MIA",
+        "insurance_included": false,
+        "pickup_date": "2026-06-22",
+        "pickup_location": "MIA",
+        "refund_amount": null,
+        "rental_id": "CR-0101",
+        "status": "confirmed",
+        "total_price": 116,
+        "user_id": "user_001"
+      }
+    }
+  ],
+  "replay_trace_hash": "a48088eb822770de9cd83477ca7d61df80c07c2d173fa5b791bad07332be9050"
+}

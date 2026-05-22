@@ -1,0 +1,76 @@
+{
+  "task_id": "70-challenge_free_shipping_clawback",
+  "task_summary": "**Task:** A Standard customer returns a blender from a two-item order that originally qualified for free shipping at $148. Once the blender is removed, the order drops below the $100 threshold, so the correct handling is to deduct the $8 free-shipping clawback and return $81 rather than the full item price.\n\n**Challenge:** The agent has to recalculate based on the remaining order, not just the returned item. Weak agents refund the full $89, never check the free-shipping policy, or understand the clawback conceptually without applying it to the final amount.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "70_challenge_free_shipping_clawback_agent_must_deduct_8_shipping_clawback",
+      "kind": "must",
+      "requirement": "Agent must tell the customer the refund includes an $8 free-shipping clawback because returning the blender leaves only $59 of merchandise, below the $100 threshold."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "Hi, I'd like to return the blender from order ORD-7099. I changed my mind about it.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7099",
+      "item_to_return: blender",
+      "reason: changed mind"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give order ID when asked.",
+      "Confirm you want to return the blender.",
+      "If the agent previews a full $89 refund or does not mention shipping, ask whether returning the blender leaves the remaining order below the free-shipping threshold before confirming.",
+      "If the agent mentions an $8 shipping deduction or free-shipping clawback, ask why once, then accept after they explain it is because the remaining order no longer qualifies for free shipping.",
+      "Confirm the return only after the agent has either included the shipping adjustment or clearly explained why no shipping adjustment applies."
+    ],
+    "unknown_info": [
+      "refund amount",
+      "shipping clawback policy"
+    ],
+    "user_sim_context": "You want to return a blender from a two-item order and assume the refund should mostly track the value of the item itself. You are not thinking about the original free-shipping threshold in the background. You need the agent to explain if the return changes the shipping charges on what remains."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10110",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10110",
+      "field": "refund_amount",
+      "expected_value": 81
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10110",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10110",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10110",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7099",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/70-challenge_free_shipping_clawback.json",
+  "replay_trace_hash": "0e55a98c37922a528a1555d505e4db9a2b943dbd5e3c6c0ad0aeca344e95d843"
+}

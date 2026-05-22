@@ -1,0 +1,59 @@
+{
+  "task_id": "42-info_hotel_cancel_policies",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have two hotel reservations in Chicago — HR-I07A and HR-I07B. What are the cancellation policies for each? I might need to cancel one.",
+  "user_simulator": {
+    "personality": "Thorough. Wants to understand all the details before deciding.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Reservation IDs are HR-I07A and HR-I07B",
+      "Both are in Chicago for June 20",
+      "One is a standard room, one is a suite"
+    ],
+    "unknown_info": [
+      "Standard room: free cancellation since it's 5 days out",
+      "Suite: non-refundable regardless of timing",
+      "The tiered cancellation rules for standard rooms"
+    ],
+    "task_rules": [
+      "Ask your question about hotel cancellation policies for both reservations.",
+      "When the agent provides one policy, ask about the other.",
+      "Ask about the general timing tiers for standard room cancellations.",
+      "Do NOT ask the agent to cancel either reservation in this conversation; you only want the policy information.",
+      "When you have complete information for both, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You have two hotel reservations and are trying to understand the cancellation rules before deciding whether to keep either one. From your perspective they are both Chicago hotels, but you suspect the policies may differ. You want the agent to explain each reservation separately and clearly."
+  },
+  "task_summary": "**Task:** User asks for the cancellation policies on two hotel reservations, one standard and one suite, before deciding what to do. Correct resolution: Reservation HR-I07A is a standard room with the standard time-based cancellation policy, including that cancelling more than 48 hours before check-in is free.\n\n**Challenge:** The agent correctly explains the standard-room policy, the suite non-refundable policy, and the general timing tiers for standard-room cancellations.",
+  "task_requirements": [
+    {
+      "id": "state_standard_policy",
+      "kind": "must",
+      "requirement": "Agent must explain that reservation HR-I07A is a standard room with the standard time-based cancellation policy, including that cancelling more than 48 hours before check-in is free.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_suite_policy",
+      "kind": "must",
+      "requirement": "Agent must explain that reservation HR-I07B is a suite booking and is non-refundable regardless of timing.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_standard_tiers",
+      "kind": "must",
+      "requirement": "Agent must explain the standard-room cancellation tiers: 48 or more hours is free, 24 to 48 hours is 50% of the first night, and under 24 hours is the full first night.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_hotel_cancel_action",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel either hotel reservation in this information-only policy task.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/42-info_hotel_cancel_policies.json",
+  "state_requirements": [],
+  "replay_trace_hash": "4be885741d8464cc64f37f93a7282cdf56aabb7d3c20cc1d848fdd5ebebd4598"
+}

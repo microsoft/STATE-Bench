@@ -1,0 +1,98 @@
+{
+  "task_id": "128-hard_promo_two_codes_validate_before_apply",
+  "user_id": "shop_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "For the SlimBook, check SAVE10 and TECH20, explain which is better, but do not apply either code until I confirm.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You want to buy the SlimBook and have two possible promo codes, SAVE10 and TECH20. You want both checked and compared before either code is applied.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path."
+    ],
+    "task_rules": [
+      "You want SAVE10 and TECH20 checked and compared before either code is applied.",
+      "If the agent explains which single code is valid/better and asks before applying, consent to the better single code.",
+      "If the agent applies the first code it sees, applies both, or skips the comparison, object that you asked to check both first.",
+      "If the agent asks whether you want both codes stacked, say no; use the one valid better code only.",
+      "When the SlimBook is in the cart, the better single promo has been applied after consent, and the choice was explained, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_002 opens with: \"For the SlimBook, check SAVE10 and TECH20, explain which is better, but do not apply either code until I confirm.\" Relevant catalog/policy surface: SlimBook Air 13 (SP-H101). Correct final state: Add SlimBook if needed, validate/compare both codes, get consent, then apply TECH20 only.\n\n**Challenge:** Promo bakeoff requires validation, explanation, and a consent gate before applying the selected code. Primary pitfall: Applies first/best code before consent, applies both, or skips comparison. Correct behavior: Add SlimBook if needed, validate/compare both codes, get consent, then apply TECH20 only. Novelty: Promo bakeoff with customer-fit explanation, not fixed math trap. Family: promotions_discounts.",
+  "task_requirements": [
+    {
+      "id": "checked_both_codes",
+      "kind": "must",
+      "requirement": "Agent considered or validated both SAVE10 and TECH20 before choosing.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "explained_selected_code",
+      "kind": "must",
+      "requirement": "Agent explained why the selected promo is the better/valid choice.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_consent_before_promo_apply",
+      "kind": "must",
+      "requirement": "Agent got consent after explaining the comparison before applying the promo.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "applied_tech20_only",
+      "kind": "must",
+      "requirement": "Agent applied TECH20 only and did not stack SAVE10.",
+      "evidence": "tool_calls_or_conversation"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "applied_promo_codes",
+      "expected_value": [
+        "TECH20"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "discount_amount",
+      "expected_value": 169
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "subtotal",
+      "expected_value": 849
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_002",
+      "field": "total",
+      "expected_value": 680
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_002",
+        "product_id": "SP-H101",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/128-hard_promo_two_codes_validate_before_apply.json",
+  "replay_trace_hash": "1a26416c7769e4cc6823b373ef2e33b18ffcaadfd1fbb6ef8a649b64b5c39286"
+}

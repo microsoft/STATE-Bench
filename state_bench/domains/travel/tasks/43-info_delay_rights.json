@@ -1,0 +1,66 @@
+{
+  "task_id": "43-info_delay_rights",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have an upcoming flight BK-I08. I want to be prepared — what are my rights if the flight gets delayed? What compensation tiers exist?",
+  "user_simulator": {
+    "personality": "Proactive planner. Wants to know rights before anything happens.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Has booking BK-I08",
+      "Flight is currently on time",
+      "Wants to know about delay compensation"
+    ],
+    "unknown_info": [
+      "Under 120min: no compensation",
+      "120-239min: $25 meal voucher",
+      "240+ min: rebook + meal + hotel",
+      "The exact threshold boundaries"
+    ],
+    "task_rules": [
+      "Ask your question about delay compensation tiers.",
+      "When the agent provides the tiers, ask for the exact minute thresholds.",
+      "Ask whether the compensation applies equally regardless of cabin class or loyalty.",
+      "Do NOT ask the agent to issue compensation, change the booking, or take any action; this is informational only.",
+      "When you have complete information, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You are asking in advance what happens if a flight gets delayed, because you want to know your rights before you need them. You are looking for the compensation tiers and the general logic behind them. This is about being prepared, not about a current disruption."
+  },
+  "task_summary": "**Task:** User asks for a general explanation of delay-compensation rights before travel. Correct resolution: Delays under 120 minutes do not qualify for compensation.\n\n**Challenge:** The agent describes all three compensation tiers with the correct minute thresholds and keeps the interaction informational only.",
+  "task_requirements": [
+    {
+      "id": "state_under_120",
+      "kind": "must",
+      "requirement": "Agent must explain that delays under 120 minutes do not qualify for compensation.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_120_to_239",
+      "kind": "must",
+      "requirement": "Agent must explain that delays from 120 to 239 minutes qualify for a $25 meal voucher.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_240_plus",
+      "kind": "must",
+      "requirement": "Agent must explain that delays of 240 minutes or more qualify for the full package, including rebooking plus a meal voucher and hotel accommodation if needed overnight.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_delay_duration_not_status",
+      "kind": "must",
+      "requirement": "Agent must explain that these delay-compensation tiers depend on delay duration, not cabin class or loyalty status.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_delay_action",
+      "kind": "must_not",
+      "requirement": "Agent must not issue compensation or modify the booking in this general information task.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/43-info_delay_rights.json",
+  "state_requirements": [],
+  "replay_trace_hash": "9cc0fd9072d797363c1ac6d4e8e9024e25c878cd4b8bf33f2fe9e3fee033f0a0"
+}

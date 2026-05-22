@@ -1,0 +1,107 @@
+{
+  "task_id": "72-challenge_bulk_plus_shipping_clawback",
+  "task_summary": "**Task:** A Standard customer is returning a blender and a shirt from a four-item order that had both a bulk discount and free shipping. Once those two items are removed, the order loses both benefits, so the correct handling is to process both returns while applying the $10 bulk clawback and the $8 shipping clawback.\n\n**Challenge:** This is a double-clawback case where incomplete math is the most common failure. Weak agents catch only one adjustment, refund both items as if the original perks still applied, or miss that the post-return order state drives both deductions.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "72_challenge_bulk_plus_shipping_clawback_agent_must_discover_and_apply_both",
+      "kind": "must",
+      "requirement": "Agent must explain that the shirt refund is $37 because returning the blender and shirt leaves only two items and $59 of subtotal, triggering a $10 bulk clawback and an $8 free-shipping clawback."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "Hi, I want to return the blender and the cotton shirt from order ORD-7101. I changed my mind on both of them.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7101",
+      "items_to_return: blender and cotton shirt",
+      "reason: changed mind"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give order ID when asked.",
+      "Confirm you want to return both the blender and shirt.",
+      "If the refund preview includes deductions, ask the agent to explain whether returning both items affects both the bulk discount and free-shipping threshold before you confirm.",
+      "Accept the deductions only if the agent explains both the $10 bulk clawback and the $8 free-shipping clawback; if only one is mentioned, ask whether the other threshold also changes.",
+      "If agent only returns one item, ask about the second."
+    ],
+    "unknown_info": [
+      "refund amounts",
+      "bulk clawback",
+      "shipping clawback"
+    ],
+    "user_sim_context": "You want to return two items from a larger discounted order and are focused on what those items should refund on their own. You are not automatically tracking how the return affects both the item-count discount and the shipping qualification. The agent needs to explain the full ripple effect in plain language."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10115",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10115",
+      "field": "refund_amount",
+      "expected_value": 83
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10115",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10115",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10115",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10116",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10116",
+      "field": "refund_amount",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10116",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10116",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10116",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7101",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/72-challenge_bulk_plus_shipping_clawback.json",
+  "replay_trace_hash": "73932f83f5481c8c580580804f83a8a791139770f3b7093e0c0b28be31d63112"
+}

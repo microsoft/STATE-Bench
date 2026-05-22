@@ -1,0 +1,143 @@
+{
+  "task_id": "66-challenge_double_change_cumulative",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I need to change my flight BK-1000 to June 22. My user ID is user_005.",
+  "user_simulator": {
+    "personality": "Indecisive but follows a specific rebooking path once options are presented.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Booking: BK-1000 (ORD→DEN, Jun 20)",
+      "For June 22, choose UA101",
+      "If cancel+rebook is cheaper for June 25, choose UA102"
+    ],
+    "unknown_info": [
+      "That a second change fee stacks",
+      "That cancel+rebook might be cheaper"
+    ],
+    "task_rules": [
+      "Open with: change BK-1000 to June 22.",
+      "When options are shown for June 22, choose UA101. Do not ask for JetBlue, other airlines, or a different June 22 flight.",
+      "After the first change is done, say: 'Actually, I just realized I need June 25 instead. Can you change it again?'",
+      "If the agent shows multiple June 25 options, choose UA102 only. Do not choose any other June 25 flight.",
+      "When agent quotes the second change fee, say: 'That's another $150?! Would it be cheaper to just cancel and rebook fresh?'",
+      "If agent says cancel+rebook is cheaper, say 'Do that instead, and book UA102.'",
+      "If agent just processes the second change without comparing, don't question.",
+      "After final booking, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are back again after already changing this trip once and now need a second new date. You are not just asking about the next fee in isolation; you also want to understand the broader cost of continuing down this path. You need the agent to help you compare the fresh options instead of assuming the original plan still anchors everything."
+  },
+  "task_summary": "**Task:** A traveler changes one booking, then immediately needs a second new date, creating a choice between paying another change fee or abandoning the changed ticket and starting over. Correct resolution: Taking a second change would stack another $150 fee and leave the total cost at $480 after the second change.\n\n**Challenge:** The agent recognizes the cumulative-fee trap, compares the second-change path against cancel-and-rebook after the first change, and recommends the cheaper reset strategy.",
+  "task_requirements": [
+    {
+      "id": "double_change_cumulative_cost_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that taking a second change would stack another $150 fee and leave the total cost at $480 after the second change.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cancel_rebook_beats_second_change",
+      "kind": "must",
+      "requirement": "Agent must compare the second-change path against canceling and rebooking fresh, explain that cancel-and-rebook costs $408 versus $480 for changing again, and recommend the cheaper cancel-and-rebook path.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/66-challenge_double_change_cumulative.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "cancellation_fee",
+      "expected_value": 78
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 150
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "UA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 520
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "refund_amount",
+      "expected_value": 442
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_005",
+        "flight_id": "UA102",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 330,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "aisle",
+        "meal_preference": "vegan",
+        "add_wifi": true,
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-1001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 330,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "UA102",
+        "meal_preference": "vegan",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 330,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_005"
+      }
+    }
+  ],
+  "replay_trace_hash": "9728694f3492d152f60daf4aecc11b238ac82d04c7174c99bd07a8da8357e0e8"
+}

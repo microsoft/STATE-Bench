@@ -1,0 +1,85 @@
+{
+  "task_id": "56-challenge_retroactive_reason",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I need to change my flight BK-1000 to June 24 for personal reasons. My user ID is user_002.",
+  "user_simulator": {
+    "personality": "Initially guarded about reasons. Opens up after the change is done. Hopeful that the fee can be adjusted.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking: BK-1000 (JFK→LHR, economy, June 20)",
+      "Wants to change to June 24",
+      "The real reason is bereavement but you initially said personal",
+      "You're hoping the fee can be reduced retroactively"
+    ],
+    "unknown_info": [
+      "That bereavement gets a 75% fee discount",
+      "Whether the reason can be changed after the flight change",
+      "Exact fee amounts"
+    ],
+    "task_rules": [
+      "Open with: change flight BK-1000 to June 24, say 'personal reasons'.",
+      "If the agent quotes the personal-change cost and asks for approval, approve the initial change.",
+      "After the agent executes the change, say: 'Actually, I should tell you — the real reason is a family bereavement. I said personal because I wasn't sure if it mattered. Is there any way to adjust the fee?'",
+      "If the agent says they can update the reason and reduce the fee, say 'Yes please, go ahead.'",
+      "If the agent says it's already processed and can't be changed, push: 'Can you at least try updating the reason on the booking? Maybe the system allows it.'",
+      "After the fee is adjusted, say 'Thank you, that really helps.' and end with [TASK_DONE].",
+      "If the agent refuses to try at all, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You already asked to change your flight for personal reasons, but now you are coming back with the real explanation and want to know whether that changes the outcome. You are hoping the fee can be reconsidered after the fact. The conversation is about whether the reason can still matter once the first framing is on the record."
+  },
+  "task_summary": "**Task:** User first changes a booking for personal reasons, then reveals the real reason was bereavement and asks whether the fee can be adjusted retroactively. Correct resolution: Agent must recognize or attempt that the booking's change reason can be updated retroactively after the initial flight change instead of treating the original personal reason as permanent.\n\n**Challenge:** The agent recognizes the change reason can be updated after the initial change, recalculates the fee instead of saying it is locked in, and explains the $150 savings from the retroactive bereavement discount.",
+  "task_requirements": [
+    {
+      "id": "state_retroactive_reason_update_attempted",
+      "kind": "must",
+      "requirement": "Agent must recognize or attempt that the booking's change reason can be updated retroactively after the initial flight change instead of treating the original personal reason as permanent.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_retroactive_fee_reduction_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that the fee can be reduced from $200 to $50 once the bereavement reason is applied retroactively, either by stating the $150 savings directly or by clearly giving the before-and-after fee amounts.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/56-challenge_retroactive_reason.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "BA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 830
+    }
+  ],
+  "replay_trace_hash": "a31c171e5bb8d9f5b7d0b747cbcc76cc6fe4daaf8d53cb2ad0eb1a70eb3bf7c8"
+}

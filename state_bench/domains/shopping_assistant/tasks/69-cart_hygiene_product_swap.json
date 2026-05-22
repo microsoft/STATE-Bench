@@ -1,0 +1,88 @@
+{
+  "task_id": "69-cart_hygiene_product_swap",
+  "user_id": "shop_004",
+  "now": "2026-06-10T10:00:00",
+  "opening_message": "Hey — please add the BudgetLine Notebook 15 to my cart, that's the one I want.",
+  "user_simulator": {
+    "personality": "Casual, decides out loud, changes mind once and expects the agent to handle the swap cleanly.",
+    "user_sim_context": "You first ask for the BudgetLine Notebook 15 to be added. Right after the agent confirms it's in your cart, you remember a friend recommended the ProBook Chromebook 11 instead, and you want to switch. You expect the agent to handle the swap — remove the BudgetLine and add the Chromebook. You do NOT explicitly say 'please also remove the BudgetLine'; you say 'switch to' or 'give me that one instead'. You trust the agent to handle cart hygiene.",
+    "known_info": [
+      "You first want the BudgetLine Notebook 15.",
+      "After the agent adds it, you want to switch to the ProBook Chromebook 11.",
+      "You do not want both in your cart — just the Chromebook 11."
+    ],
+    "unknown_info": [
+      "The prices of either laptop.",
+      "The final cart total after the swap until the agent shows it.",
+      "How the agent will handle the swap mechanically."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask the agent to add the BudgetLine Notebook 15.",
+      "After the agent confirms SP-1103 BudgetLine is added, reply: 'Actually wait — my friend just reminded me the ProBook Chromebook 11 is better for what I need. Can we switch to that instead?'",
+      "If the agent removes SP-1103 and adds SP-1106 and shows a final cart with only the Chromebook 11 AND subtotal/total $329, reply: 'Total looks good.' and [TASK_DONE].",
+      "Do NOT say 'Total looks good' unless the agent has actually shown the $329 total or subtotal after the swap. If the agent says the swap is done but omits the total, ask: 'Can you show me what is in my cart now, including the total?'",
+      "If the agent adds SP-1106 without removing SP-1103, check their cart summary. If both items appear, push back: 'wait — I wanted to switch, not add both. Can you take the BudgetLine out?'. If they remove it and show a clean cart, proceed. If they don't, accept and end — failed on cart hygiene.",
+      "If the agent's cart summary after the switch only shows SP-1106 but you haven't seen them call remove for SP-1103 (e.g., they just claim 'done' without a cart readback), ask: 'can you show me what's in my cart now, including the total?'. If the readback shows only Chromebook with subtotal/total $329, proceed. If it shows both, push back and follow the above rule.",
+      "If the agent asks 'should I remove the BudgetLine?', reply: 'yes please, I want the Chromebook instead of the BudgetLine.' Then wait for them to do the swap. If they do it correctly, proceed.",
+      "Do NOT volunteer that you want SP-1103 removed unless the agent adds both and you catch it. The swap intent is implicit in 'switch to' / 'instead'.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A standard-tier customer (shop_004, Taylor Kim) first asks to add SP-1103 BudgetLine Notebook 15 ($449), then mid-flow switches intent: 'actually, switch to the ProBook Chromebook 11 (SP-1106, $329) instead.' Agent must read 'switch' / 'instead' as a product SWAP — remove SP-1103 AND add SP-1106 — so the final cart contains ONLY SP-1106. Final cart: SP-1106 qty=1, subtotal $329, total $329.\n\n**Challenge:** Cart hygiene on a mid-flow product swap. The primary failure mode is literal-interpretation: agent hears 'add ProBook Chromebook 11' and calls add_to_cart without removing the earlier item, leaving BOTH in cart. Subtotal ends $778 instead of $329 — silent state accumulation. The swap intent is carried by 'switch to' / 'instead', so the agent must infer and act on the removal. Pitfalls: (1) add without remove (both in cart), (2) claim-and-move-on without a readback that would catch the mistake, (3) ask customer to disambiguate instead of inferring swap from 'instead', (4) increment a quantity by mistake.",
+  "task_requirements": [
+    {
+      "id": "removed_original_item",
+      "kind": "must",
+      "requirement": "Agent called remove_from_cart for SP-1103 (BudgetLine Notebook 15) at some point after the customer said 'switch' / 'instead'. An equivalent update_cart_item that zeros the quantity is acceptable. Silently leaving SP-1103 in cart fails this requirement.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "added_replacement_item",
+      "kind": "must",
+      "requirement": "Agent called add_to_cart for SP-1106 (ProBook Chromebook 11) after the customer requested the switch.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "final_cart_single_item",
+      "kind": "must",
+      "requirement": "The agent's final cart summary (verbal or via get_cart) shows exactly one line item — SP-1106 ProBook Chromebook 11 — with subtotal $329. A final state with both items or an incorrect subtotal fails.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 329
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 329
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1106",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/69-cart_hygiene_product_swap.json",
+  "replay_trace_hash": "0721e9aeb86542ff5d8f6081f2d62eac20ce4534ff2a1e5e9a04d647b367115c"
+}

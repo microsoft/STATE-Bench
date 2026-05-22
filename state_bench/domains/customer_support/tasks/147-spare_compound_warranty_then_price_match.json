@@ -1,0 +1,76 @@
+{
+  "task_id": "147-spare_compound_warranty_then_price_match",
+  "task_summary": "Customer wants a shirt size exchange and a shoe return in the same order. The Large shirt variant is out of stock, so agent must not complete that exchange and must still process only the shoe return.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "spare_compound_warranty_then_price_match_exchange_unavailable",
+      "kind": "must",
+      "requirement": "Agent must explain that the Large shirt exchange cannot be completed because the target variant is unavailable/out of stock."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "In ORD-7279, the shirt is too small and I want Large, and the running shoes are uncomfortable so return those. Handle both, please.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7279",
+      "exchange_item: shirt",
+      "return_item: running shoes",
+      "target_variant: Large shirt"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Ask for the Large shirt exchange and shoe return together.",
+      "If Large is unavailable, decline any shirt exchange and still ask to return only the shoes.",
+      "Accept only a shoe return preview plus a clear no-exchange decision for the shirt."
+    ],
+    "unknown_info": [
+      "large shirt stock",
+      "separate return path"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7279. Customer wants a shirt size exchange and a shoe return in the same order. The Large shirt variant is out of stock, so agent must not complete that exchange and must still process only the shoe return. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10282",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10282",
+      "field": "refund_amount",
+      "expected_value": 121
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10282",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10282",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10282",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7279",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/147-spare_compound_warranty_then_price_match.json",
+  "replay_trace_hash": "512e0a099d22ae0a5a6f89c11f326269cae42a76e57c5e90ebc1ad13fd0dc02d"
+}

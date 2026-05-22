@@ -1,0 +1,99 @@
+{
+  "task_id": "140-hard_compound_return_one_price_match_other",
+  "task_summary": "Same order requires a defective return for headphones and a separate price-match refund for the phone case. Agent must not collapse both into one workflow.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_compound_return_one_price_match_other_price",
+      "kind": "must",
+      "requirement": "Agent must issue a separate price-match refund for the phone case."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_compound_return_one_price_match_other_scope",
+      "kind": "must",
+      "requirement": "Agent must tell the customer the phone case is being kept and only receives a price-match refund."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "In ORD-7251, the headphones are defective, and the phone case got cheaper. Can you handle both?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7251",
+      "defective: headphones",
+      "price_drop: phone case"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Confirm the headphones are defective and should be returned; confirm the phone case should be kept and only price-matched.",
+      "If the agent proposes returning, cancelling, exchanging, or otherwise changing the phone case instead of keeping it, decline and ask for only the phone-case price-match refund.",
+      "If the agent collapses both issues into one workflow, ask them to handle two separate actions: defective return for the headphones and price-match refund for the phone case.",
+      "Accept only a defective headphones return preview and a separate $10 phone-case price-match refund preview to original payment. If the phone-case price match is previewed as store credit, ask whether it can go back to original payment."
+    ],
+    "unknown_info": [
+      "two policy surfaces"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7251. Same order requires a defective return for headphones and a separate price-match refund for the phone case. Agent must not collapse both into one workflow. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10251",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10251",
+      "field": "refund_amount",
+      "expected_value": 249
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10251",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10251",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10251",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10251",
+      "field": "return_reason",
+      "expected_value": "defective"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10252",
+      "field": "refund_amount",
+      "expected_value": 10
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10252",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7251",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/140-hard_compound_return_one_price_match_other.json",
+  "replay_trace_hash": "1d3eff76eaba67dfb5cd4fb76fd6618e3c1f2fbfe4c17744e2c4e051168bf599"
+}

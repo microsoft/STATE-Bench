@@ -1,0 +1,71 @@
+{
+  "task_id": "49-audit_timing_resumed_checkout",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'm resuming my cart from earlier. Can you confirm what's in there?",
+  "user_simulator": {
+    "personality": "Returning customer, expects the cart to match what they remember.",
+    "user_sim_context": "Your cart has a SlimBook Air 13 and SoundMax Headphones from earlier. You remember the laptop being $749 when you added it. You don't know the price has since increased to $849. You'll ask what's in the cart (turn 1) and the total (turn 3). You expect the agent to proactively flag the price change BEFORE you commit to checkout.",
+    "known_info": [
+      "Your cart has a SlimBook Air 13 and SoundMax Headphones.",
+      "You remember the laptop being around $749.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The current price of SP-1001 (it's now $849).",
+      "The total after the price change."
+    ],
+    "task_rules": [
+      "Opening: 'Hi — I'm resuming my cart from earlier. Can you confirm what's in there?'",
+      "Turn 2: if the agent lists the items with CURRENT prices but doesn't mention the SP-1001 price increase yet, that's fine — it's not the trigger. Acknowledge: 'ok' or 'thanks'.",
+      "Turn 3: ask the total question — 'what's my total?'. This is the TRIGGER turn for the price-change disclosure.",
+      "Turn 4: if the agent proactively flags that SP-1001 went from $749 previous to $849 current (+$100) BEFORE or WHILE stating the total, reply: 'ugh, ok — fine, let's proceed anyway'. Then on next turn [TASK_DONE] after agent confirms.",
+      "If the agent states the total ($998) WITHOUT flagging the SP-1001 price increase, push back ONCE: 'wait — I thought it was cheaper before'. If agent then acknowledges and cites the price change specifically, proceed with 'fine, proceed'. If agent still doesn't address the price change after the nudge, accept the total and end with [TASK_DONE] — agent failed on proactive price-change disclosure.",
+      "If the agent flagged the price increase TOO EARLY at turn 2 (before you asked about total), that's acceptable — still counts as proactive, just earlier than optimal. Proceed normally.",
+      "If the agent invents a wrong previous price (e.g. says 'was $799'), push back: 'I'm pretty sure it was $749'. If agent corrects, proceed. If agent disputes without checking, accept and end — failed.",
+      "Do NOT ask for the promo codes, points, gift wrap, or shipping changes.",
+      "Do NOT remove anything from cart. Do NOT add anything.",
+      "Keep replies short.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) has a pre-seeded cart with SP-1001 SlimBook Air 13 (current $849, previous $749) + SP-2003 SoundMax Headphones ($149). Customer resumes, asks what's in cart (turn 1), then asks total (turn 3). Agent must proactively flag the +$100 price change on SP-1001 before or when stating the total. Final state: cart unchanged, $998 total.\n\n**Challenge:** Multi-turn price-change detection + audit timing. Pitfall: agent reports the new total silently, leaving customer to discover the $100 increase at checkout. Or agent spams the audit too early. Correct: call get_product on each item to check previous_price vs current, surface the delta when the customer asks about total. Tests whether agent treats 'resumed cart' as a state that may have drifted from the customer's expectation. Distinct from T14 (proactive price DROP disclosure on new add) — T49 is price INCREASE on already-committed cart, with timing constraint on when to disclose.",
+  "task_requirements": [
+    {
+      "id": "checked_current_prices_via_tools",
+      "kind": "must",
+      "requirement": "Agent called get_product (or equivalent) for SP-1001 to compare current price against previous_price. Not calling get_product — only get_cart — fails the price-history check.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "proactively_flagged_price_increase",
+      "kind": "must",
+      "requirement": "Agent PROACTIVELY disclosed that SP-1001 SlimBook Air 13 went from previous $749 to current $849 (+$100) — meaning the disclosure happened WHEN (or before) the agent stated the total, NOT only after the customer explicitly nudged with 'I thought it was cheaper' or similar. If the agent stated the total first, waited for the customer to raise suspicion, and only THEN acknowledged the price change, that is a reactive disclosure and fails this requirement. Must cite both specific numbers or the $100 delta.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "accurate_total_reported",
+      "kind": "must",
+      "requirement": "When customer asked the total, agent gave the CORRECT current total of $998 (or equivalent including any mentioned fees). Not $748+$149=$897 (as if SP-1001 were still $749). Not a fabricated number.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_cart_mutations",
+      "kind": "must",
+      "requirement": "Agent did NOT modify the cart (no remove_from_cart, update_cart_item, add_to_cart calls) during this session. The only valid actions are read-only (get_cart, get_product). The cart must end in the same state it started.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "inventory_shipping",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/49-audit_timing_resumed_checkout.json",
+  "replay_trace_hash": "90414658dda6ab872edab93753dc04cabf64eca8acb1cac39c3b6126ad561210"
+}

@@ -1,0 +1,82 @@
+{
+  "task_id": "50-edge_changes_mind",
+  "task_summary": "**Task:** The customer first asks about exchanging headphones for a premium model, then changes direction and decides they want a full return instead. The correct handling is to follow the customer's final intent, switch cleanly to the changed-mind return path, and issue the $222 refund with the $37 restocking deduction.\n\n**Challenge:** The difficulty is tracking the conversational pivot without clinging to the first request. Weak agents continue down the exchange flow, fail to reset to the return policy, or stumble when the customer reverses course midstream.",
+  "task_type": "edge_case",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "50_edge_changes_mind_agent_must_pivot_from_the_original",
+      "kind": "must",
+      "requirement": "Agent must pivot from the original exchange request to the customer's final return request."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "50_edge_changes_mind_agent_must_communicate_exchange_price_difference",
+      "kind": "must",
+      "requirement": "Agent must tell the customer that exchanging from the $249 headphones to the $349 premium model would cost $100 before switching to the return flow after the customer changes their mind."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I want to exchange my headphones from order ORD-6051 for the premium model.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6051",
+      "item: headphones"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "First ask about exchanging for premium model.",
+      "When told the price difference ($100), say 'Actually, never mind. Just return them for a refund.'",
+      "If the agent continues with an exchange after you change your mind, say you no longer want the premium model and want a refund return instead.",
+      "If the agent previews an exchange or replacement after the pivot, do not confirm it.",
+      "Accept only when the preview is a changed-mind return for the headphones with the refund/restocking terms explained."
+    ],
+    "unknown_info": [
+      "exchange price difference",
+      "return refund amount"
+    ],
+    "user_sim_context": "You start out wanting an exchange to the premium model because that seems like the obvious next step. As the conversation unfolds, you realize you may actually prefer a full return instead. You need the agent to adapt to that shift rather than locking into the first request."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9415",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9415",
+      "field": "refund_amount",
+      "expected_value": 222
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9415",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9415",
+      "field": "restocking_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9415",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6051",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/50-edge_changes_mind.json",
+  "replay_trace_hash": "37f5468a6dbdc5c0a1ef26c845e0e49cb083e45aef6c0b9e1c83270599d33cc8"
+}

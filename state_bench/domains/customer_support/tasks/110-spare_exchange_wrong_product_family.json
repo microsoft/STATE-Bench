@@ -1,0 +1,165 @@
+{
+  "task_id": "110-spare_exchange_wrong_product_family",
+  "task_summary": "Customer asks to exchange headphones for a cheaper phone case. The exchange policy allows different-product exchanges and requires the price difference to be issued as store credit, so the agent should process the exchange without routing through a return/reorder workaround.",
+  "task_type": "exchange_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "spare_exchange_wrong_product_family_exchange",
+      "kind": "must",
+      "requirement": "Agent must explain that the standard exchange policy permits exchanging to the cheaper phone case even though it is a different product family."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_exchange_wrong_product_family_store_credit_difference",
+      "kind": "must",
+      "requirement": "Agent must explain that the cheaper-item price difference is issued as store credit, not original-payment cash."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_exchange_wrong_product_family_no_return_workaround",
+      "kind": "must_not",
+      "requirement": "Agent must not route the customer into a return, refund, cancellation, or warranty workaround instead of the exchange."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I bought headphones in ORD-7272 but really meant to get the phone case. Can you exchange them and explain how the price difference works?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7272",
+      "current_item: SoundMax Wireless Headphones",
+      "requested_item: UltraShield Phone Case"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID.",
+      "Ask whether exchange policy allows a cheaper different-product exchange.",
+      "Reject any return workaround if the agent tries to return and reorder instead.",
+      "Accept only a standard exchange preview for the phone case with the price difference as store credit."
+    ],
+    "unknown_info": [
+      "replacement product scope",
+      "exchange price-difference handling"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7272. Customer asks to exchange headphones for a cheaper phone case. The visible policy allows cheaper different-product exchanges with the difference issued as store credit. Agent should handle this as a standard exchange, not as a return/reorder workaround. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10274",
+      "field": "item_status",
+      "expected_value": "exchanged"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10274",
+      "field": "refund_amount",
+      "expected_value": 214
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10274",
+      "field": "refund_method",
+      "expected_value": "store_credit"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10274",
+      "field": "replacement_item_id",
+      "expected_value": "ITEM-10275"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "goodwill_credit",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "goodwill_credit_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "item_id",
+      "expected_value": "ITEM-10275"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "item_status",
+      "expected_value": "confirmed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "order_id",
+      "expected_value": "ORD-7272"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "product_id",
+      "expected_value": "PROD-4284"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "quantity",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "refund_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "replacement_item_id",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "restocking_fee",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "return_label_issued",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "store_credit_only",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10275",
+      "field": "unit_price",
+      "expected_value": 35
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/110-spare_exchange_wrong_product_family.json",
+  "replay_trace_hash": "cb1b4de0fe002ce8ffc4bef0b3a163bd097cfa2dc469bf8e91c55053331789d5"
+}

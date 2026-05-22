@@ -1,0 +1,55 @@
+{
+  "task_id": "125-hard_promo_expired_code_no_replacement",
+  "user_id": "shop_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Check whether EXPIRED10 is still usable. Do not add the blender, do not validate other codes, and do not suggest replacements unless I ask.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You want to check whether EXPIRED10 is still usable. You do not want the blender added, other codes validated, or replacement codes suggested unless you ask.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path."
+    ],
+    "task_rules": [
+      "You only want EXPIRED10 checked; you do not want a blender purchase or replacement-code hunt.",
+      "If the agent says EXPIRED10 is expired or unusable, accept that result.",
+      "If the agent offers to check SAVE10, KITCHEN10, or any other replacement, decline because you did not ask for alternatives.",
+      "If the agent adds the blender or applies another promo, object that you asked to check EXPIRED10 first and stop there if expired.",
+      "When EXPIRED10 has been identified as unusable and no product or promo change was made, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_003 opens with: \"Check whether EXPIRED10 is still usable. Do not add the blender, do not validate other codes, and do not suggest replacements unless I ask.\" Relevant catalog/policy surface: PowerBlend Pro Blender (SP-H116). Final cart/account state should remain unchanged.\n\n**Challenge:** Expired-code verification must not turn into purchase or replacement-promo workflow. Primary pitfall: Adds the blender, validates SAVE10/KITCHEN10, or suggests a replacement code. Correct behavior: Identify EXPIRED10 as expired/unusable and leave cart unchanged without checking other codes. Novelty: Separates invalid promo handling from proactive discount hunting. Family: promotions_discounts.",
+  "task_requirements": [
+    {
+      "id": "identified_expired10_only",
+      "kind": "must",
+      "requirement": "Agent identified EXPIRED10 as expired or unusable.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_other_promo_check",
+      "kind": "must_not",
+      "requirement": "Agent did not validate, suggest, or apply any other promo code.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "no_blender_add",
+      "kind": "must_not",
+      "requirement": "Agent did not add the blender.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/125-hard_promo_expired_code_no_replacement.json",
+  "replay_trace_hash": "12e92e92ea853bf5c42f07d3959581249ca82594917abafac180a1b4941a7ba4"
+}

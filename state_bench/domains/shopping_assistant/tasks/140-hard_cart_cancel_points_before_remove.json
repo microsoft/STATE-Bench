@@ -1,0 +1,49 @@
+{
+  "task_id": "140-hard_cart_cancel_points_before_remove",
+  "user_id": "shop_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Before changing my cart, compare two paths: cancel points first then remove the laptop, versus removing it with points still active. Do not do either yet.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "Before changing your cart, you want to compare canceling points before removing the laptop versus removing it while points are still active. You do not want either action taken yet.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 1 x ProBook Laptop 13.",
+      "Your cart already has a loyalty redemption of 49900 points for $499 off."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it."
+    ],
+    "task_rules": [
+      "You want a comparison of two paths before any points or cart action: cancel points first versus remove laptop with points active.",
+      "If the agent explains both paths and recommends cancel-first to avoid unclear points handling, accept the recommendation as informational.",
+      "If the agent cancels points or removes the laptop, object that you asked for a comparison before doing either.",
+      "If the agent explains only one path, ask for the other path too.",
+      "When both paths have been compared and the cart/redemption remain unchanged, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_005 opens with: \"Before changing my cart, compare two paths: cancel points first then remove the laptop, versus removing it with points still active. Do not do either yet.\" Relevant catalog/policy surface: ProBook Laptop 13 (SP-H102). Final cart/account state should remain unchanged.\n\n**Challenge:** Loyalty/cart side-effect comparison must be read-only and sequenced before destructive writes. Primary pitfall: Cancels points, removes laptop, or discusses only one path. Correct behavior: Explain both paths and recommend cancel-first, leaving cart and redemption unchanged. Novelty: Sequenced cart hygiene: loyalty reversal before deletion. Family: cart_mutation.",
+  "task_requirements": [
+    {
+      "id": "compared_two_loyalty_remove_paths",
+      "kind": "must",
+      "requirement": "Agent compared cancel-first versus remove-with-redemption-active paths before writing.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_points_or_cart_write",
+      "kind": "must_not",
+      "requirement": "Agent did not cancel redemption or remove the laptop.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/140-hard_cart_cancel_points_before_remove.json",
+  "replay_trace_hash": "62a7639d338f1be78d8e07672c6b8c73ad45b15577d17043f9fe62ff182cd112"
+}

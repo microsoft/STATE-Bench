@@ -1,0 +1,83 @@
+{
+  "task_id": "6-return_wrong_item",
+  "task_summary": "**Task:** The customer ordered a laptop but received a blender instead. That makes this a wrong-item shipment case, so the correct handling is the free return path with the full $1,299 refund rather than any discretionary-return logic.\n\n**Challenge:** The agent has to preserve the fulfillment-error classification all the way through resolution. Weak agents add restocking, forget the free-label path, or otherwise treat a seller mistake as if it were buyer's remorse.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "6_return_wrong_item_agent_must_provide_free_return_label",
+      "kind": "must",
+      "requirement": "Agent must tell the customer that the wrong-item return includes a free return label and no restocking fee."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I ordered a laptop from order ORD-6010 but I received a blender instead! This is not what I ordered.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6010",
+      "ordered: laptop",
+      "received: blender"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Describe what you received (blender) vs what you ordered (laptop).",
+      "You want a return and refund — you'll reorder the laptop separately.",
+      "If the agent suggests a replacement or exchange, say you prefer a refund and will reorder the laptop separately.",
+      "If the agent charges restocking, omits a free label, or treats this like a changed-mind return, say this was a wrong-item shipment and ask for the wrong-item return path.",
+      "Accept only after the agent previews a full-refund wrong-item return with no restocking fee and a free return label."
+    ],
+    "unknown_info": [
+      "return process for wrong item",
+      "refund amount"
+    ],
+    "user_sim_context": "You ordered a laptop and got a blender instead, so the issue feels obvious from your side. You want the mistake fixed without being treated like this is a normal return. You expect the agent to recognize that the shipment was wrong and help you resolve it cleanly."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9070",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9070",
+      "field": "refund_amount",
+      "expected_value": 1299
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9070",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9070",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9070",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9070",
+      "field": "return_reason",
+      "expected_value": "wrong_item"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6010",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/6-return_wrong_item.json",
+  "replay_trace_hash": "b066e92cbd297c3b949856b7defea51ed4569ee0409a707b2446998322ec361b"
+}

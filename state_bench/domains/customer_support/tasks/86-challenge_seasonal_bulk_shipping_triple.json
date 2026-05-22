@@ -1,0 +1,134 @@
+{
+  "task_id": "86-challenge_seasonal_bulk_shipping_triple",
+  "task_summary": "**Task:** A November four-item order is being partially returned in January, so the seasonal extension is what keeps the request valid. Once the shirt and shoes come out, the order loses both its bulk-discount qualification and its free-shipping qualification, and the shoes are also the second clothing return. The correct shoes refund is $99 after the $10 bulk clawback, $8 shipping clawback, and $5 repeat-category surcharge.\n\n**Challenge:** This is a true multi-policy reconciliation case. Weak agents stop at eligibility, apply only one clawback, miss the repeat surcharge, or refund the items as though the original order perks still survive the return.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "86_challenge_seasonal_bulk_shipping_triple_agent_must_not_deny_return_doesn",
+      "kind": "must_not",
+      "requirement": "Agent must not tell the customer the shirt or shoes return is ineligible because the ordinary return window has expired."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "86_challenge_seasonal_bulk_shipping_triple_agent_must_include_10_bulk_clawback",
+      "kind": "must",
+      "requirement": "Agent must include the $10 bulk clawback in the shoes return math."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "86_challenge_seasonal_bulk_shipping_triple_agent_must_include_8_shipping_clawback",
+      "kind": "must",
+      "requirement": "Agent must include the $8 free-shipping clawback in the shoes return math."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "86_challenge_seasonal_bulk_shipping_triple_agent_must_include_5_repeat_surcharge",
+      "kind": "must",
+      "requirement": "Agent must include the $5 repeat-category surcharge in the shoes return math, making the confirmed shoes refund $99."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "86_challenge_seasonal_bulk_shipping_triple_agent_must_explain_that_the_seasonal",
+      "kind": "must",
+      "requirement": "Agent must explain that the seasonal extension keeps this return eligible."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2027-01-20T10:00:00",
+  "opening_message": "I'd like to return the shirt and running shoes from my November order ORD-7122. I know it's been a while — is that still possible?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7122",
+      "items: shirt + shoes",
+      "reason: changed mind"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give order ID.",
+      "If window expired, mention holiday returns.",
+      "Return both items.",
+      "If the agent previews only one of the shirt or shoes, ask to return both requested items.",
+      "If the preview does not mention the seasonal extension, ask whether the November order is eligible under holiday returns.",
+      "If the preview does not mention the $10 bulk clawback, $8 free-shipping clawback, and $5 repeat-category surcharge, ask whether returning the shirt and shoes affects the original bulk discount, free-shipping qualification, or second clothing return.",
+      "Accept the final preview once it includes both items, seasonal eligibility, the $10 bulk clawback, the $8 shipping clawback, and the $5 repeat surcharge."
+    ],
+    "unknown_info": [
+      "seasonal",
+      "bulk clawback",
+      "shipping clawback",
+      "repeat surcharge"
+    ],
+    "user_sim_context": "You want to return two items from a November order and believe the holiday extension is what makes the request possible. Beyond that, you are not tracking the discount and shipping implications on the rest of the order. You need the agent to connect all of those consequences in one coherent explanation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10154",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10154",
+      "field": "refund_amount",
+      "expected_value": 56
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10154",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10154",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10154",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10155",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10155",
+      "field": "refund_amount",
+      "expected_value": 99
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10155",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10155",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10155",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7122",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/86-challenge_seasonal_bulk_shipping_triple.json",
+  "replay_trace_hash": "e422b05f20d3362951a3a7af8d6ff8e1ce625b6383292c3d1a7fab994c2f71eb"
+}

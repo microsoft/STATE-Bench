@@ -1,0 +1,82 @@
+{
+  "task_id": "57-challenge_false_damage_claim",
+  "task_summary": "**Task:** The customer describes a problem as shipping damage, but the order record shows a normal delivery and the situation does not support a damaged-in-transit classification. The correct handling is to reframe the request as a changed-mind return instead of granting the more generous damage-based path.\n\n**Challenge:** The agent has to validate the classification rather than accept the customer's label. Weak agents grant a damaged-shipment resolution without checking the shipping record, or use the wrong rationale even if the final number happens to look plausible.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "57_challenge_false_damage_claim_agent_must_not_classify_as_damaged",
+      "kind": "must_not",
+      "requirement": "Agent must not classify as damaged_in_transit."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "57_challenge_false_damage_claim_agent_must_check_shipping_records_status",
+      "kind": "must",
+      "requirement": "Agent must use the order's normal delivery/shipping status, or explain that the shipping record does not support a damaged-in-transit classification, before handling the item as a changed-mind return."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "My blender from order ORD-7041 arrived damaged — the box was crushed and the blender looks scratched. I want a full refund.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7041",
+      "item: blender",
+      "claimed_issue: damaged"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "Give order ID when asked.",
+      "If agent asks for photos, say you don't have any right now.",
+      "If agent points out shipping records show normal delivery, say 'Well maybe it was inside the box. The blender is scratched.'",
+      "If agent says this would be classified as changed_mind/not a shipping issue, reluctantly accept and proceed with the return.",
+      "If agent classifies as damaged_in_transit without questions, go along."
+    ],
+    "unknown_info": [
+      "shipping records show no damage",
+      "return classification"
+    ],
+    "user_sim_context": "You are unhappy with the condition or appearance of the blender and describe it as damaged, even though the shipment history may not support a transit-damage story. From your perspective the item is not something you want to keep. You need the agent to sort out the right classification and explain what resolution actually applies."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10041",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10041",
+      "field": "refund_amount",
+      "expected_value": 89
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10041",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10041",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10041",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7041",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/57-challenge_false_damage_claim.json",
+  "replay_trace_hash": "1b29767475a0d450ae5621ca2b4e4250a7eb8a7709f4dc8764e46f5c476a48ab"
+}

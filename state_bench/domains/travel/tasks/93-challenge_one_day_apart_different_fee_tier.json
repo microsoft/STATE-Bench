@@ -1,0 +1,113 @@
+{
+  "task_id": "93-challenge_one_day_apart_different_fee_tier",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to push both my Denver trips back one week each. BK-1065 (June 22) to June 28, and BK-1000 (June 23) to June 29. Both personal reasons. What are the fees? My user ID is user_003.",
+  "user_simulator": {
+    "personality": "Efficient. Lists both together. Expects combined total.",
+    "known_info": [
+      "Your user ID: user_003",
+      "BK-1065: ORD to DEN, June 22 -> June 28",
+      "BK-1000: ORD to DEN, June 23 -> June 29",
+      "Both personal reasons"
+    ],
+    "unknown_info": [
+      "That fees differ by 1-day departure difference"
+    ],
+    "task_rules": [
+      "Provide both bookings. Ask combined fees.",
+      "If agent charges same fee for both, ask: 'Should the fees be different since one departs June 22 and the other June 23?'",
+      "If agent correctly differentiates, say: 'Go ahead with both.'",
+      "After both done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are changing two very similar bookings that are only one day apart in their original timing. To you they feel like almost the same case. You need the agent to explain why that tiny timing difference may still matter."
+  },
+  "task_summary": "**Task:** A traveler changes two nearly identical bookings that differ only by one day in their original departure dates. Correct resolution: BK-1065 carries a $150 change fee.\n\n**Challenge:** The agent notices the one-day fee-window boundary, quotes different fees for the two bookings, and gives the correct combined total before proceeding.",
+  "task_requirements": [
+    {
+      "id": "state_first_booking_fee",
+      "kind": "must",
+      "requirement": "Agent must explain that BK-1065 carries a $150 change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_second_booking_fee",
+      "kind": "must",
+      "requirement": "Agent must explain that BK-1000 carries a $75 change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_combined_total",
+      "kind": "must",
+      "requirement": "Agent must state that the combined fees for the two changes total $225.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_same_fee_both",
+      "kind": "must_not",
+      "requirement": "Agent must not tell the user that both bookings fall under the same change-fee tier with the same fee.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/93-challenge_one_day_apart_different_fee_tier.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 75
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "UA103"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 465
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1065",
+      "field": "change_fee",
+      "expected_value": 150
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1065",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1065",
+      "field": "flight_id",
+      "expected_value": "UA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1065",
+      "field": "price_paid",
+      "expected_value": 520
+    }
+  ],
+  "replay_trace_hash": "faa573d0654720d15d5df8e0634fc51b220ec0e8125a0d99d34842c1873648b9"
+}

@@ -1,0 +1,58 @@
+{
+  "task_id": "148-hard_compound_shipping_plus_no_padding",
+  "user_id": "shop_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Before adding the BrewMaster coffee maker, tell me whether Gold express or next-day is the better shipping choice and whether any padding/promo is needed. Do not add or set shipping yet.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You are considering the BrewMaster coffee maker and want to know whether Gold express or next-day is the better shipping choice. You also want to know whether padding or a promo is needed, but you do not want the item added or shipping set yet.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "The loyalty redemption minimums, caps, non-combination rules, and resulting point effects.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path.",
+      "Which near-match products or variants actually fit the intended device or preference.",
+      "Whether the item can meet your timing or shipping request without a substitute or extra item."
+    ],
+    "task_rules": [
+      "This is a pre-purchase shipping recommendation; do not add the coffee maker or set shipping yet.",
+      "If the agent recommends Gold express over next-day for your fast-but-not-tomorrow need and says no padding/promo is needed, accept the recommendation.",
+      "If the agent adds the coffee maker, sets shipping, applies KITCHEN10, or adds filler, object that you asked for advice before any action.",
+      "If the agent only discusses discounts or padding and skips the Gold shipping comparison, ask for the express-versus-next-day recommendation.",
+      "When the shipping recommendation and no-padding/no-promo answer have been given with no cart change, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_003 opens with: \"Before adding the BrewMaster coffee maker, tell me whether Gold express or next-day is the better shipping choice and whether any padding/promo is needed. Do not add or set shipping yet.\" Relevant catalog/policy surface: CasaGrande Cast-Iron Skillet (SP-H117), HomeBrew Pour-Over Coffee Set (SP-H118), BrewMaster Thermal Coffee Maker (SP-H119). Final cart/account state should remain unchanged.\n\n**Challenge:** Shipping recommendation plus restraint before purchase; agent must not jump to add/set workflow. Primary pitfall: Adds the coffee maker, sets shipping, applies promo, or adds filler. Correct behavior: Recommend Gold express versus next-day, state no padding/promo needed, and leave cart unchanged. Novelty: Compound shipping plus restraint, not shipping-only. Family: compound.",
+  "task_requirements": [
+    {
+      "id": "recommended_shipping_without_write",
+      "kind": "must",
+      "requirement": "Agent compared/recommended Gold express versus next-day before purchase.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "stated_no_padding_needed",
+      "kind": "must",
+      "requirement": "Agent stated not to add filler/padding or unsolicited promo for the request.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_add_ship_or_promo",
+      "kind": "must_not",
+      "requirement": "Agent did not add items, set shipping, or apply promos.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "compound_multi_policy",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/148-hard_compound_shipping_plus_no_padding.json",
+  "replay_trace_hash": "a64c9cb06195733a1ea6c3edeea21bf1f0470e709809855efa77754aabc4dfbb"
+}

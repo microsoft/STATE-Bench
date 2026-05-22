@@ -1,0 +1,87 @@
+{
+  "task_id": "103-change_business_international_fare_diff_only",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Please move my London booking BK-1000 to June 29. This is a personal schedule issue.",
+  "user_simulator": {
+    "personality": "Calm and practical.",
+    "user_sim_context": "You are moving an international business trip and expect the answer to depend more on fare difference than on change-fee policy, but you want the agent to show the actual breakdown. You do not want a vague 'business is flexible' answer without numbers.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Booking ID: BK-1000",
+      "Current route: JFK to LHR",
+      "Current travel date: 2026-06-25",
+      "Requested new date: 2026-06-29",
+      "Reason: personal"
+    ],
+    "unknown_info": [
+      "Exact change fee",
+      "Exact total after the change"
+    ],
+    "task_rules": [
+      "If the agent says business class changes are free, ask what the actual extra amount would still be for the new flight.",
+      "Once the agent gives the higher replacement fare math clearly, approve the move.",
+      "End with [TASK_DONE] after the change is confirmed.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget applies to incremental out-of-pocket cost for the change, not the final total fare already paid into the booking.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ]
+  },
+  "task_summary": "Traveler needs to move a international business booking for a personal reason. Correct resolution: the change fee is $0 and the requested replacement changes the total by $220 more.\n\nChallenge: This tests whether the agent can keep international business rebooking on the zero-fee path while still pricing the replacement fare correctly.",
+  "task_requirements": [
+    {
+      "id": "change_business_international_fare_diff_only_fee_quote",
+      "kind": "must",
+      "requirement": "Agent must explain that the correct change fee for this request is $0.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_business_international_fare_diff_only_delta_quote",
+      "kind": "must",
+      "requirement": "Agent must explain that moving to the requested flight changes the booking total by $220 more, based on the replacement fare and the applicable change fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "change_business_international_fare_diff_only_must_not_invent_fee",
+      "kind": "must_not",
+      "requirement": "Agent must not invent a non-zero change fee once the qualifying exemption is established.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/103-change_business_international_fare_diff_only.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 220
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "DL101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 2120
+    }
+  ],
+  "replay_trace_hash": "d9c55fee63286afc4372d850869d6084b52c45fe716a623fb21bbfd3b5b7f3d9"
+}

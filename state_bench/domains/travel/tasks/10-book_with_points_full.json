@@ -1,0 +1,113 @@
+{
+  "task_id": "10-book_with_points_full",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I'd like to book a flight from New York to San Francisco using my loyalty points.",
+  "user_simulator": {
+    "personality": "Cooperative and clear. Wants to use points for the full payment.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Wants to fly JFK to SFO on June 24th",
+      "Wants to pay entirely with loyalty points",
+      "Has 75,000 loyalty points",
+      "Wants economy class",
+      "Prefers DL airline, morning departure, nonstop"
+    ],
+    "unknown_info": [
+      "Exact point redemption rate",
+      "How many points will be needed for the flight"
+    ],
+    "task_rules": [
+      "When the agent asks about payment, say you want to pay entirely with points.",
+      "When the agent presents flight options, pick the DL nonstop morning flight.",
+      "When the agent calculates the points needed, verify the amount seems reasonable.",
+      "When the agent confirms the booking is fully covered by points, confirm.",
+      "End with [TASK_DONE] when the booking is confirmed with points payment.",
+      "When asked about flight preferences, say economy class, DL airline, morning departure, nonstop.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You want to book a domestic flight using loyalty points and are hoping to cover the whole thing that way. You are open to hearing what is actually possible, but you want the agent to start from the assumption that points are the main payment method. If there are tradeoffs, you want them explained clearly before committing."
+  },
+  "task_summary": "**Task:** A traveler wants to book a domestic flight entirely with loyalty points and has enough points for full coverage. Correct resolution: The selected flight can be fully covered with 50,000 points.\n\n**Challenge:** The agent computes the full-points redemption correctly, uses the right 50,000-point figure for the selected flight, and makes clear that no cash payment remains.",
+  "task_requirements": [
+    {
+      "id": "state_full_points_math",
+      "kind": "must",
+      "requirement": "Agent must explain that the selected flight can be fully covered with 50,000 points.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_zero_cash_remaining",
+      "kind": "must",
+      "requirement": "Agent must explain that the remaining cash payment after applying points is $0.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_partial_payment_claim",
+      "kind": "must_not",
+      "requirement": "Agent must not tell the user that this booking requires a cash remainder once the full points redemption is applied correctly.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "new_booking",
+  "task_env_path": "state_bench/domains/travel/task_envs/10-book_with_points_full.json",
+  "state_requirements": [
+    {
+      "entity_type": "users",
+      "record_key": "user_001",
+      "field": "loyalty_points",
+      "expected_value": 25000
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_001",
+        "flight_id": "DL100",
+        "status": "confirmed",
+        "payment_method": "points",
+        "cash_amount": 0,
+        "points_used": 50000,
+        "cabin_class": "economy",
+        "seat_type": "aisle",
+        "meal_preference": "kosher",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": true,
+        "add_insurance": false,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 0,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "DL100",
+        "meal_preference": "kosher",
+        "paid_checked_bags": 0,
+        "payment_method": "points",
+        "points_used": 50000,
+        "price_paid": 0,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_001"
+      }
+    }
+  ],
+  "replay_trace_hash": "429f1bebafd190233f0de39c877da87adc6346dd061e70e4f9ee39089d1a3edc"
+}

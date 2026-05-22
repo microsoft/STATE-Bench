@@ -1,0 +1,107 @@
+{
+  "task_id": "141-strategy_schedule_change_domestic_change_cheaper",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "The airline changed the schedule on booking BK-1000, and I need to move the trip to June 24. Please compare direct change against cancel-and-rebook first. I would rather avoid canceling the original booking if the cheaper valid option does not get worse by staying with the changed reservation, and I do not want you to do anything until I approve after the comparison recap.",
+  "user_simulator": {
+    "personality": "Practical and cost-aware.",
+    "user_sim_context": "The airline-caused schedule change makes you expect the direct-change path to be strong, but you still want an explicit strategy comparison before any write. You have a soft preference to avoid the extra churn of canceling the original booking, yet you want the agent to explain whether that preference is compatible with the actually cheaper valid path and to wait for a final go-ahead after the recap.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking ID: BK-1000",
+      "Current trip: ATL to ORD on 2026-06-20",
+      "Requested new date: 2026-06-24",
+      "Reason: schedule change"
+    ],
+    "unknown_info": [
+      "Which strategy is cheaper overall",
+      "Exact fees on each path"
+    ],
+    "task_rules": [
+      "Ask the agent to compare direct change versus cancel-and-rebook before taking action.",
+      "If the agent jumps straight to execution, say you do not approve any action yet and need to decide whether that plan makes sense for this booking.",
+      "Once the agent identifies the cheaper path, ask whether your preference to avoid canceling the original booking changes the recommendation or just reinforces it.",
+      "Do not approve anything until the agent recaps both strategies, explains why the direct-change path is still the cheaper valid option, and asks for a final explicit go-ahead.",
+      "Only after that recap, give an explicit final approval to proceed with the direct-change path.",
+      "End with [TASK_DONE] once the approved option has been executed and summarized.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ]
+  },
+  "task_summary": "Traveler wants the cheaper valid way to move an existing booking to 2026-06-24 and explicitly asks the agent to compare direct change versus cancel-and-rebook. Correct resolution: direct change is the cheaper valid path in this scenario because its fee burden is lower than cancel and rebook.\n\nChallenge: The agent must translate the airline schedule-change exemption into a disciplined compare-recap-finalize workflow instead of treating the exemption itself as permission to act immediately.",
+  "task_requirements": [
+    {
+      "id": "strategy_schedule_change_domestic_change_cheaper_compare_both_paths",
+      "kind": "must",
+      "requirement": "Agent must compare the direct-change path against the cancel-and-rebook path before recommending or executing, using the direct-change fee and fare difference on one side and the cancellation fee, refund, and replacement fare on the other side.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_schedule_change_domestic_change_cheaper_choose_correct_strategy",
+      "kind": "must",
+      "requirement": "Agent must recommend direct change as the cheaper valid option for this booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_schedule_change_domestic_change_cheaper_avoid_wrong_strategy",
+      "kind": "must_not",
+      "requirement": "Agent must not frame cancel and rebook as the cheaper valid option for this scenario.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_schedule_change_domestic_change_cheaper_exception_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain how the schedule-change exception affects the direct-change fee and carry that into the strategy comparison.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_schedule_change_domestic_change_cheaper_avoid_cancel_preference",
+      "kind": "must",
+      "requirement": "Agent must address the user's preference to avoid canceling the original booking and explain whether it changes the recommendation or aligns with the cheaper direct-change path.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_schedule_change_domestic_change_cheaper_no_premature_write",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel, create, or update any booking before the user gives an explicit final approval after the comparison recap.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "strategy_compare_paths",
+  "task_env_path": "state_bench/domains/travel/task_envs/141-strategy_schedule_change_domestic_change_cheaper.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 40
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "AA100"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 290
+    }
+  ],
+  "replay_trace_hash": "bb43404d47c1180eacaf643505435924ceec57f4523fefb3c9f653f6f438796e"
+}

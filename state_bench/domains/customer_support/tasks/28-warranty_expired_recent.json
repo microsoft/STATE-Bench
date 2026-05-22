@@ -1,0 +1,72 @@
+{
+  "task_id": "28-warranty_expired_recent",
+  "task_summary": "**Task:** The customer is just outside the warranty window, but the policy still allows a fifty-percent discounted repair. The correct handling is to acknowledge that the full warranty has expired while clearly offering the discounted repair option at $199.\n\n**Challenge:** The agent has to avoid the false choice between full coverage and total denial. Weak agents stop at 'expired,' miss the recent-expiry repair concession, or fail to surface the actual discounted cost.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "28_warranty_expired_recent_agent_must_communicate_cost_of_199",
+      "kind": "must",
+      "requirement": "Agent must communicate cost of $199 to customer."
+    },
+    {
+      "evidence": "conversation",
+      "id": "28_warranty_expired_recent_agent_must_not_deny_everything_because",
+      "kind": "must_not",
+      "requirement": "Agent must not deny everything because warranty expired."
+    },
+    {
+      "evidence": "conversation",
+      "id": "28_warranty_expired_recent_agent_must_offer_discounted_repair",
+      "kind": "must",
+      "requirement": "Agent must offer discounted repair."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My phone from order ORD-6030 has a battery issue — it drains within 2 hours. Is it still under warranty?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6030",
+      "warranty_id: WRT-4011",
+      "issue: battery drain"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Describe the battery issue.",
+      "You know the warranty ID is WRT-4011 if asked.",
+      "If told the warranty expired, ask once whether any recent-expiry repair option is available.",
+      "If the agent denies all help because the warranty expired, ask once whether the recent-expiry discounted repair concession applies.",
+      "If the agent quotes a cost other than $199 or treats the repair as fully covered, ask them to recheck the recent-expiry repair policy.",
+      "Accept only after the agent offers a discounted repair and clearly states the cost is $199. If no cost is stated, ask what the discounted repair will cost before accepting."
+    ],
+    "unknown_info": [
+      "warranty expired",
+      "discounted repair option"
+    ],
+    "user_sim_context": "Your phone has a serious battery issue, and you are hoping there may still be some help even though the warranty may have just expired. You are looking for a practical answer, not a lecture about dates. The agent should tell you what support is still available and what it would cost."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4011",
+      "field": "claim_count",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4011",
+      "field": "resolution",
+      "expected_value": "discounted_repair"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4011",
+      "field": "status",
+      "expected_value": "claimed"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/28-warranty_expired_recent.json",
+  "replay_trace_hash": "ed36775ce80c173f564e5fa0d31ac37c23da95fdcfea4dcd16bcd4531d5295a8"
+}

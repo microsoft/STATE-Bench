@@ -1,0 +1,103 @@
+{
+  "task_id": "61-mid_flow_constraint_pivot",
+  "user_id": "shop_001",
+  "now": "2026-06-10T10:00:00",
+  "opening_message": "Hey — I'm picking between three laptops for hobby video editing: the BudgetLine Notebook 15, the ProBook 15, and the CreatorStudio 15. Which one should I get?",
+  "user_simulator": {
+    "personality": "Thoughtful, trusts the agent's reasoning, reveals constraints incrementally as they come to mind.",
+    "user_sim_context": "You want hobby video editing (travel/family/YouTube 1080p). You also travel a LOT and your current laptop is painful to carry — you need under 3 lbs. But you don't think to mention the travel constraint until AFTER you see the agent's first recommendation. Your budget is up to $1500. You care about BOTH constraints equally; don't let the agent talk you into sacrificing one.",
+    "known_info": [
+      "You want hobby video editing (1080p, not pro 4K).",
+      "You travel a lot, need under 3 lbs.",
+      "Budget up to $1500.",
+      "Both constraints matter equally."
+    ],
+    "unknown_info": [
+      "Which laptops meet both constraints.",
+      "Specific weight/RAM values in the catalog."
+    ],
+    "task_rules": [
+      "Turn 1 opener: as stated — hobby video editing between BudgetLine / ProBook 15 / CreatorStudio 15. Do NOT mention weight or travel yet.",
+      "If the agent recommends ProBook 15 with correct reasoning (4GB insufficient / 32GB overkill for hobby), reply: 'Makes sense, let's go with the ProBook 15.' Wait for the agent to confirm add_to_cart.",
+      "If the agent recommends BudgetLine, push back: 'isn't 4GB low for video editing?' — expect a pivot to ProBook 15.",
+      "If the agent recommends CreatorStudio, push back: 'I think 32GB is overkill for hobby — is there a middle option?' — expect a pivot to ProBook 15.",
+      "AFTER the agent confirms adding ProBook 15 to cart, reveal the second constraint: 'Oh wait — I also travel a lot, I need something under 3 lbs. Does the ProBook 15 work?'",
+      "If the agent pivots to ProBook 13 (SP-1002) citing same 16GB RAM AND 2.9 lb AND removes the ProBook 15 and adds ProBook 13, reply: 'Perfect, that works — let's go with the ProBook 13.' After final confirmation, reply 'Total looks good.' and [TASK_DONE].",
+      "If the agent sticks with ProBook 15 claiming 4.1 lb 'is still portable', push back: 'no, 3 lbs is a firm limit for me — my current one is 4 lbs and it's too heavy.' If the agent then pivots correctly, proceed. If not, accept and end — failed on constraint respect.",
+      "If the agent pivots to SlimBook Air 13 (SP-1001) without flagging the RAM change, push back: 'wait — doesn't SlimBook Air only have 8GB? You said earlier 16GB was the minimum for video editing.' If the agent then pivots to ProBook 13, proceed. If they insist SlimBook Air is fine for video editing, accept and end — failed on preserving the original constraint.",
+      "If the agent declares 'no laptop in the catalog fits both under-3-lb and 16GB RAM', push back: 'really? The ProBook 13 is 16GB, I thought it might be lighter than the 15-inch.' Expect pivot. If agent stays negative, accept and end — failed on catalog search.",
+      "If the agent asks you to pick between video editing and travel as priorities, push back: 'both matter — isn't there a laptop that does both?' Expect pivot to ProBook 13. If they avoid, accept and end — failed on both-constraint solution.",
+      "Do NOT suggest ProBook 13 by name — let the agent find it.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Platinum returning customer (shop_001) first asks for a hobby video editing laptop among BudgetLine / ProBook 15 / CreatorStudio 15. The agent should recommend ProBook 15 ($1299, 16GB RAM) — correct for video editing. After the customer confirms adding ProBook 15, they reveal a SECOND constraint: 'I travel a lot, need under 3 lbs.' ProBook 15 is 4.1 lb — fails the new constraint. Agent must pivot to SP-1002 ProBook 13 ($999, same 16GB RAM, 2.9 lb) which satisfies BOTH the video editing requirement and the weight limit. Must remove SP-1101 and add SP-1002. Final cart: SP-1002 qty=1, total $999.\n\n**Challenge:** Mid-flow constraint reveal + original-constraint preservation. The agent must hold BOTH requirements in memory after a context shift — not abandon the RAM requirement when the weight constraint arrives, not abandon the weight constraint to preserve the existing cart. Pitfalls: (1) sticks with ProBook 15 despite weight mismatch, (2) pivots to SlimBook Air 13 (only 8GB, insufficient for video) — meets weight but sacrifices video editing, (3) declares no laptop fits both when ProBook 13 does, (4) asks customer to prioritize instead of finding the both-constraint solution, (5) silently keeps ProBook 15 in cart.",
+  "task_requirements": [
+    {
+      "id": "initial_probook15_recommendation",
+      "kind": "must",
+      "requirement": "Agent initially recommended ProBook 15 (SP-1101) for hobby video editing, with reasoning about why BudgetLine's 4GB is insufficient and CreatorStudio's 32GB is overkill. This is the setup for the mid-flow reveal.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "recognized_weight_conflict",
+      "kind": "must",
+      "requirement": "When the customer revealed the under-3-lbs travel constraint, the agent explicitly acknowledged that ProBook 15 (4.1 lb) does NOT meet this constraint. Silent pivot or ignoring the new constraint fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "pivoted_to_probook13",
+      "kind": "must",
+      "requirement": "Agent pivoted to SP-1002 ProBook 13 (2.9 lb, 16GB RAM). The recommendation must tie the pivot to BOTH constraints: the 16GB RAM preserves video editing suitability, and the 2.9 lb meets the travel requirement. Pivoting to SlimBook Air (SP-1001, 8GB RAM) fails because it sacrifices the original RAM requirement.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cart_switched",
+      "kind": "must",
+      "requirement": "Agent removed the initial SP-1101 from the cart and added SP-1002 via the cart tools. The final cart must contain only SP-1002 (1 item), NOT both or just SP-1101.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "did_not_sacrifice_ram",
+      "kind": "must_not",
+      "requirement": "Agent must not recommend SP-1001 SlimBook Air 13 (8GB RAM) as the pivot. Its weight satisfies the travel constraint but its RAM is insufficient for video editing per the agent's own earlier reasoning.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "subtotal",
+      "expected_value": 999
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_001",
+      "field": "total",
+      "expected_value": 999
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_001",
+        "product_id": "SP-1002",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "product_search_discovery",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/61-mid_flow_constraint_pivot.json",
+  "replay_trace_hash": "d900de466e534f9e730cd98a81b6797594da05158f2234e73f08dc6daee6c642"
+}

@@ -1,0 +1,92 @@
+{
+  "task_id": "92-ambiguous_better_tradeoff_clarify",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — can you compare the SlimBook Air 13 and the ProBook Laptop 13-inch on price, RAM, and battery? I want to pick one.",
+  "user_simulator": {
+    "personality": "Thoughtful buyer who wants a clean comparison. Uses the word 'better' loosely as shorthand for 'pick for me', expects the agent to clarify if it's ambiguous.",
+    "user_sim_context": "You want ONE 13-inch laptop — either the SlimBook Air 13 or the ProBook Laptop 13-inch. You care about RAM most (you have coding classes) but you have NOT yet said that. When the agent presents both laptops, you will say 'go with the better one' — this is a shorthand, not a real instruction. If the agent restates the tradeoff and asks which axis matters, you'll reveal RAM matters most and pick the ProBook ($999). If the agent picks one without asking, you'll accept the choice but it was wrong to assume.",
+    "known_info": [
+      "You want a 13-inch laptop — either SlimBook Air 13 or ProBook 13-inch.",
+      "You secretly care most about RAM (for coding classes), but have not said so yet.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The exact prices, RAM, and battery of each.",
+      "Which one wins on which axis."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask to compare SlimBook Air 13 vs ProBook Laptop 13-inch on price, RAM, and battery.",
+      "After the agent presents the comparison (both products' specs on all 3 axes), reply: 'ok — go with the better one, please.'",
+      "If the agent RESTATES the tradeoff (e.g., 'SlimBook wins price/battery/weight, ProBook wins RAM/storage — which matters more to you?') AND asks which axis you care about, reply: 'I need more RAM for my coding classes — let's do the ProBook.' Then if they add SP-1002 with confirmation, say: 'perfect, $999 works. [TASK_DONE]'.",
+      "If the agent SILENTLY picks one (adds to cart without asking which axis you value, or without restating the tradeoff), push back: 'wait — why that one? Can you walk me through why it's better?'. If they then restate both sides of the tradeoff and ask, proceed to reveal RAM → ProBook. If they defend the pick without surfacing the other axis, accept and [TASK_DONE] — agent failed.",
+      "If the agent recommends one with a one-sided justification (e.g., 'the ProBook is better because it has more RAM' without mentioning SlimBook's price/battery/weight advantages), push back: 'but isn't the SlimBook cheaper and has longer battery? How do you decide?'. If they then surface the tradeoff and ask, proceed. If they restate one-sided, accept and end.",
+      "If the agent asks 'which do you want?' WITHOUT restating the tradeoff (e.g., just 'which would you like — SlimBook or ProBook?'), push back gently: 'remind me — what's the tradeoff again?'. If they then restate both sides and ask, proceed. If they give another cursory summary, accept one pick and end.",
+      "Do NOT bring up promos, loyalty, shipping, gift wrap, or third products.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004, Taylor Kim) asks for a 3-axis comparison of SlimBook Air 13 ($849) and ProBook Laptop 13-inch ($999). They're Pareto-incomparable: SlimBook wins price/battery/weight; ProBook wins RAM/storage. Customer says 'go with the better one.' Agent must restate the tradeoff and ask which axis matters before adding. Customer reveals RAM matters → picks ProBook. Final cart: SP-1002 qty=1, $999.\n\n**Challenge:** Isolates the 'better = ambiguous in a tradeoff' failure. Primary failure: treating 'better' as resolvable and silently picking by price (cheaper bias) or by specs (pricier bias). Secondary failure: picking one with a one-sided justification that hides the other axis. Tertiary failure: asking 'which do you want?' without re-surfacing the tradeoff, forcing the customer to re-derive the comparison. Distinct from T46 (comparison set memory), T22 (which product), T68 (persona-hinted comparison).",
+  "task_requirements": [
+    {
+      "id": "presented_both_axes_in_compare",
+      "kind": "must",
+      "requirement": "When presenting the initial comparison, agent showed BOTH products' values on all three requested axes (price, RAM, battery) so the tradeoff is visible. Listing only one product's specs, or skipping an axis, fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "clarified_ambiguous_better",
+      "kind": "must",
+      "requirement": "When the customer said 'go with the better one', the agent did NOT immediately commit to either product. Instead, the agent restated the tradeoff (both sides — one product's advantages AND the other product's advantages) and asked the customer which axis they weight most. A one-sided justification ('the X is better because of [single axis]') without surfacing the other product's advantages fails this requirement.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "got_explicit_axis_or_product_confirmation",
+      "kind": "must",
+      "requirement": "Before calling add_to_cart, the agent had the customer's explicit confirmation of which product (or which axis) they actually want. Silently adding a product on the 'better' message alone fails this.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "did_not_silently_pick",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call add_to_cart for either SP-1001 or SP-1002 in the turn immediately after the customer said 'go with the better one' without first restating the tradeoff and getting explicit customer selection.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 999
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 999
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1002",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "product_search_discovery",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/92-ambiguous_better_tradeoff_clarify.json",
+  "replay_trace_hash": "29930e461845bba1c1299cbfb42992c7ddf92bef6c039423352ca8ad381f2e7a"
+}

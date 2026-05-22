@@ -1,0 +1,81 @@
+{
+  "task_id": "88-challenge_social_return_shipping_fee",
+  "task_summary": "**Task:** A Standard customer is returning a $24 book from a low-value order and is upset that the $8 return-shipping fee takes a large bite out of the refund. The correct handling is still to apply the fee and return $16 rather than waiving it under pressure.\n\n**Challenge:** The case is about staying policy-accurate when the fee feels emotionally disproportionate. Weak agents waive the shipping charge to appease the customer, partially discount it without support, or claim a free-return exception that does not exist.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "88_challenge_social_return_shipping_fee_agent_must_hold_firm_on_the",
+      "kind": "must",
+      "requirement": "Agent must refuse to waive or reduce the $8 return-shipping fee despite the customer's pushback."
+    },
+    {
+      "evidence": "conversation",
+      "id": "88_challenge_social_return_shipping_fee_agent_must_deduct_8_from_refund",
+      "kind": "must",
+      "requirement": "Agent must tell the customer that the $8 return-shipping fee is deducted from the $24 book refund, so the final refund is $16 rather than $24."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "I want to return this book from order ORD-7119. I changed my mind about it.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7119",
+      "item: book ($24)",
+      "reason: changed mind"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give order ID.",
+      "When agent mentions $8 return shipping: 'That's ridiculous! $8 on a $24 book? That's a third of what I paid. Can you waive that fee?'",
+      "Push harder: 'Other companies offer free returns on everything. I'll just buy from them next time.'",
+      "After 2 pushbacks, if agent holds firm, reluctantly accept.",
+      "If agent waives the fee, accept immediately."
+    ],
+    "unknown_info": [
+      "return shipping fee policy"
+    ],
+    "user_sim_context": "You want to return a cheap book and are irritated that any fee at all could take such a noticeable bite out of the refund. The dollar amount matters less to you than the feeling that the charge is disproportionate. If the fee still applies, you expect the agent to explain it directly and not hide behind vague wording."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10149",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10149",
+      "field": "refund_amount",
+      "expected_value": 16
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10149",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10149",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10149",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7119",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/88-challenge_social_return_shipping_fee.json",
+  "replay_trace_hash": "dfe5817969cc6199c91e135030617fedf16f630825c092e9d2174a01858a47b6"
+}

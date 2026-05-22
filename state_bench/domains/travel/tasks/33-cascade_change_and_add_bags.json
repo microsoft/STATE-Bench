@@ -1,0 +1,101 @@
+{
+  "task_id": "33-cascade_change_and_add_bags",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to change my flight (BK-MS08) to a later date. I have a medical appointment that conflicts. Also, I'll need to bring extra luggage.",
+  "user_simulator": {
+    "personality": "Polite, a bit anxious about fees. Mentions medical reason upfront.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking ID: BK-MS08",
+      "Current flight is ORD → SFO on June 20",
+      "Reason for change: medical appointment",
+      "Wants to fly June 22 instead",
+      "Needs 2 extra checked bags"
+    ],
+    "unknown_info": [
+      "Change fee amount or medical discount",
+      "Available flights on June 22",
+      "Baggage fee per bag",
+      "Free baggage allowance"
+    ],
+    "task_rules": [
+      "Start by asking to change booking BK-MS08 to June 22 due to a medical appointment.",
+      "When agent quotes the change fee, ask if there's a medical discount.",
+      "When discounted fee is confirmed, agree to proceed.",
+      "When new flight options are shown, pick UA113, the preferred United afternoon flight.",
+      "If the agent proposes or changes you to any other flight, say you want UA113 on June 22 instead.",
+      "Then ask to add 2 extra checked bags.",
+      "When bag fees are quoted, confirm.",
+      "Ask for a summary of all changes and fees.",
+      "End with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to change a flight because of a medical conflict and also want to make sure your luggage needs are handled. In your mind this is one conversation about getting the trip into workable shape. You want the agent to help with both the schedule problem and the extra baggage question before you are done."
+  },
+  "task_summary": "**Task:** A traveler changes a domestic economy flight for a medical reason and then adds two extra checked bags. Correct resolution: The medical reason cuts the standard domestic change fee in half, producing a $75 change fee for the booking.\n\n**Challenge:** The agent explains the medical-discounted $75 change fee, quotes the baggage allowance and per-bag pricing correctly, and provides a combined summary of the flight-change math plus the added-bag charges.",
+  "task_requirements": [
+    {
+      "id": "state_medical_discount_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that the medical reason cuts the standard domestic change fee in half, producing a $75 change fee for this booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_baggage_allowance_and_fee_explained",
+      "kind": "must",
+      "requirement": "Agent must explain the free checked-bag allowance for this traveler and quote the extra-bag fee as $35 per added bag before finalizing the baggage update.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_combined_change_and_bags_summary",
+      "kind": "must",
+      "requirement": "Agent must summarize both the flight-change charges and the additional baggage charges together, rather than only confirming one part of the workflow.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/33-cascade_change_and_add_bags.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS08",
+      "field": "change_fee",
+      "expected_value": 75
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS08",
+      "field": "fare_difference",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS08",
+      "field": "flight_id",
+      "expected_value": "UA113"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS08",
+      "field": "paid_checked_bags",
+      "expected_value": 2
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS08",
+      "field": "price_paid",
+      "expected_value": 505
+    }
+  ],
+  "replay_trace_hash": "200d6ff23d8e037868de22241243589a6ebdd0d3ba27505ac9579b96f26710ea"
+}

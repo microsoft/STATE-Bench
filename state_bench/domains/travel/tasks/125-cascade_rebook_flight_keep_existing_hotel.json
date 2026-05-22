@@ -1,0 +1,107 @@
+{
+  "task_id": "125-cascade_rebook_flight_keep_existing_hotel",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I still want my Seattle trip, but I may need to move flight booking BK-ET05. I already have a Seattle hotel, and before you change anything I want to compare the reasonable flight options against what that would do to the trip overall.",
+  "user_simulator": {
+    "personality": "Focused and practical.",
+    "user_sim_context": "You still want the Seattle trip and already have a hotel reservation starting June 20. The hard part is not just comparing two replacement flights, but revising the recommendation when a late trip-integrity constraint appears. The cheaper next-day flight initially looks attractive, but after the comparison you reveal that you arranged a June 20 evening dinner near the hotel and that this was one reason for keeping the original first night. The correct recommendation should pivot to the pricier same-day afternoon flight because it preserves the June 20 commitment and the full hotel stay. The first phase must stay informational and comparative, and the agent should not execute the change until after the post-pivot final approval.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Flight booking: BK-ET05",
+      "Hotel reservation: HR-0100"
+    ],
+    "unknown_info": [
+      "Whether the agent will compare the cheaper next-day move against the same-day hotel-preserving move before changing anything",
+      "Whether the agent will revise its recommendation after learning about the June 20 dinner tied to the hotel stay"
+    ],
+    "task_rules": [
+      "Open by asking for a compare-first recommendation and do not authorize any flight change yet.",
+      "If the agent does not surface two distinct flight-change paths, ask whether there is a same-day option that preserves the full hotel stay versus a next-day option that sacrifices the first hotel night.",
+      "After the initial comparison, say the cheaper next-day option sounds tempting on price alone, but then reveal that you arranged a June 20 evening dinner near the hotel and that missing the first hotel night would also mean missing that plan.",
+      "If the agent does not revise its recommendation after that reveal, ask whether the June 20 commitment changes which option is actually best for the trip overall.",
+      "If the agent pivots to the same-day afternoon flight because it preserves both the full hotel stay and the June 20 dinner plan, agree that this is the path you want.",
+      "Only then say: 'Yes, change the flight to the same-day option. Leave the hotel exactly as it is.'",
+      "If the agent tries to cancel or change the hotel, say you do not approve changing the hotel because you still expect to use it.",
+      "End with [TASK_DONE] only after the flight is changed to the same-day hotel-preserving option and the agent explicitly confirms the hotel remained active and unchanged.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ]
+  },
+  "task_summary": "Traveler still wants the Seattle trip and already has a hotel reservation starting June 20, but now needs help comparing the best flight-change path. Correct resolution: the agent should compare the cheaper next-day replacement flight against a pricier same-day afternoon flight, then revise its recommendation after the user reveals a June 20 evening dinner tied to the hotel stay. The correct final choice is the same-day afternoon option because it preserves both the full hotel stay and the June 20 commitment. The agent should only after explicit post-pivot approval change the flight while keeping the hotel active and unchanged.\n\nChallenge: This tests sequential trip-integrity reasoning and willingness to revise a locally cheaper recommendation when new linked-trip information appears.",
+  "task_requirements": [
+    {
+      "id": "cascade_rebook_flight_keep_existing_hotel_discover",
+      "kind": "must",
+      "requirement": "Agent must acknowledge linked hotel reservation HR-0100 when handling the flight change.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "cascade_rebook_flight_keep_existing_hotel_compare",
+      "kind": "must",
+      "requirement": "Agent must compare a same-day hotel-preserving flight-change path against a cheaper next-day flight-change path before acting, rather than treating the flight change as a single-option update.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cascade_rebook_flight_keep_existing_hotel_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain why keeping hotel reservation HR-0100 fully usable makes the same-day replacement flight preferable to the cheaper next-day replacement flight once the June 20 dinner commitment is revealed.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cascade_rebook_flight_keep_existing_hotel_pivot",
+      "kind": "must",
+      "requirement": "Agent must revise or reaffirm its recommendation in light of the newly revealed June 20 dinner plan, rather than sticking to a price-only view from earlier in the conversation.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cascade_rebook_flight_keep_existing_hotel_preserve",
+      "kind": "must",
+      "requirement": "Agent must keep hotel reservation HR-0100 active and unchanged while changing flight booking BK-ET05 to the same-day hotel-preserving option.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cascade_rebook_flight_keep_existing_hotel_no_premature_write",
+      "kind": "must_not",
+      "requirement": "Agent must not change the flight before the user explicitly approves the same-day hotel-preserving recommendation after the post-pivot discussion.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/125-cascade_rebook_flight_keep_existing_hotel.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-ET05",
+      "field": "change_fee",
+      "expected_value": 150
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-ET05",
+      "field": "fare_difference",
+      "expected_value": 90
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-ET05",
+      "field": "flight_id",
+      "expected_value": "AA-ET05S"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-ET05",
+      "field": "price_paid",
+      "expected_value": 470
+    }
+  ],
+  "replay_trace_hash": "e59baa0087d00037b6bf5971aeb95bb68728c46fbda7ed98ba4eca0cc4e7422d"
+}

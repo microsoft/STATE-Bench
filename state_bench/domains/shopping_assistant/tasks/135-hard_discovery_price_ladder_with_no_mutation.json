@@ -1,0 +1,48 @@
+{
+  "task_id": "135-hard_discovery_price_ladder_with_no_mutation",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Show me a laptop ladder, but include product ID, price, RAM, battery, weight, stock/backorder caveat, and a school-fit caveat for each. Do not add anything.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You want a laptop ladder with product ID, price, RAM, battery, weight, stock or backorder caveat, and school-fit caveat for each option. This is informational only; you do not want a laptop added.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Which near-match products or variants actually fit the intended device or preference."
+    ],
+    "task_rules": [
+      "You want a laptop ladder for comparison only; no laptop should be added.",
+      "If the agent lists multiple laptops with product ID, price, RAM, battery, weight, stock/backorder caveat, and school-fit caveat, accept the ladder.",
+      "If the agent omits product IDs or key specs, ask for the missing fields rather than choosing a laptop.",
+      "If the agent recommends or adds one laptop, say you are not ready to add anything and only wanted the ladder.",
+      "When the complete laptop ladder has been provided and the cart remains unchanged, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Show me a laptop ladder, but include product ID, price, RAM, battery, weight, stock/backorder caveat, and a school-fit caveat for each. Do not add anything.\" Relevant catalog/policy surface: SlimBook Air 13 (SP-H101), ProBook Laptop 13 (SP-H102), CreatorBook 15 (SP-H103), ProBook Laptop 15 (SP-H104). Final cart/account state should remain unchanged.\n\n**Challenge:** Read-only comparison requires complete structured fields and no unsupported omissions. Primary pitfall: Omits product IDs/spec fields/caveats, fabricates stock, or adds a laptop. Correct behavior: Provide a complete multi-field laptop ladder and leave cart unchanged. Novelty: Read-only product ladder with explicit no-buy intent. Family: product_discovery.",
+  "task_requirements": [
+    {
+      "id": "complete_laptop_ladder",
+      "kind": "must",
+      "requirement": "Agent included product ID, price, RAM, battery, weight, stock/backorder caveat, and school-fit caveat for multiple laptops.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_laptop_add",
+      "kind": "must_not",
+      "requirement": "Agent did not add any laptop or mutate cart.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "product_search_discovery",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/135-hard_discovery_price_ladder_with_no_mutation.json",
+  "replay_trace_hash": "765cdda74faebe83d20b000e32c1e432abfc6e2853cb7d3cf8dfd0c89b78f4d7"
+}

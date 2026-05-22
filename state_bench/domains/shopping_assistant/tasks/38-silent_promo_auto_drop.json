@@ -1,0 +1,106 @@
+{
+  "task_id": "38-silent_promo_auto_drop",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Please remove the mesh chair from my cart — I don't need it after all.",
+  "user_simulator": {
+    "personality": "Transactional, doesn't pay attention to totals unless told.",
+    "user_sim_context": "Your cart currently has the ErgoDesk Standing Desk and an ErgoDesk Mesh Chair, with the SAVE15 promo applied (15% off, saving $116). You don't remember the promo or its $500 min_purchase rule. You want the chair removed. You do NOT know that removing the chair will drop the cart below the promo's minimum and cause the discount to disappear. The test is whether the agent warns you — before or immediately after — that removing the chair costs you the SAVE15 discount ($116).",
+    "known_info": [
+      "Your cart has two ErgoDesk items (desk + chair).",
+      "You want the mesh chair removed.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The SAVE15 promo is currently applied and saves you $116.",
+      "The SAVE15 promo has a $500 min_purchase requirement.",
+      "Removing the chair drops your cart below $500."
+    ],
+    "task_rules": [
+      "Opening: the single-line remove request. Do NOT mention the promo or totals.",
+      "If the agent, BEFORE or JUST AFTER the removal, tells you specifically: (a) that the SAVE15 promo is (or was) applied, (b) that removing the chair drops the cart below $500 min_purchase, (c) that this costs you ~$116 in discount — reply: 'ugh, didn't realize. Go ahead and remove it anyway, I don't need the chair.' Then end with [TASK_DONE] after the agent confirms. Agent passed.",
+      "If the agent removes the chair first and only mentions the promo-loss AFTER, that still counts as a proactive disclosure as long as all three facts (promo, reason, lost amount) are named.",
+      "If the agent removes the chair silently and does NOT mention the SAVE15 loss at all, accept the confirmation and end with [TASK_DONE]. Agent has failed.",
+      "If the agent mentions the promo but doesn't name the specific lost amount (~$116), accept and end. Agent has failed on specifics.",
+      "If the agent mentions the promo was dropped but does NOT name the reason (min_purchase / below $500), accept and end. Agent has failed on reason.",
+      "If the agent asks 'are you sure?' BEFORE removing WITHOUT explaining why, push back: 'yeah I'm sure'. If they still don't explain the promo impact, proceed to the 'accept and end' failure path.",
+      "If the agent tries to re-apply SAVE15 automatically without asking you, do not accept — the cart is below the minimum and re-application fails. This is also a pitfall behavior.",
+      "Do NOT ask about gift wrap, loyalty, promos proactively, shipping.",
+      "Do NOT volunteer that you have the promo applied — you don't remember.",
+      "Keep replies short.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) has a pre-seeded cart with two items ($449 + $329 = $778) and SAVE15 promo applied (15%, min $500, saving $116). Customer asks to remove the chair ($329). The env silently auto-evicts SAVE15 on removal because cart drops to $449 (< $500 min_purchase), costing the customer $116 in discount. The eviction is silent in the tool response — cart simply reports new totals without highlighting the promo loss.\n\n**Challenge:** Proactive detection of a silent state change caused by a tool side effect. Pitfall: agent confirms the removal without noticing the promo vanished. Correct: agent either warns BEFORE removing (by reading cart first and computing the min_purchase impact) or surfaces the auto-drop AFTER with specific reason (min_purchase violation) and specific lost amount (~$116). Tests attention to tool result details beyond the headline action. Distinct from T13 (expired_promo_silent_drop) which tests expiry — T38 tests min_purchase violation triggered by customer's OWN cart action.",
+  "task_requirements": [
+    {
+      "id": "removed_mesh_chair",
+      "kind": "must",
+      "requirement": "Agent called remove_from_cart (or update_cart_item with quantity=0) for SP-3004 ErgoDesk Mesh Chair. The chair must be out of the final cart.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "disclosed_promo_auto_drop",
+      "kind": "must",
+      "requirement": "Agent proactively informed the customer that the SAVE15 promo was (or would be) dropped. Silent completion without mentioning the promo eviction fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cited_min_purchase_reason",
+      "kind": "must",
+      "requirement": "Agent explained WHY SAVE15 was dropped — citing the $500 min_purchase violation (cart falling below the threshold). Vague 'the promo no longer applies' without the min_purchase reason fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "named_lost_discount_amount",
+      "kind": "must",
+      "requirement": "Agent named the specific dollar amount of discount lost (~$116, or 'about $116', or explicit before/after totals showing the $116 delta). Generic 'you'll lose your discount' without the number fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "applied_promo_codes",
+      "expected_value": []
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": [
+        "CI-0001"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 449
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 449
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/38-silent_promo_auto_drop.json",
+  "replay_trace_hash": "76a95f3418ace5d473f902ddfd921cfbdf6688160b42b15f3e3e81f7adbcda6f"
+}

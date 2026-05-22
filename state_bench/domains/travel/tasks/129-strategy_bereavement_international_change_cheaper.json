@@ -1,0 +1,100 @@
+{
+  "task_id": "129-strategy_bereavement_international_change_cheaper",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Because of a family bereavement, I need to move booking BK-1000 to July 2. Is it cheaper to change it or cancel and rebook?",
+  "user_simulator": {
+    "personality": "Practical and cost-aware.",
+    "user_sim_context": "You want the agent to compare both strategies on an international bereavement case and explain why the serious reason changes the economics.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Booking ID: BK-1000",
+      "Current trip: JFK to LHR on 2026-06-28",
+      "Requested new date: 2026-07-02",
+      "Reason: bereavement"
+    ],
+    "unknown_info": [
+      "Which strategy is cheaper overall",
+      "Exact fees on each path"
+    ],
+    "task_rules": [
+      "Ask the agent to compare direct change versus cancel-and-rebook before taking action.",
+      "If the agent identifies direct change as the cheaper valid path, approve it.",
+      "If the agent recommends cancel and rebook instead, challenge that recommendation and ask them to compare the fees again.",
+      "For this existing-booking change, keep the booking-stage insurance setting exactly as it is on BK-1000. Do not ask to add insurance from your profile preference, and do not treat missing insurance as a problem after the change.",
+      "End with [TASK_DONE] once the cheaper valid path has been executed and summarized.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ]
+  },
+  "task_summary": "Traveler wants the cheaper valid way to move an existing booking to 2026-07-02 and explicitly asks the agent to compare direct change versus cancel-and-rebook. Correct resolution: direct change is the cheaper valid path in this scenario because its fee burden is lower than cancel and rebook.\n\nChallenge: The agent must carry the bereavement discount through a strategy comparison instead of treating it as just another policy aside.",
+  "task_requirements": [
+    {
+      "id": "strategy_bereavement_international_change_cheaper_compare_both_paths",
+      "kind": "must",
+      "requirement": "Agent must compare the direct-change path against the cancel-and-rebook path before recommending or executing, using the direct-change fee and fare difference on one side and the cancellation fee, refund, and replacement fare on the other side.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_bereavement_international_change_cheaper_choose_correct_strategy",
+      "kind": "must",
+      "requirement": "Agent must recommend direct change as the cheaper valid option for this booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_bereavement_international_change_cheaper_avoid_wrong_strategy",
+      "kind": "must_not",
+      "requirement": "Agent must not frame cancel and rebook as the cheaper valid option for this scenario.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_bereavement_international_change_cheaper_bereavement_discount_reasoning",
+      "kind": "must",
+      "requirement": "Agent must explain how the bereavement change-fee discount affects the direct-change economics before recommending a strategy.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "strategy_bereavement_international_change_cheaper_no_premature_write",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel, create, or update any booking before comparing both paths and identifying the cheaper valid strategy.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "strategy_compare_paths",
+  "task_env_path": "state_bench/domains/travel/task_envs/129-strategy_bereavement_international_change_cheaper.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 25
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "DL101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 955
+    }
+  ],
+  "replay_trace_hash": "4c34f3c9ea555e629eba55ea8b319189a16edb31e97673fddc0787706a678281"
+}

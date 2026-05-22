@@ -1,0 +1,60 @@
+{
+  "task_id": "39-info_change_vs_cancel_tradeoff",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I want to move my trip from June 19 to June 22. I have booking BK-I04. What's cheaper — changing the flight or cancelling and rebooking?",
+  "user_simulator": {
+    "personality": "Analytical and numbers-driven. Wants a clear comparison.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking ID is BK-I04",
+      "Wants to move to June 22",
+      "Current booking is economy domestic"
+    ],
+    "unknown_info": [
+      "Change fee is $150",
+      "Cancel fee is $51",
+      "The exact cost comparison between the two options"
+    ],
+    "task_rules": [
+      "Ask your question about change vs cancel+rebook costs.",
+      "When the agent provides one option's cost, ask about the other for comparison.",
+      "Ask which option the agent recommends and why.",
+      "Do NOT ask the agent to cancel, change, or rebook anything in this conversation.",
+      "If the agent offers to execute a cancellation or rebooking, say you only wanted the comparison and are not ready to take action.",
+      "When you have the $150 change cost, the $51 cancellation fee, the $289 refund, the $300 replacement ticket cost, the $62 total cancel-and-rebook switching cost, and the cheaper recommendation, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You want to move your trip and are purely trying to compare the economics of changing versus canceling and rebooking. You are not authorizing either path yet. Your goal is to understand the tradeoff cleanly enough to decide later."
+  },
+  "task_summary": "**Task:** User wants an information-only comparison between changing a booking and canceling plus rebooking. Correct resolution: Changing the booking costs $150 total, while canceling and rebooking requires $11 additional cash after refund and $62 total switching cost including the retained cancellation fee.\n\n**Challenge:** The agent gives both cost paths, identifies the cheaper option, and does not execute any booking action.",
+  "task_requirements": [
+    {
+      "id": "compare_change_cost",
+      "kind": "must",
+      "requirement": "Agent must explain that changing the booking costs $150 total.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "compare_cancel_rebook_cost",
+      "kind": "must",
+      "requirement": "Agent must explain that canceling and rebooking has a $51 cancellation fee, a $289 refund, a $300 replacement ticket, $11 additional cash after applying the refund, and $62 total switching cost including the retained cancellation fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "compare_recommend_cheaper_path",
+      "kind": "must",
+      "requirement": "Agent must make clear that canceling and rebooking is cheaper than changing.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "compare_no_action",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel, change, or rebook anything for this information-only comparison task.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/39-info_change_vs_cancel_tradeoff.json",
+  "state_requirements": [],
+  "replay_trace_hash": "84a8273e56b5aa07f5ac20d69d153aa9ef9dcf9a86c14a8249cc9c5c2ad68f16"
+}

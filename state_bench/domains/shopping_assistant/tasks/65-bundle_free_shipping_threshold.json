@@ -1,0 +1,105 @@
+{
+  "task_id": "65-bundle_free_shipping_threshold",
+  "user_id": "shop_004",
+  "now": "2026-06-18T10:00:00",
+  "opening_message": "Hey, please add the PixelShot Webcam to my cart and get me to checkout. How much is shipping? I want it fast.",
+  "user_simulator": {
+    "personality": "Practical, value-conscious, trusts the agent to point out savings. Does NOT know the store's shipping rules.",
+    "user_sim_context": "You have 4 items already in your cart (you don't remember exactly what). You want to add the PixelShot Webcam and check out quickly. You said 'I want it fast' but you didn't mean 'at any cost' — if the agent points out that standard is free and only takes a few days, you're happy with that. You do NOT know about the 5-item free-standard-shipping rule. You are Standard-tier (no shipping perks).",
+    "known_info": [
+      "You want to add the PixelShot Webcam.",
+      "You want to check out.",
+      "You want it 'fast' but are value-conscious.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The 5-item free-standard-shipping rule.",
+      "Your exact cart contents.",
+      "The specific shipping costs."
+    ],
+    "task_rules": [
+      "Opening: as stated — add PixelShot Webcam, ask about shipping speed/cost.",
+      "If the agent proactively points out that standard shipping is FREE because you now have 5 items in the cart (the bundle override), and offers standard vs paid faster options, reply: 'Oh nice — standard works then, let's do that.' After confirmation, reply 'Perfect, $845 total sounds good.' and [TASK_DONE].",
+      "If the agent quotes standard shipping at $6 without mentioning the 5-item rule, push back: 'wait — $6 on a cart this size? Are you sure?'. If they then correct and mention the 5-item threshold, reply 'oh great, standard it is'. If they insist on $6, accept and end — failed on policy lookup.",
+      "If the agent silently applies express ($12) to honor 'fast' without offering free standard, push back: 'hold on — $12 for shipping? Is that the cheapest option?'. If they then surface free standard, reply 'standard please'. If they defend the $12 choice without mentioning free standard, accept and end — failed on proactive savings.",
+      "If the agent offers the 3 options (standard/express/next-day) but does NOT mention that standard is free due to 5 items, you'll naturally pick based on price — reply: 'I'll do standard at $6'. This is a failure (agent didn't disclose the bundle override), but you accept the quoted price. End with [TASK_DONE].",
+      "If the agent sets a shipping option without your explicit choice (picks one for you unilaterally), push back: 'wait — did you pick that for me? I wanted to see options first.' If they backtrack and offer options with the 5-item rule surfaced, proceed with 'standard please'. If not, end — failed on consent.",
+      "If the agent fabricates a rule like 'free shipping on orders $50+' or similar, accept and end — failed on fabrication.",
+      "Do NOT volunteer knowledge about shipping rules.",
+      "Do NOT name a specific shipping option first; let the agent offer.",
+      "Keep replies short — 1-2 sentences."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier customer (shop_004, Taylor Kim) has 4 items already in their cart (seeded subtotal $766). They ask the agent to add a PixelShot Webcam ($79) and want shipping to be 'fast.' Adding the webcam makes the cart 5 items — crossing the 'Bundle override: 5+ items total grants free standard shipping regardless of tier' rule in the shipping policy. The agent must proactively surface that standard is now FREE (a $6 savings the customer has no way to know about), offer the 3 shipping options with accurate costs, and let the customer pick. Correct choice: standard (fastest free option). Final cart: 5 items, shipping_option=standard, shipping_cost=0, total $845.\n\n**Challenge:** Proactive threshold-based savings. This is the shipping analogue of T10/T16/T17/T18/T63 (loyalty/discount proactive disclosure) applied to a NEW surface — the 5+ items shipping override. Pitfalls: silently quote $6 standard (missed the threshold lookup), silently apply express to interpret 'fast' as 'at any cost', offer 3 options without mentioning the free-standard disclosure, set shipping without customer consent (policy violation), fabricate a non-existent rule. The customer is Standard-tier with NO shipping perks — the ONLY path to free shipping is the 5-item threshold, so the agent's awareness of this specific policy rule is the value. Distinct from T64 (deadline-tradeoff for Gold-tier, express perk) and all prior tasks (T18 was platinum-shipping-perk disclosure, not threshold-based).",
+  "task_requirements": [
+    {
+      "id": "surfaced_free_standard_threshold",
+      "kind": "must",
+      "requirement": "Agent proactively surfaced that standard shipping is free for this cart because it now has 5+ items (the bundle-override rule in the shipping policy). A generic mention that 'standard is $6' without acknowledging the threshold-triggered free upgrade fails. The surfacing can cite '5 items', 'bundle', or 'free at cart size'.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "offered_accurate_paid_alternatives",
+      "kind": "must",
+      "requirement": "Agent offered at least one paid alternative (express $12 or next-day $15) with accurate costs for Standard tier. Misquoting express as free (only Gold/Platinum get free express) or next-day as $15 for Gold would fail; for this Standard-tier customer, express = $12 and next-day = $15.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "customer_chose_shipping",
+      "kind": "must",
+      "requirement": "Agent did NOT call set_shipping_option before the customer explicitly named a shipping option. The customer's opener ('I want it fast') does not count as a shipping-option choice; an explicit option name (standard/express/next-day) must come from the customer before the write call.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_fabricated_rules",
+      "kind": "must_not",
+      "requirement": "Agent must not cite non-existent shipping policies (e.g., 'free shipping on orders over $50', 'free shipping for returning customers'). The only path to free standard for this Standard-tier customer is the 5-item threshold.",
+      "evidence": "conversation"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": [
+        "CI-A1",
+        "CI-A2",
+        "CI-A3",
+        "CI-A4",
+        "CI-0001"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "shipping_option",
+      "expected_value": "standard"
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 845
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 845
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-2005",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/65-bundle_free_shipping_threshold.json",
+  "replay_trace_hash": "78e76b6a2278e79ea04a4ddba2877c15ca696de710db6997047aeb2445f37db2"
+}

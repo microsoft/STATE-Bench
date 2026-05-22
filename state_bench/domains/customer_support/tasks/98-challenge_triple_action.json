@@ -1,0 +1,109 @@
+{
+  "task_id": "98-challenge_triple_action",
+  "task_summary": "**Task:** A fragile kitchen scale arrived damaged and four days late, so the correct resolution has three distinct parts: the damaged-item return refund, the late-delivery compensation, and the fragile-item goodwill credit. The supplemental credits must be issued separately to the original payment method, and the simulator should choose the refund/return path if a replacement is offered.\n\n**Challenge:** This case asks the agent to carry a compound resolution across multiple policy surfaces. Weak agents handle only the return, forget the goodwill credit, use store credit, offer replacement instead of the required refund path, or merge the compensations into one incorrect action.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "98_challenge_triple_action_agent_must_confirm_damaged_item_return_refund",
+      "kind": "must",
+      "requirement": "Agent must confirm the damaged kitchen scale return refund for $32, not resolve the item problem with replacement or store credit."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "98_challenge_triple_action_agent_must_confirm_original_payment_late_and_fragile_credits",
+      "kind": "must",
+      "requirement": "Agent must confirm separate $15 late-delivery and $10 fragile-item credits to original payment."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "98_challenge_triple_action_agent_must_not_combine_everything_into",
+      "kind": "must_not",
+      "requirement": "Agent must not combine everything into one refund instead of separate calls."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "My kitchen scale from order ORD-7042 arrived 4 days late AND damaged — the glass surface is cracked. This is completely unacceptable.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7042",
+      "item: kitchen scale ($32)",
+      "issues: 4 days late + damaged + fragile"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give order ID.",
+      "Mention BOTH late delivery AND damage.",
+      "If agent only handles one issue, remind about the others.",
+      "Ask about fragile item goodwill if not mentioned.",
+      "If offered refund or replacement, choose the return/refund path, not replacement or store credit.",
+      "Ask for the late and fragile credits to go to the original payment method if the agent asks.",
+      "Don't end until the damaged-item return refund, late-delivery credit, and fragile-item goodwill credit are all confirmed; if any refund or credit is offered as store credit, ask whether it can go back to the original payment method instead."
+    ],
+    "unknown_info": [
+      "compensation amounts",
+      "fragile goodwill policy",
+      "refund vs replacement path"
+    ],
+    "user_sim_context": "Your kitchen scale arrived both late and damaged, so from your perspective this is a compounded failure rather than a one-note complaint. You want the company to address the product problem and the delivery experience, not just one of them. The agent should recognize that the full resolution may involve more than a simple return. You specifically want the damaged item returned for a refund, with the late-delivery and fragile-item credits issued separately to the original payment method."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10042",
+      "field": "goodwill_credit",
+      "expected_value": 25
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10042",
+      "field": "goodwill_credit_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10042",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10042",
+      "field": "refund_amount",
+      "expected_value": 32
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10042",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10042",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10042",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10042",
+      "field": "return_reason",
+      "expected_value": "damaged_in_transit"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7042",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/98-challenge_triple_action.json",
+  "replay_trace_hash": "f6baec2fa88b30786594bf7c211f6fbdb77aa5279d06324c2512c049d3918390"
+}

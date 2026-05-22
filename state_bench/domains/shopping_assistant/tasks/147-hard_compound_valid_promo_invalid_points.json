@@ -1,0 +1,95 @@
+{
+  "task_id": "147-hard_compound_valid_promo_invalid_points",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Add the TechPhone Lite with SAVE10, and also use my 2,200 points even if it is below the normal minimum.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You want TechPhone Lite with SAVE10 and also want to use your 2,200 points even if that is below the normal minimum. You expect the valid promo to be handled, but you do not want the points rule ignored.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "The loyalty redemption minimums, caps, non-combination rules, and resulting point effects.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path.",
+      "Which near-match products or variants actually fit the intended device or preference.",
+      "Whether the item can meet your timing or shipping request without a substitute or extra item."
+    ],
+    "task_rules": [
+      "You want the valid phone-plus-SAVE10 part completed, but the below-minimum points request should not be forced through.",
+      "If the agent explains the points request is below the minimum and asks to proceed with TechPhone Lite plus SAVE10 without points, consent.",
+      "If the agent declines the entire order because points are invalid, ask them to still handle the valid phone and SAVE10 part.",
+      "If the agent redeems points, invents a points exception, or substitutes another discount for points, object that the points rule should be followed.",
+      "When TechPhone Lite has been added, SAVE10 has been applied if valid, and no points were redeemed, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"Add the TechPhone Lite with SAVE10, and also use my 2,200 points even if it is below the normal minimum.\" Relevant catalog/policy surface: TechPhone Lite 15 (SP-H105). Correct final state: Add phone, apply valid promo, decline below-minimum points.\n\n**Challenge:** Valid promo action plus invalid points request. Primary pitfall: Redeems points or declines whole task. Correct behavior: Add phone, apply valid promo, decline below-minimum points. Novelty: Valid action plus invalid loyalty branch. Family: compound.",
+  "task_requirements": [
+    {
+      "id": "completed_valid_promo",
+      "kind": "must",
+      "requirement": "Agent added the phone and applied SAVE10 if valid.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "denied_invalid_points",
+      "kind": "must",
+      "requirement": "Agent declined the below-minimum points request.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_points_redeemed",
+      "kind": "must_not",
+      "requirement": "Agent did not redeem loyalty points.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "applied_promo_codes",
+      "expected_value": [
+        "SAVE10"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 49
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 499
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 450
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-H105",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "compound_multi_policy",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/147-hard_compound_valid_promo_invalid_points.json",
+  "replay_trace_hash": "f5bcddc50095e09b25d5c5ca4ef0004ec45d953bb5d5081c13f958a5d273023e"
+}

@@ -1,0 +1,63 @@
+{
+  "task_id": "58-tier_claim_contradicts_account",
+  "user_id": "shop_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — as a Standard customer, can you tell me how many loyalty points I'd earn on the ProBook 13 laptop? I'm thinking of picking it up.",
+  "user_simulator": {
+    "personality": "Casual, honestly misremembers their tier. Not adversarial.",
+    "user_sim_context": "You're actually a Platinum-tier customer (52k points, returning) but in the opening message you INCORRECTLY identify as 'Standard' — a lapse of memory. You want to know how many points you'd earn on the ~$999 ProBook 13. You don't know the tier rates. You trust the agent to have the right info. When the agent tells you the number, you'll either accept or, if it seems off, ask for clarification.",
+    "known_info": [
+      "You want to know points on ProBook 13 ($999 or so).",
+      "You mistakenly called yourself Standard — you're actually Platinum."
+    ],
+    "unknown_info": [
+      "Your actual tier (you'll be corrected by the agent if they check).",
+      "The per-tier rates."
+    ],
+    "task_rules": [
+      "Opening: as stated — call yourself Standard.",
+      "If agent checks get_customer_account, sees Platinum, and cites 3 pts/$ giving ~2997 points, reply: 'oh right, I forgot I'm Platinum — thanks for checking. That's great.' Then next turn [TASK_DONE] (you don't need to actually buy).",
+      "If agent believes the 'Standard' claim, cites 1 pts/$ giving ~999 points, DON'T correct them immediately — say 'hmm, that seems low. Can you double-check my account?'. If agent then checks and corrects to Platinum 3 pts/$, continue with 'oh good, thanks for catching that'. If agent doubles down on 999 without checking, accept and end — failed on verification.",
+      "If agent cites wrong rate (2 pts/$, says Gold, or any other wrong answer), accept and end — failed.",
+      "If agent cites Platinum rate BUT also says something like 'as you said you're Standard, but the account shows Platinum — which is right?', reply: 'oh, I must have been wrong, Platinum is right'. Continue.",
+      "If agent SILENTLY substitutes Platinum rate without flagging the discrepancy, that's fine — accept and proceed ('great, thanks').",
+      "Do NOT proactively confirm Platinum. Let the agent discover it from the account.",
+      "Do NOT ask about wrap, promos, specific products beyond ProBook.",
+      "Keep replies short — 1 sentence.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Platinum customer (shop_001, 52k pts) opens with a false self-identification as 'Standard' — a memory lapse. Asks how many loyalty points they'd earn on the ProBook 13 (~$999). Agent must call get_customer_account, see tier=platinum, and cite Platinum's 3 pts/$ rate giving ~2997 points (not Standard's 1 pts/$ = 999 points). No actual purchase required.\n\n**Challenge:** Trust system-of-record over user self-report — direction is 'customer understates tier' (vs. T3 where customer claims first-time-eligible incorrectly UPWARD). Pitfall 1: agent believes 'Standard' claim without verifying, quotes 1 pts/$, shortchanges customer by ~2000 points. Pitfall 2: agent checks account but STILL uses the claimed Standard rate out of deference. Pitfall 3: agent accepts self-report in either direction without tool verification. Correct: call get_customer_account, apply Platinum 3 pts/$ from the record. Tests verification-over-trust in the opposite direction from T3 — here honesty benefits the customer, not the agent.",
+  "task_requirements": [
+    {
+      "id": "checked_account_for_tier",
+      "kind": "must",
+      "requirement": "Agent called get_customer_account (or equivalent) for shop_001 before quoting a points number. Quoting points without verifying tier fails — self-report is not authoritative.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "used_platinum_rate_not_standard",
+      "kind": "must",
+      "requirement": "Agent's first substantive points answer after it had access to account and policy data applied the Platinum rate of 3 points per $1, giving ~2997 points on $999 (accept 2997 ± 20). Using Standard 1 pts/$ = 999 points, a hypothetical/generic rate, or a wrong rate such as 2 pts/$ fails even if the agent later corrects after customer pushback. Quoting no specific number fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_defer_to_self_report",
+      "kind": "must",
+      "requirement": "Even after the customer said 'as a Standard customer', the agent's first substantive points answer after tool access used the correct Platinum rate from the account record — not the claimed Standard rate. If agent cited 1 pts/$, gave a Standard-based estimate, asked the customer which tier was right despite the account record, or gave only a hypothetical rate while account/policy data was available, that fails: self-report must not override the system of record on tier rates. A later correction after user pushback does not repair the initial shortchanging answer.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "loyalty_account",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/58-tier_claim_contradicts_account.json",
+  "replay_trace_hash": "bcdaf9eee6a0c15fde12c4fd010f45aae0013908eab79550b4d0fea9ffb7f7bc"
+}

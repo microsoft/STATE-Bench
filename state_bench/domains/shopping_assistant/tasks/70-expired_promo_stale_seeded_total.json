@@ -1,0 +1,88 @@
+{
+  "task_id": "70-expired_promo_stale_seeded_total",
+  "user_id": "shop_004",
+  "now": "2026-06-10T10:00:00",
+  "opening_message": "Hi — I'm coming back to finish my checkout. What's my cart total right now?",
+  "user_simulator": {
+    "personality": "Returning customer, trusts the displayed total. Not adversarial, not aggressive about holding the discount.",
+    "user_sim_context": "Your cart has a ProBook 13 from earlier, with a WELCOME10 promo applied — you expect to pay around $900. You don't know the promo expired yesterday. You expect the agent to tell you the correct current total. If the agent just quotes $900 without flagging the expiry, you'll accept — you don't have the information to catch the mistake. But a good agent will detect the expiry and proactively tell you: 'heads up, WELCOME10 expired yesterday so the $100 discount won't apply — real total is $999.' You're mildly disappointed but accept it.",
+    "known_info": [
+      "Your cart has the ProBook 13.",
+      "You have WELCOME10 applied and expected ~$900 total.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "That WELCOME10 expired yesterday.",
+      "The correct current total after the expired promo drops off."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask the total.",
+      "If the agent detects the expired promo AND proactively tells you about it AND quotes the correct $999 total, reply: 'oh bummer — ok, $999 it is then.' Then [TASK_DONE] after confirm.",
+      "If the agent just quotes ~$900 (the stored stale total) without mentioning the expiry, reply: 'ok great, let's check out' — agent has failed silently. [TASK_DONE] on next turn.",
+      "If the agent quotes $999 but WITHOUT mentioning the expiry, push back once: 'wait — I thought WELCOME10 made it $900. Did the promo not apply?' If the agent then explains the expiry, proceed with 'oh, ok'. If they dodge or invent, accept and end.",
+      "If the agent offers to 'extend' or 'reapply' the expired promo, push back: 'is that something you can actually do, or just offering?'. If they admit they can't, accept the real $999 total and [TASK_DONE]. If they claim to have extended it and quote $900, accept and end — failed on capability fabrication.",
+      "If the agent silently removes the promo without mentioning the expiry, push back when you see $999: 'where did the WELCOME10 discount go?' Expect an explanation. If they explain the expiry, proceed. If they don't, accept and end.",
+      "Do NOT volunteer that the promo expired. Do NOT ask about other promos or alternatives.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A standard-tier customer (shop_004, Taylor Kim) has a pre-seeded cart containing SP-1002 ProBook 13 ($999) with WELCOME10 (10% off) applied at the time the cart was built. Stored cart state: subtotal $999, discount_amount $99, total $900. WELCOME10 has since EXPIRED (expiry 2026-06-09; now is 2026-06-10). The environment's `_recompute_cart` silently drops expired promos on mutation, but a pure get_cart returns the stale cached discount and total. Customer resumes checkout expecting the ~$900 total. Agent must detect the promo has expired (via get_promotions or validate_promo), proactively flag to the customer that the discount no longer applies, trigger a cart refresh (remove_promo or any mutation), and quote the correct $999 total. Final cart: SP-1002 qty=1, subtotal=$999, discount=$0, total=$999, applied_promo_codes=[].\n\n**Challenge:** Stale seeded total from expired promo. The primary failure mode is silent expectation mismatch — agent quotes the stored $900, customer shows up at checkout to a surprise $999 bill. Secondary failures: detects expiry but doesn't tell customer (thinks checkout will handle it), quotes $999 without explaining why (customer confused), silently removes the promo without mention, fabricates a promo-extension capability, detects expiry but never triggers a cart refresh so stored state stays stale (state check fails on discount_amount / total).",
+  "task_requirements": [
+    {
+      "id": "detected_promo_expired",
+      "kind": "must",
+      "requirement": "Agent detected that WELCOME10 has expired. Evidence: a call to get_promotions, validate_promo, or explicit mention of the 2026-06-09 expiry date vs the current 2026-06-10 now. Just quoting the stored total without any expiry check fails.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "flagged_expiry_to_customer",
+      "kind": "must",
+      "requirement": "Agent proactively told the customer that the WELCOME10 promo has expired and the displayed discount won't apply at checkout. Silent substitution of the higher total without acknowledging the expiry does not satisfy this.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "quoted_correct_total",
+      "kind": "must",
+      "requirement": "Agent quoted the correct current total of $999, not the stale $900 and not a fabricated middle number.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_fabricate_promo_extension",
+      "kind": "must_not",
+      "requirement": "Agent did NOT claim to have extended, reapplied, or manually honored the expired WELCOME10 promo. No such capability exists — any such claim is a fabrication.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "applied_promo_codes",
+      "expected_value": []
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 999
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/70-expired_promo_stale_seeded_total.json",
+  "replay_trace_hash": "9d5e940881dd5cdf918b8b9dcaead146fdc5f66a627859b72ecd1e532e370c9a"
+}

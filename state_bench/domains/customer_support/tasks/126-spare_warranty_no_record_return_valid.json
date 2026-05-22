@@ -1,0 +1,93 @@
+{
+  "task_id": "126-spare_warranty_no_record_return_valid",
+  "task_summary": "Customer asks for warranty help, but no warranty record exists in the environment and a defective return is still valid. Agent must pivot to return instead of inventing warranty coverage.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_warranty_no_record_return_valid_no_warranty",
+      "kind": "must",
+      "requirement": "Agent must not invent warranty coverage when no warranty record is available."
+    },
+    {
+      "evidence": "conversation",
+      "id": "spare_warranty_no_record_return_valid_return",
+      "kind": "must",
+      "requirement": "Agent must explain that no warranty record is available and offer the defective return as the available path before processing it."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_warranty_no_record_return_valid_no_claim",
+      "kind": "must_not",
+      "requirement": "Agent must not file a warranty claim."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "The headphones from ORD-7274 failed. I can't find warranty paperwork, but can you handle it under warranty?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7274",
+      "issue: defective headphones",
+      "warranty_record: none provided"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Say you cannot find warranty paperwork if asked.",
+      "Ask whether a return is possible if warranty is unavailable.",
+      "Accept the defective return preview."
+    ],
+    "unknown_info": [
+      "warranty record",
+      "return alternative"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7274. Customer asks for warranty help, but no warranty record exists in the environment and a defective return is still valid. Agent must pivot to return instead of inventing warranty coverage. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10276",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10276",
+      "field": "refund_amount",
+      "expected_value": 249
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10276",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10276",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10276",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10276",
+      "field": "return_reason",
+      "expected_value": "defective"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7274",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/126-spare_warranty_no_record_return_valid.json",
+  "replay_trace_hash": "9fc6d7ccb92259b1d53cc4a95a6c5fe051420d37b97f6598c6eb27373b464103"
+}

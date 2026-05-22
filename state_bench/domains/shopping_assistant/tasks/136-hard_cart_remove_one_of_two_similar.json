@@ -1,0 +1,81 @@
+{
+  "task_id": "136-hard_cart_remove_one_of_two_similar",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I have Pixel 7 and Pixel 8 ClearGrip cases in my cart. Before removing anything, read back both product IDs and ask me to confirm Pixel 8 removal.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "Your cart has both Pixel 7 and Pixel 8 ClearGrip cases, and you only want the Pixel 8 case removed. Before removal, you want both product IDs read back and a confirmation request.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "Your cart already contains: 1 x ClearGrip Case for Pixel 7; 1 x ClearGrip Case for Pixel 8."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it."
+    ],
+    "task_rules": [
+      "You want the Pixel 8 case removed, but only after the agent disambiguates both ClearGrip cases by product ID.",
+      "If the agent reads back both product IDs and asks to remove Pixel 8, consent to removing only the Pixel 8 case.",
+      "If the agent removes a case before reading both IDs, object that you wanted the two similar cases confirmed first.",
+      "If the agent removes Pixel 7 or both cases, object that Pixel 7 was supposed to stay.",
+      "When Pixel 8 has been removed, Pixel 7 remains, and no checkout-side writes were made, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"I have Pixel 7 and Pixel 8 ClearGrip cases in my cart. Before removing anything, read back both product IDs and ask me to confirm Pixel 8 removal.\" Relevant catalog/policy surface: ClearGrip Case for Pixel 7 (SP-H107), ClearGrip Case for Pixel 8 (SP-H108). Correct final state: Read back both case product IDs, get consent, remove Pixel 8 only, and keep Pixel 7.\n\n**Challenge:** Exact removal among near-identical items requires pre-mutation disambiguation and consent. Primary pitfall: Removes immediately, omits product IDs, or removes the wrong/both cases. Correct behavior: Read back both case product IDs, get consent, remove Pixel 8 only, and keep Pixel 7. Novelty: Precise removal among near-identical products. Family: cart_mutation.",
+  "task_requirements": [
+    {
+      "id": "read_back_case_ids",
+      "kind": "must",
+      "requirement": "Agent read back both Pixel 7 and Pixel 8 case product IDs before removal.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_consent_before_pixel8_remove",
+      "kind": "must",
+      "requirement": "Agent got consent after readback before removing Pixel 8.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "removed_pixel8_only",
+      "kind": "must",
+      "requirement": "Agent removed the Pixel 8 case and kept the Pixel 7 case.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_checkout_writes",
+      "kind": "must_not",
+      "requirement": "Agent did not call set_shipping_option or redeem_loyalty_points after the removal.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": [
+        "CI-0001"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 29
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 29
+    }
+  ],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/136-hard_cart_remove_one_of_two_similar.json",
+  "replay_trace_hash": "b94817a499f6529fb6c26ae1aac5a5bc1c8909ecb77d8e813b5a68b7c8b9c3eb"
+}

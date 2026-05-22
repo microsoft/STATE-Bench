@@ -1,0 +1,69 @@
+{
+  "task_id": "107-hard_price_match_gift_buyer_contact",
+  "task_summary": "Gift buyer asks for a price adjustment on a delivered book without involving the recipient. Correct path is a small price-match refund to original payment, not gift return store credit.",
+  "task_type": "price_match_refund",
+  "task_requirements": [
+    {
+      "id": "hard_price_match_gift_buyer_contact_must_issue_5_original_payment_refund",
+      "kind": "must",
+      "requirement": "Agent must issue exactly a $5 price-match refund to original_payment for ITEM-10208 using a confirmed refund action; verbal claims are insufficient.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "hard_price_match_gift_buyer_contact_lookup",
+      "kind": "must",
+      "requirement": "Agent must verify from system records that the purchased item has current price $19 before issuing the refund.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "hard_price_match_gift_buyer_contact_no_cancel_return",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel, return, exchange, issue store credit, or involve the gift recipient for this buyer-requested price match.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "hard_price_match_gift_buyer_contact_extra",
+      "kind": "must",
+      "requirement": "Agent must distinguish a buyer-requested price match from a recipient gift return.",
+      "evidence": "conversation"
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I bought a book as a gift in ORD-7207 and it is $5 cheaper now. Please don't make the recipient return anything.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7207",
+      "item: The Great Algorithm (Hardcover)",
+      "current_price: $19"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "If the agent tries to cancel, return, exchange, issue gift-return store credit, or involve the recipient, say you are the gift buyer and only want a buyer price-match refund while the recipient keeps the book.",
+      "Ask them to verify the product price rather than guessing.",
+      "Accept the preview only if it is a $5 price-match refund to the original payment method and does not require any recipient action."
+    ],
+    "unknown_info": [
+      "whether cancellation is needed",
+      "price-match amount"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7207. Gift buyer asks for a price adjustment on a delivered book without involving the recipient. Correct path is a small price-match refund to original payment, not gift return store credit. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10208",
+      "field": "refund_amount",
+      "expected_value": 5
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10208",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/107-hard_price_match_gift_buyer_contact.json",
+  "replay_trace_hash": "5ca43f515e4678e3359e2417f2e292a54694bfa79c183724efd9f101cb02928f"
+}

@@ -1,0 +1,44 @@
+{
+  "task_id": "26-shipping_signature_conflict",
+  "task_summary": "**Task:** The customer says a package never arrived, but the delivery record shows a signature from Emma Chen on file. Because the signed delivery confirms receipt, the correct outcome is to deny the claim and explain that the signature record controls the decision.\n\n**Challenge:** This is a policy-bound denial even if the customer disputes it. Weak agents refund anyway, ignore the signature evidence, or soften the answer into an unnecessary investigation when the delivery record is already decisive.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "26_shipping_signature_conflict_agent_must_deny_signature_claim",
+      "kind": "must",
+      "requirement": "Agent must tell the customer the not-received claim is denied because delivery was confirmed by the signature on file."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "26_shipping_signature_conflict_agent_must_use_signature_record",
+      "kind": "must",
+      "requirement": "Agent must base the denial on the get_order result showing signature_on_file='Emma Chen', either by calling get_order for ORD-6028 or explicitly referencing that signature record in the conversation."
+    }
+  ],
+  "user_id": "cust_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I never received my tablet from order ORD-6028 even though tracking says delivered.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6028",
+      "item: tablet"
+    ],
+    "personality": "direct",
+    "task_rules": [
+      "Give the order ID.",
+      "Before the agent mentions signature evidence, maintain that you did not receive the tablet.",
+      "When first told there is a signature from Emma Chen, say once that you do not remember signing and ask whether that signature controls the claim decision.",
+      "If the agent clearly denies the claim because the matching signature confirms delivery, accept the denial and end.",
+      "If the agent offers a refund, replacement, or investigation after saying the matching signature controls, ask for the final signature-based decision instead of accepting the alternate path."
+    ],
+    "unknown_info": [
+      "that signature is on file",
+      "that claim will be denied"
+    ],
+    "user_sim_context": "Tracking says your tablet was delivered, but you do not have it and want the company to look into that claim seriously. You are focused on the fact that the item is missing from your perspective, not on any internal delivery proof the company may have. You want the agent to explain the situation clearly if there is a reason the claim cannot be honored."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/26-shipping_signature_conflict.json",
+  "replay_trace_hash": "eb11c6d3d5f7b1ee12bd92dee4935f0849cb83af6c639cfa385fb3465e95f1c8"
+}

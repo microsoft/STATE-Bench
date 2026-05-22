@@ -1,0 +1,84 @@
+{
+  "task_id": "24-shipping_late_compensation",
+  "task_summary": "**Task:** A Platinum customer received an order four days late. The right resolution is not a return at all, but the late-delivery compensation that results in a $30 refund after applying the Platinum multiplier.\n\n**Challenge:** The agent has to find the compensation rule and apply the tier logic correctly. Weak agents miss the multiplier, guess at the amount, or treat a service-compensation request as if it required some other order action.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "shipping_late_compensation_agent_must_check_compensation_policy",
+      "kind": "must",
+      "requirement": "Agent must either call get_policies(topic=\"shipping\") or explicitly explain the late-delivery compensation rule used for a 4-day delay."
+    },
+    {
+      "evidence": "conversation",
+      "id": "shipping_late_compensation_agent_must_apply_platinum_tier_multiplier",
+      "kind": "must",
+      "requirement": "Agent must tell the customer that a 4-day delay qualifies for a $15 base late-delivery credit and that Platinum doubles that base credit to $30."
+    }
+  ],
+  "user_id": "cust_001",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My order ORD-6026 was supposed to arrive on June 5th but didn't come until the 9th. That's 4 days late!",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6026",
+      "promised: June 5",
+      "delivered: June 9",
+      "days_late: 4"
+    ],
+    "personality": "direct",
+    "task_rules": [
+      "Give the order ID.",
+      "Mention the delay (4 days).",
+      "Ask about compensation for the delay.",
+      "You're a platinum member — mention it if relevant.",
+      "If the agent offers store credit, a product return, or any compensation amount other than a $30 refund to original payment, ask them to recheck the late-delivery policy and Platinum multiplier before you accept.",
+      "Accept only after the refund to your original payment method is clearly processed."
+    ],
+    "unknown_info": [
+      "compensation amount",
+      "tier multiplier"
+    ],
+    "user_sim_context": "Your order showed up several days later than promised, and you want to know what compensation that qualifies for. The item itself is fine, so this is about the delay rather than the product. You expect the agent to look at the lateness and tell you what the company owes, if anything."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9170",
+      "field": "refund_amount",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9170",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6026",
+      "field": "status",
+      "expected_value": "delivered"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9170",
+      "field": "item_status",
+      "expected_value": "delivered"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9170",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9170",
+      "field": "return_label_issued",
+      "expected_value": false
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/24-shipping_late_compensation.json",
+  "replay_trace_hash": "2bebabbb2b31f3363f1e22eccc31dad849ed1018749577c38893d1a796b03214"
+}

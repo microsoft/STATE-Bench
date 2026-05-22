@@ -1,0 +1,72 @@
+{
+  "task_id": "130-hard_warranty_maxed_but_paid_repair",
+  "task_summary": "Warranty claim limit is maxed, but policy still allows paid repair. Agent must not promise a free replacement or say no option exists.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_warranty_maxed_but_paid_repair_status",
+      "kind": "must",
+      "requirement": "Agent must check warranty status before filing the claim."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_warranty_maxed_but_paid_repair_no_free_or_denial_path",
+      "kind": "must_not",
+      "requirement": "Agent must not promise a free replacement, deny that any paid repair option exists, or route to return/refund instead of the paid-repair warranty path."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_warranty_maxed_but_paid_repair_disclose_cost",
+      "kind": "must",
+      "requirement": "Agent must state before confirmation that the maxed-claims option is paid repair and that the customer is responsible for the repair cost."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "My headphones from ORD-7235 broke again. I know I've used the warranty a lot, but what can you do?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7235",
+      "item: SoundMax Wireless Headphones",
+      "warranty_id: WRT-4105"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID.",
+      "Admit there have been several prior claims if asked.",
+      "If the agent says no option exists because the claim limit is maxed, ask once whether paid repair is still available under the maxed-claims policy.",
+      "If the agent offers free replacement, return, refund, or cancellation instead, ask whether the correct warranty path is paid repair rather than a free or return/refund path.",
+      "Accept paid repair only if the agent identifies it as the remaining policy option after maxed claims.",
+      "If the agent only quotes or describes paid repair, ask them to file and confirm the paid-repair warranty claim.",
+      "Accept the final outcome only after the WRT-4105 paid_repair claim is filed and confirmed."
+    ],
+    "unknown_info": [
+      "warranty eligibility",
+      "resolution"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7235. Warranty claim limit is maxed, but policy still allows paid repair. Agent must not promise a free replacement or say no option exists. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4105",
+      "field": "claim_count",
+      "expected_value": 4
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4105",
+      "field": "resolution",
+      "expected_value": "paid_repair"
+    },
+    {
+      "entity_type": "warranties",
+      "record_key": "WRT-4105",
+      "field": "status",
+      "expected_value": "claimed"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/130-hard_warranty_maxed_but_paid_repair.json",
+  "replay_trace_hash": "6272260c824dd8fbccf18121151e39c60703dbfc6c04ac866cd1fb64eee26632"
+}

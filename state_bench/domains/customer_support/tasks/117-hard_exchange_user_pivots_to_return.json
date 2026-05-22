@@ -1,0 +1,81 @@
+{
+  "task_id": "117-hard_exchange_user_pivots_to_return",
+  "task_summary": "Customer starts with an out-of-stock exchange request, then explicitly pivots to a return. Agent must follow the final return request rather than staying on exchange alternatives.",
+  "task_type": "exchange_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_user_pivots_to_return_pivot",
+      "kind": "must",
+      "requirement": "Agent must pivot from exchange handling to the customer's final return request."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_user_pivots_to_return_no_exchange",
+      "kind": "must_not",
+      "requirement": "Agent must not attempt to complete the out-of-stock exchange."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I wanted to exchange the shoes in ORD-7219, but if the replacement is unavailable I just want to return them.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7219",
+      "initial_goal: exchange",
+      "fallback: return"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Ask about the replacement stock.",
+      "If the agent says it is out of stock, clearly choose a return instead.",
+      "Confirm only a return preview for the shoes as changed_mind with refund to original payment; if the agent continues with exchange, replacement, or store-credit alternatives after the shirt is out of stock, say you are pivoting to a normal return instead."
+    ],
+    "unknown_info": [
+      "stock status",
+      "return terms"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7219. Customer starts with an out-of-stock exchange request, then explicitly pivots to a return. Agent must follow the final return request rather than staying on exchange alternatives. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10220",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10220",
+      "field": "refund_amount",
+      "expected_value": 121
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10220",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10220",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10220",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7219",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/117-hard_exchange_user_pivots_to_return.json",
+  "replay_trace_hash": "724990adc229fd9900a3a60bf96212c8d2e39483111b055c128ce63bc159c226"
+}

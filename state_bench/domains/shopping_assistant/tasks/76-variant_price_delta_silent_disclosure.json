@@ -1,0 +1,101 @@
+{
+  "task_id": "76-variant_price_delta_silent_disclosure",
+  "user_id": "shop_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hey — please add the SlimBook Air 13 with 16GB RAM to my cart.",
+  "user_simulator": {
+    "personality": "Decisive, knows what they want. Value-conscious but not price-sensitive if the upgrade is disclosed upfront.",
+    "user_sim_context": "You want the SlimBook Air 13 with 16GB RAM. You saw the base price ($849) on the product page. You do NOT know the 16GB variant carries a +$150 upgrade fee. If the agent quotes $999 upfront and asks for confirmation, you're fine — you want the upgrade. If the agent adds it silently and the final total comes out to $999 without prior notice, you'd feel caught off guard but wouldn't push back in this session — you'll accept what you're told and leave quietly.",
+    "known_info": [
+      "You want the SlimBook Air 13 (SP-1001) with 16GB RAM.",
+      "You saw the base price $849 on the product page.",
+      "No gift wrap.",
+      "You are a Gold-tier returning customer."
+    ],
+    "unknown_info": [
+      "That the 16GB variant adds $150 to the price.",
+      "The effective price ($999).",
+      "That variants can carry price deltas at all."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask for SP-1001 with 16GB.",
+      "If the agent quotes the effective price ($999) AND explains the +$150 delta BEFORE adding AND asks you to confirm, reply: 'oh — ok, $999 works.' Once agent confirms add + $999 total, reply 'perfect' and [TASK_DONE].",
+      "If the agent adds silently and quotes $999 at confirmation without mentioning the delta upfront, accept the $999 and [TASK_DONE]. Agent failed silently.",
+      "If the agent adds and quotes $849 in conversation while cart actually shows $999, ask once: 'wait — I see $999 on the cart. I thought it was $849?'. If they explain the delta, accept. If not, end.",
+      "If the agent picks 8gb base ($849) without asking you, push back: 'I wanted 16GB, not 8GB. Can you swap?' If they then check variants and quote the $999 effective, proceed with 'yes that's fine'. If they resist, end.",
+      "If the agent vaguely says 'there's a small upgrade fee' without quoting $150 or $999, ask: 'how much exactly?'. If they then quote $150 / $999, proceed. Otherwise accept the cart at whatever total.",
+      "Do NOT mention loyalty points, welcome, promos, bundles, gift wrap, or shipping.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Gold-tier returning customer (shop_003, Sam Chen) asks for the SlimBook Air 13 (SP-1001, base $849) with the 16GB RAM variant. The 16gb variant carries a +$150 price_delta — effective $999. The add_to_cart tool accepts the variant_id and computes the delta internally (via _unit_price) but does NOT force the agent to quote the delta. The customer knows base price but not the upcharge. Agent must check variants (get_variants or get_product_details), quote the effective $999 BEFORE adding, get customer consent, then call add_to_cart. Final cart: SP-1001 variant_id='16gb', qty=1, no wrap, subtotal $999, total $999.\n\n**Challenge:** Variant delta disclosure. Parallel to T12 (gift-wrap fee disclosure) but for the variant price path. Primary failure: agents that route the variant_id blindly and skip the price-delta check. The env recomputes cart aggregates correctly, so state is right — but the customer was never told about the $150 upcharge, producing a silent expectation mismatch. Secondary failures: misquoting the base price while cart is at the delta price, or defensively picking the base variant without asking.",
+  "task_requirements": [
+    {
+      "id": "checked_variant_pricing",
+      "kind": "must",
+      "requirement": "Agent called get_variants OR get_product_details for SP-1001 BEFORE calling add_to_cart, so they can see the 16gb variant's price_delta. A direct add_to_cart with variant_id='16gb' without a prior variant-pricing check fails this.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "disclosed_effective_price",
+      "kind": "must",
+      "requirement": "Agent quoted the effective $999 (or the +$150 delta) to the customer BEFORE calling add_to_cart. Post-hoc disclosure in the cart summary does not satisfy this — the customer needs the number before committing.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "customer_consent_on_upgrade",
+      "kind": "must",
+      "requirement": "Agent got customer confirmation on the upgraded price before adding to cart. Silently adding the 16gb variant without a consent checkpoint fails this.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "added_16gb_variant",
+      "kind": "must",
+      "requirement": "Agent called add_to_cart with variant_id='16gb'. The final cart must have SP-1001 with variant_id='16gb'. Base 8gb or a different variant fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "did_not_misquote_price",
+      "kind": "must_not",
+      "requirement": "Agent did NOT claim in conversation that the total is $849 (base price) while the cart actually shows $999. Cart state and conversational claims must match.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "subtotal",
+      "expected_value": 999
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "total",
+      "expected_value": 999
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_003",
+        "product_id": "SP-1001",
+        "variant_id": "16gb",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "compatibility_variants",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/76-variant_price_delta_silent_disclosure.json",
+  "replay_trace_hash": "85cfb5eeebee0f2d5b472eef41e67c3909cfea8fedbcf46699aac2e4f3358ba5"
+}

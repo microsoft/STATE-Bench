@@ -1,0 +1,86 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H123",
+      "name": "Premium Cotton Shirt",
+      "category": "clothing",
+      "subcategory": "shirt",
+      "brand": "Threadly",
+      "price": 59,
+      "rating": 4.2,
+      "review_count": 1200,
+      "description": "Premium Cotton Shirt from Threadly.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 3,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": [
+        {
+          "variant_id": "medium_blue",
+          "label": "Medium Blue",
+          "price_delta": 0,
+          "in_stock": true,
+          "stock_quantity": 9
+        },
+        {
+          "variant_id": "large_blue",
+          "label": "Large Blue",
+          "price_delta": 0,
+          "in_stock": true,
+          "stock_quantity": 4
+        },
+        {
+          "variant_id": "large_white",
+          "label": "Large White",
+          "price_delta": 0,
+          "in_stock": false,
+          "stock_quantity": 0
+        }
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_003",
+      "name": "Sam Chen",
+      "email": "sam.chen@example.com",
+      "tier": "gold",
+      "is_first_time": false,
+      "loyalty_points": 18500,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_003",
+      "customer_id": "shop_003",
+      "item_ids": [
+        "CI-0001"
+      ],
+      "subtotal": 59,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 59,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [
+    {
+      "cart_item_id": "CI-0001",
+      "customer_id": "shop_003",
+      "product_id": "SP-H123",
+      "quantity": 1,
+      "gift_wrap": false,
+      "variant_id": "medium_blue"
+    }
+  ],
+  "promotions": []
+}

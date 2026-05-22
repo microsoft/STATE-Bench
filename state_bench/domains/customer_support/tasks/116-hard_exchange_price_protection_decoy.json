@@ -1,0 +1,64 @@
+{
+  "task_id": "116-hard_exchange_price_protection_decoy",
+  "task_summary": "Customer asks to exchange a coffee maker for the identical model only to capture a lower price. Exchange policy has no price protection; agent should reject exchange-based price adjustment and use refund policy if price match is eligible.",
+  "task_type": "exchange_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_exchange_price_protection_decoy_reject_exchange",
+      "kind": "must",
+      "requirement": "Agent must reject using exchange as a price-protection mechanism."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_price_protection_decoy_refund_policy",
+      "kind": "must",
+      "requirement": "Agent must explain and use the refund price-match path for the eligible $20 difference."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_price_protection_decoy_no_exchange",
+      "kind": "must_not",
+      "requirement": "Agent must not process an exchange, return, cancellation, or replacement."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "Can you exchange my coffee maker in ORD-7218 for the same one at today's lower price?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7218",
+      "item: BrewPerfect Coffee Maker",
+      "current_price: $129"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Admit there is no defect or size issue.",
+      "Ask whether exchange can be used for the lower price.",
+      "If the agent rejects exchange-based price protection, ask whether refund policy allows a price-match adjustment for the current $129 price; do not agree to an exchange, return, cancellation, replacement, or return-and-reorder workaround.",
+      "Accept only a refund-policy price-match adjustment; if the agent explains refund policy does not allow one, accept the no-action outcome and keep the coffee maker."
+    ],
+    "unknown_info": [
+      "exchange price protection",
+      "price-match alternative"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7218. Customer asks to exchange a coffee maker for the identical model only to capture a lower price. Exchange policy has no price protection; agent should reject exchange-based price adjustment and use refund policy if price match is eligible. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10219",
+      "field": "refund_amount",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10219",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/116-hard_exchange_price_protection_decoy.json",
+  "replay_trace_hash": "5c9659ee2eb32f97c3b6248078b4dc4d53794cea3719742fee1edc6cae7fc11d"
+}

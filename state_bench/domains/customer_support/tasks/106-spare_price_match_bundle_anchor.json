@@ -1,0 +1,76 @@
+{
+  "task_id": "106-spare_price_match_bundle_anchor",
+  "task_summary": "Three-item accessory/book order where only the phone case qualifies for a price-match refund. Agent must not treat the whole bundle or the USB hub as discounted.",
+  "task_type": "price_match_refund",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_price_match_bundle_anchor_anchor",
+      "kind": "must",
+      "requirement": "Agent must identify the phone case as the only price-match item."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_price_match_bundle_anchor_refund",
+      "kind": "must",
+      "requirement": "Agent must issue only the $10 phone-case price-match refund."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_price_match_bundle_anchor_others",
+      "kind": "must_not",
+      "requirement": "Agent must not refund, return, cancel, or alter the USB hub or book."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_price_match_bundle_anchor_hard3_preview_confirm",
+      "kind": "must",
+      "requirement": "Agent must preview the phone-case-only $10 price adjustment and obtain explicit user confirmation before finalizing the refund."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_price_match_bundle_anchor_hard3_no_immediate_write",
+      "kind": "must_not",
+      "requirement": "Agent must not finalize the refund in the same assistant turn that first identifies the phone case as the eligible bundle item."
+    }
+  ],
+  "user_id": "cust_001",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "ORD-7271 had a little bundle of accessories and a book. One item got cheaper, but I only want the right adjustment, not a return.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7271",
+      "cheaper_item: phone case"
+    ],
+    "personality": "direct",
+    "task_rules": [
+      "Give the order ID.",
+      "Initially call it the little accessory bundle.",
+      "Clarify it is the phone case only if asked.",
+      "Reject any return or bundle-wide refund.",
+      "Accept only the phone-case price-match preview.",
+      "Do not accept a completed refund unless the agent first previews the phone-case-only adjustment and asks you to confirm before finalizing it."
+    ],
+    "unknown_info": [
+      "which item qualifies",
+      "whether bundle affects refund"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7271. Three-item accessory/book order where only the phone case qualifies for a price-match refund. Agent must not treat the whole bundle or the USB hub as discounted. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10271",
+      "field": "refund_amount",
+      "expected_value": 10
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10271",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/106-spare_price_match_bundle_anchor.json",
+  "replay_trace_hash": "6462d18621d7b0b624ff36cd00a9249edf89efa5797440eee0a304013cd9443c"
+}

@@ -1,0 +1,172 @@
+{
+  "task_id": "111-hard_exchange_downgrade_cash_demand",
+  "task_summary": "Customer downgrades headphones and demands cash back. Exchange policy gives cheaper-item difference as store credit, not original-payment cash.",
+  "task_type": "exchange_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_downgrade_cash_demand_lookup",
+      "kind": "must",
+      "requirement": "Agent must resolve the requested replacement product before deciding."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_downgrade_cash_demand_not_return",
+      "kind": "must_not",
+      "requirement": "Agent must not process a return instead of the required exchange decision."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_downgrade_cash_demand_process",
+      "kind": "must",
+      "requirement": "Agent must actually process the exchange after preview and confirmation."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_exchange_downgrade_cash_demand_store_credit_not_cash",
+      "kind": "must",
+      "requirement": "Agent must explain that the $200 cheaper-exchange difference is issued as store credit, not refunded to the card/original payment method."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "I want to exchange the Elite headphones in ORD-7213 for the basic model and get the difference back on my card.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7213",
+      "current_item: SoundMax Elite Wireless Headphones",
+      "requested_item: SoundMax Basic Headphones"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Ask why the difference cannot go back to your card.",
+      "Accept store credit after the policy is explained.",
+      "Confirm only a preview that exchanges the Elite headphones for the SoundMax Basic Headphones and gives any cheaper-item difference as store credit; if the agent offers a return or card refund to handle the downgrade, say you still want the exchange path and will accept store credit if that is the policy."
+    ],
+    "unknown_info": [
+      "replacement product ID",
+      "exchange eligibility",
+      "price difference"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7213. Customer downgrades headphones and demands cash back. Exchange policy gives cheaper-item difference as store credit, not original-payment cash. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10213",
+      "field": "item_status",
+      "expected_value": "exchanged"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10213",
+      "field": "refund_amount",
+      "expected_value": 200
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10213",
+      "field": "refund_method",
+      "expected_value": "store_credit"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10213",
+      "field": "replacement_item_id",
+      "expected_value": "ITEM-10214"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "goodwill_credit",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "goodwill_credit_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "item_id",
+      "expected_value": "ITEM-10214"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "item_status",
+      "expected_value": "confirmed"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "order_id",
+      "expected_value": "ORD-7213"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "product_id",
+      "expected_value": "PROD-4216"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "quantity",
+      "expected_value": 1
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "refund_amount",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "refund_method",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "replacement_item_id",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "restocking_fee",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "return_label_issued",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "return_reason",
+      "expected_value": null
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "store_credit_only",
+      "expected_value": false
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10214",
+      "field": "unit_price",
+      "expected_value": 149
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/111-hard_exchange_downgrade_cash_demand.json",
+  "replay_trace_hash": "1b06cdc5cb8520e934311b0f48dee72035a7d56bd2a0839608d8123be8de6602"
+}

@@ -1,0 +1,82 @@
+{
+  "task_id": "69-challenge_silver_restock_plus_shipping",
+  "task_summary": "**Task:** A Silver customer is returning a $599 tablet from a free-shipping order. The correct handling is to process the changed-mind return, keep the base $89 restocking deduction, apply the $22 Silver restocking-discount adjustment, and also apply the $8 shipping clawback because the remaining order falls below the free-shipping threshold.\n\n**Challenge:** Several financial adjustments stack here, but they do not collapse into one generic number. Weak agents charge the full restocking fee without the Silver adjustment, miss the shipping clawback, or surface only one of the two policy adjustments.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "69_challenge_silver_restock_plus_shipping_agent_must_discover_both_restocking_discount",
+      "kind": "must",
+      "requirement": "Agent must tell the customer the tablet refund includes a $22 Silver restocking-fee discount against the $89 restocking fee."
+    },
+    {
+      "evidence": "conversation",
+      "id": "69_challenge_silver_restock_plus_shipping_agent_must_explain_shipping_clawback",
+      "kind": "must",
+      "requirement": "Agent must tell the customer the tablet refund includes an $8 free-shipping clawback because the remaining subtotal drops below $100."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "Hi, I want to return the tablet from order ORD-7103. I changed my mind on it.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7103",
+      "item: tablet",
+      "reason: changed mind"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give order ID when asked.",
+      "If restocking fee is mentioned, ask about any Silver member discount.",
+      "Accept fees or deductions only after the agent explains the specific adjustment; if the preview gives only a net amount, ask for the restocking fee, Silver discount, and any shipping-related adjustment to be broken out.",
+      "If the agent explains restocking and the Silver discount but no shipping adjustment, ask whether returning the tablet changes the order's original free-shipping qualification before confirming."
+    ],
+    "unknown_info": [
+      "restocking fee",
+      "restocking discount",
+      "shipping clawback"
+    ],
+    "user_sim_context": "You want to return a tablet because you changed your mind, and you know the amount may not be as simple as the sticker price. Your membership tier might help somewhat, but you are not sure how much. You want the agent to walk through the refund clearly, including any deductions or credits that apply."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10120",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10120",
+      "field": "refund_amount",
+      "expected_value": 524
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10120",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10120",
+      "field": "restocking_fee",
+      "expected_value": 89
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10120",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7103",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/69-challenge_silver_restock_plus_shipping.json",
+  "replay_trace_hash": "a8cda4a7a665121e7be364d7d3ad4da50e1303af86b405ac1faa8faa37442481"
+}

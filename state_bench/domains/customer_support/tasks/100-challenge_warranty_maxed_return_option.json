@@ -1,0 +1,89 @@
+{
+  "task_id": "100-challenge_warranty_maxed_return_option",
+  "task_summary": "**Task:** The customer has defective headphones with a maxed-out warranty claim history, but the item was delivered only ten days ago and is still fully returnable. The correct handling is to recognize that the open return window provides a better valid resolution than the paid repair path and to process the full refund route.\n\n**Challenge:** The trap is stopping at the first policy dead end. Weak agents see the warranty cap, offer the $99 repair, and never look for the still-available return option that actually resolves the case better.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "100_challenge_warranty_maxed_return_option_agent_must_explain_return_better_than_paid_repair",
+      "kind": "must",
+      "requirement": "Agent must explain that the warranty is maxed out and that a defective return is the better available option because it provides a full $249 refund instead of a paid repair."
+    },
+    {
+      "evidence": "tool_calls",
+      "id": "100_challenge_warranty_maxed_return_option_agent_must_proactively_check_the_return",
+      "kind": "must",
+      "requirement": "Agent must call get_policies with topic return after checking the maxed warranty and before processing the final return."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "My headphones from order ORD-7113 are broken AGAIN. This is the fourth time! I have a warranty — can you fix them?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7113",
+      "item: headphones",
+      "issue: defective again"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give order ID and mention warranty.",
+      "If agent says warranty is maxed and offers paid repair, ask: 'Isn't there a cheaper option? Can I just return them instead?'",
+      "If agent offers return for full refund, accept it.",
+      "Before accepting any paid repair, partial workaround, replacement, or warranty-only path, ask the agent to check whether the recently delivered defective headphones are eligible for a no-cost return/refund.",
+      "If the agent only processes warranty or says returns are unavailable without checking return eligibility, push back for the defective-return option rather than accepting the warranty-only path."
+    ],
+    "unknown_info": [
+      "warranty claim limit",
+      "return option",
+      "paid repair cost"
+    ],
+    "user_sim_context": "Your headphones have broken again after repeated warranty issues, and you are exhausted with the cycle of fixes. What you want most is the best practical outcome now, not another abstract explanation of coverage. You expect the agent to look at the full situation and tell you the smartest path available today."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10141",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10141",
+      "field": "refund_amount",
+      "expected_value": 249
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10141",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10141",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10141",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10141",
+      "field": "return_reason",
+      "expected_value": "defective"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7113",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/100-challenge_warranty_maxed_return_option.json",
+  "replay_trace_hash": "c9d6436cf87f14296bb3f8557391f1d07e38068c0ace4bf8a2e856fe54d92f56"
+}

@@ -1,0 +1,70 @@
+{
+  "task_id": "124-hard_shipping_stuck_tracking_treat_lost",
+  "task_summary": "Coffee maker has been in transit with no update for more than seven days. Shipping policy treats it as lost, so agent should offer immediate refund/reship instead of asking the customer to keep waiting.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_shipping_stuck_tracking_treat_lost_ask_resolution",
+      "kind": "must",
+      "requirement": "Agent must ask the customer whether they want a refund or a reship before processing one."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_shipping_stuck_tracking_treat_lost_lost",
+      "kind": "must",
+      "requirement": "Agent must treat the stale tracking as a lost-package claim."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_shipping_stuck_tracking_treat_lost_refund",
+      "kind": "must",
+      "requirement": "Agent must wait for the customer to choose refund rather than selecting reship or refund unilaterally."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_shipping_stuck_tracking_treat_lost_no_wait",
+      "kind": "must_not",
+      "requirement": "Agent must not require the customer to keep waiting without offering immediate refund or reship."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-15T10:00:00",
+  "opening_message": "ORD-7227 has had no tracking update for over a week. Please don't tell me to wait again.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7227",
+      "tracking: stale over 7 days",
+      "preferred_resolution: refund to original payment (only reveal if the agent asks)"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Say tracking has been stale for over a week.",
+      "If the agent says to keep waiting or says no action is available because the package is still in transit, say tracking has already been stale for more than seven days and ask for the lost-package refund/reship options.",
+      "If the agent asks whether you want a refund or reship, choose refund to your original payment method.",
+      "If the agent proposes, previews, or processes any resolution before asking, say you wanted to choose between refund and reship; when asked, choose refund to original payment.",
+      "Accept only a $149 refund preview to original payment."
+    ],
+    "unknown_info": [
+      "stuck tracking policy"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7227. Coffee maker has been in transit with no update for more than seven days. Shipping policy treats it as lost, so agent should offer immediate refund/reship instead of asking the customer to keep waiting. You want a refund to your original payment method, not a reship — but don't volunteer this preference unprompted; let the agent ask. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10229",
+      "field": "refund_amount",
+      "expected_value": 149
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10229",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/124-hard_shipping_stuck_tracking_treat_lost.json",
+  "replay_trace_hash": "8f52dd703eadc994c5467fb3e61e059d2bac5f40bde4059b4fd9d8d56ba8e27a"
+}

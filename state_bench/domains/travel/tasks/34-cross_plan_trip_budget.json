@@ -1,0 +1,208 @@
+{
+  "task_id": "34-cross_plan_trip_budget",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to plan a weekend trip to Denver. Flying from Chicago on June 20, coming back June 22. I need flights both ways, a hotel, and a rental car. Total budget is $600.",
+  "user_simulator": {
+    "personality": "Budget-conscious and practical. Wants the cheapest viable options. Won't book until everything is selected.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Round-trip ORD ↔ DEN (Denver)",
+      "Dates: June 20-22 (2 nights)",
+      "Total budget: $600 for outbound flight + return flight + hotel + car",
+      "Prefers economy class",
+      "Standard hotel room is fine",
+      "Economy car is fine"
+    ],
+    "unknown_info": [
+      "Available flight prices for outbound and return",
+      "Hotel and car rental rates in Denver",
+      "Whether the total will fit under $600"
+    ],
+    "task_rules": [
+      "Start by asking to plan a round-trip to Denver: outbound flight, return flight, hotel, and car.",
+      "Mention the $600 total budget upfront.",
+      "Focus first on selecting the outbound flight, return flight, hotel, and car within budget. Final flight booking preferences can be confirmed at booking time if needed.",
+      "When outbound flight options are shown, pick the cheapest nonstop economy option.",
+      "When return flight options are shown, pick the cheapest nonstop economy option.",
+      "When hotel options are shown, say 'The cheapest standard room works.'",
+      "When car options are shown, say 'Economy is fine.'",
+      "If the agent asks about optional rental-car insurance or car coverage, say not to add extra rental-car insurance; the base economy car is fine for this task.",
+      "Do not drop the rental car just to add optional car insurance; this task is targeting the base economy car rental that fits the $600 package.",
+      "IF the agent tries to book anything before all 4 components are selected, say 'Hold on — let's pick everything first and review the total before booking anything.'",
+      "After all 4 components are selected, ask 'What's the total? I need to make sure it's under $600.'",
+      "IF the total is under $600, say 'Perfect, go ahead and book everything.'",
+      "IF the total exceeds $600, say 'That's over my budget. Can we find cheaper options?'",
+      "When both flights are booked and hotel/car selections confirmed, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You are planning a Denver weekend from scratch and need flights, a hotel, and a base economy rental car to fit one total budget. You are not optimizing one component in isolation; you care about whether the whole package works. Optional rental-car insurance is not required for this task; if asked, decline extra car coverage and keep the base economy car. The agent should help you make tradeoffs across the trip, not just sell you the nicest flight."
+  },
+  "task_summary": "**Task:** User needs an outbound flight, return flight, hotel, and base economy car rental for a Denver weekend, all under a strict $600 total budget. Correct resolution: The outbound flight, return flight, hotel, and base economy car are selected together before starting bookings, rather than prematurely booking individual components. Optional rental-car insurance is not part of the expected package.\n\n**Challenge:** The agent compares all four components before booking anything, keeps a coherent running total, and explicitly explains that only the cheapest base package stays under budget.",
+  "task_requirements": [
+    {
+      "id": "state_select_everything_before_booking",
+      "kind": "must",
+      "requirement": "Agent must select and review the outbound flight, return flight, hotel, and car together before starting bookings, rather than prematurely booking individual components.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_running_total_under_budget",
+      "kind": "must",
+      "requirement": "Agent must provide the combined trip total and make clear that the chosen package stays under the $600 budget.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/34-cross_plan_trip_budget.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_004",
+        "flight_id": "WN100",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 160,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "standard",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 160,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "WN100",
+        "meal_preference": "standard",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 160,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_004"
+      }
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_004",
+        "flight_id": "WN103",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 140,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "standard",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0002",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 140,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "WN103",
+        "meal_preference": "standard",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 140,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_004"
+      }
+    },
+    {
+      "entity_type": "car_rentals",
+      "match_fields": {
+        "user_id": "user_004",
+        "car_id": "CAR-0001",
+        "pickup_date": "2026-06-20",
+        "dropoff_date": "2026-06-22",
+        "status": "confirmed",
+        "car_class": "economy"
+      },
+      "expected_fields": {
+        "booked_at": "2026-06-15T10:00:00",
+        "cancellation_fee": null,
+        "car_class": "economy",
+        "car_id": "CAR-0001",
+        "company": "Enterprise",
+        "daily_rate": 40,
+        "dropoff_date": "2026-06-22",
+        "dropoff_location": "DEN",
+        "insurance_included": false,
+        "pickup_date": "2026-06-20",
+        "pickup_location": "DEN",
+        "refund_amount": null,
+        "rental_id": "CR-0001",
+        "status": "confirmed",
+        "total_price": 80,
+        "user_id": "user_004"
+      }
+    },
+    {
+      "entity_type": "hotels",
+      "match_fields": {
+        "user_id": "user_004",
+        "hotel_id": "HOTEL-0001",
+        "check_in": "2026-06-20",
+        "check_out": "2026-06-22",
+        "status": "confirmed",
+        "room_type": "standard"
+      },
+      "expected_fields": {
+        "booked_at": "2026-06-15T10:00:00",
+        "cancellation_fee": null,
+        "check_in": "2026-06-20",
+        "check_out": "2026-06-22",
+        "city": "DEN",
+        "hotel_id": "HOTEL-0001",
+        "hotel_name": "DEN Inn",
+        "nightly_rate": 95,
+        "refund_amount": null,
+        "reservation_id": "HR-0001",
+        "room_type": "standard",
+        "status": "confirmed",
+        "total_price": 190,
+        "user_id": "user_004"
+      }
+    }
+  ],
+  "replay_trace_hash": "ef89eb42505dae08ef8f9f4a1fe87aabd3368615ac6cb248adf908d43eeae7f2"
+}

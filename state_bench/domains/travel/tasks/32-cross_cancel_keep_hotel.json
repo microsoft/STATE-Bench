@@ -1,0 +1,96 @@
+{
+  "task_id": "32-cross_cancel_keep_hotel",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to make some changes to my Paris trip. Can you help me sort things out?",
+  "user_simulator": {
+    "personality": "Slightly scattered. Has a plan but doesn't communicate it clearly upfront.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Flight booking: BK-MS07 (JFK→CDG, business)",
+      "Hotel reservation: HR-0107 (Paris, 5 nights)",
+      "Car rental: CR-0102 (Paris, midsize, 5 days)",
+      "Has travel insurance on the flight",
+      "Wants to KEEP the hotel",
+      "Wants to cancel the flight and car"
+    ],
+    "unknown_info": [
+      "Cancellation fees for flight and car"
+    ],
+    "task_rules": [
+      "Start vaguely: 'I need to make some changes to my Paris trip.'",
+      "Do NOT immediately say what you want to cancel or keep.",
+      "When the agent asks what reservations you have or what changes you need, say 'I have a flight, hotel, and car booked for Paris next week.'",
+      "If the agent asks which Paris flight (since you may have multiple), specify BK-MS07 — that's the business class one.",
+      "When the agent asks what changes you want, say 'Well, my friend offered to drive me there, so I won't need the flight anymore. But I'm not sure about the car.'",
+      "When the agent asks about the car specifically, say 'Actually cancel that too — we'll use my friend's car.'",
+      "When the agent asks about the hotel, say firmly 'Keep the hotel, I still need that.'",
+      "When the flight and car cancellations are confirmed, ask for a summary.",
+      "Verify the hotel is still active.",
+      "End with [TASK_DONE]."
+    ],
+    "user_sim_context": "You open vaguely because you are trying to sort out a Paris trip with several moving parts. You do not want to cancel everything, only the pieces that no longer fit. The hotel should stay, but you need the agent to help disentangle the flight and car from it."
+  },
+  "task_summary": "**Task:** User starts vaguely about 'changes' to a Paris trip that includes a flight, hotel, and car, but only wants the flight and car canceled while keeping the hotel. Correct resolution: Agent must discover and explicitly surface the flight BK-MS07, hotel HR-0107, and car rental CR-0102 before finalizing the requested changes.\n\n**Challenge:** The agent discovers all three reservations, clarifies the user's intent before taking action, and preserves the hotel instead of collapsing the task into a blanket trip cancellation.",
+  "task_requirements": [
+    {
+      "id": "state_all_three_reservations_discovered",
+      "kind": "must",
+      "requirement": "Agent must discover and explicitly surface the flight BK-MS07, hotel HR-0107, and car rental CR-0102 before finalizing the requested changes.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_intent_clarified_before_action",
+      "kind": "must",
+      "requirement": "Agent must clarify which parts of the Paris trip the user wants to cancel versus keep before executing cancellations.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_hotel_not_canceled",
+      "kind": "must_not",
+      "requirement": "Agent must not treat hotel reservation HR-0107 as canceled or imply that the user wanted the whole trip canceled once the user says to keep the hotel.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/32-cross_cancel_keep_hotel.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS07",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS07",
+      "field": "refund_amount",
+      "expected_value": 1400
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS07",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0102",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0102",
+      "field": "refund_amount",
+      "expected_value": 325
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0102",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ],
+  "replay_trace_hash": "f8f3ee13798ab50b3877293bf84b24d2dc31975b6529fa49ae8a768623e643be"
+}

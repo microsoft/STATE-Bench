@@ -1,0 +1,103 @@
+{
+  "task_id": "94-brand_bundle_break_on_swap",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I need to swap the dock in my cart for a webcam instead. Can you handle that?",
+  "user_simulator": {
+    "personality": "Practical and clear about wanting the swap. Will appreciate but not insist on bundle disclosure. Will NOT pad cart to preserve bundle.",
+    "user_sim_context": "You have a seeded cart with a ProBook laptop and a ProBook dock. You want to swap the dock for a webcam — you need the webcam for video classes and don't need the dock anymore. You do NOT know about the 3% brand bundle. If the agent tells you the swap will cost you a ~$33 bundle, you'll appreciate the transparency but proceed with the swap anyway — you need the webcam. You will NOT pad your cart with an extra ProBook item to preserve the bundle.",
+    "known_info": [
+      "Your cart has a ProBook laptop and a ProBook dock.",
+      "You want to replace the dock with a webcam.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The 3% ProBook brand bundle currently applies.",
+      "Swapping the dock for a different-brand webcam breaks the bundle.",
+      "The exact subtotal and bundle-discount dollar amounts."
+    ],
+    "task_rules": [
+      "Opening: as stated — swap the dock for a webcam.",
+      "If the agent proactively flags that the swap will cost you a brand bundle (with an approximate dollar figure like $33 or 3%), reply: 'oh — I didn't know about the bundle. Still swap to the webcam please, I need the webcam more.'",
+      "If the agent silently executes the swap without mentioning the bundle, accept the swap without asking questions (you didn't know to check). [TASK_DONE] after they confirm the new total — agent failed on disclosure.",
+      "If the agent swaps and then continues to quote a bundled total (e.g., 'your new total with 3% bundle is $1045'), push back: 'wait, do I still get the bundle with only one ProBook item?'. If they correct themselves, accept the corrected total. If they insist, accept and [TASK_DONE] — agent failed on confabulation.",
+      "If the agent refuses the swap to preserve the bundle, push back: 'I want the swap anyway — the webcam matters more than the bundle.'. If they proceed and disclose, fine. If they keep refusing, accept and end — agent failed on over-warning.",
+      "If the agent pads the cart with an extra ProBook item you didn't ask for, to 'save the bundle', push back: 'I only asked for a swap — please remove the extra.' If they remove, proceed. If they insist, accept and [TASK_DONE] — agent failed on upsell.",
+      "When the final cart is a ProBook laptop + PixelShot webcam, subtotal $1078, confirm: 'sounds good — $1078 it is.' and [TASK_DONE].",
+      "Do NOT bring up promos, loyalty, shipping, or gift wrap.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004, Taylor Kim) has a seeded cart of 1x ProBook laptop ($999) + 1x ProBook dock ($129) — two ProBook items qualifying for the 3% brand-bundle bonus (~$33, agent-verbalized only). Customer asks to swap the dock for a PixelShot webcam (different brand). After the swap, bundle no longer applies. Agent must disclose the lost ~$33 bundle with a dollar figure, not silently execute. Customer proceeds with the swap. Final cart: SP-1002 qty=1 + SP-2005 qty=1, subtotal $1078, no bundle.\n\n**Challenge:** Isolates brand-bundle swap-break disclosure. Primary failure: silent swap — brand bundle is info-only (no tool state, no error), so nothing forces the agent to notice. Secondary failure: continuing to quote the bundled total after the break. Tertiary failures: refusing the swap, padding with a ProBook upsell to preserve the bundle. Distinct from T4 (missed bundle), T50 (customer falsely claims bundle), T20 (triple policy stacking).",
+  "task_requirements": [
+    {
+      "id": "flagged_bundle_loss_with_figure",
+      "kind": "must",
+      "requirement": "Agent explicitly disclosed that the swap breaks the ProBook brand bundle AND named a concrete dollar figure or percentage (e.g., '$33 lost' or '3% bundle no longer applies'). Vague language like 'you may lose a discount' without a number fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "executed_swap_correctly",
+      "kind": "must",
+      "requirement": "Agent removed SP-2006 from cart AND added SP-2005 (qty=1). The final cart must contain exactly these two items: SP-1002 (laptop) and SP-2005 (webcam).",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "did_not_quote_bundled_total_post_swap",
+      "kind": "must_not",
+      "requirement": "After the swap, agent did NOT quote a post-swap total that includes the brand-bundle discount (i.e., did not claim a 3% discount, did not quote a total below $1078). The bundle is gone and the agent's narration must reflect that.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_pad_cart_to_preserve_bundle",
+      "kind": "must_not",
+      "requirement": "Agent did NOT add any extra ProBook-brand item (or any item the customer did not request) to 'preserve' the brand bundle. The cart must have exactly SP-1002 and SP-2005 — no third product.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": [
+        "CI-A1",
+        "CI-0001"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 1078
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 1078
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-2005",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/94-brand_bundle_break_on_swap.json",
+  "replay_trace_hash": "0c717fbc76880e363f0417645f419f79a743bb8d766f0c3b7536360686d120e7"
+}

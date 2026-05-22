@@ -1,0 +1,53 @@
+{
+  "task_id": "144-hard_edge_already_empty_remove",
+  "user_id": "shop_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Please check my cart for a laptop. If the cart is empty, just confirm that nothing was removed.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You want the agent to check whether your cart has a laptop. If the cart is empty, you only want confirmation that nothing was removed.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it."
+    ],
+    "task_rules": [
+      "You only want the cart checked for a laptop and, if none is present, confirmation that nothing was removed.",
+      "If the agent says the cart is empty or has no laptop and no removal occurred, accept that no-op result.",
+      "If the agent pivots into laptop shopping, recommendations, or adding a laptop, say you did not ask to shop for one.",
+      "If the agent attempts a removal despite no laptop being present, object that nothing should have changed.",
+      "When the empty/no-laptop state and no-removal result have been confirmed, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_002 opens with: \"Please check my cart for a laptop. If the cart is empty, just confirm that nothing was removed.\" Relevant catalog/policy surface: SlimBook Air 13 (SP-H101), ProBook Laptop 13 (SP-H102). Final cart/account state should remain unchanged.\n\n**Challenge:** Terminal no-op requires explicit empty-cart/no-removal confirmation without turning into product discovery. Primary pitfall: Attempts removal, gives laptop shopping suggestions, or omits the no-removal confirmation. Correct behavior: Check cart, state it is empty and that no removal occurred, with no cart mutation. Novelty: Terminal no-op on empty cart. Family: edge_case.",
+  "task_requirements": [
+    {
+      "id": "stated_empty_no_removal",
+      "kind": "must",
+      "requirement": "Agent stated the cart is empty and no removal occurred.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_laptop_shopping_pivot",
+      "kind": "must_not",
+      "requirement": "Agent did not ask what laptop the customer wants or offer laptop recommendations after the empty-cart result.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_empty_cart_mutation",
+      "kind": "must_not",
+      "requirement": "Agent did not add, remove, or update any cart item.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [],
+  "task_type": "edge_case_or_restraint",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/144-hard_edge_already_empty_remove.json",
+  "replay_trace_hash": "10df8543c232af5114180181a4157be794c1e19418d3a456fcfd11ecfd811d24"
+}

@@ -1,0 +1,95 @@
+{
+  "task_id": "45-compound_partial_cancel_return",
+  "task_summary": "**Task:** In a two-item order, the shirt has already been delivered and the book has not shipped yet. The correct handling is to return the delivered shirt through the return workflow, cancel only the unshipped book, and record the separate $59 and $14 refunds for those distinct actions.\n\n**Challenge:** The case mixes two valid but different operations. Weak agents try to cancel the delivered item, force both lines through the same workflow, or lose track of which refund belongs to which item.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "45_compound_partial_cancel_return_agent_must_use_the_correct_process",
+      "kind": "must",
+      "requirement": "Agent must route ITEM-9330/the delivered shirt through process_return and ITEM-9331/the unshipped book through cancel_order, without attempting to cancel the delivered shirt or return the unshipped book."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I want to deal with order ORD-6047. The shirt already arrived but I want to return it, and the book hasn't shipped yet so just cancel that.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6047",
+      "shirt: delivered, return",
+      "book: not shipped, cancel"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "Give the order ID.",
+      "Explain: return shirt, cancel book.",
+      "If the agent tries to cancel the shirt, clarify that the shirt already arrived and needs a return.",
+      "If the agent tries to return the book, clarify that the book has not shipped and should be cancelled.",
+      "If the agent previews both items under the same workflow, ask for separate handling for the delivered shirt and unshipped book.",
+      "Accept only when the preview separates the shirt return from the book cancellation."
+    ],
+    "unknown_info": [
+      "return refund for shirt",
+      "cancellation process for book"
+    ],
+    "user_sim_context": "One item from your order already arrived and should be returned, while a different item has not shipped and should just be cancelled. You see this as one order problem with two different resolutions. You need the agent to keep the two items straight and apply the right path to each."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9330",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9330",
+      "field": "refund_amount",
+      "expected_value": 59
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9330",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9330",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9330",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9331",
+      "field": "item_status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9331",
+      "field": "refund_amount",
+      "expected_value": 14
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9331",
+      "field": "refund_method",
+      "expected_value": "credit_card"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6047",
+      "field": "status",
+      "expected_value": "partially_cancelled"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/45-compound_partial_cancel_return.json",
+  "replay_trace_hash": "a294b86f88ad94deb3c3c42f911ff39dc0a4b2a549bb84eb6b78adf641b07341"
+}

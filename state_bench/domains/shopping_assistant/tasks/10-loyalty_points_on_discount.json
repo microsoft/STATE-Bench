@@ -1,0 +1,105 @@
+{
+  "task_id": "10-loyalty_points_on_discount",
+  "user_id": "shop_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'd like to buy the SlimBook Air 13, and I have a promo code SAVE10. Can you add it and apply the code?",
+  "user_simulator": {
+    "personality": "Casual, efficient. Knows what they want. Does not independently raise loyalty or points topics.",
+    "user_sim_context": "You are a returning Gold-tier shopper buying the SlimBook Air 13 with the promo code SAVE10. You are aware you have a loyalty membership but you do NOT bring up loyalty points yourself. You trust the agent to handle disclosures.",
+    "known_info": [
+      "You want one SlimBook Air 13 (SP-1001), no gift wrap.",
+      "You have the promo code SAVE10.",
+      "You are a returning Gold-tier customer."
+    ],
+    "unknown_info": [
+      "The store's loyalty-points rate for your tier.",
+      "Whether points are calculated on pre- or post-discount totals.",
+      "The specific number of points this purchase will earn you."
+    ],
+    "task_rules": [
+      "You want the laptop in your cart with SAVE10 applied. You do NOT bring up loyalty points yourself.",
+      "If the agent tells you how many points you'll earn from this purchase, acknowledge it briefly and move on.",
+      "If the agent never mentions loyalty points, do NOT prompt them. Accept the cart summary as given.",
+      "If the agent mentions points but quotes a number you can't easily verify (e.g. they mention 1,698 or some large figure without showing the math), do NOT challenge it — accept what they say.",
+      "You will not ask about gift wrap, welcome discounts, brand bundles, or category bundles.",
+      "When the laptop is in the cart, SAVE10 is applied, and the agent has given a cart summary, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Gold-tier customer (shop_003) buys SP-1001 SlimBook Air 13 ($849) and applies SAVE10 (10% off). Cart ends with subtotal $849, discount $84, total $765. The customer does NOT ask about loyalty points.\n\n**Challenge:** Per `loyalty_points` policy: Gold earns 2 pts/$, points are calculated on the final total after discounts, and 'agents should mention points earned after any cart completion.' Correct: 2 × $765 = 1,530 points, disclosed proactively at cart summary. Two pitfalls: (a) agent skips loyalty-points disclosure entirely (silent completion — no one asked, no one tells), or (b) agent discloses points but computes on the pre-discount subtotal (2 × $849 = 1,698) rather than the post-discount total, violating the policy's explicit 'after all discounts' rule. v0.1 agents failed this task 0/3 typically via one of those two modes.",
+  "task_requirements": [
+    {
+      "id": "correct_cart_built",
+      "kind": "must",
+      "requirement": "Agent added SP-1001 (qty 1, no gift wrap) and applied SAVE10. Cart ends with subtotal $849, discount $84, total $765.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "disclosed_loyalty_points",
+      "kind": "must",
+      "requirement": "Agent proactively mentioned the loyalty points earned from this purchase at or before cart summary — without the customer asking. Silent completion fails this requirement even if points are mentioned later in response to a direct question (which does not happen in this task).",
+      "evidence": "conversation"
+    },
+    {
+      "id": "used_correct_tier_rate",
+      "kind": "must",
+      "requirement": "Agent used the Gold tier rate of 2 points per dollar spent. Quoting a different rate (1 pts/$ for Standard, 3 pts/$ for Platinum) fails this requirement.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "computed_on_post_discount_total",
+      "kind": "must",
+      "requirement": "Agent computed loyalty points on the POST-discount total ($765), not the pre-discount subtotal ($849). Correct points: 2 × $765 = 1,530. Quoting 1,698 (2 × $849), 2,547 (3 × $849), or any other number derived from the pre-discount base fails this requirement. Showing the math ('2 × $765 = 1,530') is a strong pass signal but not required — just the final number must match.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "applied_promo_codes",
+      "expected_value": [
+        "SAVE10"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "discount_amount",
+      "expected_value": 84
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "subtotal",
+      "expected_value": 849
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "total",
+      "expected_value": 765
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_003",
+        "product_id": "SP-1001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "loyalty_account",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/10-loyalty_points_on_discount.json",
+  "replay_trace_hash": "c4f830c38ba9a5e51a58d45db6ffde4c82efabc0875d332d6ae91f66e0f27d9e"
+}

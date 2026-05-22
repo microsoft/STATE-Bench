@@ -1,0 +1,69 @@
+{
+  "task_id": "15-cancel_backordered",
+  "task_summary": "**Task:** The customer has a two-item order where the shirt has already shipped and the blender is backordered for more than three weeks. The correct handling is to cancel only the backordered blender and leave the shipped shirt alone, producing the $79 refund for that one item.\n\n**Challenge:** The agent has to separate what is still cancellable from what is already in motion. Weak agents wipe out the full order, target the shipped item by mistake, or miss that the backordered line is the only valid cancellation path.",
+  "task_type": "cancel_order",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "15_cancel_backordered_agent_must_confirm_partial_scope",
+      "kind": "must",
+      "requirement": "Agent must tell the customer that only the blender was cancelled and the shirt remains shipped."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "My order ORD-6018 has a blender that's been backordered for weeks. I want to cancel just the blender.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6018",
+      "cancel_item: blender",
+      "keep: shirt"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "Say you want to cancel only the PowerBlend blender because it has been backordered for weeks.",
+      "If the agent previews cancelling the full order, the shirt, or anything besides the blender, correct them and say the shirt should remain active.",
+      "Accept the cancellation once the preview shows only the blender cancelled and the shirt left alone, with a $79 refund for the blender."
+    ],
+    "unknown_info": [
+      "cancellation process for backordered",
+      "refund amount"
+    ],
+    "user_sim_context": "One item in your order has been backordered for a long time, and you only want to cancel that delayed piece. The rest of the order is not the problem. You expect the agent to separate the backordered item from everything else and handle just that part."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9116",
+      "field": "item_status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9116",
+      "field": "refund_amount",
+      "expected_value": 79
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9116",
+      "field": "refund_method",
+      "expected_value": "credit_card"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6018",
+      "field": "status",
+      "expected_value": "partially_cancelled"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9115",
+      "field": "item_status",
+      "expected_value": "shipped"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/15-cancel_backordered.json",
+  "replay_trace_hash": "caa9b14ccc4d6d446e711984fdfc2a4479e70170f006c4da899d33040d48fd45"
+}

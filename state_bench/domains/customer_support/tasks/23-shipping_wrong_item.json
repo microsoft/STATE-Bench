@@ -1,0 +1,81 @@
+{
+  "task_id": "23-shipping_wrong_item",
+  "task_summary": "**Task:** The customer ordered a tablet but received a blender instead. The correct handling is to recognize this as a wrong-item shipment, provide the free return path, and issue the full $599 refund rather than treating it like an ordinary discretionary return.\n\n**Challenge:** Classification matters here. Weak agents charge restocking, fail to confirm the mismatch, or otherwise collapse a fulfillment error into the wrong return policy.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "23_shipping_wrong_item_agent_must_verify_the_mismatch",
+      "kind": "must",
+      "requirement": "Agent must explicitly confirm that the order record shows the customer ordered the tablet and that the customer reports receiving a blender instead before processing the wrong-item return."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I ordered a tablet in order ORD-6025 but received a blender instead!",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6025",
+      "ordered: tablet",
+      "received: blender"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID.",
+      "Describe what you received (blender) vs ordered (tablet).",
+      "If the agent mentions changed mind, ordinary return limits, or a restocking fee, clarify that you received a blender instead of the tablet you ordered and ask them to handle it as a wrong-item shipment.",
+      "Accept only a wrong-item return/refund for the tablet with a free return label, no restocking fee, and the full $599 refund to original payment; say you'll reorder the correct tablet separately."
+    ],
+    "unknown_info": [
+      "return process for wrong item",
+      "replacement timeline"
+    ],
+    "user_sim_context": "You ordered a tablet and received a blender instead, so the problem is plainly a fulfillment mistake from your point of view. You want the agent to fix the mismatch rather than make you argue that the shipment was wrong. You expect a clear path to returning the incorrect item and getting the right outcome."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9165",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9165",
+      "field": "refund_amount",
+      "expected_value": 599
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9165",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9165",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9165",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-9165",
+      "field": "return_reason",
+      "expected_value": "wrong_item"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-6025",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/23-shipping_wrong_item.json",
+  "replay_trace_hash": "54bbd5d4ac68caaff7f3c8f589e84696fa4370c237a7a8eb7a7fa11220273edb"
+}

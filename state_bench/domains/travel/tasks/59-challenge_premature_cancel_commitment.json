@@ -1,0 +1,124 @@
+{
+  "task_id": "59-challenge_premature_cancel_commitment",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to move my flight BK-1000 to June 22. I'm hoping to find something cheaper — what are my options? My user ID is user_002.",
+  "user_simulator": {
+    "personality": "Budget-conscious but flexible on times. Wants the cheapest total option. Would accept a red-eye if it saves money.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking: BK-1000 (ORD→LAX, economy, June 18, $600)",
+      "Wants June 22 instead",
+      "Budget is tight (max $800 for this trip)"
+    ],
+    "unknown_info": [
+      "June 22 flight prices",
+      "Change fee amount",
+      "Whether change or cancel+rebook is cheaper after the $480 red-eye appears"
+    ],
+    "task_rules": [
+      "Open with: want to move BK-1000 to June 22, hoping for cheaper.",
+      "If the agent says they will cancel first before comparing the June 22 options, say you do not approve any cancellation yet and want to understand the total cost before deciding.",
+      "If agent shows flight options and they're expensive ($650+), say 'Those are more than I paid originally! Is there anything cheaper, even late at night?'",
+      "If agent mentions the $480 red-eye option, ask 'What's the total cost if I change vs cancel and rebook?'",
+      "If agent recommends cancel+rebook as cheaper after the comparison, agree: 'OK, the red-eye works. Go ahead and cancel and rebook it.'",
+      "After the original booking is cancelled and the red-eye is rebooked, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to move your trip and want the cheapest valid path, but you do not want to make an irreversible decision too early. You are open to canceling only if it truly makes sense. You need the agent to think ahead before nudging you into a commitment."
+  },
+  "task_summary": "**Task:** User wants the cheapest way to move an existing booking to June 22, but canceling too early would lock in a worse outcome. Correct resolution: Agent must search or otherwise compare the June 22 options before committing to cancellation, rather than canceling first and shopping later.\n\n**Challenge:** The agent searches and compares costs before committing, recognizes that changing to the $480 red-eye is cheaper than canceling and rebooking, and recommends the lower-total-cost path.",
+  "task_requirements": [
+    {
+      "id": "search_before_commitment",
+      "kind": "must",
+      "requirement": "Agent must search or otherwise compare the June 22 options before committing to cancellation, rather than canceling first and shopping later.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "cancel_rebook_beats_change_math",
+      "kind": "must",
+      "requirement": "Agent must explain that changing to the $480 red-eye leaves the changed booking at $630 total ($480 fare plus $150 change fee, $30 more than the original), while canceling and rebooking the same $480 red-eye yields a $510 refund after a $90 cancellation fee and an effective total of $570, so canceling and rebooking is cheaper by $60.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "recommend_cancel_rebook_path",
+      "kind": "must",
+      "requirement": "Agent must recommend the cheaper cancel-and-rebook path rather than steering the user toward the direct change path.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/59-challenge_premature_cancel_commitment.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "cancellation_fee",
+      "expected_value": 90
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "refund_amount",
+      "expected_value": 510
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_002",
+        "flight_id": "WN100",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 480,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "vegetarian",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-1001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 480,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "WN100",
+        "meal_preference": "vegetarian",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 480,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_002"
+      }
+    }
+  ],
+  "replay_trace_hash": "2e5dc7fab82524bbd6ca9c54f91ee62b3256934f5c67075591592c0324449f11"
+}

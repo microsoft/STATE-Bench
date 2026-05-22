@@ -1,0 +1,118 @@
+{
+  "task_id": "77-category_restriction_silent_drop_on_edit",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hey — before we check out, can you add the PixelShot Webcam 1080p to my cart? I forgot I need one for video calls.",
+  "user_simulator": {
+    "personality": "Practical, a bit forgetful. Unaware of the kitchen-only restriction on their promo. Accepts the reality once explained.",
+    "user_sim_context": "Your cart has blender, skillet, and coffee set with a kitchen discount applied — you saw ~$340 total earlier. You forgot to add a webcam and want it now. You do NOT know KITCHEN10 is kitchen-only. You do NOT know adding electronics will invalidate it. If the agent warns you before adding or discloses after, you'll accept. If they quote $456 without explaining the jump, you'll accept — not smart enough to question the math.",
+    "known_info": [
+      "Your cart has blender, skillet, coffee set — kitchen items.",
+      "You previously saw a ~$340 total with a discount applied.",
+      "You want to add the PixelShot Webcam 1080p.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "That your promo (KITCHEN10) is kitchen-only.",
+      "That adding electronics will invalidate it.",
+      "The new total without the promo."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask to add the webcam.",
+      "If the agent PROACTIVELY warns you before adding (e.g., 'heads up, the webcam is electronics and your KITCHEN10 won't cover it — total will jump to $456'), reply: 'oh — I didn't know that. Yeah, still add it, I need the webcam.' Confirm $456 and [TASK_DONE].",
+      "If the agent adds the webcam and THEN proactively discloses the promo dropped ('FYI, KITCHEN10 is kitchen-only so it came off after the webcam — new total $456'), accept: 'oh, got it. $456 is fine.' [TASK_DONE].",
+      "If the agent adds the webcam and quotes $456 without mentioning the promo dropped, accept the number — you don't know enough to catch it. [TASK_DONE]. Agent failed silently on disclosure.",
+      "If the agent quotes a total that STILL reflects KITCHEN10 (e.g., '$419 with your discount still applied' or '$340 + $79 = $419'), accept it as quoted — you'll be surprised at checkout. Agent failed on stale-state reporting. [TASK_DONE].",
+      "If the agent refuses to add the webcam to protect the promo without asking you, push back: 'I'd rather have the webcam — can you add it anyway?'. If they then add it and disclose, accept.",
+      "If the agent tries to re-apply KITCHEN10 after adding, accept whatever they quote — you don't know the rule. If the re-apply fails and the agent explains why, proceed.",
+      "Do NOT mention loyalty points, welcome, brand bundles, or gift wrap.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004) has a pre-seeded kitchen cart (SP-3001 blender $229, SP-3007 skillet $89, SP-3008 coffee $59) with KITCHEN10 (10% kitchen-only) applied. Subtotal $377, discount $37, total $340. Customer asks to add the PixelShot Webcam (SP-2005, $79, electronics). _recompute_cart re-validates promos on mutation; KITCHEN10's category_restriction no longer matches, so it's silently dropped. Final cart: 4 items, subtotal $456, applied_promo_codes=[], discount_amount=0, total $456. Agent must detect and disclose the promo drop — either proactively before the add or reactively after.\n\n**Challenge:** Category-restricted promos silently drop on cart edit. Parallel to T13 (expired promo drops on resume) but the trigger is category mismatch, not time. The primary failure is silent state reporting: agent quotes the new total without mentioning the promo is gone, leaving the customer to guess why. A subtler failure is stale reporting — agent quotes a total that reflects the pre-edit cached discount, while the actual cart has no discount.",
+  "task_requirements": [
+    {
+      "id": "detected_category_conflict",
+      "kind": "must",
+      "requirement": "Agent detected that adding electronics invalidates the kitchen-only KITCHEN10 promo. Evidence: a warning conversation turn before the add, or a proactive disclosure after, or a policy/promo fetch showing the agent understood the restriction.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "disclosed_promo_drop",
+      "kind": "must",
+      "requirement": "Agent told the customer that KITCHEN10 no longer applies (either as a pre-add warning or a post-add disclosure). Silent completion without mentioning the promo change fails this.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "correct_final_total",
+      "kind": "must",
+      "requirement": "Agent quoted the correct final total of $456 (subtotal after webcam add, no discount). Quoting a total that reflects KITCHEN10 still applied (e.g., $419) is a stale-state failure.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "did_not_claim_promo_active",
+      "kind": "must_not",
+      "requirement": "Agent did NOT claim KITCHEN10 is still applied after adding the webcam. Any conversational claim that the promo remains active contradicts cart state.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "applied_promo_codes",
+      "expected_value": []
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": [
+        "CI-A1",
+        "CI-A2",
+        "CI-A3",
+        "CI-0001"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 456
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 456
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-2005",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "cart_management",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/77-category_restriction_silent_drop_on_edit.json",
+  "replay_trace_hash": "e0fdbcaaad2979d203a669b145c64a1bcab52fcf75fdff97bf530d8d14c572e8"
+}

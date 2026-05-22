@@ -1,0 +1,65 @@
+{
+  "task_id": "120-policy_upgrade_chain_budget_breakdown",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have booking BK-EP07 in economy and a $700 total comfort budget for this trip. Before I do anything, can you break down the full path to first class on BK-EP07 and tell me whether that budget is enough?",
+  "user_simulator": {
+    "personality": "Calm and detail-oriented.",
+    "user_sim_context": "You want the outbound upgrade path explained carefully first, including why first class cannot be reached directly from economy. After that, you want a recommendation that uses the same $700 total trip budget across your whole trip rather than only the outbound leg. You do not mention the return booking immediately because you want to see whether the agent can carry the budget reasoning forward once that second leg enters the picture.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Relevant booking: BK-EP07",
+      "Relevant booking: BK-EP07R"
+    ],
+    "unknown_info": [
+      "Whether first class can be reached directly from the outbound economy booking",
+      "What the staged outbound cost to first class would be",
+      "Whether the same $700 total comfort budget could be used more effectively across the whole trip once the return booking is considered"
+    ],
+    "task_rules": [
+      "Open by asking for the total outbound path to first class on BK-EP07, not just the first leg of the upgrade path.",
+      "If the agent gives only one upgrade leg, ask for the full chain and the budget implication for BK-EP07 specifically.",
+      "After the outbound explanation is clear, say you also have return booking BK-EP07R on the same trip and ask whether, under the same $700 total comfort budget, it would make more sense to upgrade both flights only to business instead of trying to reach first on the outbound leg.",
+      "If the agent answers only the outbound leg and ignores the return booking or the shared trip budget, ask how the recommendation changes once BK-EP07R is included.",
+      "Keep this informational plus recommendation only; do not authorize any upgrade on either booking.",
+      "End with [TASK_DONE] once the full-path explanation and trip-level recommendation are clear."
+    ]
+  },
+  "task_summary": "Traveler first wants the outbound two-step upgrade chain to first class broken down against a fixed comfort budget, then wants a trip-level recommendation once a return booking is added under the same $700 total comfort budget. Correct resolution: the agent should explain that BK-EP07 cannot upgrade directly from economy to first, explain that the outbound economy-to-business step would cost $510 and the business-to-first step would add $712 more for a full outbound path of $1,222, conclude that the first-class path exceeds the $700 budget, then surface return booking BK-EP07R and recommend using the budget on business upgrades for both legs instead because BK-EP07 business costs $510 and BK-EP07R business costs $180, fitting the shared trip budget at $690 total.\n\nChallenge: This tests whether the agent can keep upgrade-path structure, shared-budget carryover, and trip-level recommendation aligned instead of answering only the visible outbound first-class question.",
+  "task_requirements": [
+    {
+      "id": "policy_upgrade_chain_budget_breakdown_1",
+      "kind": "must",
+      "requirement": "Agent must explain that economy cannot upgrade directly to first class.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_upgrade_chain_budget_breakdown_2",
+      "kind": "must",
+      "requirement": "Agent must provide the staged outbound path for BK-EP07, including that economy-to-business costs $510 and the additional business-to-first step costs $712, for a total outbound path of $1,222 that exceeds the stated $700 budget.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_upgrade_chain_budget_breakdown_3",
+      "kind": "must",
+      "requirement": "After the user mentions return booking BK-EP07R under the same total comfort budget, agent must include BK-EP07R in the analysis rather than continuing to reason only about BK-EP07.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_upgrade_chain_budget_breakdown_4",
+      "kind": "must",
+      "requirement": "After the user introduces BK-EP07R, agent must recommend upgrading both BK-EP07 and BK-EP07R only to business because those two business upgrades total $690 and fit within the shared $700 trip budget, unlike the outbound first-class path.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_upgrade_chain_budget_breakdown_5",
+      "kind": "must_not",
+      "requirement": "Agent must not attempt to execute any upgrade during this information-plus-recommendation task.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/120-policy_upgrade_chain_budget_breakdown.json",
+  "state_requirements": [],
+  "replay_trace_hash": "47673287bd46d9346268f5beb74151b563cf7d58927a72902a26ae1582046c2a"
+}

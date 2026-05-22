@@ -1,0 +1,93 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H113",
+      "name": "SoundCore Basic Headphones",
+      "category": "electronics",
+      "subcategory": "headphones",
+      "brand": "SoundMax",
+      "price": 149,
+      "rating": 4.1,
+      "review_count": 1800,
+      "description": "SoundCore Basic Headphones from SoundMax.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H114",
+      "name": "SoundMax Elite Noise-Cancelling Headphones",
+      "category": "electronics",
+      "subcategory": "headphones",
+      "brand": "SoundMax",
+      "price": 249,
+      "rating": 4.8,
+      "review_count": 940,
+      "description": "SoundMax Elite Noise-Cancelling Headphones from SoundMax.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 3,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": 299,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H115",
+      "name": "TravelBuds Mini",
+      "category": "electronics",
+      "subcategory": "earbuds",
+      "brand": "SoundMax",
+      "price": 89,
+      "rating": 4.0,
+      "review_count": 650,
+      "description": "TravelBuds Mini from SoundMax.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 1,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_003",
+      "name": "Sam Chen",
+      "email": "sam.chen@example.com",
+      "tier": "gold",
+      "is_first_time": false,
+      "loyalty_points": 18500,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_003",
+      "customer_id": "shop_003",
+      "item_ids": [],
+      "subtotal": 0,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 0,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [],
+  "promotions": []
+}

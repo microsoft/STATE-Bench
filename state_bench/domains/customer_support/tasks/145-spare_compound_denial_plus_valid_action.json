@@ -1,0 +1,87 @@
+{
+  "task_id": "145-spare_compound_denial_plus_valid_action",
+  "task_summary": "Customer has a valid missing phone-case claim but also demands a non-policy expedited replacement fee waiver on a future order. Agent must refund the missing case and deny unrelated waiver.",
+  "task_type": "compound",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "spare_compound_denial_plus_valid_action_deny",
+      "kind": "must",
+      "requirement": "Agent must deny the unsupported future expedited shipping waiver."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_compound_denial_plus_valid_action_no_extra",
+      "kind": "must_not",
+      "requirement": "Agent must not issue or promise any extra future shipping waiver or goodwill credit."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "The phone case from ORD-7278 is missing. Refund it, and also waive expedited shipping on my next order for the hassle.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7278",
+      "missing: phone case",
+      "extra_demand: future expedited shipping waiver"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Confirm the case was missing from the box.",
+      "Push once for the future expedited shipping waiver; if the agent says that waiver is unsupported, accept the denial and stop pressing for it.",
+      "Accept only a refund for the missing phone case plus denial of the future waiver. If the agent offers a reship, store credit, goodwill credit, or future shipping waiver instead, ask for the missing-case refund and for no extra unsupported benefit."
+    ],
+    "unknown_info": [
+      "missing item policy",
+      "future waiver policy"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7278. Customer has a valid missing phone-case claim but also demands a non-policy expedited replacement fee waiver on a future order. Agent must refund the missing case and deny unrelated waiver. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10280",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10280",
+      "field": "refund_amount",
+      "expected_value": 35
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10280",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10280",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10280",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10280",
+      "field": "return_reason",
+      "expected_value": "missing"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7278",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/145-spare_compound_denial_plus_valid_action.json",
+  "replay_trace_hash": "0a27a420f8ce5693e70bde08c7a1888e7b637c846e41c960f17f48dc81ca0815"
+}

@@ -1,0 +1,88 @@
+{
+  "task_id": "77-challenge_seasonal_gold_restocking",
+  "task_summary": "**Task:** A Gold plus Prime customer is returning headphones in January, and the return is valid because the seasonal extension keeps the window open. The correct handling is to process the return, keep the normal restocking deduction in place, and apply the $18 Gold restocking-discount adjustment.\n\n**Challenge:** The case combines eligibility and post-eligibility math. Weak agents deny the return because they miss the seasonal rule, process it without the Gold adjustment, or waive the fee outright instead of applying the proper Gold discount structure.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "77_challenge_seasonal_gold_restocking_agent_must_not_deny_return_doesn",
+      "kind": "must",
+      "requirement": "Agent must not deny the return as outside the return window; the agent must proceed on the basis that the seasonal extension makes the December order eligible through January 31."
+    },
+    {
+      "evidence": "conversation",
+      "id": "77_challenge_seasonal_gold_restocking_agent_must_explain_gold_restocking_discount",
+      "kind": "must",
+      "requirement": "Agent must explain that the Gold tier reduces the $37 restocking fee by $18 rather than waiving the fee entirely."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "77_challenge_seasonal_gold_restocking_agent_must_explain_that_the_seasonal",
+      "kind": "must",
+      "requirement": "Agent must explain that the seasonal extension keeps this return eligible."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2027-01-10T10:00:00",
+  "opening_message": "Hi, I'd like to return the wireless headphones from my December order ORD-7108. I know it's been over a month — is it still possible?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7108",
+      "item: headphones",
+      "reason: changed mind"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give order ID when asked.",
+      "If agent says window expired, mention holiday/seasonal extension.",
+      "If restocking fee mentioned, ask about Gold member discount.",
+      "Accept the return only after the agent explains that the seasonal extension keeps the January return eligible and that Gold gives a restocking discount rather than a full waiver.",
+      "If the preview has no Gold restocking-discount explanation or says Gold fully waives the restocking fee, ask the agent to verify the Gold policy before confirming."
+    ],
+    "unknown_info": [
+      "seasonal extension",
+      "restocking discount"
+    ],
+    "user_sim_context": "You want to return headphones from a holiday-season order and suspect both the extended window and your Gold status matter. You are not coming in with the exact calculation, only the expectation that both should help you. You need the agent to account for both pieces rather than answering from the normal policy alone."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10132",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10132",
+      "field": "refund_amount",
+      "expected_value": 222
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10132",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10132",
+      "field": "restocking_fee",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10132",
+      "field": "return_reason",
+      "expected_value": "changed_mind"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7108",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/77-challenge_seasonal_gold_restocking.json",
+  "replay_trace_hash": "3b5fc9a1f73f746589de75126b9f4e289db3c7d722cacf2639489c56bf73ef2d"
+}

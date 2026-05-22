@@ -1,0 +1,115 @@
+{
+  "task_id": "11-book_with_points_partial",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I want to book a flight from Denver to Atlanta and use my loyalty points to offset the cost.",
+  "user_simulator": {
+    "personality": "Cooperative and practical. Understands points may not cover the full price.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Wants to fly DEN to ATL on June 23rd",
+      "Choose the WN nonstop morning flight when options are shown.",
+      "Has 15,000 loyalty points to apply",
+      "Budget is $600 maximum (total including points value)",
+      "Wants economy class",
+      "Prefers WN airline, morning departure, nonstop"
+    ],
+    "unknown_info": [
+      "Exact point redemption value",
+      "How much cash will remain after applying points"
+    ],
+    "task_rules": [
+      "When the agent asks about your request, mention June 23 and that you want to use loyalty points.",
+      "Do not ask for nearby dates, different times, or alternative routes.",
+      "When the agent presents flight options, pick the WN nonstop morning flight only.",
+      "When the agent calculates the points value, ask how much cash you still need to pay.",
+      "When the agent confirms the split payment (points + cash), agree to proceed.",
+      "End with [TASK_DONE] when the booking is confirmed with points_plus_cash payment.",
+      "When asked about flight preferences, say economy class, WN airline, morning departure, nonstop.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You want to book a flight and use your points to reduce the cash you need to spend rather than cover everything. You are thinking in terms of getting the best value out of a limited points balance. You want the agent to walk you through what the points actually buy you on this trip."
+  },
+  "task_summary": "**Task:** A traveler wants to apply 15,000 loyalty points toward a domestic booking that still requires some cash. Correct resolution: 15,000 points are worth $150 for this domestic redemption.\n\n**Challenge:** The agent computes the domestic points value correctly, explains the remaining cash owed after the points are applied, and treats the purchase as a true points-plus-cash split rather than full coverage.",
+  "task_requirements": [
+    {
+      "id": "state_partial_points_value",
+      "kind": "must",
+      "requirement": "Agent must explain that 15,000 points are worth $150 for this domestic redemption.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_remaining_cash_due",
+      "kind": "must",
+      "requirement": "Agent must explain that $250 in cash remains to be paid after applying the 15,000 points.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_full_points_coverage",
+      "kind": "must_not",
+      "requirement": "Agent must not claim that the 15,000 points fully cover this booking or leave no cash balance.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "new_booking",
+  "task_env_path": "state_bench/domains/travel/task_envs/11-book_with_points_partial.json",
+  "state_requirements": [
+    {
+      "entity_type": "users",
+      "record_key": "user_004",
+      "field": "loyalty_points",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_004",
+        "flight_id": "WN100",
+        "status": "confirmed",
+        "payment_method": "points_plus_cash",
+        "cash_amount": 250,
+        "points_used": 15000,
+        "cabin_class": "economy",
+        "seat_type": "window",
+        "meal_preference": "standard",
+        "add_wifi": false,
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": true,
+        "add_wifi": false,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 250,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "WN100",
+        "meal_preference": "standard",
+        "paid_checked_bags": 0,
+        "payment_method": "points_plus_cash",
+        "points_used": 15000,
+        "price_paid": 250,
+        "refund_amount": null,
+        "seat_type": "window",
+        "status": "confirmed",
+        "user_id": "user_004"
+      }
+    }
+  ],
+  "replay_trace_hash": "90d3e297c463d426f264ed7fc10d76809081e2af7788b4ba582220e15bc1d56d"
+}
