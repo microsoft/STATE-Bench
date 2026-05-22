@@ -41,6 +41,5 @@
     "user_sim_context": "Your expensive laptop looks lost in transit, and you want an immediate refund or replacement because waiting feels unacceptable at this price point. You are coming in with urgency and expect strong action now. If there is a required process before that can happen, you need the agent to explain it clearly and confidently."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/54-challenge_high_value_investigation.json",
-  "replay_trace_hash": "f85a31a5820222da7abba06d3db0a58772eb461d55d4dcd620ad09c4aafea0a1"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/54-challenge_high_value_investigation.json"
 }

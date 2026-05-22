@@ -78,6 +78,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/2-return_defective_electronics.json",
-  "replay_trace_hash": "da282a1ad58773e7e34e71c006ace214be87a300fda23b1ff4594b36bdcb4bb1"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/2-return_defective_electronics.json"
 }

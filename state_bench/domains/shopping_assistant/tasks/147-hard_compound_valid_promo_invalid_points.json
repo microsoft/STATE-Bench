@@ -90,6 +90,5 @@
     }
   ],
   "task_type": "compound_multi_policy",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/147-hard_compound_valid_promo_invalid_points.json",
-  "replay_trace_hash": "f5bcddc50095e09b25d5c5ca4ef0004ec45d953bb5d5081c13f958a5d273023e"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/147-hard_compound_valid_promo_invalid_points.json"
 }

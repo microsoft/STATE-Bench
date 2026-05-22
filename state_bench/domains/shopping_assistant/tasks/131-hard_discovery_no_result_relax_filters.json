@@ -49,6 +49,5 @@
   ],
   "state_requirements": [],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/131-hard_discovery_no_result_relax_filters.json",
-  "replay_trace_hash": "ff8ddcfbfc99742c87d8d41c2c120f71de8fb8c7cf2e28349889ce8bc2c3f558"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/131-hard_discovery_no_result_relax_filters.json"
 }

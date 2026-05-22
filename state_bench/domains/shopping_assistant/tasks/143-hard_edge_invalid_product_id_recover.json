@@ -49,6 +49,5 @@
   ],
   "state_requirements": [],
   "task_type": "edge_case_or_restraint",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/143-hard_edge_invalid_product_id_recover.json",
-  "replay_trace_hash": "24d6fc768d506cbb7a718538a3d52df0443abc298065e78eee6d3443496c549b"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/143-hard_edge_invalid_product_id_recover.json"
 }

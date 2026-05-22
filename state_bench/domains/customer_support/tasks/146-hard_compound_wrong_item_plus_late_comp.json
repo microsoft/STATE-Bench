@@ -80,6 +80,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/146-hard_compound_wrong_item_plus_late_comp.json",
-  "replay_trace_hash": "13e0a9b5087b1491f0a0e9b2023cfbbf9721d9a41fad2df824b5cb6cadada929"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/146-hard_compound_wrong_item_plus_late_comp.json"
 }

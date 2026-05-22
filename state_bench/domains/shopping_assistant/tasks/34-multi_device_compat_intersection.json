@@ -92,6 +92,5 @@
     }
   ],
   "task_type": "compatibility_variants",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/34-multi_device_compat_intersection.json",
-  "replay_trace_hash": "55f09415842fd514d3b6c3383858297a49f1004c78b53d29a90760f0e8453fab"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/34-multi_device_compat_intersection.json"
 }

@@ -39,6 +39,5 @@
     "user_sim_context": "Tracking says your tablet was delivered, but you do not have it and want the company to look into that claim seriously. You are focused on the fact that the item is missing from your perspective, not on any internal delivery proof the company may have. You want the agent to explain the situation clearly if there is a reason the claim cannot be honored."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/26-shipping_signature_conflict.json",
-  "replay_trace_hash": "eb11c6d3d5f7b1ee12bd92dee4935f0849cb83af6c639cfa385fb3465e95f1c8"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/26-shipping_signature_conflict.json"
 }

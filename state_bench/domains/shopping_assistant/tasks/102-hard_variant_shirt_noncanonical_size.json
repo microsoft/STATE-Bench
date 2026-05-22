@@ -50,6 +50,5 @@
   ],
   "state_requirements": [],
   "task_type": "compatibility_variants",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/102-hard_variant_shirt_noncanonical_size.json",
-  "replay_trace_hash": "d8322bc5ff7b50fd9559979de1ba04e043f76c3603134e81473469a904e84c76"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/102-hard_variant_shirt_noncanonical_size.json"
 }

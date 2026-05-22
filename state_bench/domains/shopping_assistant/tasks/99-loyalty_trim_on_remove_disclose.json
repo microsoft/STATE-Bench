@@ -106,6 +106,5 @@
     }
   ],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/99-loyalty_trim_on_remove_disclose.json",
-  "replay_trace_hash": "91db5e58b12ce3209e0478fc178cf1dc05f2b0dcb8718aded70d40f6d25249d6"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/99-loyalty_trim_on_remove_disclose.json"
 }

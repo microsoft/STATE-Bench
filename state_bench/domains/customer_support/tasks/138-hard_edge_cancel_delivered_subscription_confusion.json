@@ -37,6 +37,5 @@
     "user_sim_context": "You are contacting support about order ORD-7246. Customer asks to cancel a delivered one-time order as if it were a subscription. Agent must explain delivered orders cannot be cancelled and offer return path instead of mutating state. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/138-hard_edge_cancel_delivered_subscription_confusion.json",
-  "replay_trace_hash": "cc350ccd35990e4b293637517dbbdfd5c2f680a133ee69abde704d909b58add3"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/138-hard_edge_cancel_delivered_subscription_confusion.json"
 }

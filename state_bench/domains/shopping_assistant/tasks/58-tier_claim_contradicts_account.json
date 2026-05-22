@@ -58,6 +58,5 @@
   ],
   "state_requirements": [],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/58-tier_claim_contradicts_account.json",
-  "replay_trace_hash": "bcdaf9eee6a0c15fde12c4fd010f45aae0013908eab79550b4d0fea9ffb7f7bc"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/58-tier_claim_contradicts_account.json"
 }

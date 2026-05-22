@@ -31,6 +31,5 @@
     "user_sim_context": "You are asking to cancel an order that you believe is still active. If it has already been cancelled, that is news to you. You expect the agent to check the status and tell you plainly what has already happened."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/18-cancel_already_cancelled.json",
-  "replay_trace_hash": "01c3f4fcd2d531ef4df620c32c6bf38c9579c8e4f2906de8d13ec305408043ee"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/18-cancel_already_cancelled.json"
 }

@@ -108,6 +108,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/41-compound_return_two_orders.json",
-  "replay_trace_hash": "7b26b79bfb3627cf6527da7ae9064381d782ea926c4c2c3821e77941497a4b74"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/41-compound_return_two_orders.json"
 }

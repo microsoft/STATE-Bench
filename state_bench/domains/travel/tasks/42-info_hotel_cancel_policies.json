@@ -54,6 +54,5 @@
   ],
   "task_type": "policy_info_or_restraint",
   "task_env_path": "state_bench/domains/travel/task_envs/42-info_hotel_cancel_policies.json",
-  "state_requirements": [],
-  "replay_trace_hash": "4be885741d8464cc64f37f93a7282cdf56aabb7d3c20cc1d848fdd5ebebd4598"
+  "state_requirements": []
 }

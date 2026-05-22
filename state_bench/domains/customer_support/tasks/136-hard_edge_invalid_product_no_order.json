@@ -81,6 +81,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/136-hard_edge_invalid_product_no_order.json",
-  "replay_trace_hash": "c0552a85ebd15fd42eded59ff093819a8290a7516aba54111c7b41f7b3a70790"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/136-hard_edge_invalid_product_no_order.json"
 }

@@ -104,6 +104,5 @@
     }
   ],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/48-adversarial_pressure_pivot.json",
-  "replay_trace_hash": "4b8b6e26f6f3fb11ece7e13c5d33def0b193c5850d2fa8b49c8749bdf2a78f82"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/48-adversarial_pressure_pivot.json"
 }

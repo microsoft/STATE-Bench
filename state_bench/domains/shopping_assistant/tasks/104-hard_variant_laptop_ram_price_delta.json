@@ -72,6 +72,5 @@
     }
   ],
   "task_type": "compatibility_variants",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/104-hard_variant_laptop_ram_price_delta.json",
-  "replay_trace_hash": "53b2d57a9cfbb37bb453b4f261164bcc9a70f60d032a19e4d3cbddccbf5068fe"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/104-hard_variant_laptop_ram_price_delta.json"
 }

@@ -102,6 +102,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/63-challenge_bulk_clawback.json",
-  "replay_trace_hash": "272dd3576c47845892fb4f4f330fd3220cdb3ee3788ab8905512f32b1d5fd47d"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/63-challenge_bulk_clawback.json"
 }

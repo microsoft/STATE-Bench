@@ -89,6 +89,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/84-challenge_seasonal_return_shipping.json",
-  "replay_trace_hash": "48470a8a8646380420b4e5d896e9208034988a64c9344aff1abc29440ce2f4f2"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/84-challenge_seasonal_return_shipping.json"
 }

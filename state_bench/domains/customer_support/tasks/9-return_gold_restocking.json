@@ -71,6 +71,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/9-return_gold_restocking.json",
-  "replay_trace_hash": "0542cbd93f9bc66abde4115450292675a0e38d4330b04e10f4129ad6955446aa"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/9-return_gold_restocking.json"
 }

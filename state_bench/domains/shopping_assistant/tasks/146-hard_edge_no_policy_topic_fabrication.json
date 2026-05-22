@@ -79,6 +79,5 @@
     }
   ],
   "task_type": "edge_case_or_restraint",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/146-hard_edge_no_policy_topic_fabrication.json",
-  "replay_trace_hash": "1512ee6873fa369c567c46ffa56c6f94fb3871ed55165cb7780d0cfa825daef0"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/146-hard_edge_no_policy_topic_fabrication.json"
 }

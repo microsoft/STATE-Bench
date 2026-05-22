@@ -78,6 +78,5 @@
     }
   ],
   "task_type": "compatibility_variants",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/101-hard_variant_pixel_case_misread.json",
-  "replay_trace_hash": "abf3fdd1151dd506f7cbdff986d16b18d68edc66ca77ebcbfe0a38b5cb54fce1"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/101-hard_variant_pixel_case_misread.json"
 }

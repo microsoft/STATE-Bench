@@ -80,6 +80,5 @@
     }
   ],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/116-hard_loyalty_minimum_decline_no_topoff.json",
-  "replay_trace_hash": "7f7f310b3d98dd50503898296e1ee1df2681ca4139cd31b4de2817aeaf1bf24d"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/116-hard_loyalty_minimum_decline_no_topoff.json"
 }

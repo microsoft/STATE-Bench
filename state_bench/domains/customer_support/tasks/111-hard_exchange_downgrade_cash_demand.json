@@ -167,6 +167,5 @@
       "expected_value": 149
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/111-hard_exchange_downgrade_cash_demand.json",
-  "replay_trace_hash": "1b06cdc5cb8520e934311b0f48dee72035a7d56bd2a0839608d8123be8de6602"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/111-hard_exchange_downgrade_cash_demand.json"
 }

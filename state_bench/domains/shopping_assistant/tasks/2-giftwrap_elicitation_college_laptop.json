@@ -87,6 +87,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/2-giftwrap_elicitation_college_laptop.json",
-  "replay_trace_hash": "f6e3a819a0d976ff1a4ab00900c04ce239a799d2214c70a92bc3587fdd2eccce"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/2-giftwrap_elicitation_college_laptop.json"
 }

@@ -44,6 +44,5 @@
   ],
   "state_requirements": [],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/126-hard_promo_better_of_bundle_vs_code.json",
-  "replay_trace_hash": "147750b25ca42c99fd9b8a1a453aabc00ae35b5b0244ca067580f574dd044fee"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/126-hard_promo_better_of_bundle_vs_code.json"
 }

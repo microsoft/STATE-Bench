@@ -48,6 +48,5 @@
   ],
   "state_requirements": [],
   "task_type": "edge_case_or_restraint",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/144-hard_edge_already_empty_remove.json",
-  "replay_trace_hash": "10df8543c232af5114180181a4157be794c1e19418d3a456fcfd11ecfd811d24"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/144-hard_edge_already_empty_remove.json"
 }

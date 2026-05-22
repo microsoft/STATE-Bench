@@ -49,6 +49,5 @@
   ],
   "state_requirements": [],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/133-hard_discovery_gift_no_wrap_assumption.json",
-  "replay_trace_hash": "d2222248b4286e194341fb08cebe5fe09ba2cd0ab75425a011818a6e3490336e"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/133-hard_discovery_gift_no_wrap_assumption.json"
 }

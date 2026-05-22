@@ -74,6 +74,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/81-challenge_low_value_return_shipping.json",
-  "replay_trace_hash": "9efda3b8eef40e67a7f93f62b8285782edfc21fddea1386c42921ed4851942bb"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/81-challenge_low_value_return_shipping.json"
 }

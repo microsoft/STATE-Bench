@@ -88,6 +88,5 @@
     }
   ],
   "task_type": "inventory_shipping",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/51-qty_cap_tool_error_recovery.json",
-  "replay_trace_hash": "ceca764401dbebc25e36e73097409a4f4c2419d36d2341d93914930494cf9058"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/51-qty_cap_tool_error_recovery.json"
 }

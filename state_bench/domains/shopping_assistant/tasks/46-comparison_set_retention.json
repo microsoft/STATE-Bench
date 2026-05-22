@@ -91,6 +91,5 @@
     }
   ],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/46-comparison_set_retention.json",
-  "replay_trace_hash": "ab0d8fe15029f9ffa57d286f22659d0cd31f61dfd24078e2621969148ec3ccb6"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/46-comparison_set_retention.json"
 }

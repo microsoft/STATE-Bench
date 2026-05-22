@@ -76,6 +76,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/23-shipping_wrong_item.json",
-  "replay_trace_hash": "54bbd5d4ac68caaff7f3c8f589e84696fa4370c237a7a8eb7a7fa11220273edb"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/23-shipping_wrong_item.json"
 }

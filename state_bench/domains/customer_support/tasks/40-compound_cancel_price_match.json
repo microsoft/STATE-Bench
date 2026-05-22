@@ -65,6 +65,5 @@
       "expected_value": "cancelled"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/40-compound_cancel_price_match.json",
-  "replay_trace_hash": "0afc9cee92a93d3704d3c8fdb0dab6f0027ab1ce45177b4646403d9e7cec068d"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/40-compound_cancel_price_match.json"
 }

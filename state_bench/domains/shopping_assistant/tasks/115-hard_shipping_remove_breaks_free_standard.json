@@ -75,6 +75,5 @@
     }
   ],
   "task_type": "inventory_shipping",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/115-hard_shipping_remove_breaks_free_standard.json",
-  "replay_trace_hash": "c3ac37e9ef05e9d17a9daee2e4d7003525a0a78f1d20a5ee14d9f9752a5e9efb"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/115-hard_shipping_remove_breaks_free_standard.json"
 }

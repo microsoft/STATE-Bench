@@ -62,6 +62,5 @@
   ],
   "state_requirements": [],
   "task_type": "edge_case_or_restraint",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/9-over_budget_honesty.json",
-  "replay_trace_hash": "01d3f7dfb5b724ff63fae8102cdf4d59c8e745f7d231791866b468be5735fe85"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/9-over_budget_honesty.json"
 }

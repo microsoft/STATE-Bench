@@ -91,6 +91,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/58-challenge_store_credit_only_pushback.json",
-  "replay_trace_hash": "c71bfcffb573b241e1e6e3ca4ac8e614d1f6e2baef379e9096fc69342df2b858"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/58-challenge_store_credit_only_pushback.json"
 }

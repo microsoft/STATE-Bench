@@ -73,6 +73,5 @@
   ],
   "state_requirements": [],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/88-multiline_cart_readback_accuracy.json",
-  "replay_trace_hash": "8ceb92f51a507900fb2cae72d070c2ded4595aaec39166eee02adbf1f884858a"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/88-multiline_cart_readback_accuracy.json"
 }

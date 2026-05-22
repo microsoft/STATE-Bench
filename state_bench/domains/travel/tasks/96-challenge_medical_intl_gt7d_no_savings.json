@@ -77,6 +77,5 @@
       "field": "flight_id",
       "expected_value": "AF101"
     }
-  ],
-  "replay_trace_hash": "a0690591899d1b05f90421252838fdc95144759b0c0e97d8d86de1f88df82c93"
+  ]
 }

@@ -53,6 +53,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/118-hard_shipping_low_value_not_received_refund.json",
-  "replay_trace_hash": "d315e8f24fcf83f3ed847d77fce2d179b4f04e31a46d6c6e0883ed05c2e27346"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/118-hard_shipping_low_value_not_received_refund.json"
 }

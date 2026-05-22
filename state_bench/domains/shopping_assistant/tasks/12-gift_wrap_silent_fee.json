@@ -113,6 +113,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/12-gift_wrap_silent_fee.json",
-  "replay_trace_hash": "9898e52f8aa924cd0c4bb61be31dda368e9b9fb3041070ddf0b983622a33d8ab"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/12-gift_wrap_silent_fee.json"
 }

@@ -149,6 +149,5 @@
       "expected_value": 59
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/113-hard_exchange_gift_size_no_refund.json",
-  "replay_trace_hash": "81b4c369f081dd331ac4c768783b758249c8a46b19a208fbbfcad46a17bdcc79"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/113-hard_exchange_gift_size_no_refund.json"
 }

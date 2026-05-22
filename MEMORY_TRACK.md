@@ -2,7 +2,7 @@
 
 Use the **Memory Track** to evaluate methods that learn reusable procedural memory from previous task trajectories.
 
-If you want to directly evaluate an agent on all tasks without any memory layer, use the [Main Track](RUN_BENCHMARK.md) instead.
+If you want to directly evaluate an agent on all tasks without any memory method, use the [Main Track](RUN_BENCHMARK.md) instead.
 
 ## What This Track Measures
 
@@ -14,7 +14,7 @@ The Memory Track uses the same simulator, domain tools, judges, and metrics as t
 
 The score asks whether learnings extracted from past trajectories improve agent performance.
 
-> **Memory extraction is user-owned.** It can be a memory store, `memory.md` document, vector index, or another local artifact, as long as your agent exposes relevant entries through `retrieve_learnings(top_k=3)` during evaluation. The retrieval hook is defined in [Expose Retrieval](#4-expose-retrieval).
+> **Memory extraction is user-owned.** It can be a memory store, `memory.md` document, vector index, or another local artifact, as long as your agent exposes relevant entries through the `retrieve_learnings` hook during evaluation. The retrieval hook is defined in [Expose Retrieval](#4-expose-retrieval).
 
 ## Train And Test Data
 
@@ -116,11 +116,16 @@ uv run python -m state_bench.scripts.run_batch \
   --domain <domain> \
   --agent-class <YourMemoryAgent> \
   --agent-model-name <model-name> \
-  --agent-model-reasoning-level <reasoning-level> \
   --num-runs 5 \
   --retrieve-learnings-top-k 3 \
   --num-workers <parallel-workers> \
   --output-dir outputs/<domain>/test_trajectories
+```
+
+If your agent model uses a reportable reasoning level, add:
+
+```bash
+  --agent-model-reasoning-level <reasoning-level>
 ```
 
 For a custom client + agent, also add:

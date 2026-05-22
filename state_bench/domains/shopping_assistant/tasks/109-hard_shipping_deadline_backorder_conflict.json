@@ -55,6 +55,5 @@
   ],
   "state_requirements": [],
   "task_type": "inventory_shipping",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/109-hard_shipping_deadline_backorder_conflict.json",
-  "replay_trace_hash": "b7624ac4f66641e4701d8b5ea6dd7ec787b2de1f83301667254ba201ea0ed4c1"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/109-hard_shipping_deadline_backorder_conflict.json"
 }

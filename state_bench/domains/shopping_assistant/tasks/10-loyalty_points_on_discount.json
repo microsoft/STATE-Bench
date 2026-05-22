@@ -28,7 +28,7 @@
       "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
     ]
   },
-  "task_summary": "**Task:** A returning Gold-tier customer (shop_003) buys SP-1001 SlimBook Air 13 ($849) and applies SAVE10 (10% off). Cart ends with subtotal $849, discount $84, total $765. The customer does NOT ask about loyalty points.\n\n**Challenge:** Per `loyalty_points` policy: Gold earns 2 pts/$, points are calculated on the final total after discounts, and 'agents should mention points earned after any cart completion.' Correct: 2 × $765 = 1,530 points, disclosed proactively at cart summary. Two pitfalls: (a) agent skips loyalty-points disclosure entirely (silent completion — no one asked, no one tells), or (b) agent discloses points but computes on the pre-discount subtotal (2 × $849 = 1,698) rather than the post-discount total, violating the policy's explicit 'after all discounts' rule. v0.1 agents failed this task 0/3 typically via one of those two modes.",
+  "task_summary": "**Task:** A returning Gold-tier customer (shop_003) buys SP-1001 SlimBook Air 13 ($849) and applies SAVE10 (10% off). Cart ends with subtotal $849, discount $84, total $765. The customer does NOT ask about loyalty points.\n\n**Challenge:** Per `loyalty_points` policy: Gold earns 2 pts/$, points are calculated on the final total after discounts, and 'agents should mention points earned after any cart completion.' Correct: 2 × $765 = 1,530 points, disclosed proactively at cart summary. Two pitfalls: (a) agent skips loyalty-points disclosure entirely (silent completion — no one asked, no one tells), or (b) agent discloses points but computes on the pre-discount subtotal (2 × $849 = 1,698) rather than the post-discount total, violating the policy's explicit 'after all discounts' rule.",
   "task_requirements": [
     {
       "id": "correct_cart_built",
@@ -100,6 +100,5 @@
     }
   ],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/10-loyalty_points_on_discount.json",
-  "replay_trace_hash": "c4f830c38ba9a5e51a58d45db6ffde4c82efabc0875d332d6ae91f66e0f27d9e"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/10-loyalty_points_on_discount.json"
 }

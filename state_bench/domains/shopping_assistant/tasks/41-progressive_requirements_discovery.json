@@ -94,6 +94,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/41-progressive_requirements_discovery.json",
-  "replay_trace_hash": "88973cdb03777ee88ddcd7c3110911965107c6eff85292fdb4a3823ab1da0bcd"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/41-progressive_requirements_discovery.json"
 }

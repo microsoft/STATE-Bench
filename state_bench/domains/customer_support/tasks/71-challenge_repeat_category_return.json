@@ -101,6 +101,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/71-challenge_repeat_category_return.json",
-  "replay_trace_hash": "2bf34c6b2372f8ba550a26b469e0381d2cea2911b3cfcb5043b2ed371d082d81"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/71-challenge_repeat_category_return.json"
 }

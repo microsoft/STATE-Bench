@@ -98,6 +98,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/94-brand_bundle_break_on_swap.json",
-  "replay_trace_hash": "0c717fbc76880e363f0417645f419f79a743bb8d766f0c3b7536360686d120e7"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/94-brand_bundle_break_on_swap.json"
 }

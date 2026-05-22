@@ -100,6 +100,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/131-hard_warranty_shipping_damage_better_path.json",
-  "replay_trace_hash": "ec32706c81738579bc162468d1f05e8df7aff8a02828008e71fcb93a99193d7a"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/131-hard_warranty_shipping_damage_better_path.json"
 }

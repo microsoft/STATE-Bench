@@ -78,6 +78,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/65-challenge_defective_plus_clawback.json",
-  "replay_trace_hash": "487a078ff809c9ac1482a0861175f73ea659507bb470d4c889f0ce3da6880341"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/65-challenge_defective_plus_clawback.json"
 }

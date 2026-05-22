@@ -21,11 +21,12 @@ The exact required flags depend on your agent path and whether you are running t
 uv run python -m state_bench.scripts.run_batch \
   --domain <domain> \
   --agent-model-name <model-name> \
-  --agent-model-reasoning-level <reasoning-level> \
   --num-runs 5 \
   --num-workers <parallel workers> \
   --output-dir outputs/<domain>/test_trajectories
 ```
+
+If your agent model uses a reportable reasoning level, add `--agent-model-reasoning-level <reasoning-level>`.
 
 Add `--agent-class`, `--agent-client-class`, and `--retrieve-learnings-top-k` per the matrix above. For cost reporting, also add the pricing flags from [docs/eval/cost-reporting.md](cost-reporting.md).
 

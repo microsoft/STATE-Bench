@@ -50,6 +50,5 @@
   ],
   "state_requirements": [],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/125-hard_promo_expired_code_no_replacement.json",
-  "replay_trace_hash": "12e92e92ea853bf5c42f07d3959581249ca82594917abafac180a1b4941a7ba4"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/125-hard_promo_expired_code_no_replacement.json"
 }

@@ -77,6 +77,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/50-edge_changes_mind.json",
-  "replay_trace_hash": "37f5468a6dbdc5c0a1ef26c845e0e49cb083e45aef6c0b9e1c83270599d33cc8"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/50-edge_changes_mind.json"
 }

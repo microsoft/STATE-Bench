@@ -94,6 +94,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/68-challenge_seasonal_plus_shipping_clawback.json",
-  "replay_trace_hash": "385a996b4e0cfd99e2a4f08a71de15c9fa83bdafc8910da4225f2cb6fe6e1a69"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/68-challenge_seasonal_plus_shipping_clawback.json"
 }

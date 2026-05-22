@@ -58,6 +58,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/120-hard_shipping_missing_only_one_of_three.json",
-  "replay_trace_hash": "9e62432f202e8fe5dd9fe42441b8953efc5f7f55b411ba3f3edf5db96b7497f4"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/120-hard_shipping_missing_only_one_of_three.json"
 }

@@ -142,6 +142,5 @@
       "expected_value": 59
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/33-exchange_size_swap.json",
-  "replay_trace_hash": "e8b330929ebfb1e96c6701404515a14529ae77041f3e6643209d1ed429f6ce35"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/33-exchange_size_swap.json"
 }

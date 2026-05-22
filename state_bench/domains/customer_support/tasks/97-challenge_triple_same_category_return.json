@@ -145,6 +145,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/97-challenge_triple_same_category_return.json",
-  "replay_trace_hash": "b9ed125f4a0a50e2a763145c68780340bd275ff9fd6882c90a0693cf07cf67f6"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/97-challenge_triple_same_category_return.json"
 }

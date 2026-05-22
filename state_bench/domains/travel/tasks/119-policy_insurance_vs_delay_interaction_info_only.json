@@ -64,6 +64,5 @@
   ],
   "task_type": "policy_info_or_restraint",
   "task_env_path": "state_bench/domains/travel/task_envs/119-policy_insurance_vs_delay_interaction_info_only.json",
-  "state_requirements": [],
-  "replay_trace_hash": "c1401b20092cd7b69a072873f070c5b71b902e5d50496a19dbf62539e9d3c48e"
+  "state_requirements": []
 }

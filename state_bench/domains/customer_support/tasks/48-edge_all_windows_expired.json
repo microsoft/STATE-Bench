@@ -33,6 +33,5 @@
     "user_sim_context": "You want to return headphones you barely used, even though you know a long time has passed. You are hoping there may still be some exception or remaining option. You want the agent to tell you plainly whether anything can still be done."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/48-edge_all_windows_expired.json",
-  "replay_trace_hash": "a57e1663cb1f550cd7585b1449b81be4f8413c57510bfb6700fc2f253a7b5e66"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/48-edge_all_windows_expired.json"
 }

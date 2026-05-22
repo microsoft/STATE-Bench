@@ -94,6 +94,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/44-budget_bump_mid_flight.json",
-  "replay_trace_hash": "d524c3e24c8ed6409be32b08807453401774b6940d39af6854efaaf5d80bc003"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/44-budget_bump_mid_flight.json"
 }

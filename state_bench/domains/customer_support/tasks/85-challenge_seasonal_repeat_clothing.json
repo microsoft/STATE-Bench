@@ -121,6 +121,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/85-challenge_seasonal_repeat_clothing.json",
-  "replay_trace_hash": "cc2128561412334744fcd8952473f2438af0bdb105b1f2a9f00fac9c28966675"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/85-challenge_seasonal_repeat_clothing.json"
 }

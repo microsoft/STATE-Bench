@@ -43,6 +43,5 @@
   ],
   "state_requirements": [],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/139-hard_cart_gift_wrap_remove_only_one.json",
-  "replay_trace_hash": "bb51e694d2fb7f162af0fcefcaa79587ad6001e68334235e59aa1c3fa12fc8bf"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/139-hard_cart_gift_wrap_remove_only_one.json"
 }

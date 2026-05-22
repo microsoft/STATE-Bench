@@ -79,6 +79,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/53-challenge_remorse_as_defective.json",
-  "replay_trace_hash": "12d28f8d618e8316a2c75ff0dfe46eb3978bcd4efca05d084d2baf4c6a5b54cf"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/53-challenge_remorse_as_defective.json"
 }

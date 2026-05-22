@@ -88,6 +88,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/126-spare_warranty_no_record_return_valid.json",
-  "replay_trace_hash": "9fc6d7ccb92259b1d53cc4a95a6c5fe051420d37b97f6598c6eb27373b464103"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/126-spare_warranty_no_record_return_valid.json"
 }

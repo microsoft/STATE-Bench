@@ -78,6 +78,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/91-challenge_wear_as_not_described.json",
-  "replay_trace_hash": "9d97ea8bf6310e4efded3919df1603ff92c57f21397207373e28667545e75214"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/91-challenge_wear_as_not_described.json"
 }

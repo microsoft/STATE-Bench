@@ -96,6 +96,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/52-invalid_promo_tool_error_recovery.json",
-  "replay_trace_hash": "bfc0c928e07d60169a5f938923d9a6a46701a0390aa53f014101f135e62f3085"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/52-invalid_promo_tool_error_recovery.json"
 }

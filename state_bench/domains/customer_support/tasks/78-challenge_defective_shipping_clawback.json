@@ -81,6 +81,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/78-challenge_defective_shipping_clawback.json",
-  "replay_trace_hash": "e6f4e7897cc07de053fd35db76fd4ce6e408b3e609c7af275997e3e3e8134248"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/78-challenge_defective_shipping_clawback.json"
 }

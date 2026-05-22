@@ -86,6 +86,5 @@
     }
   ],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/53-self_correct_confident_wrong_price.json",
-  "replay_trace_hash": "fcde6643b154e2c64b7e20e908fed92a4ecd9fd7cfe3f0532576ec2c79a1635a"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/53-self_correct_confident_wrong_price.json"
 }

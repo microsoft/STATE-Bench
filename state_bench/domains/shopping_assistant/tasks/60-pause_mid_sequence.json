@@ -84,6 +84,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/60-pause_mid_sequence.json",
-  "replay_trace_hash": "f13ac393048f47b57965f869dfc91245c3a4395eb4a36966a9c4c2081ba3dc9e"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/60-pause_mid_sequence.json"
 }

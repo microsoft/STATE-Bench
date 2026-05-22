@@ -129,6 +129,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/86-challenge_seasonal_bulk_shipping_triple.json",
-  "replay_trace_hash": "e422b05f20d3362951a3a7af8d6ff8e1ce625b6383292c3d1a7fab994c2f71eb"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/86-challenge_seasonal_bulk_shipping_triple.json"
 }

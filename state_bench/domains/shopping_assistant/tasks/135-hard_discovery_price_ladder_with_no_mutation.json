@@ -43,6 +43,5 @@
   ],
   "state_requirements": [],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/135-hard_discovery_price_ladder_with_no_mutation.json",
-  "replay_trace_hash": "765cdda74faebe83d20b000e32c1e432abfc6e2853cb7d3cf8dfd0c89b78f4d7"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/135-hard_discovery_price_ladder_with_no_mutation.json"
 }

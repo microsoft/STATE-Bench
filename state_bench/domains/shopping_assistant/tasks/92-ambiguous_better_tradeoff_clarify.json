@@ -87,6 +87,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/92-ambiguous_better_tradeoff_clarify.json",
-  "replay_trace_hash": "29930e461845bba1c1299cbfb42992c7ddf92bef6c039423352ca8ad381f2e7a"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/92-ambiguous_better_tradeoff_clarify.json"
 }

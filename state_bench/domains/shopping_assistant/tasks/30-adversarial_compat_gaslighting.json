@@ -88,6 +88,5 @@
     }
   ],
   "task_type": "compatibility_variants",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/30-adversarial_compat_gaslighting.json",
-  "replay_trace_hash": "836fe2d1fd80c583c1133c933d9dcc0a72c9bc07b3687c582cea9f847bcffccc"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/30-adversarial_compat_gaslighting.json"
 }

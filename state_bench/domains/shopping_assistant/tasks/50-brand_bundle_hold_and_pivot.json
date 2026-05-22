@@ -112,6 +112,5 @@
     }
   ],
   "task_type": "edge_case_or_restraint",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/50-brand_bundle_hold_and_pivot.json",
-  "replay_trace_hash": "b45b250cd74212f433db9697ec3d531124a4c0cbac51fad8c47e152b62d3f2b9"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/50-brand_bundle_hold_and_pivot.json"
 }

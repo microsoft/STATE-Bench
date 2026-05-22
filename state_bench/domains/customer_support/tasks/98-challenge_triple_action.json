@@ -104,6 +104,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/98-challenge_triple_action.json",
-  "replay_trace_hash": "f6baec2fa88b30786594bf7c211f6fbdb77aa5279d06324c2512c049d3918390"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/98-challenge_triple_action.json"
 }

@@ -89,6 +89,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/33-repeat_purchase_intent_confirm.json",
-  "replay_trace_hash": "162e4e280f0a71c7f3959b232209b9343ffb65a63e0f9dda1fdc970edf3c0181"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/33-repeat_purchase_intent_confirm.json"
 }

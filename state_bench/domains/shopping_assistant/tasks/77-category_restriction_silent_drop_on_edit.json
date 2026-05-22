@@ -113,6 +113,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/77-category_restriction_silent_drop_on_edit.json",
-  "replay_trace_hash": "e0fdbcaaad2979d203a669b145c64a1bcab52fcf75fdff97bf530d8d14c572e8"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/77-category_restriction_silent_drop_on_edit.json"
 }

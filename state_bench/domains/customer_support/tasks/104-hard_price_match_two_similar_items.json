@@ -51,6 +51,5 @@
     "user_sim_context": "You are contacting support about order ORD-7204. Customer asks for a price match using a cheaper competitor bundle listing that includes a USB hub plus phone case. The purchased order has separate single items with no task-local price drop, so agent must deny price matching and leave the order unchanged. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/104-hard_price_match_two_similar_items.json",
-  "replay_trace_hash": "bc5788eea7ef8d918c47495be2f43387359f263581511390b919b9537b1ddc7f"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/104-hard_price_match_two_similar_items.json"
 }

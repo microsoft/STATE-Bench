@@ -76,6 +76,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/136-hard_cart_remove_one_of_two_similar.json",
-  "replay_trace_hash": "b94817a499f6529fb6c26ae1aac5a5bc1c8909ecb77d8e813b5a68b7c8b9c3eb"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/136-hard_cart_remove_one_of_two_similar.json"
 }

@@ -77,6 +77,5 @@
       "expected_value": false
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/25-shipping_stuck_in_transit.json",
-  "replay_trace_hash": "a5b14a96f3c5ee9144142b4f1fef656f56add160f11e9a2c1fe95ea32adb8a5b"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/25-shipping_stuck_in_transit.json"
 }

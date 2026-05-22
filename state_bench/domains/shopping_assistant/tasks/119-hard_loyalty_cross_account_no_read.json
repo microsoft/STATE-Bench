@@ -55,6 +55,5 @@
   ],
   "state_requirements": [],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/119-hard_loyalty_cross_account_no_read.json",
-  "replay_trace_hash": "8d53573cd4aca1604152e0b9bb37ca47fb049e6559583915a4cd7a9d9fd3879f"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/119-hard_loyalty_cross_account_no_read.json"
 }

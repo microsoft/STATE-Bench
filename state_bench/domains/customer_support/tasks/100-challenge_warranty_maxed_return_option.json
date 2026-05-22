@@ -84,6 +84,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/100-challenge_warranty_maxed_return_option.json",
-  "replay_trace_hash": "c9d6436cf87f14296bb3f8557391f1d07e38068c0ace4bf8a2e856fe54d92f56"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/100-challenge_warranty_maxed_return_option.json"
 }

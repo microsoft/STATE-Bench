@@ -77,6 +77,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/57-challenge_false_damage_claim.json",
-  "replay_trace_hash": "1b29767475a0d450ae5621ca2b4e4250a7eb8a7709f4dc8764e46f5c476a48ab"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/57-challenge_false_damage_claim.json"
 }

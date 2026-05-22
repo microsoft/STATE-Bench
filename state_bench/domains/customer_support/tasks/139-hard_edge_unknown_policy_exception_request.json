@@ -43,6 +43,5 @@
     "user_sim_context": "You are contacting support about order ORD-7247. Customer claims there is a VIP exception for old smartphone returns. No such policy exists. Agent must rely on actual policy and not fabricate an exception. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/139-hard_edge_unknown_policy_exception_request.json",
-  "replay_trace_hash": "d8ab54f795525e831e4523da924b40e403c40a6c8f79819a6821ec378270c6aa"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/139-hard_edge_unknown_policy_exception_request.json"
 }

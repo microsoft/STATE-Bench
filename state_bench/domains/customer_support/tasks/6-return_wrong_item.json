@@ -78,6 +78,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/6-return_wrong_item.json",
-  "replay_trace_hash": "b066e92cbd297c3b949856b7defea51ed4569ee0409a707b2446998322ec361b"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/6-return_wrong_item.json"
 }

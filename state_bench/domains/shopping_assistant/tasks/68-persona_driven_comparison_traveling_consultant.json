@@ -90,6 +90,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/68-persona_driven_comparison_traveling_consultant.json",
-  "replay_trace_hash": "8b6920f0ed5a181c8e1e0bf13f2c46c7bdc7c21c26497442d0fb7b45b5d09a5b"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/68-persona_driven_comparison_traveling_consultant.json"
 }

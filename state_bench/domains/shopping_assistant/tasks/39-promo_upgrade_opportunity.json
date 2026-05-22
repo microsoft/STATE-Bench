@@ -121,6 +121,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/39-promo_upgrade_opportunity.json",
-  "replay_trace_hash": "0a5e92936e503914979b69483f043036ae567662afb610e106cab2078268c711"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/39-promo_upgrade_opportunity.json"
 }

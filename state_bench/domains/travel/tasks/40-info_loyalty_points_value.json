@@ -60,6 +60,5 @@
   ],
   "task_type": "policy_info_or_restraint",
   "task_env_path": "state_bench/domains/travel/task_envs/40-info_loyalty_points_value.json",
-  "state_requirements": [],
-  "replay_trace_hash": "9e07cc620d7d1192a7ecf40e434eaabdc34d1b2a3e7ee8dea19bc60f5c19e85b"
+  "state_requirements": []
 }

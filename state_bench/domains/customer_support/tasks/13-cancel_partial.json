@@ -70,6 +70,5 @@
       "expected_value": "confirmed"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/13-cancel_partial.json",
-  "replay_trace_hash": "17e36e18750fe5869e17f3840aa058ac5eff07e34b291b434d5bcd296d34e9ca"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/13-cancel_partial.json"
 }

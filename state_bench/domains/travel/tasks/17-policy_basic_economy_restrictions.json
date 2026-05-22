@@ -67,6 +67,5 @@
   ],
   "task_type": "policy_info_or_restraint",
   "task_env_path": "state_bench/domains/travel/task_envs/17-policy_basic_economy_restrictions.json",
-  "state_requirements": [],
-  "replay_trace_hash": "ef3d4917769df6d0b0006d12a9852de547431897a665d299c16846323d39316c"
+  "state_requirements": []
 }

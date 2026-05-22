@@ -78,6 +78,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/82-challenge_low_value_electronics_silver.json",
-  "replay_trace_hash": "adbf0c5049758c3dd438f7a69b721ca18ebc95422140e09b521b32d9c5c63984"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/82-challenge_low_value_electronics_silver.json"
 }

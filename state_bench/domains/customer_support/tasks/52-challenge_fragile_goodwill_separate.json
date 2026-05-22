@@ -97,6 +97,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/52-challenge_fragile_goodwill_separate.json",
-  "replay_trace_hash": "aaaff6b63741a8451d1bc489815501c6549f5898d1dca62ce549b3f385363570"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/52-challenge_fragile_goodwill_separate.json"
 }

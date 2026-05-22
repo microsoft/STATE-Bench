@@ -58,6 +58,5 @@
   ],
   "state_requirements": [],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/81-pre_purchase_comparison_no_write.json",
-  "replay_trace_hash": "28ce36714d8b81c96e9e608aeff1cff7c7ada781035fe1493914a424e88fcebc"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/81-pre_purchase_comparison_no_write.json"
 }

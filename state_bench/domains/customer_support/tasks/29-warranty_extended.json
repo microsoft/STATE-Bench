@@ -54,6 +54,5 @@
       "expected_value": "claimed"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/29-warranty_extended.json",
-  "replay_trace_hash": "f4620ce250d38b62c1c47ed80deda6a47317efd7d8131d117e2e66372f61ca20"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/29-warranty_extended.json"
 }

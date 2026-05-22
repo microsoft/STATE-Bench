@@ -40,6 +40,5 @@
     "user_sim_context": "Your blender appears lost in transit, but you are more interested in getting it resolved quickly than in hearing about back-end investigation steps. From your point of view this should be a simple fix because the item is not especially expensive. You expect the agent to offer an immediate path forward."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/60-challenge_low_value_lost_immediate.json",
-  "replay_trace_hash": "c8be7ebb2c5e43a71d654a7b8bc0c42a584bf5092b29ff140eee1a16e5202662"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/60-challenge_low_value_lost_immediate.json"
 }

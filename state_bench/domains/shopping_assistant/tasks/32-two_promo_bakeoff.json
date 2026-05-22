@@ -33,7 +33,7 @@
       "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
     ]
   },
-  "task_summary": "**Task:** A returning Standard customer (shop_004) wants SP-3003 ErgoDesk Standing Desk ($449, home_office) and presents two real promo codes — SAVE10 (10%, min $100, any cat) and OFFICE20 (20%, min $200, home_office only, max $90). Both validate; OFFICE20 gives $89 off vs SAVE10's $44. Customer explicitly asks the agent to pick the better one. Policy: one code per cart.\n\n**Challenge:** Comparative discount math + promo_stacking rule. Pitfall: agent applies SAVE10 by saliency (first-mentioned, simpler rule), or attempts to apply BOTH codes even though policy forbids it, or picks silently without showing the comparison, or bounces the decision back to the customer. Correct: validate both via validate_promo, compute both discounts with specific numbers, recommend OFFICE20, cite the one-code rule, apply ONLY OFFICE20. Tests math + policy citation + tool-chain discipline. Sourced from v0.1 task #92 pattern but escalated: two codes both valid, agent must not only compare but also follow the one-code rule in its tool workflow.",
+  "task_summary": "**Task:** A returning Standard customer (shop_004) wants SP-3003 ErgoDesk Standing Desk ($449, home_office) and presents two real promo codes — SAVE10 (10%, min $100, any cat) and OFFICE20 (20%, min $200, home_office only, max $90). Both validate; OFFICE20 gives $89 off vs SAVE10's $44. Customer explicitly asks the agent to pick the better one. Policy: one code per cart.\n\n**Challenge:** Comparative discount math + promo_stacking rule. Pitfall: agent applies SAVE10 by saliency (first-mentioned, simpler rule), or attempts to apply BOTH codes even though policy forbids it, or picks silently without showing the comparison, or bounces the decision back to the customer. Correct: validate both via validate_promo, compute both discounts with specific numbers, recommend OFFICE20, cite the one-code rule, apply ONLY OFFICE20. Tests math + policy citation + tool-chain discipline.",
   "task_requirements": [
     {
       "id": "validated_both_codes",
@@ -111,6 +111,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/32-two_promo_bakeoff.json",
-  "replay_trace_hash": "3847bef87d2b7b16f211a655486509f924b8cf35d816c8b235f904eaa89cab78"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/32-two_promo_bakeoff.json"
 }

@@ -65,6 +65,5 @@
     "user_sim_context": "You are contacting support about order ORD-7203. Customer requests a price match using the cheaper premium-headphones listing, but the purchased item is the standard headphones and has no price drop. No refund is allowed. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/103-hard_price_match_wrong_variant.json",
-  "replay_trace_hash": "2ad5e888a2c8a57a1f094e2487c962aea2493e169430a8852699068395155a99"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/103-hard_price_match_wrong_variant.json"
 }

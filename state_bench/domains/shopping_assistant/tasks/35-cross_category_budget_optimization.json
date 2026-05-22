@@ -108,6 +108,5 @@
     }
   ],
   "task_type": "edge_case_or_restraint",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/35-cross_category_budget_optimization.json",
-  "replay_trace_hash": "c8a8f1616322543023b221ebe51721e3ed5b093655e9413ddb7fe4707edd74c4"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/35-cross_category_budget_optimization.json"
 }

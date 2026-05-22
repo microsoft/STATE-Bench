@@ -82,6 +82,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/145-spare_compound_denial_plus_valid_action.json",
-  "replay_trace_hash": "0a27a420f8ce5693e70bde08c7a1888e7b637c846e41c960f17f48dc81ca0815"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/145-spare_compound_denial_plus_valid_action.json"
 }

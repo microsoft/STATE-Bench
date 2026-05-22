@@ -104,6 +104,5 @@
       "field": "price_paid",
       "expected_value": 415
     }
-  ],
-  "replay_trace_hash": "445612873c1ac9d0bc950b9737f2060e5d685d2dbd61be5560c25e572ec3cec5"
+  ]
 }

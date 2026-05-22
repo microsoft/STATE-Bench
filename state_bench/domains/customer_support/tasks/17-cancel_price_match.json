@@ -59,6 +59,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/17-cancel_price_match.json",
-  "replay_trace_hash": "17dfb80d6e03b4b9fbfa9b8e064add0447d25941c5665d22add45887dc5428c5"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/17-cancel_price_match.json"
 }

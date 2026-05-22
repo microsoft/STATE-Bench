@@ -86,6 +86,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/97-ambiguous_blue_cart_reference.json",
-  "replay_trace_hash": "8094e7d4da7598f7a08d95d5dfd5ca0d6566bb7a141068c2d17bec0e07f67d38"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/97-ambiguous_blue_cart_reference.json"
 }

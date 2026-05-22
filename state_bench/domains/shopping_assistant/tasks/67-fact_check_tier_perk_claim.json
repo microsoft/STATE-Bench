@@ -84,6 +84,5 @@
     }
   ],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/67-fact_check_tier_perk_claim.json",
-  "replay_trace_hash": "51844e5aea4f83e0187ccc9e3a947a87dd1e6d22c6b49323074f10d5043ef8f9"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/67-fact_check_tier_perk_claim.json"
 }

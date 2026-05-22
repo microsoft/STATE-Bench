@@ -76,6 +76,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/117-hard_exchange_user_pivots_to_return.json",
-  "replay_trace_hash": "724990adc229fd9900a3a60bf96212c8d2e39483111b055c128ce63bc159c226"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/117-hard_exchange_user_pivots_to_return.json"
 }

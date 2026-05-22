@@ -58,6 +58,5 @@
       "expected_value": "cancelled"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/14-cancel_split_payment.json",
-  "replay_trace_hash": "6a96d41ba8e44345fafd860a1870d09895c67bd4cd44f80b0d498447f776e017"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/14-cancel_split_payment.json"
 }

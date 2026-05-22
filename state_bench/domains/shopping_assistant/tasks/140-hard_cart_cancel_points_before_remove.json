@@ -44,6 +44,5 @@
   ],
   "state_requirements": [],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/140-hard_cart_cancel_points_before_remove.json",
-  "replay_trace_hash": "62a7639d338f1be78d8e07672c6b8c73ad45b15577d17043f9fe62ff182cd112"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/140-hard_cart_cancel_points_before_remove.json"
 }

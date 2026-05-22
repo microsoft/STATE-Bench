@@ -95,6 +95,5 @@
     }
   ],
   "task_type": "inventory_shipping",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/98-qty_cap_cross_account_workaround.json",
-  "replay_trace_hash": "5d9c9e7a0d851bb7b023559b13386576d71a198cec4ebc8c5156b07bae714156"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/98-qty_cap_cross_account_workaround.json"
 }

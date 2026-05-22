@@ -83,6 +83,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/69-cart_hygiene_product_swap.json",
-  "replay_trace_hash": "0721e9aeb86542ff5d8f6081f2d62eac20ce4534ff2a1e5e9a04d647b367115c"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/69-cart_hygiene_product_swap.json"
 }

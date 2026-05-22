@@ -111,6 +111,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/13-expired_promo_silent_drop.json",
-  "replay_trace_hash": "efe5a593e91a4f10813014e8c7ae0da662afa995d2737f423158cd6597181815"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/13-expired_promo_silent_drop.json"
 }

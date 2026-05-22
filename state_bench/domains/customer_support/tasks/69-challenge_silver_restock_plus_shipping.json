@@ -77,6 +77,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/69-challenge_silver_restock_plus_shipping.json",
-  "replay_trace_hash": "a8cda4a7a665121e7be364d7d3ad4da50e1303af86b405ac1faa8faa37442481"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/69-challenge_silver_restock_plus_shipping.json"
 }

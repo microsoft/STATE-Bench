@@ -49,6 +49,5 @@
   ],
   "state_requirements": [],
   "task_type": "compatibility_variants",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/106-hard_compat_unknown_device_canonicalize.json",
-  "replay_trace_hash": "20c85ef3bdac07ee8734ecfdca99b35fe1801be66500956ce9a5a88d05ee973b"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/106-hard_compat_unknown_device_canonicalize.json"
 }

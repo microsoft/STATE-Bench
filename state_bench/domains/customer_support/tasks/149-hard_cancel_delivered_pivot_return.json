@@ -45,6 +45,5 @@
     "user_sim_context": "You are contacting support about order ORD-7262. Customer asks to cancel 'the accessory' from a processing order that contains two accessory items. Agent must clarify which item before any cancellation and leave the order unchanged until the item is identified. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/149-hard_cancel_delivered_pivot_return.json",
-  "replay_trace_hash": "2ea939954257136d2c1d029ae965ab710f19f8e6b81a58428d59689bff7118ea"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/149-hard_cancel_delivered_pivot_return.json"
 }

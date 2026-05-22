@@ -145,6 +145,5 @@
       "expected_value": 349
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/42-compound_exchange_plus_credit.json",
-  "replay_trace_hash": "5727e01568764f7d83581cab4336ba8e009ba47b1067567bf60c8fc7b32055f0"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/42-compound_exchange_plus_credit.json"
 }

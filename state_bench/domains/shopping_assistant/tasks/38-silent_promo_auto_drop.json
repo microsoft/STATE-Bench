@@ -101,6 +101,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/38-silent_promo_auto_drop.json",
-  "replay_trace_hash": "76a95f3418ace5d473f902ddfd921cfbdf6688160b42b15f3e3e81f7adbcda6f"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/38-silent_promo_auto_drop.json"
 }

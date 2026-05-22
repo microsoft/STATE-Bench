@@ -56,6 +56,5 @@
   ],
   "task_type": "policy_info_or_restraint",
   "task_env_path": "state_bench/domains/travel/task_envs/41-info_upgrade_options.json",
-  "state_requirements": [],
-  "replay_trace_hash": "df657eba41d898468449b865e682f98ba336e7b5f455292aafc2b99e1403204c"
+  "state_requirements": []
 }

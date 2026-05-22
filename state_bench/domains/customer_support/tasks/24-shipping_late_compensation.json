@@ -79,6 +79,5 @@
       "expected_value": false
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/24-shipping_late_compensation.json",
-  "replay_trace_hash": "2bebabbb2b31f3363f1e22eccc31dad849ed1018749577c38893d1a796b03214"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/24-shipping_late_compensation.json"
 }

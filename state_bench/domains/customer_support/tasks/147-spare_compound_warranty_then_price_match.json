@@ -71,6 +71,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/147-spare_compound_warranty_then_price_match.json",
-  "replay_trace_hash": "512e0a099d22ae0a5a6f89c11f326269cae42a76e57c5e90ebc1ad13fd0dc02d"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/147-spare_compound_warranty_then_price_match.json"
 }

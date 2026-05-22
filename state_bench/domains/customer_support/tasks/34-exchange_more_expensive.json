@@ -143,6 +143,5 @@
       "expected_value": 349
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/34-exchange_more_expensive.json",
-  "replay_trace_hash": "6019d6574d71be15c38a538c3f59a25a0671ac3061bd4a0f75fe5c45c747d15d"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/34-exchange_more_expensive.json"
 }

@@ -53,6 +53,5 @@
       "expected_value": "claimed"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/27-warranty_in_warranty_repair.json",
-  "replay_trace_hash": "544fc7b00cfbfe4c843628d8630ce093c2691dd81b724d67443a86fe3ef5f1da"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/27-warranty_in_warranty_repair.json"
 }

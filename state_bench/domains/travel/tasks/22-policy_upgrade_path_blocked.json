@@ -58,6 +58,5 @@
   ],
   "task_type": "policy_info_or_restraint",
   "task_env_path": "state_bench/domains/travel/task_envs/22-policy_upgrade_path_blocked.json",
-  "state_requirements": [],
-  "replay_trace_hash": "f3117c7700a554c733d06b4fc584c0c9d817425b00f97551fccd9f939979eac9"
+  "state_requirements": []
 }

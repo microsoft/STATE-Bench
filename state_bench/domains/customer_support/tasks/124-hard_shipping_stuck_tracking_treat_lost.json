@@ -65,6 +65,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/124-hard_shipping_stuck_tracking_treat_lost.json",
-  "replay_trace_hash": "8f52dd703eadc994c5467fb3e61e059d2bac5f40bde4059b4fd9d8d56ba8e27a"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/124-hard_shipping_stuck_tracking_treat_lost.json"
 }

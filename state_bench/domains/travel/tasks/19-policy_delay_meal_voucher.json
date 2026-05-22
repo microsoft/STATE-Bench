@@ -72,6 +72,5 @@
       "field": "delay_compensation",
       "expected_value": "meal_voucher"
     }
-  ],
-  "replay_trace_hash": "9e561b11626c5940c9f28c94bfa54c42e6cf56adb4aa264fe2ab94fcab6d2991"
+  ]
 }

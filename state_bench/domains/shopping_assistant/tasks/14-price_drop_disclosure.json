@@ -28,7 +28,7 @@
       "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
     ]
   },
-  "task_summary": "**Task:** A returning Standard customer (shop_004) asks for SP-1107 SlimBook Touch 15 ($1099, previously $1299 — a $200 drop). Customer does NOT know the previous price and does NOT ask about pricing.\n\n**Challenge:** Per `price_alerts` policy, the agent should surface price changes proactively. Pitfall: agent reports the current price at cart summary without mentioning the $200 drop. Silent completion misses an opportunity to inform the customer of a saving they didn't have to ask for. Correct: agent quotes both prices ($1299 -> $1099) or names the savings ($200 off) at or before cart summary, on its own initiative. Sourced from v0.1 hard tasks #82/99 (price-drop disclosure, both 0/3 pass).",
+  "task_summary": "**Task:** A returning Standard customer (shop_004) asks for SP-1107 SlimBook Touch 15 ($1099, previously $1299 — a $200 drop). Customer does NOT know the previous price and does NOT ask about pricing.\n\n**Challenge:** Per `price_alerts` policy, the agent should surface price changes proactively. Pitfall: agent reports the current price at cart summary without mentioning the $200 drop. Silent completion misses an opportunity to inform the customer of a saving they didn't have to ask for. Correct: agent quotes both prices ($1299 -> $1099) or names the savings ($200 off) at or before cart summary, on its own initiative.",
   "task_requirements": [
     {
       "id": "correct_product_added",
@@ -74,6 +74,5 @@
     }
   ],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/14-price_drop_disclosure.json",
-  "replay_trace_hash": "881bcf8620b97ab41737c72628620ff51b2fad1c5fb4e4460674822c2781ddd7"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/14-price_drop_disclosure.json"
 }

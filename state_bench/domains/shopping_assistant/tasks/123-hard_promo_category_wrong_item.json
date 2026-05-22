@@ -44,6 +44,5 @@
   ],
   "state_requirements": [],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/123-hard_promo_category_wrong_item.json",
-  "replay_trace_hash": "59525b687ccdb04e05a3fe83cbb6ff89c733c17e0e87b47720782e384ef282d2"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/123-hard_promo_category_wrong_item.json"
 }

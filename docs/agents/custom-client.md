@@ -166,4 +166,7 @@ If your provider expects separate tool-result messages (e.g., OpenAI Chat Comple
 
 ## Next step
 
-Go to [docs/eval/run-batch.md](../eval/run-batch.md) and use the **Custom** column of the args matrix.
+Return to your track guide and continue with the run steps:
+
+- Main Track: [Run Benchmark](../../RUN_BENCHMARK.md)
+- Memory Track: [Memory Track](../../MEMORY_TRACK.md)

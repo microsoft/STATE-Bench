@@ -2,7 +2,7 @@
 
 Use the **Main Track** to evaluate an agent or model on STATE-Bench's provided enterprise benchmark tasks. This is the default benchmark path.
 
-If you want to benchmark your agentic memory layer, use the [Memory Track](MEMORY_TRACK.md) instead.
+If you want to benchmark an agentic memory method, use the [Memory Track](MEMORY_TRACK.md) instead.
 
 ## 1. Install
 
@@ -49,10 +49,15 @@ Run one domain at a time:
 uv run python -m state_bench.scripts.run_batch \
   --domain <domain> \
   --agent-model-name <model-name> \
-  --agent-model-reasoning-level <reasoning-level> \
   --num-runs 5 \
   --num-workers <parallel-workers> \
   --output-dir outputs/<domain>/test_trajectories
+```
+
+If your agent model uses a reportable reasoning level, add:
+
+```bash
+  --agent-model-reasoning-level <reasoning-level>
 ```
 
 For a custom client + agent, add:

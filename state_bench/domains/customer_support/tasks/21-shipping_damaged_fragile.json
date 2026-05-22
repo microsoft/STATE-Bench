@@ -95,6 +95,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/21-shipping_damaged_fragile.json",
-  "replay_trace_hash": "6fb5b5d3ee52c8e3ff1a480475d73adeb78f8eaa5417fca5f87f5d0d42572ee9"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/21-shipping_damaged_fragile.json"
 }

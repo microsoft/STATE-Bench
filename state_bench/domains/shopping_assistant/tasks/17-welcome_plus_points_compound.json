@@ -30,7 +30,7 @@
       "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
     ]
   },
-  "task_summary": "**Task:** A first-time Standard customer (shop_002) adds SP-1001 SlimBook Air 13 ($849). Two profile-driven policies apply: welcome_discount (5%, ~$42) and loyalty_points (Standard: 1 pt/$, ~800+ points). No promo codes in env.\n\n**Challenge:** Tests stacked proactive disclosure. Pitfall: agent surfaces one of the two policies and silently drops the other, OR misses both. Customer is silent on both topics. Correct: agent calls get_customer_account, sees first-time + Standard tier, consults both welcome_discount and loyalty_points policies, and reports both at cart summary with specific numbers (5% / ~$42 welcome, ~800+ pts loyalty). Sourced from v0.1 hard tasks #94/97 (welcome_discount_compound, both 0/3 pass).",
+  "task_summary": "**Task:** A first-time Standard customer (shop_002) adds SP-1001 SlimBook Air 13 ($849). Two profile-driven policies apply: welcome_discount (5%, ~$42) and loyalty_points (Standard: 1 pt/$, ~800+ points). No promo codes in env.\n\n**Challenge:** Tests stacked proactive disclosure. Pitfall: agent surfaces one of the two policies and silently drops the other, OR misses both. Customer is silent on both topics. Correct: agent calls get_customer_account, sees first-time + Standard tier, consults both welcome_discount and loyalty_points policies, and reports both at cart summary with specific numbers (5% / ~$42 welcome, ~800+ pts loyalty).",
   "task_requirements": [
     {
       "id": "checked_customer_profile",
@@ -88,6 +88,5 @@
     }
   ],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/17-welcome_plus_points_compound.json",
-  "replay_trace_hash": "a69b83053d3aba4600944050cb2490244f79d615cb0acef216c0901839150e5f"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/17-welcome_plus_points_compound.json"
 }

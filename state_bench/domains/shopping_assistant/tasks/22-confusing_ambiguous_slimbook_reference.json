@@ -87,6 +87,5 @@
     }
   ],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/22-confusing_ambiguous_slimbook_reference.json",
-  "replay_trace_hash": "55cb92d5957dd2950c806dd02558cd753e2fab7e59ac3922a1081076f163e92d"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/22-confusing_ambiguous_slimbook_reference.json"
 }

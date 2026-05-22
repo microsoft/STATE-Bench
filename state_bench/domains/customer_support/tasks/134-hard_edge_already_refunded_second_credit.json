@@ -49,6 +49,5 @@
     "user_sim_context": "You are contacting support about order ORD-7242. Item is already returned and refunded. Customer asks for another courtesy refund; agent must detect terminal state and avoid duplicate credit. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/134-hard_edge_already_refunded_second_credit.json",
-  "replay_trace_hash": "c64966567180f80acc67b09aa04ce1885cc1aa2990490f27b3573c748909a7fd"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/134-hard_edge_already_refunded_second_credit.json"
 }

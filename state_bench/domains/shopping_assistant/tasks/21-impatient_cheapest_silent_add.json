@@ -64,6 +64,5 @@
   ],
   "state_requirements": [],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/21-impatient_cheapest_silent_add.json",
-  "replay_trace_hash": "de83d6cf76784394a88edb44293c7ec7427265ac124af7605efef0d11bd8bff9"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/21-impatient_cheapest_silent_add.json"
 }

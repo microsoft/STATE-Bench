@@ -40,6 +40,5 @@
     "user_sim_context": "You want to exchange your headphones and are also thinking about the fact that the price has dropped since you bought them. From your perspective, it is natural to wonder whether the lower price should help you here. You want the agent to explain how an exchange interacts with that price change."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/37-exchange_no_price_protection.json",
-  "replay_trace_hash": "511d3981a3bfbdc3c203ce7cc30a0946532d2f959a629f3203fc45967e3af693"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/37-exchange_no_price_protection.json"
 }

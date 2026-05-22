@@ -81,6 +81,5 @@
       "expected_value": "claimed"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/127-hard_warranty_recent_expiry_discounted_repair.json",
-  "replay_trace_hash": "bd56d75d34f80900362d1ae328dfac198d31f44198e665cee6b3dbd47b1370dd"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/127-hard_warranty_recent_expiry_discounted_repair.json"
 }

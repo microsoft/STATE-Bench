@@ -92,6 +92,5 @@
     }
   ],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/122-hard_loyalty_first_time_vs_points_noncombine.json",
-  "replay_trace_hash": "a2a19c41d43b0e4585c61e6a7360c3dad0370e45b7ca4a6935d760da8e9abf67"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/122-hard_loyalty_first_time_vs_points_noncombine.json"
 }

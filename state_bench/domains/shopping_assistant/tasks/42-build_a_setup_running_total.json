@@ -116,6 +116,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/42-build_a_setup_running_total.json",
-  "replay_trace_hash": "3bd385dc84e04769ff7229248a27b7aef36976a682be8b2dd5e92191280d966a"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/42-build_a_setup_running_total.json"
 }

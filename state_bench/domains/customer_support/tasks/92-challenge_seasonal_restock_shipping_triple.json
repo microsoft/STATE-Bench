@@ -77,6 +77,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/92-challenge_seasonal_restock_shipping_triple.json",
-  "replay_trace_hash": "4e2114c23f82a469862eda28e6b6a92bfbcc9070a5daa91151938f0272ed46da"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/92-challenge_seasonal_restock_shipping_triple.json"
 }

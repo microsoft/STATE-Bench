@@ -58,6 +58,5 @@
       "expected_value": "partially_cancelled"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/148-spare_cancel_after_shipment_keep_delivered.json",
-  "replay_trace_hash": "cb5a5342b6616ff1835ced6e601107750e59f58fd50e23784d51e4d930218f31"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/148-spare_cancel_after_shipment_keep_delivered.json"
 }

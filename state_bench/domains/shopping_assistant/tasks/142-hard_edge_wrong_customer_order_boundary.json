@@ -42,6 +42,5 @@
   ],
   "state_requirements": [],
   "task_type": "edge_case_or_restraint",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/142-hard_edge_wrong_customer_order_boundary.json",
-  "replay_trace_hash": "2b75b4959a7a53053513116fe0b6a56e827bf0a50dfd491104cc3870f929d057"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/142-hard_edge_wrong_customer_order_boundary.json"
 }

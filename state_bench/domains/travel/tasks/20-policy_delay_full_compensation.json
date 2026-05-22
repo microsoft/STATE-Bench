@@ -56,6 +56,5 @@
       "field": "delay_compensation",
       "expected_value": "full"
     }
-  ],
-  "replay_trace_hash": "b8e3a48cd8e392d77bd5f657c100411d712a65a841cae657923ab37d2df66e4d"
+  ]
 }

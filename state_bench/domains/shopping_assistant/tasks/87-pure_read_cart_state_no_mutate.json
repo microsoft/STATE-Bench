@@ -52,6 +52,5 @@
   ],
   "state_requirements": [],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/87-pure_read_cart_state_no_mutate.json",
-  "replay_trace_hash": "19c8def071018f44023df54723d6215b06fa307ace648e86acb2de56981ae550"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/87-pure_read_cart_state_no_mutate.json"
 }

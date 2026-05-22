@@ -95,6 +95,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/122-hard_shipping_fragile_goodwill_after_return.json",
-  "replay_trace_hash": "fba0b5cf53fd65aac3a14e4b0ef1594636a3fdcf61a4077eab130a3f89f9277e"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/122-hard_shipping_fragile_goodwill_after_return.json"
 }

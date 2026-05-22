@@ -53,6 +53,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/125-hard_shipping_paid_shipping_not_damage.json",
-  "replay_trace_hash": "1b07f3f0c4f0957ab38b3d99f27c9df5e9b37afd9d3f3620c75070592ca8bb18"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/125-hard_shipping_paid_shipping_not_damage.json"
 }

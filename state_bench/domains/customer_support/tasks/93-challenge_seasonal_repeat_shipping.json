@@ -113,6 +113,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/93-challenge_seasonal_repeat_shipping.json",
-  "replay_trace_hash": "ee2a21d8ff3be592dbce6da562f383502c8704ab1b4237617f37eb12c8d863c8"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/93-challenge_seasonal_repeat_shipping.json"
 }

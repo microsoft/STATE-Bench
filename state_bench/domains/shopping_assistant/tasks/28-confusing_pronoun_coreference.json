@@ -85,6 +85,5 @@
     }
   ],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/28-confusing_pronoun_coreference.json",
-  "replay_trace_hash": "f52c2df35224992b4321c9ae4511e23229c65f0965f1d64b6f13f11ba772e296"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/28-confusing_pronoun_coreference.json"
 }

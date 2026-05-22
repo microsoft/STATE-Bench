@@ -83,6 +83,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/70-expired_promo_stale_seeded_total.json",
-  "replay_trace_hash": "9d5e940881dd5cdf918b8b9dcaead146fdc5f66a627859b72ecd1e532e370c9a"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/70-expired_promo_stale_seeded_total.json"
 }

@@ -86,6 +86,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/49-edge_vague_complaint.json",
-  "replay_trace_hash": "c1393d4af54e60c7e6c44627aa84bae22af25695821cae48793d76d0a5d965f8"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/49-edge_vague_complaint.json"
 }

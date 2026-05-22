@@ -59,6 +59,5 @@
   ],
   "task_type": "policy_info_or_restraint",
   "task_env_path": "state_bench/domains/travel/task_envs/114-policy_cancel_vs_change_business_international.json",
-  "state_requirements": [],
-  "replay_trace_hash": "d94e066ff9abaa1788ef944356ae92db55a1cf912587ec563085b2d7dc1008ff"
+  "state_requirements": []
 }

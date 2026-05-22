@@ -49,6 +49,5 @@
   ],
   "state_requirements": [],
   "task_type": "inventory_shipping",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/114-hard_inventory_backorder_deposit_disclosure.json",
-  "replay_trace_hash": "e35ab10ebd99146152024e4110ee2dd4f4bf9cde8570c6c20a0ae6e4330cf1f3"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/114-hard_inventory_backorder_deposit_disclosure.json"
 }

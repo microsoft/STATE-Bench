@@ -64,6 +64,5 @@
   ],
   "state_requirements": [],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/85-policy_fetch_and_relay_accuracy.json",
-  "replay_trace_hash": "3ecf8645a925639b5369301bde7df8d5954a7277977144185567206f95d271ca"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/85-policy_fetch_and_relay_accuracy.json"
 }

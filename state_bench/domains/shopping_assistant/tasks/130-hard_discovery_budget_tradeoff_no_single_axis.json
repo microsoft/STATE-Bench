@@ -79,6 +79,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/130-hard_discovery_budget_tradeoff_no_single_axis.json",
-  "replay_trace_hash": "49437bfc469cd0db8d325347589578571f70fd63d6725cfa71b905f6487fe947"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/130-hard_discovery_budget_tradeoff_no_single_axis.json"
 }

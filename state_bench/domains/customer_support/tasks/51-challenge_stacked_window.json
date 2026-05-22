@@ -85,6 +85,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/51-challenge_stacked_window.json",
-  "replay_trace_hash": "f7ac69b592b282c438e1b64b223b787ef1d59aa744cc2a7d1bc05da60b360e7c"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/51-challenge_stacked_window.json"
 }

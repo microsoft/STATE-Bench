@@ -78,6 +78,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/87-challenge_social_gold_demands_plat_waiver.json",
-  "replay_trace_hash": "22de43c8c7ff272ad5bdefa8f05aec1ff0ce062f2824ac6ddd92e89253579898"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/87-challenge_social_gold_demands_plat_waiver.json"
 }

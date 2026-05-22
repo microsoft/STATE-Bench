@@ -96,6 +96,5 @@
     }
   ],
   "task_type": "compatibility_variants",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/76-variant_price_delta_silent_disclosure.json",
-  "replay_trace_hash": "85cfb5eeebee0f2d5b472eef41e67c3909cfea8fedbcf46699aac2e4f3358ba5"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/76-variant_price_delta_silent_disclosure.json"
 }

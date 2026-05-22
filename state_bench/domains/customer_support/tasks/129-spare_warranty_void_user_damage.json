@@ -38,6 +38,5 @@
     "user_sim_context": "You are contacting support about order ORD-7275. Tablet has active warranty, but customer admits liquid damage. Agent must deny warranty claim and avoid filing any claim or return. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
   },
   "state_requirements": [],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/129-spare_warranty_void_user_damage.json",
-  "replay_trace_hash": "aab643a2aa3411f1d8924f6156e21e6efcaa444ad37650c3978943d55a9a5d51"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/129-spare_warranty_void_user_damage.json"
 }

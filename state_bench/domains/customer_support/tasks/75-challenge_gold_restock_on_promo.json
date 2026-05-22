@@ -71,6 +71,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/75-challenge_gold_restock_on_promo.json",
-  "replay_trace_hash": "b95276ab41cab9f5d369954791be7fd6de77541d66e89e5fd7b62a6e067892ce"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/75-challenge_gold_restock_on_promo.json"
 }

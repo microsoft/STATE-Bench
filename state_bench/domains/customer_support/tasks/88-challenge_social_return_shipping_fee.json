@@ -76,6 +76,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/88-challenge_social_return_shipping_fee.json",
-  "replay_trace_hash": "dfe5817969cc6199c91e135030617fedf16f630825c092e9d2174a01858a47b6"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/88-challenge_social_return_shipping_fee.json"
 }

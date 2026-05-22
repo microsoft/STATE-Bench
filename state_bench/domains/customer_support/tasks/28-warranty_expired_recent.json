@@ -67,6 +67,5 @@
       "expected_value": "claimed"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/28-warranty_expired_recent.json",
-  "replay_trace_hash": "ed36775ce80c173f564e5fa0d31ac37c23da95fdcfea4dcd16bcd4531d5295a8"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/28-warranty_expired_recent.json"
 }

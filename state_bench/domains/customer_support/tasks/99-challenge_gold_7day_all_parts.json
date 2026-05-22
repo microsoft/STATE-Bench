@@ -63,6 +63,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/99-challenge_gold_7day_all_parts.json",
-  "replay_trace_hash": "672dee566dc31361dbf61a99d6ccdc151baf57453c5ecd8cb1f073d83319f7b1"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/99-challenge_gold_7day_all_parts.json"
 }

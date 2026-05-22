@@ -155,6 +155,5 @@
       "expected_value": 59
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/109-hard_exchange_noncanonical_size.json",
-  "replay_trace_hash": "f1a14b54ccfd1d24a7b38d78f02ebb62198a4dafe27baa38e4f580bc8afcf779"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/109-hard_exchange_noncanonical_size.json"
 }

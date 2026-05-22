@@ -63,6 +63,5 @@
   ],
   "state_requirements": [],
   "task_type": "compound_multi_policy",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/150-hard_compound_invalid_compat_valid_readback.json",
-  "replay_trace_hash": "a863d1db97fa93b89da69ed99fd1149f3f3c098d0a8990aedec10133c0eeb830"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/150-hard_compound_invalid_compat_valid_readback.json"
 }

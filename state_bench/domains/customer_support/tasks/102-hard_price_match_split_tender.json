@@ -70,6 +70,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/102-hard_price_match_split_tender.json",
-  "replay_trace_hash": "122e68874be8303b609251e60c437817eb9e7c99e4fe82d8768a1c14af2f3852"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/102-hard_price_match_split_tender.json"
 }

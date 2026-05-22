@@ -66,6 +66,5 @@
   ],
   "state_requirements": [],
   "task_type": "inventory_shipping",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/49-audit_timing_resumed_checkout.json",
-  "replay_trace_hash": "90414658dda6ab872edab93753dc04cabf64eca8acb1cac39c3b6126ad561210"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/49-audit_timing_resumed_checkout.json"
 }

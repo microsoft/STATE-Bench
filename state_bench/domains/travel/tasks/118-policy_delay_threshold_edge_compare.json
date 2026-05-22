@@ -37,6 +37,5 @@
   ],
   "task_type": "policy_info_or_restraint",
   "task_env_path": "state_bench/domains/travel/task_envs/118-policy_delay_threshold_edge_compare.json",
-  "state_requirements": [],
-  "replay_trace_hash": "71d629fa13dc16c6fb583a7c8591ff942fcc787a8597ee392f24f76df771c013"
+  "state_requirements": []
 }

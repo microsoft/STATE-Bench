@@ -67,6 +67,5 @@
       "expected_value": "claimed"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/130-hard_warranty_maxed_but_paid_repair.json",
-  "replay_trace_hash": "6272260c824dd8fbccf18121151e39c60703dbfc6c04ac866cd1fb64eee26632"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/130-hard_warranty_maxed_but_paid_repair.json"
 }

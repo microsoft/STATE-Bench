@@ -67,6 +67,5 @@
       "expected_value": "partially_cancelled"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/150-spare_cancel_in_transit_fee_decline.json",
-  "replay_trace_hash": "ecf668ecc72da6ffcd526bab4a60a48e5e2c1cd8b0abbe2870da73c7d10d6472"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/150-spare_cancel_in_transit_fee_decline.json"
 }

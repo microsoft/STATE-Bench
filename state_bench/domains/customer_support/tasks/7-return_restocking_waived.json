@@ -71,6 +71,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/7-return_restocking_waived.json",
-  "replay_trace_hash": "12950fdfe88827e8fc92778929fa20b3352a9401a1ae65e631dcff7410f7b582"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/7-return_restocking_waived.json"
 }

@@ -121,6 +121,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/7-category_bundle_vs_promo.json",
-  "replay_trace_hash": "967c1be3b070381d8b77549a38874972426a2ef502f986a41ebdea7abac651cb"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/7-category_bundle_vs_promo.json"
 }

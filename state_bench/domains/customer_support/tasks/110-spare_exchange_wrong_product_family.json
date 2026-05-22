@@ -160,6 +160,5 @@
       "expected_value": 35
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/110-spare_exchange_wrong_product_family.json",
-  "replay_trace_hash": "cb1b4de0fe002ce8ffc4bef0b3a163bd097cfa2dc469bf8e91c55053331789d5"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/110-spare_exchange_wrong_product_family.json"
 }

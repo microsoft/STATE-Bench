@@ -68,6 +68,5 @@
   ],
   "state_requirements": [],
   "task_type": "comparison_recommendation",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/57-hold_correct_math_on_pushback.json",
-  "replay_trace_hash": "08a57ca36bbbf11825165fb392ea2fc0693f030d3c9104a8f2233761486140df"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/57-hold_correct_math_on_pushback.json"
 }

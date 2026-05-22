@@ -80,6 +80,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/124-hard_promo_minimum_gap_no_padding.json",
-  "replay_trace_hash": "08084748992b46a407685f27f298bfc7f54753ef806a8d10e1ea911c66da88ab"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/124-hard_promo_minimum_gap_no_padding.json"
 }

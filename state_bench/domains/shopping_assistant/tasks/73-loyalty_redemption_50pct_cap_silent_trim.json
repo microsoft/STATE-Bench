@@ -104,6 +104,5 @@
     }
   ],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/73-loyalty_redemption_50pct_cap_silent_trim.json",
-  "replay_trace_hash": "e3bd6ec90f330730466bf880b9391d37f776f4a92c12c57ecfbae3a7a626773a"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/73-loyalty_redemption_50pct_cap_silent_trim.json"
 }

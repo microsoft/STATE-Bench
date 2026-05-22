@@ -80,6 +80,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/45-gift_retracted_wrap_removal.json",
-  "replay_trace_hash": "0d02eab9fe06081f2de746e57db1a94f64289d2510e6169b2ef5a62a721cba5e"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/45-gift_retracted_wrap_removal.json"
 }

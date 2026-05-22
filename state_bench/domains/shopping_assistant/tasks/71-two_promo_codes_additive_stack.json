@@ -102,6 +102,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/71-two_promo_codes_additive_stack.json",
-  "replay_trace_hash": "b573ce6564455f33a0521f38c4d1f40cdfea0bb163a2f4335bb0f67aa259f2ec"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/71-two_promo_codes_additive_stack.json"
 }

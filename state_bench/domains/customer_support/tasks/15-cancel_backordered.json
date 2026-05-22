@@ -64,6 +64,5 @@
       "expected_value": "shipped"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/15-cancel_backordered.json",
-  "replay_trace_hash": "caa9b14ccc4d6d446e711984fdfc2a4479e70170f006c4da899d33040d48fd45"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/15-cancel_backordered.json"
 }

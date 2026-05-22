@@ -100,6 +100,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/65-bundle_free_shipping_threshold.json",
-  "replay_trace_hash": "78e76b6a2278e79ea04a4ddba2877c15ca696de710db6997047aeb2445f37db2"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/65-bundle_free_shipping_threshold.json"
 }

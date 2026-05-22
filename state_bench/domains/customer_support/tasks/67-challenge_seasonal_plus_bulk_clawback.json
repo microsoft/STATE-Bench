@@ -121,6 +121,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/67-challenge_seasonal_plus_bulk_clawback.json",
-  "replay_trace_hash": "f8fb63e1e7985a3a083fdc4b81a742803e9bb8859204e797fc031bdcfc4044e2"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/67-challenge_seasonal_plus_bulk_clawback.json"
 }

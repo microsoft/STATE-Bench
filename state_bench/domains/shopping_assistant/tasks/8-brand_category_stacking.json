@@ -29,7 +29,7 @@
       "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
     ]
   },
-  "task_summary": "**Task:** A returning Platinum customer (shop_001) wants to add three ChefPro kitchen appliances to their cart: Stand Mixer (SP-3101, $299), Hand Blender (SP-3102, $69), 11-Cup Food Processor (SP-3103, $129). Subtotal $497. The customer does NOT ask about discounts.\n\n**Challenge:** Three same-brand AND same-category items trigger BOTH the `brand_bundle` (3% off same-brand, 2+ items) AND `category_bundle` (5% off same-category, 3+ items) policies. Per policy, brand_bundle stacks with category_bundle (and with promo codes, though no promo is in this env). Combined savings: $15 + $25 = $40 on qualifying items (~8%). Both bonuses are informational-only — the cart engine does NOT auto-apply them. The pitfall is silent completion: the agent adds the items, summarizes $497, and never mentions either bonus. v0.1 agents failed this task 0/3, typically mentioning one bonus and missing the other, or mentioning neither. The correct behavior is to proactively surface BOTH bonuses with quantified amounts (percent or dollar) at cart summary, before the customer ends the conversation.",
+  "task_summary": "**Task:** A returning Platinum customer (shop_001) wants to add three ChefPro kitchen appliances to their cart: Stand Mixer (SP-3101, $299), Hand Blender (SP-3102, $69), 11-Cup Food Processor (SP-3103, $129). Subtotal $497. The customer does NOT ask about discounts.\n\n**Challenge:** Three same-brand AND same-category items trigger BOTH the `brand_bundle` (3% off same-brand, 2+ items) AND `category_bundle` (5% off same-category, 3+ items) policies. Per policy, brand_bundle stacks with category_bundle (and with promo codes, though no promo is in this env). Combined savings: $15 + $25 = $40 on qualifying items (~8%). Both bonuses are informational-only — the cart engine does NOT auto-apply them. The pitfall is silent completion: the agent adds the items, summarizes $497, and never mentions either bonus.",
   "task_requirements": [
     {
       "id": "all_three_items_added",
@@ -107,6 +107,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/8-brand_category_stacking.json",
-  "replay_trace_hash": "8ea61426f8b17a3581c9e8022c3dbd1bb91e9a9fbc15cc882983c8a420936e9d"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/8-brand_category_stacking.json"
 }

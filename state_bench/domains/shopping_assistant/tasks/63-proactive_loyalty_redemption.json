@@ -113,6 +113,5 @@
     }
   ],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/63-proactive_loyalty_redemption.json",
-  "replay_trace_hash": "bdf1cd3f9acbe7ac8a409bc955ed0cf950ffd578182b28e6ecb2dcef5e685cce"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/63-proactive_loyalty_redemption.json"
 }

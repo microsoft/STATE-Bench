@@ -84,6 +84,5 @@
     }
   ],
   "task_type": "inventory_shipping",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/111-hard_shipping_gold_express_vs_nextday.json",
-  "replay_trace_hash": "dfa35ecb5c621257fa4c90b9d7c49bbdec6848e56d502221c02894124e997f93"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/111-hard_shipping_gold_express_vs_nextday.json"
 }

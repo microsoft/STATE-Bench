@@ -94,6 +94,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/140-hard_compound_return_one_price_match_other.json",
-  "replay_trace_hash": "1d3eff76eaba67dfb5cd4fb76fd6618e3c1f2fbfe4c17744e2c4e051168bf599"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/140-hard_compound_return_one_price_match_other.json"
 }

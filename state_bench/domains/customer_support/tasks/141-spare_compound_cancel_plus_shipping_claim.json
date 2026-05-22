@@ -64,6 +64,5 @@
       "expected_value": "cancelled"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/141-spare_compound_cancel_plus_shipping_claim.json",
-  "replay_trace_hash": "4af8c2168d7ff055dbcc100376a8f0b0245db65c31f6ebceb91f0080211718df"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/141-spare_compound_cancel_plus_shipping_claim.json"
 }

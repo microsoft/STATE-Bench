@@ -89,6 +89,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/112-hard_exchange_oos_store_credit.json",
-  "replay_trace_hash": "7c56b7e54bcdbbad05b940ed632b4f3323ae16ed8c58e18b81028e3393ae2790"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/112-hard_exchange_oos_store_credit.json"
 }

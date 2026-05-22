@@ -96,6 +96,5 @@
     }
   ],
   "task_type": "promotions_discounts",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/96-promo_rejected_min_purchase_path.json",
-  "replay_trace_hash": "844c6494dee778e06484ea08dda9c38b804f3a24237deadd09bba8279d528b7c"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/96-promo_rejected_min_purchase_path.json"
 }

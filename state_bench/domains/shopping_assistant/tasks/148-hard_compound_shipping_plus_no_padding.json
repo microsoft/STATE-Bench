@@ -53,6 +53,5 @@
   ],
   "state_requirements": [],
   "task_type": "compound_multi_policy",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/148-hard_compound_shipping_plus_no_padding.json",
-  "replay_trace_hash": "a64c9cb06195733a1ea6c3edeea21bf1f0470e709809855efa77754aabc4dfbb"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/148-hard_compound_shipping_plus_no_padding.json"
 }

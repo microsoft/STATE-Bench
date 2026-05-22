@@ -71,6 +71,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/105-hard_price_match_after_exchange_request.json",
-  "replay_trace_hash": "43479c600c7d84fed383f897d9528c36e6a3d752dd60b551b493693d4163e660"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/105-hard_price_match_after_exchange_request.json"
 }

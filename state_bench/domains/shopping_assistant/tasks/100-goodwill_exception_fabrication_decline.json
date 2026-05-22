@@ -111,6 +111,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/100-goodwill_exception_fabrication_decline.json",
-  "replay_trace_hash": "99c7b6b311001d2acbe0ae6183d558d98f10edd2b7a5a8f05bc1ba4283147565"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/100-goodwill_exception_fabrication_decline.json"
 }

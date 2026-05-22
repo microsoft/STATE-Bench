@@ -117,6 +117,5 @@
     }
   ],
   "task_type": "edge_case_or_restraint",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/66-bundle_optimization_college_setup.json",
-  "replay_trace_hash": "3d959368ea77724407eb0a648f6922d1c48039ecce81c718d29edcfce302c9f2"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/66-bundle_optimization_college_setup.json"
 }

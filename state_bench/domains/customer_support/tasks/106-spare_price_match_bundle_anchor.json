@@ -71,6 +71,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/106-spare_price_match_bundle_anchor.json",
-  "replay_trace_hash": "6462d18621d7b0b624ff36cd00a9249edf89efa5797440eee0a304013cd9443c"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/106-spare_price_match_bundle_anchor.json"
 }

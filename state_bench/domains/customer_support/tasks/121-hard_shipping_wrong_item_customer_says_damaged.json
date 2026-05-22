@@ -85,6 +85,5 @@
       "expected_value": "fully_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/121-hard_shipping_wrong_item_customer_says_damaged.json",
-  "replay_trace_hash": "bdadbae3f881297296c49dd5924b02c5395eee948e668d7982bcfa910900a39d"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/121-hard_shipping_wrong_item_customer_says_damaged.json"
 }

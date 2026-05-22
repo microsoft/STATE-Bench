@@ -28,8 +28,10 @@ The harness round-robins across deployments with sticky routing for Responses AP
 ```bash
 STATE_BENCH_AGENT_PROVIDER="openai"
 STATE_BENCH_AGENT_MODEL="<your OpenAI model>"
-OPENAI_API_KEY="<your OpenAI API key>"
+STATE_BENCH_AGENT_API_KEY="<your OpenAI API key>"
 ```
+
+`OPENAI_API_KEY` is also accepted as a fallback. If both are set, `STATE_BENCH_AGENT_API_KEY` is used for the agent client.
 
 For the OpenAI API, parallelism comes from concurrent API calls to that model, controlled by `--num-workers` at run time.
 

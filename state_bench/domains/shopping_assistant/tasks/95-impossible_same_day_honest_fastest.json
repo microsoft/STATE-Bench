@@ -105,6 +105,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/95-impossible_same_day_honest_fastest.json",
-  "replay_trace_hash": "9a4568b15cb516155cb19076615c0c268a4459662cdf2200b53623b19cacbce0"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/95-impossible_same_day_honest_fastest.json"
 }

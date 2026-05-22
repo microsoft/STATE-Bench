@@ -89,6 +89,5 @@
     }
   ],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/31-price_drop_loyalty_platinum_compound.json",
-  "replay_trace_hash": "dde1a9233801b725d5328bd8b1d14bc809bd419da6d3c43f81753502e20fb224"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/31-price_drop_loyalty_platinum_compound.json"
 }

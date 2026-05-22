@@ -109,6 +109,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/80-challenge_two_electronics_gold.json",
-  "replay_trace_hash": "f3c5ebfe601b8e844f86c90ea8a7e315bd912f9406d4ce5c29e38b54478bf9cd"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/80-challenge_two_electronics_gold.json"
 }

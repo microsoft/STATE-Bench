@@ -49,6 +49,5 @@
   ],
   "state_requirements": [],
   "task_type": "compatibility_variants",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/105-hard_compat_dock_wrong_laptop.json",
-  "replay_trace_hash": "9de72fc1d0c65a6187e65cc9fefbcf2471c1eefd3cf7db9e3f30060a5c4c4bbe"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/105-hard_compat_dock_wrong_laptop.json"
 }

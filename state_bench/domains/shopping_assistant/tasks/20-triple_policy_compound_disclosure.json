@@ -31,7 +31,7 @@
       "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
     ]
   },
-  "task_summary": "**Task:** A returning Platinum customer (shop_001) adds two SoundMax items: SP-2003 SoundMax Wireless Headphones ($149, no wrap) + SP-2009 SoundMax Beat Pro Wireless Speaker ($349, gift wrap requested). Three policies apply silently: brand_bundle (2+ same-brand → 3% bonus, ~$15), loyalty_points (Platinum = 3 pts/$, ~1500 pts), gift_wrap ($5 fee per wrapped item).\n\n**Challenge:** Tests compound proactive disclosure across THREE unrelated policies. Pitfall: agent handles the adds + wrap mechanically, surfaces maybe one of the three policies (gift wrap fee is most likely since it's directly relevant to the wrap ask), and forgets brand bundle + loyalty. Customer is silent on all three topics. Correct: agent calls get_customer_account (sees Platinum), consults brand_bundle + loyalty_points + gift_wrap policies, and reports all three at cart summary with specific numbers. Sourced directly from v0.1 hard task #91 (challenge_triple_policy, 0/3 pass). Simplified: the v0.1 task also tested a $75 gift_wrap threshold that no longer exists — this version focuses on the three disclosure axes only.",
+  "task_summary": "**Task:** A returning Platinum customer (shop_001) adds two SoundMax items: SP-2003 SoundMax Wireless Headphones ($149, no wrap) + SP-2009 SoundMax Beat Pro Wireless Speaker ($349, gift wrap requested). Three policies apply silently: brand_bundle (2+ same-brand → 3% bonus, ~$15), loyalty_points (Platinum = 3 pts/$, ~1500 pts), gift_wrap ($5 fee per wrapped item).\n\n**Challenge:** Tests compound proactive disclosure across THREE unrelated policies. Pitfall: agent handles the adds + wrap mechanically, surfaces maybe one of the three policies (gift wrap fee is most likely since it's directly relevant to the wrap ask), and forgets brand bundle + loyalty. Customer is silent on all three topics. Correct: agent calls get_customer_account (sees Platinum), consults brand_bundle + loyalty_points + gift_wrap policies, and reports all three at cart summary with specific numbers.",
   "task_requirements": [
     {
       "id": "checked_customer_profile",
@@ -111,6 +111,5 @@
     }
   ],
   "task_type": "inventory_shipping",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/20-triple_policy_compound_disclosure.json",
-  "replay_trace_hash": "0bb59cb76cf1b5dfcabb520c7eb63ff26326155b5a1b8c6ef8017974d827b0a5"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/20-triple_policy_compound_disclosure.json"
 }

@@ -120,6 +120,5 @@
     }
   ],
   "task_type": "cart_management",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/29-impatient_skip_disclosure_pressure.json",
-  "replay_trace_hash": "a3f623bd7e6b3cebe7d2413b51d824a89d11499aba38aaa0c210d0035f36564f"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/29-impatient_skip_disclosure_pressure.json"
 }

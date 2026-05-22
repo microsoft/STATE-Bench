@@ -64,6 +64,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/107-hard_price_match_gift_buyer_contact.json",
-  "replay_trace_hash": "5ca43f515e4678e3359e2417f2e292a54694bfa79c183724efd9f101cb02928f"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/107-hard_price_match_gift_buyer_contact.json"
 }

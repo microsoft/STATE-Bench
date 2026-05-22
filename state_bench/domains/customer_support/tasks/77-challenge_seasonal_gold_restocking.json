@@ -83,6 +83,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/77-challenge_seasonal_gold_restocking.json",
-  "replay_trace_hash": "3b5fc9a1f73f746589de75126b9f4e289db3c7d722cacf2639489c56bf73ef2d"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/77-challenge_seasonal_gold_restocking.json"
 }

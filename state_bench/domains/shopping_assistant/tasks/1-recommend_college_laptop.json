@@ -101,6 +101,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/1-recommend_college_laptop.json",
-  "replay_trace_hash": "39b5a5a2dcba89b559a0cdd4c48ba2c2e087543d932ac1a02b56169c29cafcd9"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/1-recommend_college_laptop.json"
 }

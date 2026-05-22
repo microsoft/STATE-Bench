@@ -71,6 +71,5 @@
       "expected_value": "partially_returned"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/70-challenge_free_shipping_clawback.json",
-  "replay_trace_hash": "0e55a98c37922a528a1555d505e4db9a2b943dbd5e3c6c0ad0aeca344e95d843"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/70-challenge_free_shipping_clawback.json"
 }

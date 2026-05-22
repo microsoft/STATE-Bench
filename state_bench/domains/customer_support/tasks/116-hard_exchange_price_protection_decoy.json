@@ -59,6 +59,5 @@
       "expected_value": "original_payment"
     }
   ],
-  "task_env_path": "state_bench/domains/customer_support/task_envs/116-hard_exchange_price_protection_decoy.json",
-  "replay_trace_hash": "5c9659ee2eb32f97c3b6248078b4dc4d53794cea3719742fee1edc6cae7fc11d"
+  "task_env_path": "state_bench/domains/customer_support/task_envs/116-hard_exchange_price_protection_decoy.json"
 }

@@ -44,6 +44,5 @@
   ],
   "state_requirements": [],
   "task_type": "loyalty_account",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/121-hard_loyalty_points_earned_post_promo.json",
-  "replay_trace_hash": "26b39439ca2a0b4acacd108d4471f3e403d3bda639615c33899ac4b5c62a1af7"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/121-hard_loyalty_points_earned_post_promo.json"
 }

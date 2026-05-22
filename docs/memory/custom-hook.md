@@ -13,6 +13,11 @@ from state_bench.agents.base import BaseAgent
 class MyAgent(BaseAgent):
     learnings_path = Path("outputs/learnings.json")
 
+    def __init__(self, client, system_prompt, tools, tool_handlers, runtime_context=None, retrieve_learnings_top_k=3, **kwargs):
+        super().__init__(runtime_context=runtime_context)
+        self.client = client
+        self.retrieve_learnings_top_k = retrieve_learnings_top_k
+
     def memory_tool_schemas(self):
         return [
             {
@@ -21,7 +26,10 @@ class MyAgent(BaseAgent):
                 "description": "Retrieve procedural learnings relevant to the current task.",
                 "parameters": {
                     "type": "object",
-                    "properties": {"query": {"type": "string"}},
+                    "properties": {
+                        "query": {"type": "string"},
+                        "top_k": {"type": "integer", "minimum": 1},
+                    },
                     "required": ["query"],
                     "additionalProperties": False,
                 },
@@ -29,9 +37,17 @@ class MyAgent(BaseAgent):
         ]
 
     def memory_tool_handlers(self):
-        return {"retrieve_learnings": self.retrieve_learnings}
+        return {"retrieve_learnings": self.handle_retrieve_learnings}
 
-    def retrieve_learnings(self, query: str) -> list[str]:
+    def handle_retrieve_learnings(self, args):
+        query = args["query"]
+        top_k = min(int(args.get("top_k", self.retrieve_learnings_top_k)), self.retrieve_learnings_top_k)
+        learnings = self.retrieve_learnings(query, top_k=top_k)
+        if not isinstance(learnings, list) or not all(isinstance(item, str) for item in learnings):
+            raise TypeError("retrieve_learnings must return list[str]")
+        return learnings
+
+    def retrieve_learnings(self, query: str, top_k: int = 3) -> list[str]:
         # Load/query your artifact and return relevant learnings.
         raise NotImplementedError
 ```
@@ -40,8 +56,9 @@ The harness will:
 
 - merge your memory tool schemas into the `tools` argument passed to `generate_next_turn()`,
 - execute `retrieve_learnings` calls returned by your agent using your handler,
-- validate the return type as `list[str]` and reject other return types,
-- force `top_k` to the run-configured `--retrieve-learnings-top-k`.
+- append the retrieval result to the canonical conversation as a tool result.
+
+For custom `BaseAgent` implementations, your handler owns validation and `top_k` enforcement. Keep the schema and handler above unless you have a provider-specific reason to adapt it.
 
 **Memory tools must not mutate benchmark state.** Domain tools are still owned and executed by STATE-Bench.
 

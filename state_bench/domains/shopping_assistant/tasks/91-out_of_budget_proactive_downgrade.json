@@ -94,6 +94,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/91-out_of_budget_proactive_downgrade.json",
-  "replay_trace_hash": "ae7f5dee5dfce38aff79dc818c37e1469de42b17af041ccdbb6bdd60a81adb41"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/91-out_of_budget_proactive_downgrade.json"
 }

@@ -98,6 +98,5 @@
     }
   ],
   "task_type": "product_search_discovery",
-  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/61-mid_flow_constraint_pivot.json",
-  "replay_trace_hash": "d900de466e534f9e730cd98a81b6797594da05158f2234e73f08dc6daee6c642"
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/61-mid_flow_constraint_pivot.json"
 }

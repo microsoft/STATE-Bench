@@ -109,6 +109,5 @@
       "field": "status",
       "expected_value": "cancelled"
     }
-  ],
-  "replay_trace_hash": "059ece9d1033cecaaf2e7abb8ee6176180b43e91bd14e6e8fa16c3fdf92776c8"
+  ]
 }
