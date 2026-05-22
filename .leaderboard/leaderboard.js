@@ -10,6 +10,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 74.8,
+      overallPassAt1Std: 1.6,
       passAt5: 43.1,
       meanUxScore: 4.32,
       costPerTask: 0.218,
@@ -26,6 +27,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 72.2,
+      overallPassAt1Std: 1.8,
       passAt5: 39.6,
       meanUxScore: 4.27,
       costPerTask: 0.174,
@@ -43,6 +45,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 68.5,
+      overallPassAt1Std: 2.1,
       passAt5: 34.2,
       meanUxScore: 4.09,
       costPerTask: 0.086,
@@ -59,6 +62,7 @@ const entries = [
     verificationStatus: "pending",
     metrics: {
       overallPassAt1: 66.9,
+      overallPassAt1Std: 1.9,
       passAt5: 31.7,
       meanUxScore: 4.04,
       costPerTask: 0.151,
@@ -75,6 +79,7 @@ const entries = [
     verificationStatus: "self_reported",
     metrics: {
       overallPassAt1: 61.4,
+      overallPassAt1Std: 2.4,
       passAt5: 24.9,
       meanUxScore: 3.86,
       costPerTask: 0.042,
@@ -91,6 +96,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 58.7,
+      overallPassAt1Std: 2.2,
       passAt5: 21.3,
       meanUxScore: 3.78,
       costPerTask: 0.063,
@@ -107,6 +113,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 54.3,
+      overallPassAt1Std: 2.7,
       passAt5: 18.8,
       meanUxScore: 3.65,
       costPerTask: 0.052,
@@ -123,6 +130,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 51.9,
+      overallPassAt1Std: 2.6,
       passAt5: 15.4,
       meanUxScore: 3.58,
       costPerTask: 0.031,
@@ -139,6 +147,7 @@ const entries = [
     verificationStatus: "pending",
     metrics: {
       overallPassAt1: 49.8,
+      overallPassAt1Std: 2.9,
       passAt5: 13.9,
       meanUxScore: 3.49,
       costPerTask: 0.047,
@@ -155,6 +164,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 46.2,
+      overallPassAt1Std: 3.1,
       passAt5: 10.6,
       meanUxScore: 3.33,
       costPerTask: 0.024,
@@ -171,6 +181,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 38.4,
+      overallPassAt1Std: 3.4,
       passAt5: 6.7,
       meanUxScore: 3.02,
       costPerTask: undefined,
@@ -188,6 +199,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 79.6,
+      overallPassAt1Std: 1.4,
       passAt5: 48.8,
       meanUxScore: 4.35,
       costPerTask: 0.239,
@@ -204,6 +216,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 75.1,
+      overallPassAt1Std: 1.7,
       passAt5: 42.9,
       meanUxScore: 4.28,
       costPerTask: 0.192,
@@ -220,6 +233,7 @@ const entries = [
     verificationStatus: "pending",
     metrics: {
       overallPassAt1: 71.8,
+      overallPassAt1Std: 1.9,
       passAt5: 37.4,
       meanUxScore: 4.15,
       costPerTask: 0.169,
@@ -237,6 +251,7 @@ const entries = [
     verificationStatus: "verified",
     metrics: {
       overallPassAt1: 70.4,
+      overallPassAt1Std: 2.0,
       passAt5: 35.8,
       meanUxScore: 4.11,
       costPerTask: 0.094,
@@ -297,6 +312,14 @@ function formatPercent(value) {
   return value.toFixed(1);
 }
 
+function formatPassAt1(entry) {
+  const mean = formatPercent(selectedScore(entry));
+  const std = entry.metrics.overallPassAt1Std;
+
+  if (state.scoreView !== "overall" || std == null) return `<span class="metric-main">${mean}</span>`;
+  return `<span class="metric-main">${mean}</span><span class="metric-std">&plusmn; ${formatPercent(std)}</span>`;
+}
+
 function formatUx(value) {
   return value.toFixed(2);
 }
@@ -330,7 +353,7 @@ function render() {
             <span class="model-meta">${meta || "-"}</span>
           </td>
           <td>${entry.organization}</td>
-          <td class="metric">${formatPercent(selectedScore(entry))}</td>
+          <td class="metric">${formatPassAt1(entry)}</td>
           <td class="metric">${formatPercent(entry.metrics.passAt5)}</td>
           <td class="metric">${formatUx(entry.metrics.meanUxScore)}</td>
           <td class="metric">${formatCost(entry.metrics.costPerTask)}</td>

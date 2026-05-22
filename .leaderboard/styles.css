@@ -41,7 +41,7 @@ a {
 .compact-hero {
   background: var(--brand-navy);
   color: #ffffff;
-  padding: 18px 24px;
+  padding: 22px 24px;
 }
 
 .compact-hero-inner {
@@ -60,13 +60,6 @@ a {
   line-height: 1.05;
 }
 
-.compact-subtitle {
-  color: #dbeafe;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 3px;
-}
-
 .mini-nav {
   align-items: center;
   display: flex;
@@ -74,11 +67,14 @@ a {
 }
 
 .mini-nav a {
+  align-items: center;
   border-radius: 4px;
   color: #eaf4ff;
-  font-size: 14px;
+  display: inline-flex;
+  font-size: 15px;
   font-weight: 600;
-  padding: 7px 10px;
+  gap: 7px;
+  padding: 8px 11px;
   text-decoration: none;
 }
 
@@ -212,7 +208,7 @@ a {
 .leaderboard-table th:nth-child(1),
 .leaderboard-table td:nth-child(1) {
   width: 58px;
-  text-align: center;
+  text-align: left;
 }
 
 .leaderboard-table th:nth-child(2),
@@ -226,7 +222,11 @@ a {
 }
 
 .leaderboard-table th:nth-child(4),
-.leaderboard-table td:nth-child(4),
+.leaderboard-table td:nth-child(4) {
+  width: 122px;
+  text-align: left;
+}
+
 .leaderboard-table th:nth-child(5),
 .leaderboard-table td:nth-child(5),
 .leaderboard-table th:nth-child(6),
@@ -234,13 +234,20 @@ a {
 .leaderboard-table th:nth-child(7),
 .leaderboard-table td:nth-child(7) {
   width: 96px;
-  text-align: right;
+  text-align: left;
 }
 
 .leaderboard-table th:nth-child(8),
 .leaderboard-table td:nth-child(8) {
   width: 104px;
   text-align: left;
+}
+
+.leaderboard-table td:nth-child(8) {
+  color: var(--muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
 }
 
 .leaderboard-table th:nth-child(9),
@@ -260,7 +267,7 @@ a {
 .rank-col,
 .rank-cell {
   width: 64px;
-  text-align: center;
+  text-align: left;
 }
 
 .rank-pill {
@@ -303,8 +310,23 @@ a {
   color: var(--ink);
   font-variant-numeric: tabular-nums;
   font-weight: 650;
-  text-align: right;
+  text-align: left;
   white-space: nowrap;
+}
+
+.metric-main {
+  display: inline-block;
+  min-width: 34px;
+  text-align: left;
+}
+
+.metric-std {
+  color: var(--muted);
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 44px;
+  text-align: left;
 }
 
 .status-badge {
