@@ -17,7 +17,7 @@ STATE-Bench evaluates AI agents on realistic, multi-turn enterprise tasks across
 
 Each task gives the agent a task-local sandbox database, domain-specific tools, and a simulated user. To pass a task, the agent must do multi-step reasoning by gathering the right information with domain tools, applying the correct policy, taking actions to update the database to the right final state when needed, and following the required procedure in conversation.
 
-## What STATE-Bench Includes
+## Overview
 
 STATE-Bench includes 450 challenging enterprise tasks across three domains.
 
