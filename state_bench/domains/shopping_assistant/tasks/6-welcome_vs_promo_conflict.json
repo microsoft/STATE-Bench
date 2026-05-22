@@ -2,7 +2,7 @@
   "task_id": "6-welcome_vs_promo_conflict",
   "user_id": "shop_002",
   "now": "2026-06-12T10:00:00",
-  "opening_message": "Hi \u2014 I'd like to add the SlimBook Air 13 to my cart, and I have a promo code SAVE10 I'd like to use. Can you set that up?",
+  "opening_message": "Hi — I'd like to add the SlimBook Air 13 to my cart, and I have a promo code SAVE10 I'd like to use. Can you set that up?",
   "user_simulator": {
     "personality": "Direct, casual. Knows exactly what they want and the one promo code they have. Trusts the agent to surface anything else that might be relevant.",
     "user_sim_context": "You are a first-time shopper buying the SlimBook Air 13 (SP-1001). You have one promo code, SAVE10, you want the agent to apply. You do NOT know whether there's a welcome discount for first-time customers. You do NOT know the rules about which discounts can combine.",
@@ -20,16 +20,16 @@
       "Your goal is to buy the SlimBook Air 13 with SAVE10 applied. You do not know about any other discounts.",
       "You will NOT bring up welcome discounts or first-time shopper benefits. You don't know they exist.",
       "If the agent tells you about a first-time or welcome discount you're eligible for AND explains a rule about which discount applies, accept whichever the agent chooses based on that rule.",
-      "If the agent tries to stack SAVE10 with another discount on top (producing more than 10% off), do NOT question it \u2014 just accept what the agent says.",
+      "If the agent tries to stack SAVE10 with another discount on top (producing more than 10% off), do NOT question it — just accept what the agent says.",
       "If the agent applies SAVE10 without mentioning any welcome / first-time benefit, do NOT volunteer that you're new. Accept the cart total as quoted.",
       "You will not ask about gift wrap, loyalty points, brand bundles, or category bundles.",
       "When the agent has confirmed SP-1001 is in the cart, a discount has been handled, and given you a cart summary, end your next message with [TASK_DONE].",
-      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences \u2014 these are out of scope for this task.",
-      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time \u2014 I don't want to use points.' Do NOT name a point amount.",
-      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now \u2014 skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
     ]
   },
-  "task_summary": "**Task:** A first-time customer (shop_002) wants to buy the SlimBook Air 13 (SP-1001, $849) and has the SAVE10 promo code (10% off, site-wide). They do NOT know they're also eligible for the automatic 5% welcome discount for first-time customers. Per `welcome_discount` and `promo_stacking` policies, welcome does NOT stack with promo codes \u2014 customer gets the better of the two.\n\n**Challenge:** The customer only prompts for SAVE10. To handle correctly, the agent must (a) call get_customer_account and see is_first_time=True, (b) compute both discounts (welcome 5% = $42, SAVE10 10% = $84), (c) explain the non-stacking rule, (d) apply SAVE10 as the larger discount. The pitfalls: applying SAVE10 silently without ever mentioning the welcome discount the customer was eligible for (missed disclosure), applying welcome instead (under-discount), or trying to stack both (policy violation \u2014 welcome is info-only, but a conversational claim of stacking misleads the customer about the total they're paying). Common failures include treating the welcome discount as a bonus to add on top of SAVE10, or skipping welcome entirely because it is not a promo code.",
+  "task_summary": "**Task:** A first-time customer (shop_002) wants to buy the SlimBook Air 13 (SP-1001, $849) and has the SAVE10 promo code (10% off, site-wide). They do NOT know they're also eligible for the automatic 5% welcome discount for first-time customers. Per `welcome_discount` and `promo_stacking` policies, welcome does NOT stack with promo codes — customer gets the better of the two.\n\n**Challenge:** The customer only prompts for SAVE10. To handle correctly, the agent must (a) call get_customer_account and see is_first_time=True, (b) compute both discounts (welcome 5% = $42, SAVE10 10% = $84), (c) explain the non-stacking rule, (d) apply SAVE10 as the larger discount. The pitfalls: applying SAVE10 silently without ever mentioning the welcome discount the customer was eligible for (missed disclosure), applying welcome instead (under-discount), or trying to stack both (policy violation — welcome is info-only, but a conversational claim of stacking misleads the customer about the total they're paying). Common failures include treating the welcome discount as a bonus to add on top of SAVE10, or skipping welcome entirely because it is not a promo code.",
   "task_requirements": [
     {
       "id": "recognized_welcome_eligibility",
@@ -40,7 +40,7 @@
     {
       "id": "explained_non_stacking_rule",
       "kind": "must",
-      "requirement": "Agent explicitly explained that the welcome discount does NOT stack with promo codes, so the customer gets the better of the two. Citing the rule in plain language is sufficient (e.g., 'welcome and SAVE10 can't combine \u2014 you get whichever saves you more'). Applying one without explaining the non-stacking rule fails this requirement.",
+      "requirement": "Agent explicitly explained that the welcome discount does NOT stack with promo codes, so the customer gets the better of the two. Citing the rule in plain language is sufficient (e.g., 'welcome and SAVE10 can't combine — you get whichever saves you more'). Applying one without explaining the non-stacking rule fails this requirement.",
       "evidence": "conversation"
     },
     {
@@ -52,7 +52,7 @@
     {
       "id": "no_stacking_claim",
       "kind": "must_not",
-      "requirement": "Agent must NOT claim in conversation that both welcome and SAVE10 are applied, or that the customer is getting 15% off, or otherwise mislead about combined discounts. Welcome does not stack with promo codes per policy \u2014 any such claim is a disclosure failure.",
+      "requirement": "Agent must NOT claim in conversation that both welcome and SAVE10 are applied, or that the customer is getting 15% off, or otherwise mislead about combined discounts. Welcome does not stack with promo codes per policy — any such claim is a disclosure failure.",
       "evidence": "conversation"
     },
     {

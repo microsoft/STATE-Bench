@@ -1,0 +1,111 @@
+{
+  "task_id": "31-cross_cancel_full_trip",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "My flight DL100 to LA is delayed over 5 hours. I want to cancel my flight (BK-MS06) and hotel (HR-0100).",
+  "user_simulator": {
+    "personality": "Assertive and organized. Wants clear breakdown of each item.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Flight booking: BK-MS06 (delayed 5+ hours)",
+      "Hotel reservation: HR-0100 (suite in LA)",
+      "Car rental: CR-0101 (luxury car in LA)",
+      "Flight is massively delayed"
+    ],
+    "unknown_info": [
+      "Hotel suite is non-refundable",
+      "Car luxury surcharge amount",
+      "Exact refund amounts for each"
+    ],
+    "task_rules": [
+      "Start by requesting cancellation of the flight and hotel ONLY. Do NOT mention the car rental AT ALL.",
+      "When agent explains the flight is free to cancel due to delay, acknowledge.",
+      "When agent explains hotel suite is non-refundable, express disappointment but accept.",
+      "If the agent asks about other reservations or mentions the car rental, confirm you want to cancel it too.",
+      "If the agent does NOT ask about other reservations after processing flight and hotel, simply end with [TASK_DONE]. The agent should have checked proactively.",
+      "When agent explains car surcharge, accept and confirm.",
+      "After all brought-up items are processed, ask for a complete summary with total fees and refunds.",
+      "End with [TASK_DONE]."
+    ],
+    "user_sim_context": "A major flight delay has made you want to cancel the whole Los Angeles trip, not just one reservation. You are thinking in terms of the trip as a whole and may forget all the components tied to it unless the agent surfaces them. What you want most is to shut the trip down cleanly once the implications are clear."
+  },
+  "task_summary": "**Task:** A traveler asks to cancel a delayed flight and an LA hotel, but a linked luxury car rental also exists and must be proactively discovered. Correct resolution: Agent must proactively discover and bring up the linked luxury car rental CR-0101 rather than ending after only the flight and hotel.\n\n**Challenge:** The agent recognizes the severe-delay free-cancellation path for the flight, clearly explains that the suite hotel is non-refundable, and proactively surfaces and resolves the hidden luxury-car cancellation with its surcharge instead of ignoring it.",
+  "task_requirements": [
+    {
+      "id": "state_hidden_car_discovered",
+      "kind": "must",
+      "requirement": "Agent must proactively discover and bring up the linked luxury car rental CR-0101 rather than ending after only the flight and hotel.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_delay_cancel_and_nonrefundable_hotel_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that the delayed flight can be canceled with no fee because of the severe airline delay, while the suite hotel is still non-refundable.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_luxury_car_surcharge_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that canceling the linked luxury car rental carries a $50 surcharge and quote that fee before or when confirming the cancellation.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "multi_booking_trip_coordination",
+  "task_env_path": "state_bench/domains/travel/task_envs/31-cross_cancel_full_trip.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS06",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS06",
+      "field": "refund_amount",
+      "expected_value": 1000
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-MS06",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0101",
+      "field": "cancellation_fee",
+      "expected_value": 50
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0101",
+      "field": "refund_amount",
+      "expected_value": 430
+    },
+    {
+      "entity_type": "car_rentals",
+      "record_key": "CR-0101",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "cancellation_fee",
+      "expected_value": 1400
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "refund_amount",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ]
+}

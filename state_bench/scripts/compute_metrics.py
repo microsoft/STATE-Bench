@@ -18,7 +18,6 @@ import math
 from datetime import UTC, datetime
 from pathlib import Path
 
-from state_bench.agents.base import PRICING_CONFIG_PATH, agent_pricing_from_config
 from state_bench.protocol import load_default_protocol, load_split_task_ids
 from state_bench.version import get_package_version
 
@@ -88,10 +87,6 @@ def _validate_agent_pricing(traj: dict, path: Path) -> dict | None:
     }
 
 
-def _agent_pricing_from_config(model_name: str) -> dict:
-    return agent_pricing_from_config(model_name).to_dict()
-
-
 def _cost_fields_from_pricing(traj: dict, pricing: dict, path: Path) -> dict[str, float]:
     usage = traj.get("token_usage")
     if not isinstance(usage, dict):
@@ -100,11 +95,14 @@ def _cost_fields_from_pricing(traj: dict, pricing: dict, path: Path) -> dict[str
     input_tokens = int(_num(usage.get("input_tokens")))
     cached_input_tokens = int(_num(usage.get("cached_input_tokens")))
     output_tokens = int(_num(usage.get("output_tokens")))
-    embedding_cost = _num(usage.get("embedding_cost_usd"))
-    embedding_tokens = int(_num(usage.get("embedding_input_tokens")))
 
-    if embedding_tokens > 0 or embedding_cost > 0:
-        raise ValueError(f"{path}: embedding cost accounting is not supported for official public metrics yet")
+    if input_tokens == 0 and output_tokens == 0:
+        raise ValueError(
+            f"{path}: trajectory has zero tokens recorded but pricing is set. "
+            "This usually means a custom BaseAgent's generate_next_turn() did not "
+            "call self.add_token_usage(...) after each provider call. "
+            "See USE_CUSTOM_CLIENT.md §'Token usage and cost'."
+        )
 
     non_cached_input_tokens = max(0, input_tokens - cached_input_tokens)
     input_cost = non_cached_input_tokens * pricing["input_cost_per_1m_tokens"] / 1_000_000
@@ -187,7 +185,7 @@ UX_DIMENSIONS = {
 }
 
 
-def load_run(run_dir: Path, *, fallback_agent_pricing: dict | None = None) -> tuple[dict[str, dict], dict[str, object]]:
+def load_run(run_dir: Path) -> tuple[dict[str, dict], dict[str, object]]:
     """Load all scored trajectory results from a run directory.
 
     Unscored trajectories are skipped so the script can report partial metrics while a
@@ -213,12 +211,7 @@ def load_run(run_dir: Path, *, fallback_agent_pricing: dict | None = None) -> tu
         agent_pricing = _validate_agent_pricing(traj, f)
         if agent_pricing is not None:
             _validate_cost_from_pricing(traj, agent_pricing, f)
-            cost_fields = None
-        elif fallback_agent_pricing is not None:
-            agent_pricing = fallback_agent_pricing
-            cost_fields = _cost_fields_from_pricing(traj, agent_pricing, f)
-        else:
-            cost_fields = None
+        cost_fields = None
         eff = traj.get("efficiency", {})
         token_usage = traj.get("token_usage", {})
         results[tid] = {
@@ -247,15 +240,12 @@ def load_run(run_dir: Path, *, fallback_agent_pricing: dict | None = None) -> tu
             "reasoning_output_tokens": traj.get("reasoning_output_tokens")
             or traj.get("token_usage", {}).get("reasoning_output_tokens"),
             "total_tokens": traj.get("total_tokens") or traj.get("token_usage", {}).get("total_tokens"),
-            "embedding_input_tokens": traj.get("embedding_input_tokens")
-            or traj.get("token_usage", {}).get("embedding_input_tokens"),
             "cost_usd": (cost_fields or {}).get("total_cost_usd")
             or traj.get("cost_usd")
             or token_usage.get("total_cost_usd"),
             "agent_turn_cost_usd": (cost_fields or {}).get("total_cost_usd") or token_usage.get("agent_turn_cost_usd"),
             "memory_ingestion_cost_usd": traj.get("token_usage", {}).get("memory_ingestion_cost_usd"),
             "memory_retrieval_cost_usd": traj.get("token_usage", {}).get("memory_retrieval_cost_usd"),
-            "embedding_cost_usd": traj.get("token_usage", {}).get("embedding_cost_usd"),
             "agent_model": agent_model,
             "agent_pricing": agent_pricing,
         }
@@ -286,8 +276,6 @@ def load_all_runs(
     results_dir: Path,
     num_runs: int,
     num_runs_idx_start: int = 1,
-    *,
-    fallback_agent_pricing: dict | None = None,
 ) -> tuple[list[dict[str, dict]], list[dict[str, object]]]:
     """Load runs from a results directory, returning run dicts plus coverage metadata."""
     runs: list[dict[str, dict]] = []
@@ -297,7 +285,7 @@ def load_all_runs(
         if not run_dir.exists():
             print(f"WARNING: {run_dir} not found, skipping")
             continue
-        run_data, meta = load_run(run_dir, fallback_agent_pricing=fallback_agent_pricing)
+        run_data, meta = load_run(run_dir)
         runs.append(run_data)
         metas.append(meta)
         extra = ""
@@ -413,10 +401,6 @@ def build_matrices(runs: list[dict[str, dict]]) -> dict:
         "total_tokens": {
             tid: [run.get(tid, {}).get("total_tokens") if tid in run else None for run in runs] for tid in all_tasks
         },
-        "embedding_input_tokens": {
-            tid: [run.get(tid, {}).get("embedding_input_tokens") if tid in run else None for run in runs]
-            for tid in all_tasks
-        },
         "cost_usd": {
             tid: [run.get(tid, {}).get("cost_usd") if tid in run else None for run in runs] for tid in all_tasks
         },
@@ -430,10 +414,6 @@ def build_matrices(runs: list[dict[str, dict]]) -> dict:
         },
         "memory_retrieval_cost_usd": {
             tid: [run.get(tid, {}).get("memory_retrieval_cost_usd") if tid in run else None for run in runs]
-            for tid in all_tasks
-        },
-        "embedding_cost_usd": {
-            tid: [run.get(tid, {}).get("embedding_cost_usd") if tid in run else None for run in runs]
             for tid in all_tasks
         },
         "reasoning_task_req": {
@@ -468,12 +448,10 @@ def compute_summary(m: dict, run_meta: list[dict[str, object]] | None = None) ->
         output_tokens_m,
         reasoning_output_tokens_m,
         total_tokens_m,
-        embedding_input_tokens_m,
         cost_m,
         agent_turn_cost_m,
         memory_ingestion_cost_m,
         memory_retrieval_cost_m,
-        embedding_cost_m,
     ) = (
         m["pass"],
         m["ux_score"],
@@ -487,12 +465,10 @@ def compute_summary(m: dict, run_meta: list[dict[str, object]] | None = None) ->
         m["output_tokens"],
         m["reasoning_output_tokens"],
         m["total_tokens"],
-        m["embedding_input_tokens"],
         m["cost_usd"],
         m["agent_turn_cost_usd"],
         m["memory_ingestion_cost_usd"],
         m["memory_retrieval_cost_usd"],
-        m["embedding_cost_usd"],
     )
     ux_dim_m = {ux_field: m[ux_field] for ux_field in UX_DIMENSIONS}
 
@@ -549,12 +525,10 @@ def compute_summary(m: dict, run_meta: list[dict[str, object]] | None = None) ->
     all_output_tokens = [t for vals in output_tokens_m.values() for t in vals if t is not None]
     all_reasoning_output_tokens = [t for vals in reasoning_output_tokens_m.values() for t in vals if t is not None]
     all_total_tokens = [t for vals in total_tokens_m.values() for t in vals if t is not None]
-    all_embedding_input_tokens = [t for vals in embedding_input_tokens_m.values() for t in vals if t is not None]
     all_costs = [c for vals in cost_m.values() for c in vals if c is not None]
     all_agent_turn_costs = [c for vals in agent_turn_cost_m.values() for c in vals if c is not None]
     all_memory_ingestion_costs = [c for vals in memory_ingestion_cost_m.values() for c in vals if c is not None]
     all_memory_retrieval_costs = [c for vals in memory_retrieval_cost_m.values() for c in vals if c is not None]
-    all_embedding_costs = [c for vals in embedding_cost_m.values() for c in vals if c is not None]
 
     pass_turns = [
         turns_m[tid][i]
@@ -608,13 +582,11 @@ def compute_summary(m: dict, run_meta: list[dict[str, object]] | None = None) ->
         "mean_output_tokens": round(_avg(all_output_tokens), 1),
         "mean_reasoning_output_tokens": round(_avg(all_reasoning_output_tokens), 1),
         "mean_total_tokens": round(_avg(all_total_tokens), 1),
-        "mean_embedding_input_tokens": round(_avg(all_embedding_input_tokens), 1),
         "mean_cost_usd": round(_avg(all_costs), 6),
         "mean_cost_usd_pass": round(_avg(pass_costs), 6),
         "mean_agent_turn_cost_usd": round(_avg(all_agent_turn_costs), 6),
         "mean_memory_ingestion_cost_usd": round(_avg(all_memory_ingestion_costs), 6),
         "mean_memory_retrieval_cost_usd": round(_avg(all_memory_retrieval_costs), 6),
-        "mean_embedding_cost_usd": round(_avg(all_embedding_costs), 6),
         "per_run_state_pass_rates": [round(r, 4) for r in per_run_state_rates],
         "per_run_task_requirements_pass_rates": [round(r, 4) for r in per_run_task_rates],
         "per_run_task_completion_pass_rates": [round(r, 4) for r in per_run_completion_rates],
@@ -709,11 +681,9 @@ def print_summary(s: dict, verbose: bool = False) -> None:
         print(f"{'Mean output tokens':<30s} {s['mean_output_tokens']:.1f}")
         print(f"{'Mean reasoning output tokens':<30s} {s['mean_reasoning_output_tokens']:.1f}")
         print(f"{'Mean total tokens':<30s} {s['mean_total_tokens']:.1f}")
-        print(f"{'Mean embedding input tokens':<30s} {s['mean_embedding_input_tokens']:.1f}")
         print(f"{'Mean agent-turn cost':<30s} ${s['mean_agent_turn_cost_usd']:.4f}")
         print(f"{'Mean memory ingestion cost':<30s} ${s['mean_memory_ingestion_cost_usd']:.4f}")
         print(f"{'Mean memory retrieval cost':<30s} ${s['mean_memory_retrieval_cost_usd']:.4f}")
-        print(f"{'Mean embedding cost':<30s} ${s['mean_embedding_cost_usd']:.4f}")
         print(f"{'Mean cost (pass only)':<30s} ${s['mean_cost_usd_pass']:.4f}")
         print(f"{'Comparable across all runs':<30s} {s['comparable_task_count']}")
 
@@ -746,13 +716,11 @@ def save_metrics(s: dict, results_dir: Path, *, skip_path: Path | None = None) -
         "mean_output_tokens": s["mean_output_tokens"],
         "mean_reasoning_output_tokens": s["mean_reasoning_output_tokens"],
         "mean_total_tokens": s["mean_total_tokens"],
-        "mean_embedding_input_tokens": s["mean_embedding_input_tokens"],
         "mean_cost_usd": s["mean_cost_usd"],
         "mean_cost_usd_pass": s["mean_cost_usd_pass"],
         "mean_agent_turn_cost_usd": s["mean_agent_turn_cost_usd"],
         "mean_memory_ingestion_cost_usd": s["mean_memory_ingestion_cost_usd"],
         "mean_memory_retrieval_cost_usd": s["mean_memory_retrieval_cost_usd"],
-        "mean_embedding_cost_usd": s["mean_embedding_cost_usd"],
         "per_run_state_pass_rates": s["per_run_state_pass_rates"],
         "per_run_task_requirements_pass_rates": s["per_run_task_requirements_pass_rates"],
         "per_run_task_completion_pass_rates": s["per_run_task_completion_pass_rates"],
@@ -837,12 +805,10 @@ def save_per_task(m: dict, results_dir: Path) -> None:
         cached_input_tokens_m,
         output_tokens_m,
         total_tokens_m,
-        embedding_input_tokens_m,
         cost_m,
         agent_turn_cost_m,
         memory_ingestion_cost_m,
         memory_retrieval_cost_m,
-        embedding_cost_m,
         reasoning_task_req_m,
         reasoning_state_req_m,
     ) = (
@@ -858,12 +824,10 @@ def save_per_task(m: dict, results_dir: Path) -> None:
         m["cached_input_tokens"],
         m["output_tokens"],
         m["total_tokens"],
-        m["embedding_input_tokens"],
         m["cost_usd"],
         m["agent_turn_cost_usd"],
         m["memory_ingestion_cost_usd"],
         m["memory_retrieval_cost_usd"],
-        m["embedding_cost_usd"],
         m["reasoning_task_req"],
         m["reasoning_state_req"],
     )
@@ -899,12 +863,10 @@ def save_per_task(m: dict, results_dir: Path) -> None:
                     "cached_input_tokens": cached_input_tokens_m[tid][i],
                     "output_tokens": output_tokens_m[tid][i],
                     "total_tokens": total_tokens_m[tid][i],
-                    "embedding_input_tokens": embedding_input_tokens_m[tid][i],
                     "cost_usd": cost_m[tid][i],
                     "agent_turn_cost_usd": agent_turn_cost_m[tid][i],
                     "memory_ingestion_cost_usd": memory_ingestion_cost_m[tid][i],
                     "memory_retrieval_cost_usd": memory_retrieval_cost_m[tid][i],
-                    "embedding_cost_usd": embedding_cost_m[tid][i],
                     "task_requirements_reasoning": reasoning_task_req_m[tid][i],
                     "state_requirements_reasoning": reasoning_state_req_m[tid][i],
                 }
@@ -924,12 +886,10 @@ def save_per_task(m: dict, results_dir: Path) -> None:
             "avg_cached_input_tokens": round(_avg([v for v in cached_input_tokens_m[tid] if v is not None]), 2),
             "avg_output_tokens": round(_avg([v for v in output_tokens_m[tid] if v is not None]), 2),
             "avg_total_tokens": round(_avg([v for v in total_tokens_m[tid] if v is not None]), 2),
-            "avg_embedding_input_tokens": round(_avg([v for v in embedding_input_tokens_m[tid] if v is not None]), 2),
             "avg_cost_usd": round(_avg([v for v in cost_m[tid] if v is not None]), 6),
             "avg_agent_turn_cost_usd": round(_avg([v for v in agent_turn_cost_m[tid] if v is not None]), 6),
             "avg_memory_ingestion_cost_usd": round(_avg([v for v in memory_ingestion_cost_m[tid] if v is not None]), 6),
             "avg_memory_retrieval_cost_usd": round(_avg([v for v in memory_retrieval_cost_m[tid] if v is not None]), 6),
-            "avg_embedding_cost_usd": round(_avg([v for v in embedding_cost_m[tid] if v is not None]), 6),
             "passes": pass_m[tid],
             "runs": per_run,
         }
@@ -1001,9 +961,6 @@ def print_comparison(
         print(
             f"{'Mean output tokens':<35} {base_s['mean_output_tokens']:>10.1f} {comp_s['mean_output_tokens']:>10.1f} {comp_s['mean_output_tokens'] - base_s['mean_output_tokens']:>+10.1f}"
         )
-        print(
-            f"{'Mean embedding cost':<35} ${base_s['mean_embedding_cost_usd']:>9.4f} ${comp_s['mean_embedding_cost_usd']:>9.4f} {comp_s['mean_embedding_cost_usd'] - base_s['mean_embedding_cost_usd']:>+10.4f}"
-        )
 
     base_pass_tasks = {tid for tid in base_m["all_tasks"] if any(v is True for v in base_m["pass"][tid])}
     comp_pass_tasks = {tid for tid in comp_m["all_tasks"] if any(v is True for v in comp_m["pass"][tid])}
@@ -1061,12 +1018,6 @@ def main():
         "--ignore-missing-runs", action="store_true", help="Allow incomplete split coverage for local analysis"
     )
     parser.add_argument(
-        "--agent-model-name",
-        type=str,
-        default=None,
-        help="Override protocol model name when backfilling missing trajectory pricing from state_bench/configs/pricing.yaml",
-    )
-    parser.add_argument(
         "--num-runs", type=int, default=None, help="Number of runs to analyze (default: protocol requirement)"
     )
     parser.add_argument("--num-runs-idx-start", type=int, default=1, help="Starting run index to analyze (default: 1)")
@@ -1092,17 +1043,11 @@ def main():
             f"WARNING: Protocol {protocol.protocol_id} benchmark submission expects metrics computed on "
             f"{protocol.num_runs} runs; computing metrics on {args.num_runs} run(s) for local analysis."
         )
-    fallback_agent_pricing = None
-    if args.agent_model_name:
-        fallback_agent_pricing = _agent_pricing_from_config(args.agent_model_name)
-        print(f"Backfilling missing trajectory pricing from {PRICING_CONFIG_PATH}: {args.agent_model_name}")
-
     print(f"Loading from {results_dir}...")
     runs, run_meta = load_all_runs(
         results_dir,
         args.num_runs,
         args.num_runs_idx_start,
-        fallback_agent_pricing=fallback_agent_pricing,
     )
     if not runs:
         print(
@@ -1135,7 +1080,6 @@ def main():
             comp_dir,
             args.num_runs,
             args.num_runs_idx_start,
-            fallback_agent_pricing=fallback_agent_pricing,
         )
         if comp_runs:
             comp_runs, comp_meta = filter_runs_to_split(

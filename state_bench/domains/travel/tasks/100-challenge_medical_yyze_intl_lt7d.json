@@ -1,0 +1,87 @@
+{
+  "task_id": "100-challenge_medical_yyze_intl_lt7d",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Medical procedure requires me to change BK-1000 to Toronto on June 27 in the same economy cabin. My user ID is user_003.",
+  "user_simulator": {
+    "personality": "Matter-of-fact and single-purpose.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Booking: BK-1000 (JFK to YYZ, June 20)",
+      "Medical",
+      "Original booking cabin is economy",
+      "For this task, change to AA101 in the existing economy cabin only"
+    ],
+    "unknown_info": [
+      "Fee",
+      "That YYZ is international"
+    ],
+    "task_rules": [
+      "Open with: medical, change BK-1000 to June 27 in the same economy cabin.",
+      "If the agent asks about cabin, say 'Keep me in my current economy cabin.'",
+      "Never ask for business class or any cabin upgrade.",
+      "If the agent offers multiple June 27 options, choose AA101 in the existing economy cabin only.",
+      "Accept the quoted fee and fare difference and end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to move a Toronto trip on short notice because of a medical procedure and expect the medical reason to matter. Toronto may feel close and straightforward to you, but you still want the agent to tell you how this specific booking will be treated. What you want most is a clear, practical answer about the cost of making the change now."
+  },
+  "task_summary": "**Task:** The traveler needs a medical change on an economy booking to Toronto within seven days of departure and wants to stay in the same cabin. Correct resolution is to treat Toronto as international for fee purposes, apply the within-seven-days international medical discount correctly, and complete the same-cabin change on the requested date.\n\n**Challenge:** This tests route classification plus discounted-fee math under execution pressure. Agents often slip into domestic pricing for Toronto, lose the medical discount, or drift into an unnecessary cabin change.",
+  "task_requirements": [
+    {
+      "id": "challenge_medical_yyze_intl_lt7d_international_medical_fee",
+      "kind": "must",
+      "requirement": "Agent must explain that Toronto/YYZ is treated as international, so the short-notice international medical change fee is $100 rather than a domestic fee.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "challenge_medical_yyze_intl_lt7d_same_cabin",
+      "kind": "must",
+      "requirement": "Agent must keep the booking in the existing economy cabin and must not suggest or apply a cabin upgrade.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "challenge_medical_yyze_intl_lt7d_total_math",
+      "kind": "must",
+      "requirement": "Agent must quote the $100 medical change fee and $30 fare difference, for $130 total additional cost.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/100-challenge_medical_yyze_intl_lt7d.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 100
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 30
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "AA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 680
+    }
+  ]
+}

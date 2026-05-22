@@ -30,5 +30,12 @@
       "shopping_assistant/judge_ux_quality.md": "25e6921deffc10f42baf95ecfe064149d4ffd11b798ed5ee79b53a0a38650790",
       "shopping_assistant/judge_ux_quality_user.md": "5a6e9fa444fb5da4bd06991f907845a3023a8bb449dbb7c0994f4624fad67b94"
     }
+  },
+  "pricing": {
+    "gpt-5.1": {
+      "input_per_million_usd": 1.25,
+      "cached_input_per_million_usd": 0.13,
+      "output_per_million_usd": 10.0
+    }
   }
 }

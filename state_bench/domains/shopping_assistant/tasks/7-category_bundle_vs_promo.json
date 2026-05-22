@@ -1,0 +1,125 @@
+{
+  "task_id": "7-category_bundle_vs_promo",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'm setting up a new kitchen. Can you add the PowerBlend Pro Blender, the CasaGrande Cast-Iron Skillet, and the HomeBrew Pour-Over Coffee Set to my cart? I have a promo code KITCHEN10 I'd like to use.",
+  "user_simulator": {
+    "personality": "Organized, efficient. Knows what they want and the one promo code they have. Trusts the agent to surface anything else that should matter.",
+    "user_sim_context": "You are stocking your new kitchen. You want three kitchen items in one cart and you have the promo code KITCHEN10. You do NOT know about any other discount like a category bundle, and you do NOT know the rules about stacking different discount types.",
+    "known_info": [
+      "You want PowerBlend Pro Blender, CasaGrande Cast-Iron Skillet, HomeBrew Pour-Over Coffee Set.",
+      "One of each, no gift wrap.",
+      "You have the promo code KITCHEN10 to apply."
+    ],
+    "unknown_info": [
+      "Whether any category-based bundle discount exists.",
+      "Whether KITCHEN10 and any category bundle can combine.",
+      "The dollar amounts of any discounts."
+    ],
+    "task_rules": [
+      "You came here with one promo code. You do NOT know about any other discount schemes.",
+      "You will NOT bring up category bundles, same-category bonuses, or stacking rules on your own.",
+      "If the agent tells you about a category bundle AND a rule for how it combines (or doesn't) with KITCHEN10, accept whichever approach the agent chooses.",
+      "If the agent claims BOTH discounts apply on top of each other (combining to more than 10% off), do NOT question it — accept the math as quoted.",
+      "If the agent applies KITCHEN10 without ever mentioning a category bundle, do NOT raise it — accept the total as quoted.",
+      "You will not ask about loyalty points, welcome discounts, brand bundles, or gift wrap.",
+      "When the 3 items are in the cart, a discount has been handled, and the agent has given a cart summary, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning customer (shop_004) wants to buy 3 kitchen items — PowerBlend Pro Blender (SP-3001, $229), CasaGrande Cast-Iron Skillet (SP-3007, $89), HomeBrew Pour-Over Coffee Set (SP-3008, $59). Subtotal $377. The customer has the KITCHEN10 promo code (10% off kitchen) and wants it applied.\n\n**Challenge:** 3+ same-category items activate the `category_bundle` policy (5% off qualifying items' line totals). The customer also has KITCHEN10 (10% off). Per `category_bundle` and `promo_stacking` policies: category_bundle does NOT stack with promo codes on the same items — customer gets the better. The correct behavior is to (a) recognize the 3-item same-category qualifier, (b) compute both discounts (category_bundle 5% = ~$18, KITCHEN10 10% = $37), (c) explain non-stacking, (d) apply KITCHEN10 as the larger discount. Pitfalls: agent silently applies KITCHEN10 without surfacing the category-bundle alternative (missed disclosure), agent tries to stack both in conversation (policy violation + customer mistrust), or agent applies category_bundle instead and misses KITCHEN10 (under-discount).",
+  "task_requirements": [
+    {
+      "id": "recognized_category_bundle_eligibility",
+      "kind": "must",
+      "requirement": "Agent verbalized that 3+ same-category items qualify for the category_bundle policy (5% off). Evidence: the agent mentioned the category bundle or same-category bonus before or during the discount decision. Silently applying KITCHEN10 without ever mentioning category_bundle fails this requirement.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "explained_non_stacking_rule",
+      "kind": "must",
+      "requirement": "Agent explicitly explained that category_bundle and promo codes do NOT stack — customer gets the better of the two. Language like 'they can't combine, so I'll apply whichever saves you more' is sufficient. Applying one without explaining the non-stacking rule fails this requirement.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "applied_better_discount",
+      "kind": "must",
+      "requirement": "Agent applied KITCHEN10 via apply_promo (10% = $37 discount), NOT category_bundle (5% = ~$18). At cart summary, discount_amount=$37 and applied_promo_codes=['KITCHEN10']. The larger discount must win.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_stacking_claim",
+      "kind": "must_not",
+      "requirement": "Agent must NOT claim in conversation that both KITCHEN10 and the category bundle are applied simultaneously, or that the customer is getting 15% off, or otherwise mislead about combined discounts. Category bundle does not stack with promo codes per policy — any such claim is a disclosure failure.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "applied_promo_codes",
+      "expected_value": [
+        "KITCHEN10"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 37
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 377
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 340
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-3001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-3007",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-3008",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/7-category_bundle_vs_promo.json"
+}

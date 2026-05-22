@@ -1,0 +1,93 @@
+{
+  "task_id": "85-challenge_cancel_rebook_vs_change_close_math",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I see a cheaper flight on the same route as my booking BK-1000 for $1000 instead of the $1100 I paid. Should I change my flight or cancel and rebook? Which is cheaper? My user ID is user_001.",
+  "user_simulator": {
+    "personality": "Analytical. Wants exact numbers for both paths before deciding.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Booking: BK-1000 (JFK to LHR, economy, $1100)",
+      "Found same-day flight for $1000",
+      "Wants cheapest path"
+    ],
+    "unknown_info": [
+      "Exact change vs cancel fees",
+      "That negative fare diff is not refunded on change",
+      "Which path is cheaper"
+    ],
+    "task_rules": [
+      "Open with: found $1000 flight, which is cheaper - change or cancel+rebook?",
+      "When agent shows both calculations, go with whichever they recommend.",
+      "If agent recommends cancel+rebook (wrong), do NOT correct them.",
+      "If agent recommends change (correct), say: 'Go ahead.'",
+      "After action done, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You found a cheaper alternative and want help deciding whether changing or canceling and rebooking would leave you better off. The totals are close enough that you do not trust your gut. You need the agent to walk through the comparison carefully rather than answer from intuition."
+  },
+  "task_summary": "**Task:** User asks the agent to compare a direct change against cancel-and-rebook when the totals are very close. Correct resolution: The direct change path totals $1200 for the booking.\n\n**Challenge:** The agent computes both paths correctly, handles the non-refundable negative fare difference on the change path, and recommends the cheaper change option by the narrow $20 margin.",
+  "task_requirements": [
+    {
+      "id": "state_change_total",
+      "kind": "must",
+      "requirement": "Agent must explain that the direct change path totals $1200 for this booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_cancel_rebook_total",
+      "kind": "must",
+      "requirement": "Agent must explain that the cancel-and-rebook path totals $1220.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_recommend_change",
+      "kind": "must",
+      "requirement": "Agent must recommend the direct change because it is $20 cheaper than canceling and rebooking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_no_negative_diff_refund",
+      "kind": "must",
+      "requirement": "Agent must not treat the $100 cheaper replacement flight as a refund on the change path; the change comparison must still land at the authored $1200 total.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/85-challenge_cancel_rebook_vs_change_close_math.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 200
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": -100
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "BA101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 1200
+    }
+  ]
+}

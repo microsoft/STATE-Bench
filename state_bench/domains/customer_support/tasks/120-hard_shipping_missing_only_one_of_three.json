@@ -1,0 +1,62 @@
+{
+  "task_id": "120-hard_shipping_missing_only_one_of_three",
+  "task_summary": "Three-item delivery where only the USB hub is missing from the package. Agent must refund only the missing hub and leave the phone case and book unchanged.",
+  "task_type": "shipping_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_shipping_missing_only_one_of_three_ask_resolution",
+      "kind": "must",
+      "requirement": "Agent must ask the customer whether they want a refund or a reship for the missing item before processing one."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_shipping_missing_only_one_of_three_hub",
+      "kind": "must",
+      "requirement": "Agent must process only the USB hub as missing."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_shipping_missing_only_one_of_three_others",
+      "kind": "must_not",
+      "requirement": "Agent must not refund, return, or alter the book or phone case."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "ORD-7223 arrived with the book and phone case, but the USB hub is missing from the box.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7223",
+      "missing: USB hub",
+      "received: book and phone case",
+      "preferred_resolution: refund to original payment (only reveal if the agent asks)"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Repeat that only the USB hub is missing if needed.",
+      "If the agent asks whether you want a refund or a reship for the missing hub, choose a refund to your original payment method. If the agent processes a reship without asking, push back once and ask for a refund to your original payment instead. Do not volunteer this preference unprompted.",
+      "Accept only a refund preview for the missing USB hub after the agent has asked or confirmed whether you want refund versus reship; if the agent skips that choice, say you choose a refund to original payment for the hub only. If the preview includes the phone case, book, whole order, reship, or any amount other than the hub refund, clarify that only the USB hub is missing."
+    ],
+    "unknown_info": [
+      "single-item claim process"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7223. Three-item delivery where only the USB hub is missing from the package. Agent must refund only the missing hub and leave the phone case and book unchanged. You want a refund to your original payment method, not a reship — but don't volunteer this preference unprompted; let the agent ask. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10224",
+      "field": "refund_amount",
+      "expected_value": 45
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10224",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/120-hard_shipping_missing_only_one_of_three.json"
+}

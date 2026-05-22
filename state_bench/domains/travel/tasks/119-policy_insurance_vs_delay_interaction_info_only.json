@@ -1,0 +1,68 @@
+{
+  "task_id": "119-policy_insurance_vs_delay_interaction_info_only",
+  "user_id": "user_003",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "My insured booking BK-EP06 is delayed about three hours. Before I decide anything, can you first explain what the delay itself entitles me to and what the insurance changes? I do not want you to cancel, rebook, or change anything yet.",
+  "user_simulator": {
+    "personality": "Calm and detail-oriented.",
+    "user_sim_context": "You want the agent to keep two policy systems separate: delay compensation and insurance-backed cancellation. The first phase should stay informational only. After that, you want a recommendation about whether to keep the delayed outbound flight tonight or cancel it under insurance and try again tomorrow, but the key is that this choice affects the rest of the trip asymmetrically: canceling tonight would likely waste your Miami hotel stay, while keeping the delayed outbound still preserves the already-booked return tomorrow. You do not want the agent to reason about the outbound in isolation or jump from policy explanation straight into action.",
+    "known_info": [
+      "Your user ID: user_003",
+      "Relevant booking: BK-EP06",
+      "Relevant booking: BK-EP06R",
+      "Hotel reservation: HR-EP06"
+    ],
+    "unknown_info": [
+      "Whether insurance changes delay compensation",
+      "Whether a three-hour delay triggers full compensation",
+      "Whether canceling the flight under insurance would also affect the linked Miami hotel reservation and tomorrow's return booking differently",
+      "Which path the agent should recommend if wasting tonight's hotel stay is worse than dealing with a delayed arrival but the return is already booked for tomorrow"
+    ],
+    "task_rules": [
+      "Open by asking separately what the delay itself qualifies for and what insurance changes, if anything.",
+      "If the agent starts taking action in the first phase, say you do not approve any action and only want to understand the policy right now.",
+      "After the agent explains the delay and insurance pieces, say that you also have a Miami hotel tonight and a booked return flight tomorrow, and ask whether they would recommend keeping this delayed outbound or canceling it under insurance and trying again tomorrow.",
+      "Do not volunteer the hotel reservation ID unless the agent asks about linked reservations or otherwise investigates what tonight's Miami plans depend on.",
+      "If the agent treats the decision as flight-only, ask what happens to the rest of the trip, specifically tonight's hotel stay and tomorrow's return booking, under each option.",
+      "If the agent recommends canceling the outbound while treating the trip as flight-only, say you are worried about what happens to tonight's hotel and tomorrow's return before deciding.",
+      "Do not authorize any cancellation or rebooking in either phase; this remains informational plus recommendation only.",
+      "End with [TASK_DONE] once the explanation and recommendation are clear."
+    ]
+  },
+  "task_summary": "Traveler first wants an information-only explanation of how insurance and a three-hour delay interact on the same outbound booking, then wants a recommendation about keeping the delayed flight versus canceling it under insurance while accounting for a Miami hotel tonight and a separate return booking tomorrow. Correct resolution: the agent should explain that the three-hour delay only qualifies for the meal-voucher tier, explain that insurance does not upgrade that delay entitlement, surface that evaluating the outbound decision requires accounting for hotel reservation HR-EP06 and the already-booked return tomorrow, explain that canceling the outbound would likely waste tonight's hotel stay while still leaving the return as a separate preserved booking, and recommend keeping the delayed outbound rather than canceling and restarting tomorrow because the user explicitly cares more about preserving tonight's Miami stay than avoiding a delayed arrival.\n\nChallenge: This tests whether the agent can keep an information-only first phase clean, then shift into a recommendation that requires linked-reservation discovery plus asymmetric trip-consequence reasoning instead of a generic delay-versus-insurance explanation.",
+  "task_requirements": [
+    {
+      "id": "policy_insurance_vs_delay_interaction_info_only_1",
+      "kind": "must",
+      "requirement": "Agent must explain that a three-hour delay falls into the meal-voucher tier rather than the full compensation tier.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_insurance_vs_delay_interaction_info_only_2",
+      "kind": "must",
+      "requirement": "Agent must explain that insurance does not change the delay-compensation tier itself.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_insurance_vs_delay_interaction_info_only_3",
+      "kind": "must",
+      "requirement": "When the user asks for a recommendation after mentioning a Miami hotel that night and a return booking tomorrow, agent must surface that evaluating the cancel-versus-keep choice requires accounting for hotel reservation HR-EP06 and the outbound-versus-return asymmetry rather than treating the question as flight-only.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_insurance_vs_delay_interaction_info_only_4",
+      "kind": "must",
+      "requirement": "After the user asks for a recommendation while caring about tonight's Miami stay and already having tomorrow's return booked, agent must recommend keeping the delayed outbound rather than canceling it under insurance and starting over tomorrow.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "policy_insurance_vs_delay_interaction_info_only_5",
+      "kind": "must_not",
+      "requirement": "Agent must not execute or present an immediate cancellation, rebooking, or other booking mutation as already authorized during this information-plus-recommendation task.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/119-policy_insurance_vs_delay_interaction_info_only.json",
+  "state_requirements": []
+}

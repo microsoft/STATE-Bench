@@ -1,0 +1,106 @@
+{
+  "task_id": "71-two_promo_codes_additive_stack",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I want to add the SlimBook Air 13 to my cart. I have two promo codes I'd like to use: SAVE10 and SPRING20. Can you apply both for me?",
+  "user_simulator": {
+    "personality": "Direct, casual, unaware of stacking rules. Assumes if they have two codes, both should work. Accepts the agent's guidance once explained.",
+    "user_sim_context": "You want to buy the SlimBook Air 13 (SP-1001) and you have two promo codes in hand: SAVE10 and SPRING20. You assume both can be applied — you've used multiple coupons at other stores before. You do NOT know this store's one-code policy. If the agent explains the rule AND picks the larger code (SPRING20) for you, you're happy. If the agent applies both and says 'you got 30% off!', you'll believe them — you don't have a reason to doubt. If the agent picks the smaller code or picks one without explaining, accept what they quote.",
+    "known_info": [
+      "You want one SlimBook Air 13 (SP-1001), no gift wrap.",
+      "You have two promo codes: SAVE10 and SPRING20.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "That only one promo code can be applied per cart.",
+      "That the two codes offer different discount percentages (10% vs 20%).",
+      "The exact discount dollar amounts."
+    ],
+    "task_rules": [
+      "Opening: as stated — ask to apply BOTH codes.",
+      "If the agent explains the one-code policy AND picks SPRING20 (the larger), reply: 'oh — ok, makes sense. Go with the bigger one.' Confirm the $680 total and [TASK_DONE].",
+      "If the agent claims BOTH codes can be applied together and says 'you got ~30% off' or quotes a total around $595 (849 - 254), accept it — you don't know any better. [TASK_DONE] after confirm. Agent failed silently.",
+      "If the agent applies only SAVE10 without discussing SPRING20, do NOT volunteer. Accept the $765 total quoted and [TASK_DONE]. Agent failed on non-disclosure.",
+      "If the agent explains the one-code rule but picks SAVE10 (the smaller), push back gently once: 'wait — isn't SPRING20 bigger? Shouldn't we use that one?'. If they switch, accept. If they insist, accept and [TASK_DONE] — failed on wrong pick.",
+      "If the agent refuses to apply either code because you asked for both, push back: 'ok, can we just apply one then? Which is better?'. If they then pick SPRING20, proceed. Otherwise accept and end.",
+      "Do NOT volunteer that you know about stacking rules. Do NOT ask about gift wrap, loyalty, welcome, or bundles.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard-tier customer (shop_004, Taylor Kim) wants the SlimBook Air 13 (SP-1001, $849) and asks to apply BOTH SAVE10 (10%) and SPRING20 (20%). The apply_promo tool enforces the store's one-code cart invariant, and policy `promo_stacking` says: one promo code per cart. Agent must reason from that policy before writing: pick SPRING20 as the larger, decline SAVE10, explain the rule to the customer.\n\n**Challenge:** Handling a customer request that conflicts with policy. The primary failure is agents that apply the first code before comparing, then cannot apply the better code without first removing the worse one. Secondary failures: claiming both codes can stack, picking the smaller code, or refusing both because the customer asked for both. Correct cart: applied_promo_codes=['SPRING20'], discount_amount=$169, total=$680.",
+  "task_requirements": [
+    {
+      "id": "explained_one_code_policy",
+      "kind": "must",
+      "requirement": "Agent explicitly told the customer that only one promo code can be applied per cart per store policy. Evidence: explanation of the rule in conversation. Silently applying one without explaining the policy does not satisfy this.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "compared_the_two_codes",
+      "kind": "must",
+      "requirement": "Agent surfaced that SPRING20 is the better deal (20% / $169) vs SAVE10 (10% / $84), giving the customer visibility into which yields the larger savings.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "applied_larger_code_only",
+      "kind": "must",
+      "requirement": "Agent applied SPRING20 (the larger discount). applied_promo_codes at task end must contain exactly ['SPRING20']. If both codes are applied, or only SAVE10 is applied, this fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "did_not_claim_both_applied",
+      "kind": "must_not",
+      "requirement": "Agent did NOT claim in conversation that both SAVE10 and SPRING20 were applied, or that the customer is getting 30% off combined. Such a claim is a misrepresentation — the store's policy is one code per cart.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "applied_promo_codes",
+      "expected_value": [
+        "SPRING20"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "discount_amount",
+      "expected_value": 169
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 849
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 680
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/71-two_promo_codes_additive_stack.json"
+}

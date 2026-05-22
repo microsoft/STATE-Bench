@@ -1,0 +1,37 @@
+{
+  "task_id": "48-edge_all_windows_expired",
+  "task_summary": "**Task:** The customer wants to return electronics sixty-three days after delivery, long past both the fifteen-day return window and the additional fifteen-day store-credit window. The correct handling is to confirm that all eligibility windows have expired and deny the return without creating any state change.\n\n**Challenge:** Timing logic is the full substance of the case. Weak agents skip the eligibility check, offer store credit even though that extension has also expired, or process the return despite the windows being fully closed.",
+  "task_type": "edge_case",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "48_edge_all_windows_expired_agent_must_check_return_eligibility",
+      "kind": "must",
+      "requirement": "Agent must deny the return and explain that the electronics return window and the additional store-credit window have both expired for ORD-6049, so no return or store-credit option is available."
+    }
+  ],
+  "user_id": "cust_005",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I want to return the headphones from order ORD-6049. I know it's been a while but I barely used them.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-6049",
+      "item: headphones"
+    ],
+    "personality": "uncertain",
+    "task_rules": [
+      "Give the order ID.",
+      "If told window passed, ask about any options.",
+      "If the agent offers store credit or another return option, ask whether that is still allowed given the headphones were delivered about 63 days ago.",
+      "If the agent only says the normal return window expired, ask whether the store-credit grace period has also expired.",
+      "Accept the denial once the agent explains that both the return window and any store-credit grace window are expired."
+    ],
+    "unknown_info": [
+      "that all return windows expired",
+      "no options available"
+    ],
+    "user_sim_context": "You want to return headphones you barely used, even though you know a long time has passed. You are hoping there may still be some exception or remaining option. You want the agent to tell you plainly whether anything can still be done."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/48-edge_all_windows_expired.json"
+}

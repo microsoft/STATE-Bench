@@ -1,0 +1,91 @@
+{
+  "task_id": "3-cancel_economy_international",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I need to cancel my flight to Paris. Can you help me with that?",
+  "user_simulator": {
+    "personality": "Cooperative and direct. Answers questions clearly.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Flight booking ID: BK-1000",
+      "Flight is economy class, international (JFK to CDG)",
+      "Price paid: $450",
+      "Hotel reservation: HR-0101",
+      "Hotel in Paris, June 25-30, $160/night"
+    ],
+    "unknown_info": [
+      "International economy cancellation fee formula",
+      "Hotel cancellation fee"
+    ],
+    "task_rules": [
+      "When the agent asks for your booking ID, provide only the flight booking ID.",
+      "Do NOT proactively mention the hotel. Only bring it up if the agent asks about other reservations.",
+      "When the agent quotes the cancellation fee, acknowledge it and confirm cancellation.",
+      "If the agent asks about other reservations, mention the hotel.",
+      "If the agent does NOT ask about other reservations after cancelling the flight, simply end with [TASK_DONE]. The agent should have checked proactively.",
+      "When all brought-up cancellations are done, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You want to cancel your flight to Paris and mainly care about what that will cost you. You are not thinking of the hotel as a separate issue at the start, even though it is part of the same trip. You expect the agent to help you understand what else needs attention."
+  },
+  "task_summary": "**Task:** A traveler asks to cancel an international Paris flight but does not mention the Paris hotel reservation. Correct resolution: Agent must proactively discover and mention hotel reservation HR-0101 after handling the Paris flight cancellation request.\n\n**Challenge:** The agent proactively looks for the hidden hotel reservation and offers to handle it instead of stopping at the flight cancellation alone.",
+  "task_requirements": [
+    {
+      "id": "state_hotel_discovered",
+      "kind": "must",
+      "requirement": "Agent must proactively discover and mention hotel reservation HR-0101 after handling the Paris flight cancellation request.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_offer_hotel_cancellation",
+      "kind": "must",
+      "requirement": "Agent must offer or ask about cancelling the related hotel instead of ignoring the rest of the trip.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_flight_only",
+      "kind": "must_not",
+      "requirement": "Agent must not present the Paris trip as fully handled while leaving a discoverable linked hotel unaddressed.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "cancellation",
+  "task_env_path": "state_bench/domains/travel/task_envs/3-cancel_economy_international.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "cancellation_fee",
+      "expected_value": 90
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "refund_amount",
+      "expected_value": 360
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0101",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0101",
+      "field": "refund_amount",
+      "expected_value": 800
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0101",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ]
+}

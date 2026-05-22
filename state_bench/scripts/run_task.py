@@ -15,7 +15,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from state_bench.agents.base import AgentPricing, BaseAgent, agent_pricing_from_config
+from state_bench.agents.base import AgentPricing, BaseAgent
 from state_bench.agents.loader import load_root_agent_class, load_root_client_class
 from state_bench.agents.state_bench import StateBenchAgent
 from state_bench.client import BaseLLMClient, LLMClient, PooledLLMClient, build_llm_client, build_user_sim_client
@@ -45,12 +45,7 @@ def _build_agent_pricing(args: argparse.Namespace, default_model_name: str | Non
         args.agent_cached_input_cost_per_1m,
     ]
     if all(value is None for value in pricing_values):
-        if not model_name:
-            return None
-        try:
-            return agent_pricing_from_config(model_name)
-        except ValueError:
-            return None
+        return None
 
     missing = [
         flag
@@ -463,8 +458,7 @@ def main() -> None:
                 "  Cost breakdown: "
                 f"agent=${usage.get('agent_turn_cost_usd', 0.0):.4f}, "
                 f"memory_ingest=${usage.get('memory_ingestion_cost_usd', 0.0):.4f}, "
-                f"memory_retrieval=${usage.get('memory_retrieval_cost_usd', 0.0):.4f}, "
-                f"embedding=${usage.get('embedding_cost_usd', 0.0):.4f}"
+                f"memory_retrieval=${usage.get('memory_retrieval_cost_usd', 0.0):.4f}"
             )
 
     print(

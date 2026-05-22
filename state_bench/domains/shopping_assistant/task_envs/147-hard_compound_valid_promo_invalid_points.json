@@ -1,0 +1,67 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H105",
+      "name": "TechPhone Lite 15",
+      "category": "electronics",
+      "subcategory": "phone",
+      "brand": "Orion",
+      "price": 499,
+      "rating": 4.4,
+      "review_count": 2100,
+      "description": "TechPhone Lite 15 from Orion.",
+      "specs": {
+        "storage_gb": 128
+      },
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": 549,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_004",
+      "name": "Taylor Kim",
+      "email": "taylor.kim@example.com",
+      "tier": "standard",
+      "is_first_time": false,
+      "loyalty_points": 2200,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_004",
+      "customer_id": "shop_004",
+      "item_ids": [],
+      "subtotal": 0,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 0,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [],
+  "promotions": [
+    {
+      "promo_code": "SAVE10",
+      "description": "10% off eligible orders",
+      "discount_type": "percentage",
+      "discount_value": 10,
+      "min_purchase": 0,
+      "max_discount": 0,
+      "category_restriction": null,
+      "expiry_date": "2026-12-31T23:59:59",
+      "active": true
+    }
+  ]
+}

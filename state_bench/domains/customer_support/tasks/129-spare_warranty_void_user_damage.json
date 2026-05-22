@@ -1,0 +1,42 @@
+{
+  "task_id": "129-spare_warranty_void_user_damage",
+  "task_summary": "Tablet has active warranty, but customer admits liquid damage. Agent must deny warranty claim and avoid filing any claim or return.",
+  "task_type": "warranty_claim",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "spare_warranty_void_user_damage_deny",
+      "kind": "must",
+      "requirement": "Agent must deny warranty coverage because the issue is admitted liquid/user damage."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "spare_warranty_void_user_damage_no_claim",
+      "kind": "must_not",
+      "requirement": "Agent must not file a warranty claim, return, refund, exchange, or cancellation."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "My tablet from ORD-7275 has an active warranty, but I spilled coffee on it. Can you still file the claim?",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7275",
+      "damage: liquid spill",
+      "warranty_id: WRT-4115"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give the order ID.",
+      "Admit the coffee spill if asked.",
+      "Push once because the warranty is active.",
+      "Accept a clear denial if liquid damage is explained."
+    ],
+    "unknown_info": [
+      "whether accidental damage is covered"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7275. Tablet has active warranty, but customer admits liquid damage. Agent must deny warranty claim and avoid filing any claim or return. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/129-spare_warranty_void_user_damage.json"
+}

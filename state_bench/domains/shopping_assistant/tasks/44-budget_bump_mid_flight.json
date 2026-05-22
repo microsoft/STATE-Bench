@@ -1,0 +1,98 @@
+{
+  "task_id": "44-budget_bump_mid_flight",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I want to buy a blender. My budget is $500.",
+  "user_simulator": {
+    "personality": "Decisive but curious. Open to premium options if the agent justifies them.",
+    "user_sim_context": "You're buying a blender with a starting budget of $500. The agent will recommend something in budget. You'll ask about a premium option. The premium is $899 — far over your $500 budget. You'll first bump to $750 (still insufficient). If the agent flags that $750 is still short, you'll commit to $899. If the agent adds at $750 anyway (without pushing back), that's a silent-overage failure.",
+    "known_info": [
+      "You want a blender.",
+      "Your starting budget is $500.",
+      "You're curious about premium options.",
+      "You're willing to stretch to $899 if the agent negotiates openly.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The specific catalog prices.",
+      "That the premium is exactly $899."
+    ],
+    "task_rules": [
+      "Opening: 'I want to buy a blender. My budget is $500.'",
+      "Turn 2: after agent recommends a blender in your budget (SP-3001 PowerBlend Pro $229 or SP-4003 PowerBlend Plus $449), ask: 'what about something more premium? The top-of-line option?'. Do NOT bump yet.",
+      "Turn 3: after agent describes the premium — if agent flags that SP-4002 at $899 is OVER your $500 budget (citing the specific price and the overage), reply: 'hmm, I could stretch to $750. Would that work?'. This bump is INSUFFICIENT ($899 > $750).",
+      "If agent describes the premium WITHOUT flagging the overage, push back: 'wait, isn't that well over my $500?'. If agent acknowledges after nudge, proceed. If still ignoring, accept and end — failed.",
+      "Turn 4: if agent ADDS SP-4002 at your $750 bump (doesn't flag it's still $149 short), this is a silent-overage failure. Reply: 'hmm, you didn't mention the price — let me check'. Then end with [TASK_DONE]. Agent failed.",
+      "Turn 4: if agent flags that $750 is STILL $149 short of the $899 premium, reply: 'ok fine, $899 it is. Go with the KitchenPro'. Agent should then add SP-4002.",
+      "Turn 5: if agent adds SP-4002, reply: 'great, thanks.' and then [TASK_DONE] on next turn after confirmation.",
+      "If the agent REFUSES at turn 5 to add even after the final $899 bump, push back ONCE: 'I just said $899 is fine — go ahead'. If still refuses, accept and end — failed.",
+      "If the agent silently substitutes SP-4003 PowerBlend Plus ($449) or any other mid-tier product instead of the premium, reply: 'no, I want the KitchenPro Master Blender'. Agent must then add SP-4002.",
+      "Do NOT volunteer that $899 is your final cap until after the agent pushes back on $750.",
+      "Do NOT add SP-3001 or SP-4003 to cart.",
+      "Do NOT ask about gift wrap, loyalty, promos, shipping proactively.",
+      "Keep replies short.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) states a $500 blender budget and asks about a premium. The premium (SP-4002 KitchenPro Master Blender) is $899. Customer first offers $750 (insufficient); agent must push back. Customer then commits to $899. Agent adds. Two-step budget negotiation over 6+ turns.\n\n**Challenge:** Multi-turn budget-as-mutable tracking + intermediate-insufficient-bump pushback. Pitfall 1: agent adds premium silently at the $750 bump (still $149 short) without flagging. Pitfall 2: agent refuses even after the final $899 bump. Pitfall 3: agent silently swaps to SP-4003 mid-tier ($449). Correct: flag overage, reject the insufficient bump, honor the final bump. Tests whether agent tracks specific dollar amounts across a multi-step negotiation. Distinct from T9 (single-turn over-budget) — T44 is a negotiation with intermediate states.",
+  "task_requirements": [
+    {
+      "id": "flagged_premium_overage",
+      "kind": "must",
+      "requirement": "When customer asked about the premium blender, agent explicitly noted that SP-4002 at $899 is over the customer's stated $500 budget, citing both numbers. Silent description or vague 'it's pricier' without the overage math fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "pushed_back_on_insufficient_bump",
+      "kind": "must",
+      "requirement": "When customer offered to stretch to $750, agent explicitly noted that $750 is STILL insufficient for the $899 premium (citing the $149 gap or comparable specifics). Silently adding SP-4002 at the $750 bump without flagging the remaining overage fails. Not noticing the insufficient bump fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "honored_final_bump",
+      "kind": "must",
+      "requirement": "After customer committed to $899, agent proceeded to ADD SP-4002. Refusing to add, substituting a mid-tier, or asking for further justification fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "correct_product_added",
+      "kind": "must",
+      "requirement": "Agent added exactly SP-4002 KitchenPro Master Blender with quantity=1, gift_wrap=False. No other blender added.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 899
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 899
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-4002",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "product_search_discovery",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/44-budget_bump_mid_flight.json"
+}

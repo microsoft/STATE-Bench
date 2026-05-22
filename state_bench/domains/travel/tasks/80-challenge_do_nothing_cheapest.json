@@ -1,0 +1,49 @@
+{
+  "task_id": "80-challenge_do_nothing_cheapest",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I found a flight on the same route for $270 instead of the $300 I paid. Can you switch my booking BK-1000 to save me $30? My user ID is user_002.",
+  "user_simulator": {
+    "personality": "Frugal. Thinks switching to cheaper flight always saves money.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking: BK-1000 (ORD to DEN, $300, June 24)",
+      "Found $270 flight on same route and date"
+    ],
+    "unknown_info": [
+      "Change and cancel fees",
+      "That the $30 savings is eaten by fees"
+    ],
+    "task_rules": [
+      "Open with: found $270 flight, want to switch from BK-1000.",
+      "If agent switches without mentioning costs exceed savings, say: 'Wait, did that actually save me money?'",
+      "If agent says keeping is cheapest, say: 'Oh, I did not realize the fees would wipe out the savings. I will keep my current booking then.' End with [TASK_DONE].",
+      "If agent changes the booking anyway, say: 'That made it more expensive than keeping my current booking. I did not want a more expensive outcome.' Do not end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You spotted a slightly cheaper flight and instinctively think switching should save money. You are asking the agent to sanity-check that instinct before you do anything. If the answer is counterintuitive, you want it explained clearly."
+  },
+  "task_summary": "**Task:** A traveler thinks switching to a slightly cheaper flight will save money, but fees make doing nothing the cheapest option. Correct resolution: Keeping the current booking is the cheapest option.\n\n**Challenge:** The agent compares change, cancel-and-rebook, and keep-current-booking paths, recommends keeping the original booking, and does not execute a needless change.",
+  "task_requirements": [
+    {
+      "id": "recommend_keep_current_booking",
+      "kind": "must",
+      "requirement": "Agent must explain that keeping the current booking is the cheapest option.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "compare_all_three_paths",
+      "kind": "must",
+      "requirement": "Agent must compare the costs of changing, canceling and rebooking, and doing nothing before recommending a path.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "must_not_execute_change",
+      "kind": "must_not",
+      "requirement": "Agent must not leave the final outcome as a changed or rebooked reservation because the correct outcome is to keep the original booking unchanged.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "adversarial_or_reasoning_trap",
+  "task_env_path": "state_bench/domains/travel/task_envs/80-challenge_do_nothing_cheapest.json",
+  "state_requirements": []
+}

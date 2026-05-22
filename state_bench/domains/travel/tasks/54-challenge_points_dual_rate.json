@@ -1,0 +1,161 @@
+{
+  "task_id": "54-challenge_points_dual_rate",
+  "user_id": "user_001",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I need to book two flights. One domestic — LAX to Chicago on June 25, 2026 — and one international — JFK to London on June 28, 2026. I want to use my loyalty points for both and pay as little cash as possible. My user ID is user_001.",
+  "user_simulator": {
+    "personality": "Analytical and frugal. Wants to optimize point usage. Expects the agent to find the cheapest option.",
+    "known_info": [
+      "Your user ID: user_001",
+      "Wants domestic flight: LAX to Chicago (ORD), June 25, 2026, economy",
+      "Wants international flight: JFK to London (LHR), June 28, 2026, economy",
+      "For the London leg, wants the nonstop morning British Airways option.",
+      "Has 75,000 loyalty points",
+      "Wants to use points for both flights to minimize cash"
+    ],
+    "unknown_info": [
+      "Exact redemption rates (domestic vs international)",
+      "That booking order affects total cash cost",
+      "Exact flight prices",
+      "How many points each flight requires"
+    ],
+    "task_rules": [
+      "Provide both flight requests in the opening message. Do NOT specify booking order.",
+      "If the agent presents flight options, choose the cheapest economy nonstop domestic flight by visible route, date, cabin, stops, and price, and choose the nonstop morning British Airways London option by visible route, date, airline, time, cabin, and stops.",
+      "If the agent offers a London flight that is not the nonstop morning British Airways option, say 'I want the nonstop morning British Airways flight if it's available.'",
+      "If the agent claims that nonstop morning British Airways option is unavailable, ask them to check again specifically for a nonstop morning British Airways flight and do not accept another London option unless they confirm that exact search preference truly cannot be met.",
+      "If the agent still cannot offer that nonstop morning British Airways option, say you do not want a substitute London flight and would rather stop than book the wrong one.",
+      "If the agent asks about payment preference, say 'Use as many points as possible — I want to minimize cash.'",
+      "If the agent proposes booking the international flight first and explains that the international point rate is higher, agree.",
+      "If the agent proposes booking the domestic flight first, ask whether that still minimizes total cash after the different domestic and international point rates.",
+      "If the agent cannot explain the total cash math, ask for the points and cash breakdown before approving.",
+      "When the agent presents the total cash cost and explains the points/cash breakdown, confirm and proceed.",
+      "After both bookings are confirmed, say 'Great, thanks!' and end with [TASK_DONE].",
+      "Do NOT request date changes or unrelated extras. Focus on booking the correct flights and minimizing cash while still confirming required booking preferences.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You need to book one domestic trip and one international trip using the same pool of points. Your instinct is to use points aggressively on both and keep cash as low as possible. You need the agent to help you understand how far the points really stretch across two very different itineraries."
+  },
+  "task_summary": "**Task:** A traveler wants to book one domestic and one international flight with a shared points pool while minimizing cash. Correct resolution: Domestic and international redemptions use different point values, with the international flight redeeming at the higher rate.\n\n**Challenge:** The agent recognizes the higher international redemption rate, books in the cash-optimal order, and explains why using points on the international leg first produces the lowest total cash spend.",
+  "task_requirements": [
+    {
+      "id": "state_dual_rate_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that domestic and international redemptions use different point values, with the international flight redeeming at the higher rate.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_optimal_booking_order_selected",
+      "kind": "must",
+      "requirement": "Agent must recognize that booking the international flight first is the cash-optimal order for the shared 75,000-point pool.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_min_cash_math_correct",
+      "kind": "must",
+      "requirement": "Agent must explain the resulting optimal cash outcome: 60,000 points cover the $900 international flight first, then the remaining 15,000 points reduce the $350 domestic fare to a $200 cash remainder.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/54-challenge_points_dual_rate.json",
+  "state_requirements": [
+    {
+      "entity_type": "users",
+      "record_key": "user_001",
+      "field": "loyalty_points",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_001",
+        "flight_id": "BA100",
+        "status": "confirmed",
+        "payment_method": "points",
+        "cash_amount": 0,
+        "points_used": 60000,
+        "cabin_class": "economy",
+        "seat_type": "aisle",
+        "meal_preference": "kosher",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": true,
+        "add_insurance": false,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 0,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "BA100",
+        "meal_preference": "kosher",
+        "paid_checked_bags": 0,
+        "payment_method": "points",
+        "points_used": 60000,
+        "price_paid": 0,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_001"
+      }
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_001",
+        "flight_id": "DL100",
+        "status": "confirmed",
+        "payment_method": "points_plus_cash",
+        "cash_amount": 200,
+        "points_used": 15000,
+        "cabin_class": "economy",
+        "seat_type": "aisle",
+        "meal_preference": "kosher",
+        "add_wifi": true,
+        "add_extra_legroom": true,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": true,
+        "add_insurance": false,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0002",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 200,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "DL100",
+        "meal_preference": "kosher",
+        "paid_checked_bags": 0,
+        "payment_method": "points_plus_cash",
+        "points_used": 15000,
+        "price_paid": 200,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_001"
+      }
+    }
+  ]
+}

@@ -14,7 +14,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from state_bench.agents.base import AgentPricing, BaseAgent, agent_pricing_from_config
+from state_bench.agents.base import AgentPricing, BaseAgent
 from state_bench.agents.loader import load_root_agent_class, load_root_client_class
 from state_bench.agents.state_bench import StateBenchAgent
 from state_bench.client import (
@@ -99,12 +99,7 @@ def _build_agent_pricing(args: argparse.Namespace, default_model_name: str | Non
         args.agent_cached_input_cost_per_1m,
     ]
     if all(value is None for value in pricing_values):
-        if not model_name:
-            return None
-        try:
-            return agent_pricing_from_config(model_name)
-        except ValueError:
-            return None
+        return None
 
     missing = [
         flag

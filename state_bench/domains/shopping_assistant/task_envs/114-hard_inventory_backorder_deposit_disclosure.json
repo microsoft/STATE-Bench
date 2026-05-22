@@ -1,0 +1,80 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H111",
+      "name": "7-Port USB-C Hub",
+      "category": "electronics",
+      "subcategory": "hub",
+      "brand": "PortPro",
+      "price": 49,
+      "rating": 4.2,
+      "review_count": 1550,
+      "description": "7-Port USB-C Hub from PortPro. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "SlimBook Air 13",
+        "ProBook Laptop 13",
+        "TechPhone Pro 16"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H112",
+      "name": "Atlas 9-in-1 USB-C Hub",
+      "category": "electronics",
+      "subcategory": "hub",
+      "brand": "PortPro",
+      "price": 79,
+      "rating": 4.6,
+      "review_count": 700,
+      "description": "Atlas 9-in-1 USB-C Hub from PortPro. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "SlimBook Air 13",
+        "ProBook Laptop 13"
+      ],
+      "in_stock": false,
+      "stock_quantity": 0,
+      "shipping_days": 7,
+      "gift_wrap_available": true,
+      "backorder_available": true,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_005",
+      "name": "Morgan Patel",
+      "email": "morgan.patel@example.com",
+      "tier": "platinum",
+      "is_first_time": false,
+      "loyalty_points": 104000,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_005",
+      "customer_id": "shop_005",
+      "item_ids": [],
+      "subtotal": 0,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 0,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [],
+  "promotions": []
+}

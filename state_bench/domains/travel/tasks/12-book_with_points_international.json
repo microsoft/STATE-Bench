@@ -1,0 +1,114 @@
+{
+  "task_id": "12-book_with_points_international",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I'd like to book a flight from Los Angeles to Tokyo and apply my loyalty points.",
+  "user_simulator": {
+    "personality": "Cooperative and curious. Wants to understand the international points rate.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Wants to fly LAX to NRT on June 26th",
+      "Choose the B6 nonstop afternoon flight when options are shown.",
+      "Has 12,000 loyalty points to apply",
+      "Budget is $700 maximum (total including points value)",
+      "Wants economy class",
+      "Prefers B6 airline, afternoon departure, nonstop"
+    ],
+    "unknown_info": [
+      "International points redemption rate ($0.015/pt vs $0.01/pt domestic)",
+      "Exact cash remaining after applying points"
+    ],
+    "task_rules": [
+      "When the agent asks about your request, mention loyalty points and June 26.",
+      "Do not ask for nearby dates, different airports, different times of day, or connecting options.",
+      "When the agent presents flight options, pick the B6 nonstop afternoon flight only. Do not switch to a nearby date or a different time of day.",
+      "When the agent calculates the international points rate, ask how much each point is worth.",
+      "When the agent confirms the split payment amount, verify and agree.",
+      "End with [TASK_DONE] when the booking is confirmed with points_plus_cash payment.",
+      "When asked about flight preferences, say economy class, B6 airline, afternoon departure, nonstop.",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "You want to apply your loyalty points toward an international booking and keep the cash portion as low as possible. You assume your points should help in a meaningful way, but you are not sure how redemption works on international travel. You need the agent to translate that into realistic options."
+  },
+  "task_summary": "**Task:** A traveler wants to apply 12,000 points toward an international booking where the international redemption rate is higher than the domestic rate. Correct resolution: The international redemption rate here is $0.015 per point, making 12,000 points worth $180.\n\n**Challenge:** The agent uses the international $0.015 per point valuation, computes the correct $270 cash remainder, and does not fall back to the domestic points rate.",
+  "task_requirements": [
+    {
+      "id": "state_international_points_rate",
+      "kind": "must",
+      "requirement": "Agent must explain that the international redemption rate here is $0.015 per point, making 12,000 points worth $180.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_international_cash_remainder",
+      "kind": "must",
+      "requirement": "Agent must explain that $270 in cash remains after applying the 12,000 points to the booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_domestic_rate",
+      "kind": "must_not",
+      "requirement": "Agent must not use or claim the lower domestic points valuation for this international redemption.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "new_booking",
+  "task_env_path": "state_bench/domains/travel/task_envs/12-book_with_points_international.json",
+  "state_requirements": [
+    {
+      "entity_type": "users",
+      "record_key": "user_005",
+      "field": "loyalty_points",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_005",
+        "flight_id": "B6100",
+        "status": "confirmed",
+        "payment_method": "points_plus_cash",
+        "cash_amount": 270,
+        "points_used": 12000,
+        "cabin_class": "economy",
+        "seat_type": "aisle",
+        "meal_preference": "vegan",
+        "add_wifi": true,
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 270,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "B6100",
+        "meal_preference": "vegan",
+        "paid_checked_bags": 0,
+        "payment_method": "points_plus_cash",
+        "points_used": 12000,
+        "price_paid": 270,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_005"
+      }
+    }
+  ]
+}

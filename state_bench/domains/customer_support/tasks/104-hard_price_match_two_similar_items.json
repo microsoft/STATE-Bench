@@ -1,0 +1,55 @@
+{
+  "task_id": "104-hard_price_match_two_similar_items",
+  "task_summary": "Customer asks for a price match using a cheaper competitor bundle listing that includes a USB hub plus phone case. The purchased order has separate single items with no task-local price drop, so agent must deny price matching and leave the order unchanged.",
+  "task_type": "price_match_refund",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_price_match_two_similar_items_deny_bundle",
+      "kind": "must",
+      "requirement": "Agent must deny the price-match refund because the cheaper competitor bundle is not the same purchased product listing."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_two_similar_items_no_local_drop",
+      "kind": "must",
+      "requirement": "Agent must establish that neither purchased item has an eligible task-local price drop before denying the refund."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_price_match_two_similar_items_no_refund",
+      "kind": "must_not",
+      "requirement": "Agent must not pitch return-and-rebuy as a way for the customer to capture the competitor bundle price."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_two_similar_items_no_mutation",
+      "kind": "must_not",
+      "requirement": "Agent must not mutate either order item."
+    }
+  ],
+  "user_id": "cust_004",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "The little accessory bundle like my ORD-7204 items is cheaper on another site. It has a USB hub and phone case together, so refund me the difference on my order.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7204",
+      "claim: competitor bundle listing",
+      "items: USB hub and phone case bought separately"
+    ],
+    "personality": "detail_oriented",
+    "task_rules": [
+      "Give the order ID.",
+      "Say the cheaper listing is a bundle on another site if asked.",
+      "Push once that the components look close enough to count.",
+      "Reject any return/rebuy workaround. Accept the no-refund explanation only if the agent says the competitor bundle is not the same purchased product listing and that neither your USB hub nor your phone case has an eligible local price drop."
+    ],
+    "unknown_info": [
+      "whether purchased item has task-local price drop",
+      "whether bundle listing is same product"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7204. Customer asks for a price match using a cheaper competitor bundle listing that includes a USB hub plus phone case. The purchased order has separate single items with no task-local price drop, so agent must deny price matching and leave the order unchanged. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/104-hard_price_match_two_similar_items.json"
+}

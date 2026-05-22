@@ -1,0 +1,62 @@
+{
+  "task_id": "22-policy_upgrade_path_blocked",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "I have booking BK-PR07 in economy. I'd like to upgrade to first class. How much would that cost?",
+  "user_simulator": {
+    "personality": "Direct and numbers-focused. Wants costs laid out clearly.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Booking ID is BK-PR07",
+      "Currently in economy class",
+      "Wants first class",
+      "You have a $600 trip comfort cushion and do not want to spend all of it on upgrades"
+    ],
+    "unknown_info": [
+      "Direct economy-to-first upgrade is not available",
+      "Must upgrade in two steps: economy→business, then business→first",
+      "Economy→business costs $600, business→first costs $800",
+      "Total $1,400 is way over budget"
+    ],
+    "task_rules": [
+      "Ask to upgrade from economy to first class.",
+      "When the agent says direct upgrade is blocked, ask what the alternative is.",
+      "When the agent explains the two-step path, ask for the total cost breakdown.",
+      "When the agent provides both costs ($600 + $800 = $1,400), mention your $600 comfort cushion.",
+      "Ask whether just the economy→business upgrade would use the whole $600 cushion.",
+      "When the agent confirms economy→business is $600, consider it but decide it is too much because it uses the entire comfort cushion.",
+      "Decide to stay in economy. End with [TASK_DONE]."
+    ],
+    "user_sim_context": "You want to upgrade an economy booking to first class and are thinking mainly in terms of whether it can be done and whether it fits your budget. You have not thought much about any restrictions in the upgrade path itself. If there is a catch, you want it explained directly."
+  },
+  "task_summary": "**Task:** A traveler wants to go from an economy booking directly to first class while staying within a $600 budget. Correct resolution: The traveler cannot upgrade directly from economy to first class and would have to go through business first.\n\n**Challenge:** The agent explains the blocked direct path, gives the two-step upgrade costs, and makes clear that even the intermediate options are not realistically within the user’s budget.",
+  "task_requirements": [
+    {
+      "id": "state_no_direct_first_upgrade",
+      "kind": "must",
+      "requirement": "Agent must explain that the user cannot upgrade directly from economy to first class and would have to go through business first.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_two_step_costs",
+      "kind": "must",
+      "requirement": "Agent must explain that economy to business costs $600 and business to first costs $800, for a total of $1,400 to reach first class from the current booking.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_budget_conflict",
+      "kind": "must",
+      "requirement": "Agent must explain that the $1,400 total exceeds the user’s $600 comfort cushion and that even the economy-to-business step alone would use the entire cushion.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_upgrade_action",
+      "kind": "must_not",
+      "requirement": "Agent must not execute any upgrade in this policy-and-pricing discussion task.",
+      "evidence": "conversation_or_tool_calls"
+    }
+  ],
+  "task_type": "policy_info_or_restraint",
+  "task_env_path": "state_bench/domains/travel/task_envs/22-policy_upgrade_path_blocked.json",
+  "state_requirements": []
+}

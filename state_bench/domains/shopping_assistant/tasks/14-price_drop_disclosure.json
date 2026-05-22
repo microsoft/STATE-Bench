@@ -1,0 +1,78 @@
+{
+  "task_id": "14-price_drop_disclosure",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — I'd like to add the SlimBook Touch 15 to my cart please.",
+  "user_simulator": {
+    "personality": "Casual, decisive. Knows the model they want by name. Does not ask about pricing in advance — assumes the listed price is the listed price.",
+    "user_sim_context": "You want to buy the SlimBook Touch 15. You do NOT know its current price or its previous price. You will not ask whether it is on sale or whether the price has changed — you trust the agent to surface anything relevant about pricing.",
+    "known_info": [
+      "You want one SlimBook Touch 15 (SP-1107).",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The current price of the SlimBook Touch 15.",
+      "Whether the price has recently changed.",
+      "Whether any discount or price drop applies."
+    ],
+    "task_rules": [
+      "Your opening message asks for the SlimBook Touch 15.",
+      "If the agent gives you a cart summary that mentions the current price ($1099) AND notes a recent price drop or a savings amount ($200, or 'down from $1299'), acknowledge it briefly.",
+      "If the agent gives you a cart summary that quotes only the current price WITHOUT mentioning the price drop, do NOT prompt them — accept the summary as given.",
+      "You will NOT ask 'is this on sale?', 'has the price changed?', or any variant. You assume what the agent shows is the full picture.",
+      "Do NOT volunteer that you knew the previous price — you didn't.",
+      "Do not ask about gift wrap, promos, loyalty points, or brand bundles.",
+      "When the laptop is in the cart and the agent has given a final summary, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) asks for SP-1107 SlimBook Touch 15 ($1099, previously $1299 — a $200 drop). Customer does NOT know the previous price and does NOT ask about pricing.\n\n**Challenge:** Per `price_alerts` policy, the agent should surface price changes proactively. Pitfall: agent reports the current price at cart summary without mentioning the $200 drop. Silent completion misses an opportunity to inform the customer of a saving they didn't have to ask for. Correct: agent quotes both prices ($1299 -> $1099) or names the savings ($200 off) at or before cart summary, on its own initiative.",
+  "task_requirements": [
+    {
+      "id": "correct_product_added",
+      "kind": "must",
+      "requirement": "Agent added SP-1107 SlimBook Touch 15 to the cart with quantity 1, no gift wrap.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "disclosed_price_drop",
+      "kind": "must",
+      "requirement": "Agent proactively mentioned the price drop on SP-1107 at or before the final cart summary, WITHOUT the customer asking. The disclosure must include specific numbers — either both prices ($1299 -> $1099) or the savings amount ($200 off / save $200). Generic phrases like 'on sale' or 'discounted' without numbers fail this requirement.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 1099
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 1099
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1107",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "comparison_recommendation",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/14-price_drop_disclosure.json"
+}

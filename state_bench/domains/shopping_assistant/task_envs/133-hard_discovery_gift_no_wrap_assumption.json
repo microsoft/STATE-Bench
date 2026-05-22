@@ -1,0 +1,93 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H116",
+      "name": "PowerBlend Pro Blender",
+      "category": "kitchen",
+      "subcategory": "blender",
+      "brand": "HomePro",
+      "price": 229,
+      "rating": 4.6,
+      "review_count": 890,
+      "description": "PowerBlend Pro Blender from HomePro.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 3,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H118",
+      "name": "HomeBrew Pour-Over Coffee Set",
+      "category": "kitchen",
+      "subcategory": "coffee",
+      "brand": "BrewLab",
+      "price": 59,
+      "rating": 4.4,
+      "review_count": 610,
+      "description": "HomeBrew Pour-Over Coffee Set from BrewLab.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H119",
+      "name": "BrewMaster Thermal Coffee Maker",
+      "category": "kitchen",
+      "subcategory": "coffee_maker",
+      "brand": "BrewLab",
+      "price": 129,
+      "rating": 4.5,
+      "review_count": 780,
+      "description": "BrewMaster Thermal Coffee Maker from BrewLab.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 3,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_005",
+      "name": "Morgan Patel",
+      "email": "morgan.patel@example.com",
+      "tier": "platinum",
+      "is_first_time": false,
+      "loyalty_points": 104000,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_005",
+      "customer_id": "shop_005",
+      "item_ids": [],
+      "subtotal": 0,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 0,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [],
+  "promotions": []
+}

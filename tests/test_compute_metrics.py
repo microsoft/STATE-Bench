@@ -33,8 +33,6 @@ def test_compute_summary_includes_state_task_and_completion_rates():
                 "agent_turn_cost_usd": 0.0007,
                 "memory_ingestion_cost_usd": 0.0002,
                 "memory_retrieval_cost_usd": 0.0,
-                "embedding_cost_usd": 0.0001,
-                "embedding_input_tokens": 20,
             },
             "t2": {
                 "task_id": "t2",
@@ -53,8 +51,6 @@ def test_compute_summary_includes_state_task_and_completion_rates():
                 "agent_turn_cost_usd": 0.0015,
                 "memory_ingestion_cost_usd": 0.0,
                 "memory_retrieval_cost_usd": 0.0002,
-                "embedding_cost_usd": 0.0003,
-                "embedding_input_tokens": 40,
             },
         },
         {
@@ -75,8 +71,6 @@ def test_compute_summary_includes_state_task_and_completion_rates():
                 "agent_turn_cost_usd": 0.002,
                 "memory_ingestion_cost_usd": 0.0005,
                 "memory_retrieval_cost_usd": 0.0002,
-                "embedding_cost_usd": 0.0003,
-                "embedding_input_tokens": 60,
             },
             "t2": {
                 "task_id": "t2",
@@ -95,8 +89,6 @@ def test_compute_summary_includes_state_task_and_completion_rates():
                 "agent_turn_cost_usd": 0.003,
                 "memory_ingestion_cost_usd": 0.0003,
                 "memory_retrieval_cost_usd": 0.0004,
-                "embedding_cost_usd": 0.0003,
-                "embedding_input_tokens": 80,
             },
         },
     ]
@@ -116,11 +108,9 @@ def test_compute_summary_includes_state_task_and_completion_rates():
     assert summary["mean_cached_input_tokens"] == 75.0
     assert summary["mean_output_tokens"] == 25.0
     assert summary["mean_total_tokens"] == 275.0
-    assert summary["mean_embedding_input_tokens"] == 50.0
     assert summary["mean_agent_turn_cost_usd"] == 0.0018
     assert summary["mean_memory_ingestion_cost_usd"] == 0.00025
     assert summary["mean_memory_retrieval_cost_usd"] == 0.0002
-    assert summary["mean_embedding_cost_usd"] == 0.00025
     assert "pass^2" not in summary
 
 
@@ -145,8 +135,6 @@ def test_compute_summary_includes_ux_scores():
                 "agent_turn_cost_usd": 0.0008,
                 "memory_ingestion_cost_usd": 0.0001,
                 "memory_retrieval_cost_usd": 0.0,
-                "embedding_cost_usd": 0.0001,
-                "embedding_input_tokens": 10,
             }
         },
         {
@@ -168,8 +156,6 @@ def test_compute_summary_includes_ux_scores():
                 "agent_turn_cost_usd": 0.0014,
                 "memory_ingestion_cost_usd": 0.0002,
                 "memory_retrieval_cost_usd": 0.0002,
-                "embedding_cost_usd": 0.0002,
-                "embedding_input_tokens": 30,
             }
         },
     ]
@@ -260,14 +246,12 @@ def _priced_trajectory(**overrides):
             "output_tokens": 50,
             "reasoning_output_tokens": 5,
             "total_tokens": 1050,
-            "embedding_input_tokens": 0,
             "input_cost_usd": 0.0009,
             "cached_input_cost_usd": 0.00001,
             "output_cost_usd": 0.0005,
             "agent_turn_cost_usd": 0.00141,
             "memory_ingestion_cost_usd": 0.0,
             "memory_retrieval_cost_usd": 0.0,
-            "embedding_cost_usd": 0.0,
             "other_llm_cost_usd": 0.0,
             "total_cost_usd": 0.00141,
         },
@@ -304,7 +288,31 @@ def test_load_run_allows_missing_agent_pricing(tmp_path):
     assert meta["agent_pricing_records"] == []
 
 
-def test_load_run_can_backfill_missing_agent_pricing(tmp_path):
+def test_load_run_raises_when_pricing_set_but_tokens_are_zero(tmp_path):
+    """If pricing is declared but no tokens were recorded, the run likely forgot
+    to call add_token_usage. Fail loudly so the user fixes their custom agent."""
+    run_dir = tmp_path / "run1"
+    run_dir.mkdir()
+    traj = _priced_trajectory()
+    traj["token_usage"]["input_tokens"] = 0
+    traj["token_usage"]["output_tokens"] = 0
+    traj["token_usage"]["cached_input_tokens"] = 0
+    traj["token_usage"]["total_tokens"] = 0
+    traj["token_usage"]["input_cost_usd"] = 0.0
+    traj["token_usage"]["cached_input_cost_usd"] = 0.0
+    traj["token_usage"]["output_cost_usd"] = 0.0
+    traj["token_usage"]["agent_turn_cost_usd"] = 0.0
+    traj["token_usage"]["total_cost_usd"] = 0.0
+    traj["cost_usd"] = 0.0
+    (run_dir / "t1.json").write_text(json.dumps(traj))
+
+    with pytest.raises(ValueError, match="zero tokens recorded but pricing is set"):
+        load_run(run_dir)
+
+
+def test_load_run_reports_zero_cost_when_pricing_is_absent(tmp_path):
+    """No pricing in the trajectory => cost is reported as $0, no error.
+    The user opted out of cost tracking; submission stays scorable on completion/UX."""
     run_dir = tmp_path / "run1"
     run_dir.mkdir()
     traj = _priced_trajectory()
@@ -315,25 +323,13 @@ def test_load_run_can_backfill_missing_agent_pricing(tmp_path):
     traj["token_usage"]["agent_turn_cost_usd"] = 0
     traj["token_usage"]["total_cost_usd"] = 0
     traj["cost_usd"] = 0
-    fallback_pricing = {
-        "model_name": "test-model",
-        "input_cost_per_1m_tokens": 1.0,
-        "output_cost_per_1m_tokens": 10.0,
-        "cached_input_cost_per_1m_tokens": 0.1,
-        "cached_input_pricing_provided": True,
-        "currency": "USD",
-        "source": "test",
-        "cost_accounting_version": "agent-pricing-v1",
-        "cost_includes": [],
-    }
     (run_dir / "t1.json").write_text(json.dumps(traj))
 
-    runs, meta = load_run(run_dir, fallback_agent_pricing=fallback_pricing)
+    runs, meta = load_run(run_dir)
 
-    assert runs["t1"]["cost_usd"] == pytest.approx(0.00141)
-    assert runs["t1"]["agent_turn_cost_usd"] == pytest.approx(0.00141)
-    assert runs["t1"]["agent_pricing"] == fallback_pricing
-    assert meta["agent_pricing_records"] == [fallback_pricing]
+    assert runs["t1"]["cost_usd"] == 0
+    assert runs["t1"]["agent_pricing"] is None
+    assert meta["agent_pricing_records"] == []
 
 
 def test_load_run_charges_cached_tokens_at_input_rate_without_cached_pricing(tmp_path):

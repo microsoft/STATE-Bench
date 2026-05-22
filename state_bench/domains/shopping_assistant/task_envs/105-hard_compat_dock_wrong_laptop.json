@@ -1,0 +1,104 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H103",
+      "name": "CreatorBook 15",
+      "category": "electronics",
+      "subcategory": "laptop",
+      "brand": "Northstar",
+      "price": 1299,
+      "rating": 4.8,
+      "review_count": 620,
+      "description": "CreatorBook 15 from Northstar.",
+      "specs": {
+        "weight_lb": 4.4,
+        "ram_gb": 32,
+        "battery_hours": 8
+      },
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 4,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H110",
+      "name": "ProBook USB-C Dock",
+      "category": "electronics",
+      "subcategory": "dock",
+      "brand": "Northstar",
+      "price": 129,
+      "rating": 4.3,
+      "review_count": 430,
+      "description": "ProBook USB-C Dock from Northstar. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "ProBook Laptop 13",
+        "ProBook Laptop 15"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H111",
+      "name": "7-Port USB-C Hub",
+      "category": "electronics",
+      "subcategory": "hub",
+      "brand": "PortPro",
+      "price": 49,
+      "rating": 4.2,
+      "review_count": 1550,
+      "description": "7-Port USB-C Hub from PortPro. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "SlimBook Air 13",
+        "ProBook Laptop 13",
+        "TechPhone Pro 16"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_004",
+      "name": "Taylor Kim",
+      "email": "taylor.kim@example.com",
+      "tier": "standard",
+      "is_first_time": false,
+      "loyalty_points": 2200,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_004",
+      "customer_id": "shop_004",
+      "item_ids": [],
+      "subtotal": 0,
+      "discount_amount": 0,
+      "gift_wrap_fee": 0,
+      "total": 0,
+      "applied_promo_codes": [],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": null,
+      "shipping_cost": 0
+    }
+  ],
+  "cart_items": [],
+  "promotions": []
+}

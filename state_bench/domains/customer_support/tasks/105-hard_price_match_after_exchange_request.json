@@ -1,0 +1,75 @@
+{
+  "task_id": "105-hard_price_match_after_exchange_request",
+  "task_summary": "Customer asks to exchange a coffee maker only because its price dropped. Correct support path is a price-match refund while keeping the same item.",
+  "task_type": "price_match_refund",
+  "task_requirements": [
+    {
+      "evidence": "conversation",
+      "id": "hard_price_match_after_exchange_request_price_match_only",
+      "kind": "must",
+      "requirement": "Agent must present the direct $20 price-match adjustment as the workflow that keeps the coffee maker/order active."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_after_exchange_request_lookup",
+      "kind": "must",
+      "requirement": "Agent must verify from system records that the purchased item has current price $129 before issuing the refund."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_after_exchange_request_no_cancel_return",
+      "kind": "must_not",
+      "requirement": "Agent must not cancel, return, or exchange the item."
+    },
+    {
+      "evidence": "conversation",
+      "id": "hard_price_match_after_exchange_request_extra",
+      "kind": "must",
+      "requirement": "Agent must explain that exchanging/rebuying is unnecessary because the price-match refund directly solves the issue."
+    },
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "hard_price_match_after_exchange_request_hard3_no_return_rebuy",
+      "kind": "must_not",
+      "requirement": "Agent must not recommend or route the customer toward return-and-rebuy or exchange-and-rebuy once the eligible direct price-match path is available."
+    }
+  ],
+  "user_id": "cust_003",
+  "now": "2026-07-08T10:00:00",
+  "opening_message": "Can I exchange the coffee maker in ORD-7205 and buy it again at the cheaper price? It is $20 less today.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7205",
+      "item: BrewPerfect Coffee Maker",
+      "current_price: $129"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID when asked.",
+      "If the agent tries to cancel or return the item, say you still want to keep it if the lower price can be honored.",
+      "Ask them to verify the product price rather than guessing.",
+      "Accept the price-match refund once previewed.",
+      "Do not accept return-and-rebuy or exchange language once the agent can check the price-match policy; only accept direct price adjustment."
+    ],
+    "unknown_info": [
+      "whether cancellation is needed",
+      "price-match amount"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7205. Customer asks to exchange a coffee maker only because its price dropped. Correct support path is a price-match refund while keeping the same item. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10206",
+      "field": "refund_amount",
+      "expected_value": 20
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10206",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/105-hard_price_match_after_exchange_request.json"
+}

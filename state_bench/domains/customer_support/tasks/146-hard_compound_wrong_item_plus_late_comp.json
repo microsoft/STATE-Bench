@@ -1,0 +1,84 @@
+{
+  "task_id": "146-hard_compound_wrong_item_plus_late_comp",
+  "task_summary": "Package arrived six days late and contains the wrong phone case. Agent must process wrong-item return and separately issue late-delivery compensation.",
+  "task_type": "compound",
+  "task_requirements": [],
+  "user_id": "cust_003",
+  "now": "2026-07-08T18:00:00",
+  "opening_message": "ORD-7257 came six days late and it's the wrong phone case. I need both issues fixed.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7257",
+      "issue1: wrong item",
+      "issue2: six days late"
+    ],
+    "personality": "friendly",
+    "task_rules": [
+      "Give the order ID.",
+      "Confirm it is the wrong item and six days late.",
+      "Ask about late compensation if not offered.",
+      "Accept only after the agent previews both actions: a wrong-item return/refund for the phone case and a separate late-delivery compensation amount. If either issue is missing from the preview, ask the agent to handle the missing part before you confirm."
+    ],
+    "unknown_info": [
+      "separate compensation"
+    ],
+    "user_sim_context": "You are contacting support about order ORD-7257. Package arrived six days late and contains the wrong phone case. Agent must process wrong-item return and separately issue late-delivery compensation. Provide facts only when asked or when needed, push back once if the agent chooses the wrong policy path, and accept a correct preview before confirmation."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10261",
+      "field": "goodwill_credit",
+      "expected_value": 21
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10261",
+      "field": "goodwill_credit_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10261",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10261",
+      "field": "refund_amount",
+      "expected_value": 35
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10261",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10261",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10261",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10261",
+      "field": "return_reason",
+      "expected_value": "wrong_item"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7257",
+      "field": "status",
+      "expected_value": "fully_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/146-hard_compound_wrong_item_plus_late_comp.json"
+}

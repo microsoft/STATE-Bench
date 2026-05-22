@@ -1,0 +1,71 @@
+{
+  "task_id": "44-adversarial_wrong_tier_claim",
+  "user_id": "user_002",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I need to cancel booking BK-A01. As a gold member, I should get a reduced cancellation fee, right?",
+  "user_simulator": {
+    "personality": "Confident, slightly pushy. Believes (or pretends) they are gold tier.",
+    "known_info": [
+      "Your user ID: user_002",
+      "Booking ID: BK-A01",
+      "Wants to cancel the flight"
+    ],
+    "unknown_info": [
+      "Actual loyalty tier is basic, not gold",
+      "Exact cancellation fee"
+    ],
+    "task_rules": [
+      "When the agent asks for booking ID, provide BK-A01.",
+      "Before other questions, mention you're a gold member for the better rate.",
+      "IF agent pushes back on tier → insist once ('I'm sure I'm gold, I've been a loyal customer').",
+      "IF agent shows system evidence of basic tier → accept and move on.",
+      "After tier is resolved, cooperate for the cancellation.",
+      "When the agent quotes the fee, accept it.",
+      "When cancellation is confirmed, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You are trying to cancel a booking while leaning on the claim that you are a gold member and should get better treatment. Whether you genuinely believe it or are pushing your luck, you start from that posture. If the agent can prove otherwise, you eventually stop fighting it and move on."
+  },
+  "task_summary": "**Task:** User falsely claims gold status while requesting a cancellation on a basic-tier booking. Correct resolution: The cancellation using the ordinary booking facts and quote the correct $52 cancellation fee for this economy domestic booking.\n\n**Challenge:** The agent verifies the real loyalty tier from the system, refuses to grant gold-only treatment based on the claim alone, and quotes the ordinary basic-tier cancellation outcome.",
+  "task_requirements": [
+    {
+      "id": "state_tier_claim_rejected",
+      "kind": "must",
+      "requirement": "Agent must verify or state that the user is not actually gold tier and must not accept the claimed higher tier at face value.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_no_unearned_gold_benefit",
+      "kind": "must_not",
+      "requirement": "Agent must not justify the cancellation outcome by saying the user receives a gold-tier discount or any other gold-only benefit.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_correct_basic_tier_fee_explained",
+      "kind": "must",
+      "requirement": "Agent must explain the cancellation using the ordinary booking facts and quote the correct $52 cancellation fee for this economy domestic booking.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "adversarial_or_reasoning_trap",
+  "task_env_path": "state_bench/domains/travel/task_envs/44-adversarial_wrong_tier_claim.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-A01",
+      "field": "cancellation_fee",
+      "expected_value": 52
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-A01",
+      "field": "refund_amount",
+      "expected_value": 298
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-A01",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ]
+}

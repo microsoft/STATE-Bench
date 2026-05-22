@@ -1,0 +1,83 @@
+{
+  "task_id": "62-challenge_delay_waiver_fare_diff",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "My flight BK-1000 to Paris is delayed over 4 hours! I want a free change to the evening flight. My user ID is user_005.",
+  "user_simulator": {
+    "personality": "Expects completely free switch.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Booking: BK-1000 (JFK→CDG, delayed 4+ hours)"
+    ],
+    "unknown_info": [
+      "That fare diff still applies"
+    ],
+    "task_rules": [
+      "Open with: flight delayed 4+ hours, want free change.",
+      "If agent says $200 fare diff applies, say 'I thought the delay made it completely free?'",
+      "If agent explains fee vs fare diff, accept: 'OK, $200 for the fare difference. Go ahead.'",
+      "If agent says $0 total, don't question it.",
+      "After change, end with [TASK_DONE].",
+      "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
+      "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",
+      "Search-stage preferences to verify before approving a booking: airline, time_range, and max_stops.",
+      "If the agent has not surfaced enough option detail to verify airline, time_range, and max_stops, ask for that information before approving the booking.",
+      "Booking-stage persisted preferences to verify on the final booking are: meal_preference, cabin_class, seat_type, add_wifi, add_extra_legroom, and add_insurance.",
+      "For a new booking, including a replacement after canceling an existing booking, if the agent asks about one of those booking-stage preferences, answer using your profile preferences.",
+      "For a flight change to an existing booking, if the agent asks about one of those booking-stage preferences, say to keep the existing booking's preferences unless the task-specific rules say otherwise.",
+      "If the agent creates or changes a booking with any wrong booking-stage preference, correct exactly one preference at a time in this order: cabin_class, seat_type, meal_preference, add_wifi, add_extra_legroom, add_insurance.",
+      "Do not try to verify raw flight_id. Budget remains a hard constraint.",
+      "Do not end with [TASK_DONE] for a booking creation or flight change until the final booking has the expected booking-stage preferences for that operation: profile preferences for new bookings, existing persisted preferences for changes."
+    ],
+    "user_sim_context": "A long delay has made you assume the airline should move you for free onto another option. You are approaching the conversation with that sense of entitlement rather than as a neutral question. If there is still a catch, you need the agent to explain it clearly."
+  },
+  "task_summary": "**Task:** User’s flight is delayed more than four hours and assumes that makes the replacement completely free. Correct resolution: A 250-minute delay waives the change fee but does not waive the fare difference for a more expensive replacement flight.\n\n**Challenge:** The agent separates the waived change fee from the still-applicable fare difference and gives the correct $200 total to switch to the evening flight.",
+  "task_requirements": [
+    {
+      "id": "delay_waives_fee_not_fare_diff",
+      "kind": "must",
+      "requirement": "Agent must explain that a 250-minute delay waives the change fee but does not waive the fare difference for a more expensive replacement flight.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "correct_delay_change_total",
+      "kind": "must",
+      "requirement": "Agent must quote the correct total additional cost as $200 for switching to the evening flight.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "flight_change_policy",
+  "task_env_path": "state_bench/domains/travel/task_envs/62-challenge_delay_waiver_fare_diff.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "change_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "delay_compensation",
+      "expected_value": "full"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "fare_difference",
+      "expected_value": 200
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "flight_id",
+      "expected_value": "DL101"
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "price_paid",
+      "expected_value": 1000
+    }
+  ]
+}

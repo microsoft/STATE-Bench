@@ -1,0 +1,90 @@
+{
+  "task_id": "97-ambiguous_blue_cart_reference",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Hi — can you remove the blue one from my cart please?",
+  "user_simulator": {
+    "personality": "Casual, slightly vague. Doesn't realize the reference is ambiguous until pointed out.",
+    "user_sim_context": "You have a cart with a blue ProBook laptop and a blue PixelPhone. You want to keep the laptop and remove the phone. You will say 'remove the blue one' without realizing both items are blue. If the agent asks which blue item you mean (naming both explicitly), you'll clarify: the phone, and after they remove the phone you will simply confirm the cart is correct. If the agent silently deletes the laptop (wrong one), push back: 'hey I meant the phone, not the laptop — put the laptop back please.' If the agent deletes the phone (right one) without asking, push back anyway: 'you should've asked which — I could have meant either.' Accept the phone-removed outcome but note the lack of clarification.",
+    "known_info": [
+      "You have a cart with a blue laptop and a blue phone.",
+      "You want to remove the phone and keep the laptop.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "That 'the blue one' is ambiguous from the agent's POV.",
+      "The exact colors' labels (Midnight Blue vs Ocean Blue)."
+    ],
+    "task_rules": [
+      "Opening: as stated — 'remove the blue one from my cart please'. Do NOT clarify which upfront.",
+      "If the agent asks which blue item you mean AND names both the ProBook Laptop AND the PixelPhone 9 clearly (product names, not just SKUs), reply: 'oh right — the phone, please.' Wait for the agent to remove SP-2004 and confirm. Then confirm the subtotal $999 is correct and [TASK_DONE]. Do NOT criticize the agent for failing to clarify in this path, because they did clarify before removing anything.",
+      "If the agent silently removes an item WITHOUT asking, check: if they removed the phone (SP-2004), push back: 'you got lucky — but you should've asked which blue item. Both are blue.' Accept and [TASK_DONE] — agent failed on clarification but ended up right.",
+      "If the agent silently removed the laptop (SP-1002), push back: 'that's wrong — I meant the phone. Put the laptop back and remove the phone instead.' If the agent fixes it, accept and end — agent failed on silent wrong pick.",
+      "If the agent removes BOTH blue items, push back: 'wait, I only wanted one gone — put the laptop back please.' If they fix it, accept. If not, end — failed.",
+      "If the agent asks by SKU or ID only ('remove SP-1002 or SP-2004?'), push back once: 'sorry, what are those? Can you use product names?'. If they rephrase with names, proceed. If they insist on SKUs, answer as best you can and end.",
+      "If the agent asks a clarifying question AND pre-emptively removes one ('I've removed the laptop — let me know if you meant the phone instead'), push back: 'wait, don't remove anything until I confirm. Can you put it back and ask me first?'. If they comply, proceed. If not, accept and end — failed.",
+      "Do NOT bring up promos, loyalty, shipping, or gift wrap.",
+      "Keep replies short — 1-2 sentences.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A Standard-tier returning customer (shop_004, Taylor Kim) has a seeded cart: 1x SP-1002 ProBook Laptop in Midnight Blue ($999) + 1x SP-2004 PixelPhone 9 in Ocean Blue ($499). Both blue. Customer says 'remove the blue one' — ambiguous. Agent must clarify (naming both products), customer says phone, agent removes SP-2004. Final: SP-1002 qty=1 variant='blue', subtotal $999, total $999.\n\n**Challenge:** Adjective ambiguity with multiple matches. Primary failure: silent pick (wrong 50% of the time). Secondary: removing both. Tertiary: pre-emptive delete with parallel question. Distinct from T22 (name-family), T28/T59 (pronoun coreference), T62 (variant OOS).",
+  "task_requirements": [
+    {
+      "id": "identified_ambiguity",
+      "kind": "must",
+      "requirement": "Agent recognized that 'the blue one' matches TWO cart items (laptop and phone) and asked the customer to clarify which one to remove. A silent pick of either item fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "clarification_named_both_products",
+      "kind": "must",
+      "requirement": "Agent's clarifying question named BOTH candidate products in customer-friendly terms (e.g., 'ProBook Laptop' and 'PixelPhone 9', not just 'SP-1002' and 'SP-2004'). Asking by SKU alone fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "removed_correct_item_after_clarification",
+      "kind": "must",
+      "requirement": "After customer clarified 'the phone', agent called remove_from_cart for SP-2004 (the phone), NOT SP-1002 (the laptop). Final cart must contain only SP-1002.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "did_not_preemptively_delete",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call remove_from_cart BEFORE receiving customer's clarification on which blue item. The first remove_from_cart call must occur AFTER the customer explicitly names laptop-or-phone.",
+      "evidence": "tool_calls_or_conversation"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "item_ids",
+      "expected_value": [
+        "CI-A1"
+      ]
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 999
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 999
+    }
+  ],
+  "task_type": "product_search_discovery",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/97-ambiguous_blue_cart_reference.json"
+}

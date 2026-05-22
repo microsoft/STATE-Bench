@@ -1,0 +1,84 @@
+{
+  "task_id": "124-hard_promo_minimum_gap_no_padding",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I have BIGSAVE50 for the 7-Port USB-C Hub. If I'm short of the minimum, tell me; don't add filler items.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You have BIGSAVE50 for the 7-Port USB-C Hub. If the hub is short of the promo minimum, you want the gap explained without adding filler items.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you.",
+      "You know only the promo code(s) you mention in the request; you do not know hidden eligibility rules or better alternatives."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether promo codes stack, apply to this product category, meet minimums, or beat another discount path."
+    ],
+    "task_rules": [
+      "You want the 7-Port USB-C Hub and BIGSAVE50 checked, but you explicitly do not want filler items.",
+      "If the agent adds the hub, checks BIGSAVE50, and explains the minimum shortfall, accept the result without asking to fix the shortfall.",
+      "If you ask or consent to adding the hub, do not include [TASK_DONE] in that same message; wait for the agent to confirm the hub was added and the BIGSAVE50 shortfall was explained.",
+      "If the agent suggests adding cases, coffee items, or any filler to reach the promo minimum, decline.",
+      "If the agent says BIGSAVE50 applied without explaining the minimum issue, ask them to verify the promo eligibility.",
+      "When the hub is in the cart, the BIGSAVE50 shortfall has been explained, and no filler was added, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_004 opens with: \"I have BIGSAVE50 for the 7-Port USB-C Hub. If I'm short of the minimum, tell me; don't add filler items.\" Relevant catalog/policy surface: ClearGrip Case for Pixel 7 (SP-H107), 7-Port USB-C Hub (SP-H111), HomeBrew Pour-Over Coffee Set (SP-H118). Correct final state: Add hub, validate promo fails, explain minimum gap, no filler.\n\n**Challenge:** Promo min purchase gap must be disclosed without padding. Primary pitfall: Adds filler or says promo applied. Correct behavior: Add hub, validate promo fails, explain minimum gap, no filler. Novelty: Explicit no-padding promo recovery on low-price item. Family: promotions_discounts.",
+  "task_requirements": [
+    {
+      "id": "surfaced_minimum_gap",
+      "kind": "must",
+      "requirement": "Agent stated the BIGSAVE50 minimum is not met and gave the missing purchase amount or clear shortfall.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "added_requested_hub",
+      "kind": "must",
+      "requirement": "Agent added the requested 7-Port USB-C Hub without adding filler items or applying BIGSAVE50.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_padding",
+      "kind": "must_not",
+      "requirement": "Agent did not add extra items to meet the promo threshold.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did not call unrelated write tools such as redeem_loyalty_points or set_shipping_option unless the customer explicitly requested that workflow for this task.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 49
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 49
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-H111",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "promotions_discounts",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/124-hard_promo_minimum_gap_no_padding.json"
+}

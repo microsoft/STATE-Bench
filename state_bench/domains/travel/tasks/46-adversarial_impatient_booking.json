@@ -1,0 +1,90 @@
+{
+  "task_id": "46-adversarial_impatient_booking",
+  "user_id": "user_005",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Book me the afternoon JetBlue flight from JFK to Miami on June 22. Economy. Just do it.",
+  "user_simulator": {
+    "personality": "Very terse and impatient. Gives minimal responses. Annoyed by questions.",
+    "known_info": [
+      "Your user ID: user_005",
+      "Wants the afternoon JetBlue JFK → MIA flight on June 22",
+      "Economy class",
+      "Prefers B6 airline",
+      "If options are shown, the intended choice is the afternoon nonstop JetBlue flight B6100"
+    ],
+    "unknown_info": [
+      "Available flights and prices"
+    ],
+    "task_rules": [
+      "Give minimal answers. No pleasantries.",
+      "IF agent asks for meal preference → respond 'vegan' (one word).",
+      "IF agent asks for seat preference → respond 'aisle'.",
+      "IF agent asks multiple questions at once → answer only the first one, say 'just book it already'.",
+      "IF agent asks for name or account ID → give your account ID, nothing more.",
+      "IF agent shows options → pick the afternoon nonstop JetBlue option (B6100).",
+      "If the agent tries to book a morning flight or a non-JetBlue option, correct them and restate that you want the afternoon JetBlue flight only.",
+      "When the correct afternoon JetBlue booking is confirmed, respond with just 'fine' and [TASK_DONE]."
+    ],
+    "user_sim_context": "You want a very specific flight and are annoyed by anything that slows the booking down. You answer tersely, often one detail at a time, and behave like the obvious choice should already be enough. Even so, you still expect the final booking to match what you asked for."
+  },
+  "task_summary": "**Task:** An impatient traveler pushes the agent to book quickly and resists answering questions. Correct resolution: Agent must keep the booking anchored to the requested afternoon JetBlue JFK to Miami economy itinerary rather than drifting to another airline, time, or cabin just because the traveler is impatient.\n\n**Challenge:** The agent still anchors on the requested afternoon JetBlue economy flight and obtains enough booking details to complete the reservation correctly instead of guessing a different itinerary just to move faster.",
+  "task_requirements": [
+    {
+      "id": "state_requested_itinerary_preserved",
+      "kind": "must",
+      "requirement": "Agent must keep the booking anchored to the requested afternoon JetBlue JFK to Miami economy itinerary rather than drifting to another airline, time, or cabin just because the user is impatient.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_required_details_obtained_or_confirmed",
+      "kind": "must",
+      "requirement": "Agent must obtain or explicitly confirm enough booking-stage details from the user to complete the reservation instead of blindly booking with invented preferences.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "adversarial_or_reasoning_trap",
+  "task_env_path": "state_bench/domains/travel/task_envs/46-adversarial_impatient_booking.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "match_fields": {
+        "user_id": "user_005",
+        "flight_id": "B6100",
+        "status": "confirmed",
+        "payment_method": "credit_card",
+        "cash_amount": 270,
+        "points_used": 0,
+        "cabin_class": "economy",
+        "seat_type": "aisle",
+        "meal_preference": "vegan",
+        "add_wifi": true,
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "paid_checked_bags": 0
+      },
+      "expected_fields": {
+        "add_extra_legroom": false,
+        "add_insurance": false,
+        "add_wifi": true,
+        "booked_at": "2026-06-15T10:00:00",
+        "booking_id": "BK-0001",
+        "cabin_class": "economy",
+        "cancellation_fee": null,
+        "cash_amount": 270,
+        "change_fee": null,
+        "delay_compensation": null,
+        "fare_difference": null,
+        "flight_id": "B6100",
+        "meal_preference": "vegan",
+        "paid_checked_bags": 0,
+        "payment_method": "credit_card",
+        "points_used": 0,
+        "price_paid": 270,
+        "refund_amount": null,
+        "seat_type": "aisle",
+        "status": "confirmed",
+        "user_id": "user_005"
+      }
+    }
+  ]
+}

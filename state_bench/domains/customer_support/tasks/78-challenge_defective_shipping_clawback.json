@@ -1,0 +1,85 @@
+{
+  "task_id": "78-challenge_defective_shipping_clawback",
+  "task_summary": "**Task:** A Standard customer is returning a defective blender from a free-shipping order. The defect means there is no restocking fee, a free return label is required, and the full $89 item refund applies. Although the remaining order subtotal drops below the free-shipping threshold, defective/product-fault returns are exempt from the free-shipping clawback.\n\n**Challenge:** The trap is mixing up customer-fault threshold deductions with product-fault returns. Weak agents either use a refund-only write instead of processing the return, or incorrectly charge an $8 clawback that policy waives for defective items.",
+  "task_type": "return_item",
+  "task_requirements": [
+    {
+      "evidence": "conversation_or_tool_calls",
+      "id": "78_challenge_defective_shipping_clawback_agent_must_not_apply_shipping_clawback",
+      "kind": "must_not",
+      "requirement": "Agent must not apply or communicate an $8 free-shipping clawback for this defective return."
+    },
+    {
+      "evidence": "conversation",
+      "id": "78_challenge_defective_shipping_clawback_agent_must_explain_defective_exemption",
+      "kind": "must",
+      "requirement": "Agent must explain that the defective return receives a full item refund with no shipping or restocking deduction."
+    }
+  ],
+  "user_id": "cust_002",
+  "now": "2026-06-20T10:00:00",
+  "opening_message": "The blender from order ORD-7109 is defective — it won't turn on. I need a full refund.",
+  "user_simulator": {
+    "known_info": [
+      "order_id: ORD-7109",
+      "item: blender",
+      "reason: defective"
+    ],
+    "personality": "polite",
+    "task_rules": [
+      "Give order ID when asked.",
+      "Describe the defect: blender won't power on.",
+      "If any deductions mentioned, ask why (defective should be free).",
+      "Accept if agent explains that defective returns are exempt from return-shipping and free-shipping clawback deductions."
+    ],
+    "unknown_info": [
+      "whether shipping threshold deductions apply to defective returns"
+    ],
+    "user_sim_context": "The blender is defective, so you expect the return itself to be treated fully in your favor. You are not thinking about whether returning it could change the original order's shipping qualification. The agent should keep the product defect clear and avoid charging threshold deductions that the policy exempts for product-fault returns."
+  },
+  "state_requirements": [
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10134",
+      "field": "item_status",
+      "expected_value": "returned"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10134",
+      "field": "refund_amount",
+      "expected_value": 89
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10134",
+      "field": "refund_method",
+      "expected_value": "original_payment"
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10134",
+      "field": "restocking_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10134",
+      "field": "return_label_issued",
+      "expected_value": true
+    },
+    {
+      "entity_type": "order_items",
+      "record_key": "ITEM-10134",
+      "field": "return_reason",
+      "expected_value": "defective"
+    },
+    {
+      "entity_type": "orders",
+      "record_key": "ORD-7109",
+      "field": "status",
+      "expected_value": "partially_returned"
+    }
+  ],
+  "task_env_path": "state_bench/domains/customer_support/task_envs/78-challenge_defective_shipping_clawback.json"
+}

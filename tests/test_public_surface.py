@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from state_bench.domain import get_domain_config
-from state_bench.protocol import load_split_task_ids
+from state_bench.protocol import load_split_manifest, load_split_task_ids
 
 PUBLIC_SCRIPT_MODULES = [
     "state_bench.scripts.run_task",
@@ -46,12 +46,15 @@ def test_public_domain_data_counts_and_no_provenance_fields() -> None:
         root = Path("state_bench/domains") / domain
         tasks = sorted((root / "tasks").glob("*.json"))
         envs = sorted((root / "task_envs").glob("*.json"))
-        test_task_ids = load_split_task_ids(domain, "test")
+        manifest = load_split_manifest(domain)
+        train_task_ids = set(manifest["splits"]["train"])
+        test_task_ids = set(load_split_task_ids(domain, "test"))
+        all_task_ids = train_task_ids | test_task_ids
 
-        assert len(tasks) == 50, domain
-        assert len(envs) == 50, domain
-        assert {path.stem for path in tasks} == set(test_task_ids), domain
-        assert {path.stem for path in envs} == set(test_task_ids), domain
+        assert len(tasks) == 150, domain
+        assert len(envs) == 150, domain
+        assert {path.stem for path in tasks} == all_task_ids, domain
+        assert {path.stem for path in envs} == all_task_ids, domain
 
         for task_path in tasks:
             task = json.loads(task_path.read_text())

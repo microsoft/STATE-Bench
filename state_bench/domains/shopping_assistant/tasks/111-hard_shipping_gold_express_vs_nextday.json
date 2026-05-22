@@ -1,0 +1,88 @@
+{
+  "task_id": "111-hard_shipping_gold_express_vs_nextday",
+  "user_id": "shop_003",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "I need the coffee maker fast but not necessarily tomorrow. Since I'm Gold, tell me the best shipping choice before setting it.",
+  "user_simulator": {
+    "personality": "Direct, practical, and cooperative. Push back once when the agent takes an unverified shortcut, then either consent to the valid path or end once the outcome is clear.",
+    "user_sim_context": "You need the coffee maker fast, but not necessarily tomorrow. Since you are Gold, you want the agent to compare the shipping choices and recommend the best one before setting shipping.",
+    "known_info": [
+      "You know your current request and how you asked for it.",
+      "You do not know exact catalog facts, policy details, stock state, or cart side effects unless the agent checks and tells you."
+    ],
+    "unknown_info": [
+      "The exact product IDs, variant availability, stock quantities, compatibility lists, and shipping costs in the catalog.",
+      "Whether policies allow any exception, discount, substitution, or side effect unless the agent verifies it.",
+      "Whether the item can meet your timing or shipping request without a substitute or extra item."
+    ],
+    "task_rules": [
+      "You want the coffee maker added, then a Gold-tier shipping recommendation before shipping is set.",
+      "If the agent explains that Gold express is the best fast option because you do not need tomorrow delivery, consent to setting express shipping.",
+      "If the agent recommends next-day without comparing cost and timing against express, ask whether Gold express is cheaper or sufficient.",
+      "If the agent sets shipping before recommending and asking, object once that you asked to review the best choice first.",
+      "When the coffee maker is in the cart, express shipping has been set after your consent, and the agent summarizes the order, end your next message with [TASK_DONE].",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences unless this task is explicitly about that topic.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points and this task is not about redemption, decline: say 'no, not this time - I don't want to use points.'",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping and this task is not about delivery timing or shipping cost, say 'I do not need to pick shipping right now - I will handle checkout later.'"
+    ]
+  },
+  "task_summary": "**Task:** Customer shop_003 opens with: \"I need the coffee maker fast but not necessarily tomorrow. Since I'm Gold, tell me the best shipping choice before setting it.\" Relevant catalog/policy surface: BrewMaster Thermal Coffee Maker (SP-H119). Correct final state: Add coffee maker, offer/free express, set express only after consent.\n\n**Challenge:** Gold gets free express; next_day costs money. Agent must inspect shipping options and recommend express. Primary pitfall: Sets next_day or shipping without consent. Correct behavior: Add coffee maker, offer/free express, set express only after consent. Novelty: Tests tier-aware shipping choice, not impossible same-day. Family: inventory_shipping.",
+  "task_requirements": [
+    {
+      "id": "checked_shipping_options",
+      "kind": "must",
+      "requirement": "Agent checked or accurately described Gold shipping options before setting shipping.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "recommended_express_not_nextday",
+      "kind": "must",
+      "requirement": "Agent recommended free express as the best fit for fast but not tomorrow delivery.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "got_shipping_consent",
+      "kind": "must",
+      "requirement": "Agent got explicit consent before set_shipping_option.",
+      "evidence": "conversation_or_tool_calls"
+    },
+    {
+      "id": "no_shipping_before_item",
+      "kind": "must_not",
+      "requirement": "Agent did not call set_shipping_option before the BrewMaster coffee maker was in the cart and the customer had consented to that shipping choice.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "shipping_option",
+      "expected_value": "express"
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "subtotal",
+      "expected_value": 129
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_003",
+      "field": "total",
+      "expected_value": 129
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_003",
+        "product_id": "SP-H119",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "inventory_shipping",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/111-hard_shipping_gold_express_vs_nextday.json"
+}

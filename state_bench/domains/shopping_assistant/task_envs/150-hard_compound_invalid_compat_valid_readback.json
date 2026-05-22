@@ -1,0 +1,180 @@
+{
+  "products": [
+    {
+      "product_id": "SP-H103",
+      "name": "CreatorBook 15",
+      "category": "electronics",
+      "subcategory": "laptop",
+      "brand": "Northstar",
+      "price": 1299,
+      "rating": 4.8,
+      "review_count": 620,
+      "description": "CreatorBook 15 from Northstar.",
+      "specs": {
+        "weight_lb": 4.4,
+        "ram_gb": 32,
+        "battery_hours": 8
+      },
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 4,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H110",
+      "name": "ProBook USB-C Dock",
+      "category": "electronics",
+      "subcategory": "dock",
+      "brand": "Northstar",
+      "price": 129,
+      "rating": 4.3,
+      "review_count": 430,
+      "description": "ProBook USB-C Dock from Northstar. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "ProBook Laptop 13",
+        "ProBook Laptop 15"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H111",
+      "name": "7-Port USB-C Hub",
+      "category": "electronics",
+      "subcategory": "hub",
+      "brand": "PortPro",
+      "price": 49,
+      "rating": 4.2,
+      "review_count": 1550,
+      "description": "7-Port USB-C Hub from PortPro. Electronics accessory.",
+      "specs": {},
+      "compatible_with": [
+        "SlimBook Air 13",
+        "ProBook Laptop 13",
+        "TechPhone Pro 16"
+      ],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H121",
+      "name": "PosturePro Office Chair",
+      "category": "home_office",
+      "subcategory": "chair",
+      "brand": "WorkWell",
+      "price": 199,
+      "rating": 4.3,
+      "review_count": 840,
+      "description": "PosturePro Office Chair from WorkWell.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 4,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    },
+    {
+      "product_id": "SP-H122",
+      "name": "LumaDesk Task Lamp",
+      "category": "home_office",
+      "subcategory": "lamp",
+      "brand": "BrightNest",
+      "price": 69,
+      "rating": 4.6,
+      "review_count": 430,
+      "description": "LumaDesk Task Lamp from BrightNest.",
+      "specs": {},
+      "compatible_with": [],
+      "in_stock": true,
+      "stock_quantity": 50,
+      "shipping_days": 2,
+      "gift_wrap_available": true,
+      "backorder_available": false,
+      "previous_price": null,
+      "variants": null
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "shop_002",
+      "name": "Jordan Lee",
+      "email": "jordan.lee@example.com",
+      "tier": "standard",
+      "is_first_time": true,
+      "loyalty_points": 0,
+      "purchase_history": []
+    }
+  ],
+  "carts": [
+    {
+      "cart_id": "CART-shop_002",
+      "customer_id": "shop_002",
+      "item_ids": [
+        "CI-0001",
+        "CI-0002"
+      ],
+      "subtotal": 268,
+      "discount_amount": 20,
+      "gift_wrap_fee": 5,
+      "total": 259,
+      "applied_promo_codes": [
+        "OFFICE20"
+      ],
+      "loyalty_points_redeemed": 0,
+      "loyalty_discount": 0,
+      "shipping_option": "standard",
+      "shipping_cost": 6
+    }
+  ],
+  "cart_items": [
+    {
+      "cart_item_id": "CI-0001",
+      "customer_id": "shop_002",
+      "product_id": "SP-H121",
+      "quantity": 1,
+      "gift_wrap": false,
+      "variant_id": null
+    },
+    {
+      "cart_item_id": "CI-0002",
+      "customer_id": "shop_002",
+      "product_id": "SP-H122",
+      "quantity": 1,
+      "gift_wrap": true,
+      "variant_id": null
+    }
+  ],
+  "promotions": [
+    {
+      "promo_code": "OFFICE20",
+      "description": "$20 off home office over $250",
+      "discount_type": "fixed",
+      "discount_value": 20,
+      "min_purchase": 250,
+      "max_discount": 0,
+      "category_restriction": [
+        "home_office"
+      ],
+      "expiry_date": "2026-12-31T23:59:59",
+      "active": true
+    }
+  ]
+}

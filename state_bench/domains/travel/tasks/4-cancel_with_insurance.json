@@ -1,0 +1,94 @@
+{
+  "task_id": "4-cancel_with_insurance",
+  "user_id": "user_004",
+  "now": "2026-06-15T10:00:00",
+  "opening_message": "Hi, I'd like to cancel my flight from Denver to San Francisco.",
+  "user_simulator": {
+    "personality": "Cooperative and patient. Provides booking details when asked.",
+    "known_info": [
+      "Your user ID: user_004",
+      "Flight booking ID: BK-1000",
+      "Flight is economy class, domestic (DEN to SFO)",
+      "Has travel insurance on the booking",
+      "Price paid: $400",
+      "Hotel reservation ID: HR-0100",
+      "Hotel is in San Francisco, June 19-22, $180/night"
+    ],
+    "unknown_info": [
+      "Whether insurance actually waives the cancellation fee",
+      "Refund processing details",
+      "Hotel cancellation fee"
+    ],
+    "task_rules": [
+      "When the agent asks for your booking ID, provide only the flight booking ID.",
+      "Do NOT proactively mention the hotel. Only bring it up if the agent asks about other reservations.",
+      "When the agent mentions insurance coverage, acknowledge it.",
+      "When the agent says the flight fee is waived, confirm you want to proceed.",
+      "If the agent asks about other reservations on this trip, mention the hotel.",
+      "If the agent does NOT mention or ask about other reservations after cancelling the flight, simply end with [TASK_DONE]. The agent should have checked proactively.",
+      "When all brought-up cancellations are complete, end with [TASK_DONE]."
+    ],
+    "user_sim_context": "You want to cancel your Denver to San Francisco trip and assume the insurance on the booking should make that easier. You are focused on getting out of the flight and are not leading with every other reservation linked to the trip. If the agent asks the right questions, you will work through the rest of the travel plans too."
+  },
+  "task_summary": "**Task:** A traveler asks to cancel an insured domestic flight and has a linked hotel reservation that is not mentioned up front. Correct resolution: The flight cancellation fee is waived because the booking has insurance.\n\n**Challenge:** The agent recognizes the insurance waiver on the flight cancellation and still proactively looks for the hidden hotel reservation instead of stopping after the waived-fee flight cancel.",
+  "task_requirements": [
+    {
+      "id": "state_insurance_waiver_explained",
+      "kind": "must",
+      "requirement": "Agent must explain that the flight cancellation fee is waived because the booking has insurance.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_related_hotel_discovered",
+      "kind": "must",
+      "requirement": "Agent must proactively discover and mention hotel reservation HR-0100 for the same trip.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "state_not_ignore_hotel",
+      "kind": "must_not",
+      "requirement": "Agent must not stop after the insured flight cancellation as if no other trip reservation needs attention.",
+      "evidence": "conversation"
+    }
+  ],
+  "task_type": "cancellation",
+  "task_env_path": "state_bench/domains/travel/task_envs/4-cancel_with_insurance.json",
+  "state_requirements": [
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "refund_amount",
+      "expected_value": 400
+    },
+    {
+      "entity_type": "bookings",
+      "record_key": "BK-1000",
+      "field": "status",
+      "expected_value": "cancelled"
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "cancellation_fee",
+      "expected_value": 0
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "refund_amount",
+      "expected_value": 540
+    },
+    {
+      "entity_type": "hotels",
+      "record_key": "HR-0100",
+      "field": "status",
+      "expected_value": "cancelled"
+    }
+  ]
+}

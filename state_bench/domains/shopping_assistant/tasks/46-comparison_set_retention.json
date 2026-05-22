@@ -1,0 +1,95 @@
+{
+  "task_id": "46-comparison_set_retention",
+  "user_id": "shop_004",
+  "now": "2026-06-12T10:00:00",
+  "opening_message": "Can you compare laptops under $1000 for me? I'm trying to figure out what's best for my day-to-day.",
+  "user_simulator": {
+    "personality": "Deliberative, asks one question at a time. Trusts the agent to stay within the compared set.",
+    "user_sim_context": "You're comparing laptops under $1000. The agent will present 3 options. You'll ask comparative questions one at a time (lightest, best battery, which has 16GB), then pick based on being LIGHT. You expect the agent to keep the SAME 3 options consistent across all answers and not introduce new ones.",
+    "known_info": [
+      "You want a laptop under $1000.",
+      "You care about light weight, good battery, RAM — in that order.",
+      "You are a returning Standard-tier customer."
+    ],
+    "unknown_info": [
+      "The specific catalog options.",
+      "Which is lightest / best battery / 16GB."
+    ],
+    "task_rules": [
+      "Opening: 'compare laptops under $1000 for me'. No more specifics.",
+      "Turn 2: after agent lists 3 options, ask: 'which of these is the lightest?'. Do NOT ask for a new set.",
+      "Turn 3: after agent answers, ask: 'which has the best battery life?'. Must be answered from within the same set.",
+      "Turn 4: after agent answers, ask: 'which has 16GB RAM?'. Must be answered from within the same set (SP-1002 ProBook).",
+      "Turn 5: ask 'ok go with the SlimBook Air 13 — add it to my cart'. Agent should add SP-1001, not any other 'light' product.",
+      "If at any point the agent introduces a 4TH option not in the original list, push back: 'stick to the 3 you compared first'. Agent failed on set retention.",
+      "If the agent re-searches or shows a DIFFERENT 3-option set mid-conversation, push back: 'why did the options change?'. Agent failed on set retention.",
+      "If the agent forgets and asks you to restate which laptops were compared, just say 'you told me earlier — SlimBook, ProBook, SlateTab'. This counts against them but continue.",
+      "If the agent tries to re-recommend the ProBook when you pick SlimBook (e.g. 'but ProBook has 16GB, you should consider it'), reply: 'no, I want the SlimBook'. Agent must respect the choice.",
+      "After agent confirms SP-1001 added, reply: 'thanks!' then on next turn [TASK_DONE].",
+      "Do NOT volunteer specific specs. Do NOT ask about promos, loyalty, gift wrap, shipping proactively.",
+      "Keep replies short — one question per turn.",
+      "[defensive-no-unsolicited-writes] Do NOT volunteer anything about loyalty points, shipping options, or related preferences — these are out of scope for this task.",
+      "[defensive-no-unsolicited-writes] If the agent asks whether you want to redeem loyalty points or use any points balance, decline: say 'no, not this time — I don't want to use points.' Do NOT name a point amount.",
+      "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
+    ]
+  },
+  "task_summary": "**Task:** A returning Standard customer (shop_004) asks for a comparison of laptops under $1000. Correct 3-option set: SP-1001 SlimBook Air ($849, 2.6 lb, 14 hrs, 8GB), SP-1002 ProBook ($999, 2.9 lb, 12 hrs, 16GB), SP-1003 SlateTab ($749, 3.2 lb, 11 hrs, 8GB). Customer then asks comparative questions across turns (lightest / best battery / which has 16GB) and ultimately picks the 'light one' — SP-1001. Final cart: SP-1001 qty=1 no wrap, $849.\n\n**Challenge:** Multi-turn comparison set retention. Pitfall: agent re-searches at later turns, producing different 3-option sets; introduces a 4th option; forgets the set by turn 6 and asks customer to restate; answers 'which has 16GB' with an out-of-set product. Correct: hold the same 3 options across all comparative answers, respect the customer's final choice. Tests whether agent treats an earlier comparison as a committed reference set rather than re-querying each turn. Distinct from T41 (progressive requirements) — T46 is set retention with fixed options across a comparative Q&A.",
+  "task_requirements": [
+    {
+      "id": "presented_committed_set",
+      "kind": "must",
+      "requirement": "At turn 2, agent presented a specific comparison set (3-4 laptops under $1000 is acceptable). The set must be explicitly named — not a vague 'here are some options' with a dozen SKUs. Listing 5+ products fails (too many to compare meaningfully). Listing 0 or 1 fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "retained_set_across_turns",
+      "kind": "must",
+      "requirement": "Agent answered ALL 3 comparative questions (lightest / best battery / 16GB RAM) using ONLY products from the initial comparison set presented at turn 2. Introducing a NEW product mid-conversation that was not in the original set fails. Dropping a product from the set without notice fails. Asking the customer to restate the set fails.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "correct_comparative_answers",
+      "kind": "must",
+      "requirement": "Agent's answers to comparative questions were CORRECT within the set it presented. Lightest must be whichever has the lowest weight_lb in the set. Best battery must be highest battery_hours. 16GB RAM answer must only name products in the set with 16GB (SP-1002 if included). Wrong answers fail.",
+      "evidence": "conversation"
+    },
+    {
+      "id": "added_slimbook_on_light_cue",
+      "kind": "must",
+      "requirement": "Agent added exactly SP-1001 SlimBook Air 13 with quantity=1, gift_wrap=False, after the customer said 'go with the light one — the SlimBook'. The customer specifically named SlimBook — adding SP-1106 Chromebook (even if lighter) or SP-1002 fails.",
+      "evidence": "tool_calls"
+    },
+    {
+      "id": "no_unsolicited_new_writes",
+      "kind": "must_not",
+      "requirement": "Agent did NOT call set_shipping_option or redeem_loyalty_points. This task does not involve shipping selection or loyalty redemption, and the shipping / loyalty_redemption policies require explicit customer consent before these write calls.",
+      "evidence": "tool_calls"
+    }
+  ],
+  "state_requirements": [
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "subtotal",
+      "expected_value": 849
+    },
+    {
+      "entity_type": "carts",
+      "record_key": "CART-shop_004",
+      "field": "total",
+      "expected_value": 849
+    },
+    {
+      "entity_type": "cart_items",
+      "match_fields": {
+        "customer_id": "shop_004",
+        "product_id": "SP-1001",
+        "gift_wrap": false,
+        "quantity": 1
+      },
+      "expected_fields": {}
+    }
+  ],
+  "task_type": "comparison_recommendation",
+  "task_env_path": "state_bench/domains/shopping_assistant/task_envs/46-comparison_set_retention.json"
+}
