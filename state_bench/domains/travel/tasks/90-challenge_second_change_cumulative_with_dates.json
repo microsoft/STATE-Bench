@@ -19,7 +19,7 @@
     "task_rules": [
       "Open with: already changed BK-1000 once, need to change again to June 28.",
       "When agent quotes fee, ask: 'So counting the first change, how much have I paid in fees total?'",
-      "If agent says cumulative is $225, say: 'Ouch. Go ahead anyway.'",
+      "If agent says cumulative is $225, say: 'That's steep. Go ahead anyway.'",
       "After change done, end with [TASK_DONE].",
       "For new booking creation, booking-stage preferences should match your profile preferences unless task-specific rules say otherwise.",
       "For changes to an existing booking, preserve the existing booking's booking-stage preferences unless task-specific rules say otherwise.",

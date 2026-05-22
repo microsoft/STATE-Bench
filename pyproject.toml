@@ -1,6 +1,6 @@
 [project]
 name = "state-bench"
-version = "0.5.0"
+version = "0.5.1"
 description = "STATE-Bench: multi-domain benchmark for evaluating procedural memory in AI agents"
 readme = "README.md"
 requires-python = ">=3.12"
