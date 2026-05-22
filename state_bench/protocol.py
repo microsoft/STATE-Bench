@@ -135,8 +135,15 @@ def load_split_manifest(domain: str, split_version: str = "train_test") -> dict[
 def load_split_task_ids(domain: str, split: str, split_version: str = "train_test") -> list[str]:
     path = DOMAINS_DIR / domain / "splits" / f"{split_version}.json"
     data = load_split_manifest(domain, split_version)
+    splits = data["splits"]
+    if split == "all":
+        seen: dict[str, None] = {}
+        for split_ids in splits.values():
+            for task_id in split_ids:
+                seen.setdefault(str(task_id), None)
+        return list(seen)
     try:
-        task_ids = data["splits"][split]
+        task_ids = splits[split]
     except KeyError as exc:
         raise ValueError(f"Split {split!r} not found in {path}") from exc
     return [str(task_id) for task_id in task_ids]

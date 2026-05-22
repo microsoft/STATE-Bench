@@ -224,9 +224,9 @@ def main() -> None:
     parser.add_argument(
         "--split",
         type=str,
-        default="test",
-        choices=["test"],
-        help=argparse.SUPPRESS,
+        default="all",
+        choices=["all", "test"],
+        help="Task split to run (default: all)",
     )
     parser.add_argument("--output-dir", type=str, default=None, help="Output directory (default: outputs/<domain>)")
     parser.add_argument("--num-runs", type=int, default=1, help="Number of runs (default: 1)")
@@ -325,7 +325,7 @@ def main() -> None:
         parser.error("--num-workers must be >= 1")
     if args.retrieve_learnings_top_k < 1:
         parser.error("--retrieve-learnings-top-k must be >= 1")
-    if args.tasks and args.split != "test":
+    if args.tasks and args.split != "all":
         parser.error("--tasks and --split are mutually exclusive")
     try:
         _validate_agent_client_args(args, sys.argv[1:])

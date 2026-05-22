@@ -1010,9 +1010,9 @@ def main():
     parser.add_argument(
         "--split",
         type=str,
-        default="test",
-        choices=["test"],
-        help=argparse.SUPPRESS,
+        default="all",
+        choices=["all", "test"],
+        help="Task split to score against (default: all)",
     )
     parser.add_argument(
         "--ignore-missing-runs", action="store_true", help="Allow incomplete split coverage for local analysis"
