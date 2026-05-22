@@ -28,41 +28,69 @@ body {
   line-height: 1.5;
 }
 
+.leaderboard-shell {
+  min-height: 100vh;
+  background: #f7f9fc;
+}
+
 button,
 a {
   font: inherit;
 }
 
-.hero {
+.compact-hero {
   background: var(--brand-navy);
   color: #ffffff;
-  padding: 34px 24px 40px;
+  padding: 18px 24px;
 }
 
-.hero-inner {
-  max-width: 1180px;
+.compact-hero-inner {
+  align-items: center;
+  display: flex;
+  gap: 28px;
+  justify-content: space-between;
   margin: 0 auto;
+  max-width: 1180px;
 }
 
-h1 {
-  margin: 0;
+.compact-brand {
   color: var(--brand-cyan);
-  font-size: clamp(38px, 4.4vw, 56px);
+  font-size: 30px;
   font-weight: 650;
-  line-height: 1;
+  line-height: 1.05;
 }
 
-.hero-label {
-  margin: 10px 0 0;
-  color: #ffffff;
-  font-size: clamp(20px, 2vw, 28px);
+.compact-subtitle {
+  color: #dbeafe;
+  font-size: 16px;
   font-weight: 500;
-  letter-spacing: 0;
+  margin-top: 3px;
+}
+
+.mini-nav {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+
+.mini-nav a {
+  border-radius: 4px;
+  color: #eaf4ff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 10px;
+  text-decoration: none;
+}
+
+.mini-nav a.active,
+.mini-nav a:hover {
+  background: rgba(80, 230, 255, 0.14);
+  color: var(--brand-cyan);
 }
 
 .page-shell {
   max-width: 1228px;
-  margin: -18px auto 64px;
+  margin: 24px auto 64px;
   padding: 0 24px;
 }
 
@@ -70,7 +98,7 @@ h1 {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
-  box-shadow: 0 12px 28px rgba(23, 32, 51, 0.08);
+  box-shadow: 0 8px 24px rgba(36, 58, 94, 0.08);
   overflow: hidden;
 }
 
@@ -88,6 +116,7 @@ h1 {
 .track-row {
   display: flex;
   align-items: center;
+  background: #f9fbfe;
   justify-content: space-between;
   gap: 24px;
   padding: 0 24px;
@@ -162,9 +191,9 @@ h1 {
 }
 
 .leaderboard-table th {
-  background: #fbfcfe;
+  background: #eef5fb;
   border-bottom: 1px solid var(--border);
-  color: var(--muted);
+  color: #52647b;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -222,6 +251,10 @@ h1 {
 
 .leaderboard-table tbody tr:hover {
   background: #fbfdff;
+}
+
+.leaderboard-table tbody tr:nth-child(even) {
+  background: #fcfdff;
 }
 
 .rank-col,
@@ -356,12 +389,18 @@ h1 {
 }
 
 @media (max-width: 720px) {
-  .hero {
-    padding: 32px 18px 42px;
-  }
-
   .page-shell {
     padding: 0 14px;
+  }
+
+  .compact-hero-inner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .mini-nav {
+    flex-wrap: wrap;
   }
 
   .track-row {
