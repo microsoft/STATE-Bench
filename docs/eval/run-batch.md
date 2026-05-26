@@ -4,14 +4,14 @@
 
 ## Which flags are required for my path?
 
-The exact required flags depend on your agent path and whether you are running the Memory Track.
+The exact required flags depend on your agent path and whether you are running the Agent Learning Track.
 
 | Path | `--agent-class` | `--agent-client-class` | `--retrieve-learnings-top-k` |
 | --- | --- | --- | --- |
 | Main Track, OOTB (StateBenchAgent on Azure AI Foundry/OpenAI) | omitted | omitted | n/a |
 | Main Track, custom client + agent | required (your `BaseAgent` subclass) | required (your `BaseLLMClient` subclass) | n/a |
-| Memory Track, OOTB | required (your `StateBenchAgent` subclass) | omitted | `3` (official) |
-| Memory Track, custom | required (your `BaseAgent` subclass) | required (your `BaseLLMClient` subclass) | `3` (official) |
+| Agent Learning Track, OOTB | required (your `StateBenchAgent` subclass) | omitted | `3` (official) |
+| Agent Learning Track, custom | required (your `BaseAgent` subclass) | required (your `BaseLLMClient` subclass) | `3` (official) |
 
 > Passing `--agent-client-class` without `--agent-class` is rejected. Passing `--agent-class` without `--agent-client-class` uses the built-in Azure AI Foundry/OpenAI client and requires a `StateBenchAgent` subclass.
 
@@ -38,7 +38,7 @@ Add `--agent-class`, `--agent-client-class`, and `--retrieve-learnings-top-k` pe
 - `--agent-model-name` — **Required.** Model name reported in trajectories and the submitted `metrics.json` (e.g., `gpt-5.1`, `claude-sonnet-4.5`).
 - `--agent-model-reasoning-level` — Reasoning level reported in trajectories and `metrics.json` when the agent model uses one (e.g., `medium`). Used to group results on the leaderboard.
 - `--num-runs` — Number of runs per task. Set to `5` for official submissions.
-- `--retrieve-learnings-top-k` — Benchmark-fixed maximum number of learnings returned by `retrieve_learnings()`. Set to `3` for official submissions. Memory Track only.
+- `--retrieve-learnings-top-k` — Benchmark-fixed maximum number of learnings returned by `retrieve_learnings()`. Set to `3` for official submissions. Agent Learning Track only.
 - `--num-workers` — Number of benchmark tasks to run in parallel. Tune for your provider rate limits.
 - `--output-dir` — Directory where scored trajectories are written.
 
