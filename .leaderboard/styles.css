@@ -60,22 +60,6 @@ a {
   line-height: 1.05;
 }
 
-.compact-brand-wrap {
-  align-items: center;
-  display: inline-flex;
-  gap: 12px;
-}
-
-.hero-cup {
-  color: #b7f4ff;
-  flex: 0 0 auto;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.8;
-  fill: none;
-}
-
 .mini-nav {
   align-items: center;
   display: flex;
