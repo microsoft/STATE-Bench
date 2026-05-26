@@ -2,7 +2,7 @@
 
 Use the **Main Track** to evaluate an agent or model on STATE-Bench's provided enterprise benchmark tasks. This is the default benchmark path.
 
-If you want to benchmark an agentic memory method, use the [Memory Track](MEMORY_TRACK.md) instead.
+If you want to benchmark agentic memory, skills, or prompt optimization, use the [Agent Learning Track](AGENT_LEARNING_TRACK.md) instead.
 
 ## 1. Install
 

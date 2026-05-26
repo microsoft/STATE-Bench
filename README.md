@@ -1,4 +1,6 @@
-# STATE-Bench
+<p align="center">
+  <img src="assets/state-bench-banner.svg" alt="STATE-Bench: Benchmark For Enterprise Workflows" width="100%" />
+</p>
 
 <p align="center">
   <a href="https://microsoft.github.io/STATE-Bench/leaderboard/"><img src="https://img.shields.io/badge/Leaderboard-Live-0078D4?style=for-the-badge" alt="Leaderboard" /></a>
@@ -10,10 +12,10 @@
 </p>
 
 <p align="center">
-  <a href="RUN_BENCHMARK.md">Main Track</a> &nbsp;·&nbsp; <a href="MEMORY_TRACK.md">Memory Track</a>
+  <a href="RUN_BENCHMARK.md">Main Track</a> &nbsp;·&nbsp; <a href="AGENT_LEARNING_TRACK.md">Agent Learning Track</a>
 </p>
 
-STATE-Bench evaluates AI agents on realistic, multi-turn enterprise tasks across **travel**, **customer support**, and **shopping assistant** domains.
+STATE-Bench evaluates AI agents on realistic, multi-step enterprise workflows across three domains: **travel**, **customer support**, and **shopping assistant**.
 
 Each task gives the agent a task-local sandbox database, domain-specific tools, and a simulated user. To pass a task, the agent must do multi-step reasoning by gathering the right information with domain tools, applying the correct policy, taking actions to update the database to the right final state when needed, and following the required procedure in conversation.
 
@@ -34,9 +36,9 @@ Start with the track that matches what you want to evaluate. Each track guide li
 | Goal | Start here |
 | --- | --- |
 | Evaluate an agent or model directly on the provided enterprise benchmark tasks | **[Main Track](RUN_BENCHMARK.md)** |
-| Evaluate agentic memory | **[Memory Track](MEMORY_TRACK.md)** |
+| Evaluate agentic memory, skills, or prompt optimization | **[Agent Learning Track](AGENT_LEARNING_TRACK.md)** |
 
-The **Main Track** is the default benchmark path. The **Memory Track** uses the same simulator, domain tools, judges, and metrics, but adds train trajectories and a retrieval hook for procedural learnings.
+The **Main Track** is the default benchmark path. The **Agent Learning Track** uses the same simulator, domain tools, judges, and metrics, but adds train trajectories and a retrieval hook for reusable learnings such as memories, skills, or prompt optimizations.
 
 <br/>
 

@@ -31,11 +31,11 @@ from typing import Any
 
 import yaml
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
-from openai import APIStatusError, AuthenticationError, OpenAI
+from openai import APIStatusError, AuthenticationError, BadRequestError, OpenAI
 from tenacity import (
     RetryCallState,
     retry,
-    retry_if_exception_type,
+    retry_if_exception,
     stop_after_attempt,
 )
 
@@ -104,10 +104,27 @@ def _wait_by_error_type(retry_state: RetryCallState) -> float:
     return float(CONFIG["retry"]["wait_seconds"])
 
 
+class UnsupportedReasoningEffortError(Exception):
+    """Raised when the deployment rejects reasoning.effort. Fatal, not retried."""
+
+
+def _is_retryable(exc: BaseException) -> bool:
+    if isinstance(exc, BadRequestError):
+        body = getattr(exc, "body", None)
+        param = body.get("param") if isinstance(body, dict) else None
+        code = body.get("code") if isinstance(body, dict) else None
+        if param == "reasoning.effort" and code == "unsupported_parameter":
+            raise UnsupportedReasoningEffortError(
+                "Agent deployment does not support reasoning.effort. Re-run without --agent-model-reasoning-level."
+            ) from exc
+        return False
+    return isinstance(exc, (APIStatusError, AuthenticationError, json.JSONDecodeError, ContentFilterError))
+
+
 _llm_retry = retry(
     stop=stop_after_attempt(CONFIG["retry"]["max_attempts"]),
     wait=_wait_by_error_type,
-    retry=retry_if_exception_type((APIStatusError, AuthenticationError, json.JSONDecodeError, ContentFilterError)),
+    retry=retry_if_exception(_is_retryable),
     before_sleep=_before_sleep_log,
     reraise=True,
 )

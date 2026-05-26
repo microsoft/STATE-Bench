@@ -66,6 +66,7 @@ third_party/
 migration_validation_outputs/
 
 # Temp Data and Outputs
+_RESULTS.md
 RESULTS*.md
 outputs*/
 logs/
