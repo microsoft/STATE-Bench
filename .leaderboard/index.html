@@ -42,6 +42,28 @@
           </div>
         </div>
 
+        <div class="domain-row" aria-label="Score domain">
+          <span class="domain-label">Score view</span>
+          <div class="domain-options">
+            <label class="domain-option">
+              <input type="radio" name="score-view" value="overall" checked />
+              <span>Overall</span>
+            </label>
+            <label class="domain-option">
+              <input type="radio" name="score-view" value="travel" />
+              <span>Travel</span>
+            </label>
+            <label class="domain-option">
+              <input type="radio" name="score-view" value="customerSupport" />
+              <span>Customer Support</span>
+            </label>
+            <label class="domain-option">
+              <input type="radio" name="score-view" value="shoppingAssistant" />
+              <span>Shopping</span>
+            </label>
+          </div>
+        </div>
+
         <div class="table-wrap">
           <table class="leaderboard-table">
             <thead>
@@ -52,7 +74,7 @@
                 <th scope="col"><button id="primary-score-sort" type="button" class="sort-button active" data-sort="selectedScore">pass@1 (%)</button></th>
                 <th scope="col"><button type="button" class="sort-button" data-sort="passAt5">pass^5 (%)</button></th>
                 <th scope="col"><button type="button" class="sort-button" data-sort="meanUxScore">UX (1-5)</button></th>
-                <th scope="col"><button type="button" class="sort-button" data-sort="costPerTask">Cost</button></th>
+                <th scope="col"><button type="button" class="sort-button" data-sort="costPerTask">Cost / Task</button></th>
                 <th scope="col"><button type="button" class="sort-button" data-sort="submissionDate">Submitted</button></th>
                 <th scope="col">Status</th>
               </tr>

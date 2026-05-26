@@ -1,7 +1,7 @@
 # STATE-Bench
 
 <p align="center">
-  <a href="https://microsoft.github.io/STATE-Bench/leaderboard/"><img src="https://img.shields.io/badge/Leaderboard-Open-0078D4?style=for-the-badge" alt="Leaderboard" /></a>
+  <a href="https://microsoft.github.io/STATE-Bench/leaderboard/"><img src="https://img.shields.io/badge/Leaderboard-Live-0078D4?style=for-the-badge" alt="Leaderboard" /></a>
 </p>
 
 <p align="center">

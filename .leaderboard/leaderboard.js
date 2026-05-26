@@ -2,260 +2,86 @@ const entries = [
   {
     id: "main-01",
     track: "main",
-    model: "GPT-5.1",
-    agent: "StateBenchAgent",
+    model: "GPT-5.4",
+    reasoningLabel: "high",
+    agent: "",
     organization: "OpenAI",
-    reasoningLevel: "medium",
-    submissionDate: "2026-05-20",
+    submissionDate: "2026-05-25",
     verificationStatus: "verified",
     metrics: {
-      overallPassAt1: 74.8,
-      overallPassAt1Std: 1.6,
-      passAt5: 43.1,
-      meanUxScore: 4.32,
-      costPerTask: 0.218,
-      domains: { travel: 73.9, customerSupport: 76.0, shoppingAssistant: 74.5 },
+      overallPassAt1: 55.7,
+      overallPassAt1Std: 1.9,
+      passAt5: 38.0,
+      meanUxScore: 3.49,
+      costPerTask: 0.0809,
+      domains: {
+        travel: { passAt1: 55.9, passAt1Std: 2.8, passAt5: 36.0, meanUxScore: 3.37, costPerTask: 0.1224 },
+        customerSupport: { passAt1: 57.6, passAt1Std: 2.5, passAt5: 38.0, meanUxScore: 3.49, costPerTask: 0.0716 },
+        shoppingAssistant: { passAt1: 53.6, passAt1Std: 2.1, passAt5: 40.0, meanUxScore: 3.61, costPerTask: 0.0486 },
+      },
     },
   },
   {
     id: "main-02",
     track: "main",
-    model: "Claude Sonnet 4.5",
-    agent: "Custom tool loop",
-    organization: "Anthropic",
-    submissionDate: "2026-05-18",
+    model: "Kimi-K2.6",
+    agent: "",
+    organization: "Moonshot AI",
+    submissionDate: "2026-05-25",
     verificationStatus: "verified",
     metrics: {
-      overallPassAt1: 72.2,
-      overallPassAt1Std: 1.8,
-      passAt5: 39.6,
-      meanUxScore: 4.27,
-      costPerTask: 0.174,
-      domains: { travel: 71.1, customerSupport: 73.7, shoppingAssistant: 71.8 },
+      overallPassAt1: 48.3,
+      overallPassAt1Std: 2.1,
+      passAt5: 29.3,
+      meanUxScore: 3.37,
+      costPerTask: 0.0496,
+      domains: {
+        travel: { passAt1: 51.9, passAt1Std: 4.0, passAt5: 26.0, meanUxScore: 3.22, costPerTask: 0.0871 },
+        customerSupport: { passAt1: 45.1, passAt1Std: 1.8, passAt5: 26.0, meanUxScore: 3.35, costPerTask: 0.0339 },
+        shoppingAssistant: { passAt1: 47.9, passAt1Std: 2.2, passAt5: 36.0, meanUxScore: 3.54, costPerTask: 0.0279 },
+      },
     },
   },
   {
     id: "main-03",
     track: "main",
-    model: "o4-mini",
-    agent: "StateBenchAgent",
-    organization: "OpenAI",
-    reasoningLevel: "high",
-    submissionDate: "2026-05-17",
+    model: "DeepSeek-v4-Pro",
+    agent: "",
+    organization: "DeepSeek",
+    submissionDate: "2026-05-25",
     verificationStatus: "verified",
     metrics: {
-      overallPassAt1: 68.5,
-      overallPassAt1Std: 2.1,
-      passAt5: 34.2,
-      meanUxScore: 4.09,
-      costPerTask: 0.086,
-      domains: { travel: 67.3, customerSupport: 69.9, shoppingAssistant: 68.2 },
+      overallPassAt1: 47.2,
+      overallPassAt1Std: 0.6,
+      passAt5: 25.3,
+      meanUxScore: 3.36,
+      costPerTask: undefined,
+      domains: {
+        travel: { passAt1: 47.6, passAt1Std: 2.7, passAt5: 22.0, meanUxScore: 3.04, costPerTask: undefined },
+        customerSupport: { passAt1: 45.6, passAt1Std: 1.4, passAt5: 23.0, meanUxScore: 3.50, costPerTask: undefined },
+        shoppingAssistant: { passAt1: 48.4, passAt1Std: 2.2, passAt5: 31.0, meanUxScore: 3.54, costPerTask: undefined },
+      },
     },
   },
   {
     id: "main-04",
     track: "main",
-    model: "Gemini 2.5 Pro",
-    agent: "Custom client",
-    organization: "Google DeepMind",
-    submissionDate: "2026-05-14",
-    verificationStatus: "pending",
-    metrics: {
-      overallPassAt1: 66.9,
-      overallPassAt1Std: 1.9,
-      passAt5: 31.7,
-      meanUxScore: 4.04,
-      costPerTask: 0.151,
-      domains: { travel: 65.8, customerSupport: 68.1, shoppingAssistant: 66.8 },
-    },
-  },
-  {
-    id: "main-05",
-    track: "main",
-    model: "Llama 4 Maverick",
-    agent: "Open tools adapter",
-    organization: "Meta",
-    submissionDate: "2026-05-13",
-    verificationStatus: "self_reported",
-    metrics: {
-      overallPassAt1: 61.4,
-      overallPassAt1Std: 2.4,
-      passAt5: 24.9,
-      meanUxScore: 3.86,
-      costPerTask: 0.042,
-      domains: { travel: 59.5, customerSupport: 63.2, shoppingAssistant: 61.5 },
-    },
-  },
-  {
-    id: "main-06",
-    track: "main",
-    model: "Mistral Large 2",
-    agent: "Custom client",
-    organization: "Mistral AI",
-    submissionDate: "2026-05-11",
-    verificationStatus: "verified",
-    metrics: {
-      overallPassAt1: 58.7,
-      overallPassAt1Std: 2.2,
-      passAt5: 21.3,
-      meanUxScore: 3.78,
-      costPerTask: 0.063,
-      domains: { travel: 57.1, customerSupport: 60.4, shoppingAssistant: 58.6 },
-    },
-  },
-  {
-    id: "main-07",
-    track: "main",
-    model: "Command A",
-    agent: "Tool router",
-    organization: "Cohere",
-    submissionDate: "2026-05-08",
-    verificationStatus: "verified",
-    metrics: {
-      overallPassAt1: 54.3,
-      overallPassAt1Std: 2.7,
-      passAt5: 18.8,
-      meanUxScore: 3.65,
-      costPerTask: 0.052,
-      domains: { travel: 53.2, customerSupport: 55.6, shoppingAssistant: 54.1 },
-    },
-  },
-  {
-    id: "main-08",
-    track: "main",
-    model: "Phi-4 Reasoning Plus",
-    agent: "StateBenchAgent",
-    organization: "Microsoft Research",
-    submissionDate: "2026-05-05",
-    verificationStatus: "verified",
-    metrics: {
-      overallPassAt1: 51.9,
-      overallPassAt1Std: 2.6,
-      passAt5: 15.4,
-      meanUxScore: 3.58,
-      costPerTask: 0.031,
-      domains: { travel: 50.6, customerSupport: 53.1, shoppingAssistant: 52.0 },
-    },
-  },
-  {
-    id: "main-09",
-    track: "main",
-    model: "Qwen3 Max",
-    agent: "Custom client",
-    organization: "Alibaba Cloud",
-    submissionDate: "2026-05-04",
-    verificationStatus: "pending",
-    metrics: {
-      overallPassAt1: 49.8,
-      overallPassAt1Std: 2.9,
-      passAt5: 13.9,
-      meanUxScore: 3.49,
-      costPerTask: 0.047,
-      domains: { travel: 48.4, customerSupport: 50.7, shoppingAssistant: 50.3 },
-    },
-  },
-  {
-    id: "main-10",
-    track: "main",
-    model: "DeepSeek V3.2",
-    agent: "Tool loop baseline",
-    organization: "DeepSeek",
-    submissionDate: "2026-05-01",
-    verificationStatus: "verified",
-    metrics: {
-      overallPassAt1: 46.2,
-      overallPassAt1Std: 3.1,
-      passAt5: 10.6,
-      meanUxScore: 3.33,
-      costPerTask: 0.024,
-      domains: { travel: 44.8, customerSupport: 47.6, shoppingAssistant: 46.2 },
-    },
-  },
-  {
-    id: "main-11",
-    track: "main",
-    model: "Baseline Tool Agent",
-    agent: "Reference baseline",
-    organization: "STATE-Bench",
-    submissionDate: "2026-04-30",
-    verificationStatus: "verified",
-    metrics: {
-      overallPassAt1: 38.4,
-      overallPassAt1Std: 3.4,
-      passAt5: 6.7,
-      meanUxScore: 3.02,
-      costPerTask: undefined,
-      domains: { travel: 37.0, customerSupport: 40.2, shoppingAssistant: 38.1 },
-    },
-  },
-  {
-    id: "memory-01",
-    track: "memory",
-    model: "GPT-5.1",
-    agent: "Terminal retrieval memory",
     organization: "OpenAI",
-    reasoningLevel: "medium",
-    submissionDate: "2026-05-21",
+    model: "GPT-5.4",
+    agent: "",
+    submissionDate: "2026-05-25",
     verificationStatus: "verified",
     metrics: {
-      overallPassAt1: 79.6,
-      overallPassAt1Std: 1.4,
-      passAt5: 48.8,
-      meanUxScore: 4.35,
-      costPerTask: 0.239,
-      domains: { travel: 78.7, customerSupport: 80.4, shoppingAssistant: 79.8 },
-    },
-  },
-  {
-    id: "memory-02",
-    track: "memory",
-    model: "Claude Sonnet 4.5",
-    agent: "BM25 procedural memory",
-    organization: "Anthropic",
-    submissionDate: "2026-05-19",
-    verificationStatus: "verified",
-    metrics: {
-      overallPassAt1: 75.1,
-      overallPassAt1Std: 1.7,
-      passAt5: 42.9,
-      meanUxScore: 4.28,
-      costPerTask: 0.192,
-      domains: { travel: 74.6, customerSupport: 76.3, shoppingAssistant: 74.4 },
-    },
-  },
-  {
-    id: "memory-03",
-    track: "memory",
-    model: "Gemini 2.5 Pro",
-    agent: "Embedding retrieval memory",
-    organization: "Google DeepMind",
-    submissionDate: "2026-05-15",
-    verificationStatus: "pending",
-    metrics: {
-      overallPassAt1: 71.8,
-      overallPassAt1Std: 1.9,
-      passAt5: 37.4,
-      meanUxScore: 4.15,
-      costPerTask: 0.169,
-      domains: { travel: 70.2, customerSupport: 73.1, shoppingAssistant: 72.1 },
-    },
-  },
-  {
-    id: "memory-04",
-    track: "memory",
-    model: "o4-mini",
-    agent: "Summarized trajectory memory",
-    organization: "OpenAI",
-    reasoningLevel: "high",
-    submissionDate: "2026-05-12",
-    verificationStatus: "verified",
-    metrics: {
-      overallPassAt1: 70.4,
-      overallPassAt1Std: 2.0,
-      passAt5: 35.8,
-      meanUxScore: 4.11,
-      costPerTask: 0.094,
-      domains: { travel: 68.9, customerSupport: 71.2, shoppingAssistant: 71.1 },
+      overallPassAt1: 46.9,
+      overallPassAt1Std: 0.9,
+      passAt5: 26.2,
+      meanUxScore: 3.41,
+      costPerTask: 0.0351,
+      domains: {
+        travel: { passAt1: 43.2, passAt1Std: 1.5, passAt5: 22.9, meanUxScore: 3.19, costPerTask: 0.0565 },
+        customerSupport: { passAt1: 47.2, passAt1Std: 2.1, passAt5: 28.1, meanUxScore: 3.49, costPerTask: 0.0271 },
+        shoppingAssistant: { passAt1: 50.3, passAt1Std: 1.3, passAt5: 30.8, meanUxScore: 3.55, costPerTask: 0.0216 },
+      },
     },
   },
 ];
@@ -271,24 +97,31 @@ const state = {
 const body = document.querySelector("#leaderboard-body");
 const toggleRows = document.querySelector("#toggle-rows");
 const tabs = Array.from(document.querySelectorAll(".track-tab"));
+const scoreViewInputs = Array.from(document.querySelectorAll('input[name="score-view"]'));
 const sortButtons = Array.from(document.querySelectorAll(".sort-button"));
 const primaryScoreSort = document.querySelector("#primary-score-sort");
 
 const scoreLabels = {
   overall: "pass@1 (%)",
-  travel: "Travel",
-  customerSupport: "Customer Support",
-  shoppingAssistant: "Shopping",
+  travel: "Travel pass@1 (%)",
+  customerSupport: "Customer Support pass@1 (%)",
+  shoppingAssistant: "Shopping pass@1 (%)",
 };
 
 function selectedScore(entry) {
   if (state.scoreView === "overall") return entry.metrics.overallPassAt1;
+  return entry.metrics.domains[state.scoreView].passAt1;
+}
+
+function selectedMetrics(entry) {
+  if (state.scoreView === "overall") return entry.metrics;
   return entry.metrics.domains[state.scoreView];
 }
 
 function metricValue(entry, key) {
   if (key === "selectedScore") return selectedScore(entry);
   if (key === "submissionDate") return new Date(entry.submissionDate).getTime();
+  if (["passAt5", "meanUxScore", "costPerTask"].includes(key)) return selectedMetrics(entry)[key];
   return entry.metrics[key];
 }
 
@@ -313,10 +146,11 @@ function formatPercent(value) {
 }
 
 function formatPassAt1(entry) {
+  const metrics = selectedMetrics(entry);
   const mean = formatPercent(selectedScore(entry));
-  const std = entry.metrics.overallPassAt1Std;
+  const std = state.scoreView === "overall" ? entry.metrics.overallPassAt1Std : metrics.passAt1Std;
 
-  if (state.scoreView !== "overall" || std == null) return `<span class="metric-main">${mean}</span>`;
+  if (std == null) return `<span class="metric-main">${mean}</span>`;
   return `<span class="metric-main">${mean}</span><span class="metric-std">&plusmn; ${formatPercent(std)}</span>`;
 }
 
@@ -325,7 +159,7 @@ function formatUx(value) {
 }
 
 function formatCost(value) {
-  return value == null ? "-" : `$${value.toFixed(3)}`;
+  return value == null ? "-" : `$${value.toFixed(2)}`;
 }
 
 function statusLabel(status) {
@@ -341,28 +175,28 @@ function render() {
   body.innerHTML = visible
     .map((entry) => {
       const rank = ranked.indexOf(entry) + 1;
-      const meta = [entry.agent, entry.reasoningLevel ? `reasoning: ${entry.reasoningLevel}` : ""]
-        .filter(Boolean)
-        .join(" | ");
-
+      const metrics = selectedMetrics(entry);
       return `
         <tr>
           <td class="rank-cell"><span class="rank-pill ${rank <= 3 ? "top" : ""}">${rank}</span></td>
           <td>
-            <span class="model-name">${entry.model}</span>
-            <span class="model-meta">${meta || "-"}</span>
+            <span class="model-name">${entry.model}${entry.reasoningLabel ? ` <span class="model-variant">(${entry.reasoningLabel})</span>` : ""}</span>
           </td>
           <td>${entry.organization}</td>
           <td class="metric">${formatPassAt1(entry)}</td>
-          <td class="metric">${formatPercent(entry.metrics.passAt5)}</td>
-          <td class="metric">${formatUx(entry.metrics.meanUxScore)}</td>
-          <td class="metric">${formatCost(entry.metrics.costPerTask)}</td>
+          <td class="metric">${formatPercent(metrics.passAt5)}</td>
+          <td class="metric">${formatUx(metrics.meanUxScore)}</td>
+          <td class="metric">${formatCost(metrics.costPerTask)}</td>
           <td>${entry.submissionDate}</td>
           <td><span class="status-badge status-${entry.verificationStatus}">${statusLabel(entry.verificationStatus)}</span></td>
         </tr>
       `;
     })
     .join("");
+
+  if (!visible.length) {
+    body.innerHTML = '<tr><td class="empty-state" colspan="9">No submitted results for this track yet.</td></tr>';
+  }
 
   toggleRows.hidden = ranked.length <= 10;
   toggleRows.textContent = state.showAll ? "Show top 10" : `Show all ${ranked.length}`;
@@ -371,6 +205,10 @@ function render() {
     const active = tab.dataset.track === state.track;
     tab.classList.toggle("active", active);
     tab.setAttribute("aria-selected", String(active));
+  });
+
+  scoreViewInputs.forEach((input) => {
+    input.checked = input.value === state.scoreView;
   });
 
   sortButtons.forEach((button) => {
@@ -384,6 +222,16 @@ function render() {
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     state.track = tab.dataset.track;
+    state.showAll = false;
+    render();
+  });
+});
+
+scoreViewInputs.forEach((input) => {
+  input.addEventListener("change", () => {
+    state.scoreView = input.value;
+    state.sortKey = "selectedScore";
+    state.sortDirection = "desc";
     state.showAll = false;
     render();
   });
