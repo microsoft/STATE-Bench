@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>STATE-Bench Leaderboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="leaderboard-shell">
+    <header class="compact-hero">
+      <div class="compact-hero-inner">
+        <div>
+          <div class="compact-brand">STATE-Bench</div>
+        </div>
+        <nav class="mini-nav" aria-label="Benchmark navigation">
+          <a class="active" href="index.html">Leaderboard</a>
+          <a href="https://github.com/microsoft/STATE-Bench" target="_blank" rel="noopener noreferrer" aria-label="Open STATE-Bench on GitHub">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
+              <path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 .1.7 2.6 3.4 1.9.1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.3 11.3 0 0 1 6 0C17.1 5.7 18.1 6 18.1 6c.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v2.8c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z" fill="currentColor" />
+            </svg>
+            GitHub
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="leaderboard-panel" aria-labelledby="leaderboard-title">
+        <h2 id="leaderboard-title" class="sr-only">Leaderboard results</h2>
+
+        <div class="track-row">
+          <div class="track-tabs" role="tablist" aria-label="Leaderboard track">
+            <button class="track-tab active" type="button" data-track="main" role="tab" aria-selected="true">
+              Main Track
+            </button>
+            <button class="track-tab" type="button" data-track="memory" role="tab" aria-selected="false">
+              Memory Track
+            </button>
+          </div>
+          <div class="toolbar-actions">
+            <a class="toolbar-link primary" href="../docs/submit.md">Submit results</a>
+          </div>
+        </div>
+
+        <div class="domain-row" aria-label="Score domain">
+          <span class="domain-label">Score view</span>
+          <div class="domain-options">
+            <label class="domain-option">
+              <input type="radio" name="score-view" value="overall" checked />
+              <span>Overall</span>
+            </label>
+            <label class="domain-option">
+              <input type="radio" name="score-view" value="travel" />
+              <span>Travel</span>
+            </label>
+            <label class="domain-option">
+              <input type="radio" name="score-view" value="customerSupport" />
+              <span>Customer Support</span>
+            </label>
+            <label class="domain-option">
+              <input type="radio" name="score-view" value="shoppingAssistant" />
+              <span>Shopping</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th class="rank-col" scope="col">Rank</th>
+                <th scope="col">Model</th>
+                <th scope="col">Organization</th>
+                <th scope="col"><button id="primary-score-sort" type="button" class="sort-button active" data-sort="selectedScore">pass@1 (%)</button></th>
+                <th scope="col"><button type="button" class="sort-button" data-sort="passAt5">pass^5 (%)</button></th>
+                <th scope="col"><button type="button" class="sort-button" data-sort="meanUxScore">UX (1-5)</button></th>
+                <th scope="col"><button type="button" class="sort-button" data-sort="costPerTask">Cost / Task</button></th>
+                <th scope="col"><button type="button" class="sort-button" data-sort="submissionDate">Submitted</button></th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <button id="toggle-rows" class="toggle-button" type="button"></button>
+        </div>
+      </section>
+    </main>
+
+    <script src="leaderboard.js"></script>
+  </body>
+</html>
