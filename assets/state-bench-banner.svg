@@ -3,7 +3,7 @@
   <desc id="desc">STATE-Bench banner with a navy background and cyan wordmark.</desc>
   <rect width="1400" height="230.4" fill="#243A5E" />
   <text x="700" y="105.6" text-anchor="middle" dominant-baseline="middle" font-family="Segoe UI, DejaVu Sans, Arial, sans-serif" font-size="89.6" letter-spacing="0" textLength="740" lengthAdjust="spacing">
-    <tspan fill="#50E6FF" font-weight="600">STATE</tspan><tspan fill="#B7F4FF" font-weight="400">-Bench</tspan>
+    <tspan fill="#50E6FF" font-weight="700">STATE</tspan><tspan fill="#B7F4FF" font-weight="550">-Bench</tspan>
   </text>
-  <text x="700" y="172.8" text-anchor="middle" dominant-baseline="middle" font-family="Aptos, Segoe UI, DejaVu Sans, Arial, sans-serif" font-size="25.6" font-weight="400" letter-spacing="0" textLength="740" lengthAdjust="spacing" fill="#B7F4FF">Benchmark For Enterprise Workflows</text>
+  <text x="700" y="172.8" text-anchor="middle" dominant-baseline="middle" font-family="Segoe UI, DejaVu Sans, Arial, sans-serif" font-size="25.6" font-weight="400" letter-spacing="0" textLength="740" lengthAdjust="spacing" fill="#B7F4FF">Benchmark For Enterprise Workflows</text>
 </svg>
