@@ -47,5 +47,5 @@ If you want to add a memory retrieval hook on top of this loop, see [docs/memory
 
 Return to your track guide and continue with the run steps:
 
-- Main Track: [Run Benchmark](../../RUN_BENCHMARK.md)
-- Agent Learning Track: [Agent Learning Track](../../AGENT_LEARNING_TRACK.md)
+- Main Track: [Run Benchmark](../RUN_BENCHMARK.md)
+- Agent Learning Track: [Agent Learning Track](../AGENT_LEARNING_TRACK.md)

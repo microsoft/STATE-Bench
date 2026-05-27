@@ -1,6 +1,6 @@
 # Memory Hook — Custom `BaseAgent`
 
-Use this hook when you are running the [Agent Learning Track](../../AGENT_LEARNING_TRACK.md) with a custom client + agent from [Use a Custom Client + Agent](../../USE_CUSTOM_CLIENT.md).
+Use this hook when you are running the [Agent Learning Track](../AGENT_LEARNING_TRACK.md) with a custom client + agent from [Use a Custom Client + Agent](../USE_CUSTOM_CLIENT.md).
 
 A custom `BaseAgent` does not benefit from `StateBenchAgent`'s automatic injection. Instead, expose a read-only retrieval tool by overriding `memory_tool_schemas()` and `memory_tool_handlers()`.
 
@@ -74,4 +74,4 @@ The artifact format is up to you — JSON, a vector index, a database, or any lo
 
 ## Next step
 
-Return to [Agent Learning Track](../../AGENT_LEARNING_TRACK.md) and continue with the run steps using `--agent-class MyAgent --agent-client-class MyLLMClient --retrieve-learnings-top-k 3`.
+Return to [Agent Learning Track](../AGENT_LEARNING_TRACK.md) and continue with the run steps using `--agent-class MyAgent --agent-client-class MyLLMClient --retrieve-learnings-top-k 3`.

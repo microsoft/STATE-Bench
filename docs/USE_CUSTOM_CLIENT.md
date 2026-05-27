@@ -5,7 +5,7 @@ Use this reference when your chosen track evaluates models from a different prov
 Start from a track guide first:
 
 - Main Track: [Run Benchmark](RUN_BENCHMARK.md)
-- Memory Track: [Memory Track](MEMORY_TRACK.md)
+- Agent Learning Track: [Agent Learning Track](AGENT_LEARNING_TRACK.md)
 
 Then come here only to build the custom harness. After that, return to your track guide for run, metrics, and submission steps.
 
@@ -15,8 +15,8 @@ STATE-Bench does not ship third-party provider adapters. Provider integration is
 
 Custom provider runs use two extension points together:
 
-- **`BaseLLMClient`** ([`state_bench/client.py`](state_bench/client.py)) wraps your provider client and loads provider-specific environment variables.
-- **`BaseAgent`** ([`state_bench/agents/base.py`](state_bench/agents/base.py)) calls that client and returns provider-neutral tool requests for the benchmark harness to execute.
+- **`BaseLLMClient`** ([`state_bench/client.py`](../state_bench/client.py)) wraps your provider client and loads provider-specific environment variables.
+- **`BaseAgent`** ([`state_bench/agents/base.py`](../state_bench/agents/base.py)) calls that client and returns provider-neutral tool requests for the benchmark harness to execute.
 
 Place implementations under repo-root extension folders:
 
@@ -154,9 +154,9 @@ Do not rename tool names or argument keys. The harness uses those names to execu
 
 Domain schemas live in:
 
-- [state_bench/domains/travel/tools.py](state_bench/domains/travel/tools.py)
-- [state_bench/domains/customer_support/tools.py](state_bench/domains/customer_support/tools.py)
-- [state_bench/domains/shopping_assistant/tools.py](state_bench/domains/shopping_assistant/tools.py)
+- [state_bench/domains/travel/tools.py](../state_bench/domains/travel/tools.py)
+- [state_bench/domains/customer_support/tools.py](../state_bench/domains/customer_support/tools.py)
+- [state_bench/domains/shopping_assistant/tools.py](../state_bench/domains/shopping_assistant/tools.py)
 
 Inspect these files when writing a provider conversion, but do not edit them for official runs.
 
@@ -190,11 +190,11 @@ self.add_token_usage(
 
 `input_tokens` and `output_tokens` are required for usage and cost to be recorded. `cached_input_tokens` is optional.
 
-Your track guide explains the pricing flags to pass at run time. Full details: [Reporting Avg. Cost Per Task](docs/eval/cost-reporting.md).
+Your track guide explains the pricing flags to pass at run time. Full details: [Reporting Avg. Cost Per Task](eval/cost-reporting.md).
 
 ## Return To Your Track
 
 After your custom client and agent classes are in place:
 
 - Main Track users return to [Run Benchmark](RUN_BENCHMARK.md) and run with `--agent-class` plus `--agent-client-class`.
-- Memory Track users return to [Memory Track](MEMORY_TRACK.md) and run with `--agent-class`, `--agent-client-class`, and `--retrieve-learnings-top-k 3`.
+- Agent Learning Track users return to [Agent Learning Track](AGENT_LEARNING_TRACK.md) and run with `--agent-class`, `--agent-client-class`, and `--retrieve-learnings-top-k 3`.

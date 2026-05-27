@@ -5,8 +5,8 @@ Create `outputs.zip` containing the scored trajectories and metrics for every pr
 ```
 outputs/
   travel/
-    test_trajectories/run1/<task_id>.json
-    test_trajectories/run2/<task_id>.json
+    run1/<task_id>.json
+    run2/<task_id>.json
     ...
     metrics.json
   customer_support/

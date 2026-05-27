@@ -27,13 +27,13 @@ The simulator and judge are fixed by the benchmark protocol. Your agent model is
 
 Every official run requires the protocol-locked GPT-5.1 evaluation client. Configure it first:
 
-- [Locked Evaluation Client](docs/setup/eval-client.md)
+- [Locked Evaluation Client](setup/eval-client.md)
 
 ### Agent under test
 
 If you are evaluating an Azure AI Foundry model or OpenAI model with standard tool calling, use the built-in `StateBenchAgent` client:
 
-- [Built-in StateBenchAgent Client](docs/agents/builtin.md) (no code change needed; only configure env variables)
+- [Built-in StateBenchAgent Client](agents/builtin.md) (no code change needed; only configure env variables)
 
 If you are evaluating models from a different provider or want to write a custom tool-calling agent, follow the instructions to extend the base classes:
 
@@ -51,7 +51,7 @@ uv run python -m state_bench.scripts.run_batch \
   --agent-model-name <model-name> \
   --num-runs 5 \
   --num-workers <parallel-workers> \
-  --output-dir outputs/<domain>/test_trajectories
+  --output-dir outputs/<domain>/
 ```
 
 If your agent model uses a reportable reasoning level, add:
@@ -76,18 +76,18 @@ Use these values:
 | `--agent-model-reasoning-level` | Optional reasoning level, such as `low`, `medium`, or `high`; omit if not applicable |
 | `--num-runs` | `5` for official submissions |
 | `--num-workers` | Parallel task workers; tune for your provider rate limits |
-| `--output-dir` | `outputs/<domain>/test_trajectories` for the standard layout |
+| `--output-dir` | `outputs/<domain>/` for the standard layout |
 
 `run_batch` writes scored trajectories under:
 
 ```text
-outputs/<domain>/test_trajectories/run1/<task_id>.json
-outputs/<domain>/test_trajectories/run2/<task_id>.json
+outputs/<domain>/run1/<task_id>.json
+outputs/<domain>/run2/<task_id>.json
 ...
-outputs/<domain>/test_trajectories/run5/<task_id>.json
+outputs/<domain>/run5/<task_id>.json
 ```
 
-For the full CLI reference and worker guidance, see [run_batch](docs/eval/run-batch.md).
+For the full CLI reference and worker guidance, see [run_batch](eval/run-batch.md).
 
 ## 4. Report Cost Per Task
 
@@ -99,7 +99,7 @@ Cost reporting is optional but strongly encouraged. Add pricing flags to `run_ba
   --agent-cached-input-cost-per-1m <cached-input-price>
 ```
 
-The cached-input flag is optional. Details: [Reporting Avg. Cost Per Task](docs/eval/cost-reporting.md).
+The cached-input flag is optional. Details: [Reporting Avg. Cost Per Task](eval/cost-reporting.md).
 
 ## 5. Compute Metrics
 
@@ -108,18 +108,18 @@ After a domain finishes, produce its standardized metrics file:
 ```bash
 uv run python -m state_bench.scripts.compute_metrics \
   --domain <domain> \
-  --results-dir outputs/<domain>/test_trajectories \
+  --results-dir outputs/<domain>/ \
   --num-runs 5 \
-  --save-filepath outputs/<domain>/metrics.json
+  --output-dir outputs/<domain>/
 ```
 
-Metrics default to the protocol test split and fail if any expected test task is missing or unscored. Details: [Compute Metrics](docs/eval/compute-metrics.md).
+Metrics default to the protocol test split and fail if any expected test task is missing or unscored. Details: [Compute Metrics](eval/compute-metrics.md).
 
 Repeat the run and metrics steps for `travel`, `customer_support`, and `shopping_assistant` for a complete submission.
 
 ## 6. Submit
 
-Package the scored trajectories and metrics for each completed domain, then open a submission issue. Details: [Submit Results](docs/submit.md).
+Package the scored trajectories and metrics for each completed domain, then open a submission issue. Details: [Submit Results](submit.md).
 
 ## Official Run Settings
 
