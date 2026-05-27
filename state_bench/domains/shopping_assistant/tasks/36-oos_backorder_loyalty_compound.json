@@ -32,7 +32,7 @@
       "[defensive-no-unsolicited-writes] If the agent asks about shipping options, expedited shipping, shipping upgrades, or asks you to pick a shipping method, say 'I don't need to pick shipping right now — skip it, I'll handle it at checkout.' Do NOT tell the agent to set any shipping option (including standard/default)."
     ]
   },
-  "task_summary": "**Task:** A returning Platinum customer (shop_001) asks by name for SP-2050 GameForce Pro 16 2027 Edition ($2199), which is OOS but backorder_available=True. Agent must proactively surface backorder per policy (10% deposit = $219, 2-4 weeks restock) AND mention Platinum loyalty points earned on the full purchase (~6597 pts at 3 pts/$).\n\n**Challenge:** Compound proactive disclosure on OOS + backorder + loyalty. Pitfall: agent silently substitutes an in-stock laptop (",
+  "task_summary": "**Task:** A returning Platinum customer (shop_001) asks by name for SP-2050 GameForce Pro 16 2027 Edition ($2199), which is OOS but backorder_available=True. Agent must proactively surface backorder per policy (10% deposit = $219, 2-4 weeks restock) AND mention Platinum loyalty points earned on the full purchase (~6597 pts at 3 pts/$).\n\n**Challenge:** Compound proactive disclosure on OOS + backorder + loyalty. Pitfall: agent silently substitutes an in-stock laptop, or offers backorder without the deposit/timeline specifics, or forgets loyalty disclosure on a premium purchase. Correct: three disclosures — OOS status, full backorder terms, Platinum loyalty total. No cart write (backorder is conversational in current env).",
   "task_requirements": [
     {
       "id": "identified_oos",

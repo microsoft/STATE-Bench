@@ -1,4 +1,5 @@
 import json
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from state_bench.protocol import load_default_protocol, load_split_manifest
@@ -78,3 +79,81 @@ def test_split_entries_have_checked_in_task_and_env_files() -> None:
         for task_id in [*manifest["splits"]["train"], *manifest["splits"]["test"]]:
             env_path = root / "task_envs" / f"{task_id}.json"
             assert env_path.is_file(), f"{domain} split missing task env file: {task_id}"
+
+
+def test_travel_task_env_dates_are_chronological() -> None:
+    for env_path in _domain_envs("travel"):
+        env = json.loads(env_path.read_text())
+        flights_by_id = {flight["flight_id"]: flight for flight in env.get("flights", [])}
+
+        for flight in env.get("flights", []):
+            flight_id = flight["flight_id"]
+            departure = datetime.fromisoformat(flight["departure_time"])
+            arrival = datetime.fromisoformat(flight["arrival_time"])
+            assert arrival > departure, f"{env_path.name}: {flight_id} arrives before departure"
+
+        for booking in env.get("bookings", []):
+            flight = flights_by_id[booking["flight_id"]]
+            booked_at = datetime.fromisoformat(booking["booked_at"])
+            departure = datetime.fromisoformat(flight["departure_time"])
+            assert booked_at <= departure, f"{env_path.name}: {booking['booking_id']} booked after departure"
+
+        for hotel in env.get("hotels", []):
+            reservation_id = hotel["reservation_id"]
+            check_in = date.fromisoformat(hotel["check_in"])
+            check_out = date.fromisoformat(hotel["check_out"])
+            assert check_out > check_in, f"{env_path.name}: {reservation_id} checks out before check-in"
+            if hotel.get("booked_at"):
+                assert datetime.fromisoformat(hotel["booked_at"]).date() <= check_in, (
+                    f"{env_path.name}: {reservation_id} booked after check-in"
+                )
+
+        for rental in env.get("car_rentals", []):
+            rental_id = rental["rental_id"]
+            pickup = date.fromisoformat(rental["pickup_date"])
+            dropoff = date.fromisoformat(rental["dropoff_date"])
+            assert dropoff > pickup, f"{env_path.name}: {rental_id} drops off before pickup"
+            if rental.get("booked_at"):
+                assert datetime.fromisoformat(rental["booked_at"]).date() <= pickup, (
+                    f"{env_path.name}: {rental_id} booked after pickup"
+                )
+
+
+def test_travel_exact_seven_day_boundary_tasks_match_task_text() -> None:
+    for task_path in _domain_tasks("travel"):
+        task = json.loads(task_path.read_text())
+        task_text = json.dumps(task).lower()
+        if "exactly seven days" not in task_text:
+            continue
+
+        env = json.loads(Path(task["task_env_path"]).read_text())
+        flights_by_id = {flight["flight_id"]: flight for flight in env.get("flights", [])}
+        original_booking = next(booking for booking in env.get("bookings", []) if booking["user_id"] == task["user_id"])
+        departure = datetime.fromisoformat(flights_by_id[original_booking["flight_id"]]["departure_time"])
+        now = datetime.fromisoformat(task["now"])
+        assert departure - now == timedelta(days=7), f"{task_path.name}: task text says exactly seven days"
+
+
+def test_shopping_task_env_dates_are_policy_coherent() -> None:
+    for env_path in _domain_envs("shopping_assistant"):
+        task_path = Path("state_bench/domains/shopping_assistant/tasks") / env_path.name
+        task = json.loads(task_path.read_text())
+        env = json.loads(env_path.read_text())
+        now = datetime.fromisoformat(task["now"])
+        task_text = json.dumps(task).lower()
+
+        for product in env.get("products", []):
+            shipping_days = product.get("shipping_days")
+            assert isinstance(shipping_days, int) and shipping_days > 0, (
+                f"{env_path.name}: {product['product_id']} has invalid shipping_days"
+            )
+
+        for promo in env.get("promotions", []):
+            promo_code = promo["promo_code"]
+            expiry_raw = promo.get("expiry_date", "")
+            assert expiry_raw, f"{env_path.name}: {promo_code} missing expiry_date"
+            expiry = datetime.fromisoformat(expiry_raw if "T" in expiry_raw else f"{expiry_raw}T23:59:59")
+
+            promo_text_marker = f"{promo_code.lower()} expired"
+            if promo_code.lower().startswith("expired") or promo_text_marker in task_text:
+                assert now > expiry, f"{env_path.name}: {promo_code} is described as expired but is usable"

@@ -40,7 +40,7 @@
       "shipping_cost": 0,
       "tracking_number": "TRK34039212",
       "delivery_date": "2026-07-03T14:00:00",
-      "delivery_promised_date": "2026-06-05T18:00:00",
+      "delivery_promised_date": "2026-07-03T18:00:00",
       "signature_required": false,
       "signature_on_file": null,
       "payment_method": "credit_card",

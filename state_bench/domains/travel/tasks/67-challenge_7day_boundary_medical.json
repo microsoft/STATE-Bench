@@ -1,7 +1,7 @@
 {
   "task_id": "67-challenge_7day_boundary_medical",
   "user_id": "user_002",
-  "now": "2026-06-15T10:00:00",
+  "now": "2026-06-15T08:00:00",
   "opening_message": "I need to change my flight BK-1000 to June 28 for a medical reason. I was going to call yesterday but forgot. Does the timing matter for the fee? My user ID is user_002.",
   "user_simulator": {
     "personality": "Curious about the fee structure. Asks follow-up questions about timing.",

@@ -51,7 +51,7 @@
       "payment_method": "credit_card",
       "points_used": 0,
       "cash_amount": 0,
-      "booked_at": "2026-06-01T10:00:00",
+      "booked_at": "2026-06-01T08:00:00",
       "cancellation_fee": null,
       "refund_amount": null,
       "change_fee": null,

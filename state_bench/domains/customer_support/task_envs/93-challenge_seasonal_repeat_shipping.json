@@ -54,7 +54,7 @@
       "shipping_cost": 0,
       "tracking_number": "TRK27274864",
       "delivery_date": "2026-11-25T14:00:00",
-      "delivery_promised_date": "2026-06-05T18:00:00",
+      "delivery_promised_date": "2026-11-25T18:00:00",
       "signature_required": false,
       "signature_on_file": null,
       "payment_method": "credit_card",
