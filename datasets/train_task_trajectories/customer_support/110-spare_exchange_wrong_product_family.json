@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I can help with that. Right now, order ORD-7272 only shows the SoundMax Wireless Headphones; there isn\u2019t a phone case on that order, and I don\u2019t yet know which specific case you want.\n\nHere\u2019s how the price difference works for an exchange, based on our policy:\n- If the phone case is the same price as the headphones: no extra charge and no refund.\n- If the case is cheaper than the headphones: we exchange the item and the difference is given to you as store credit (not back to your card).\n- If the case is more expensive: you pay the difference between the headphone price and the case price.\n\nReply with the exact phone case you want (or a link/name if you know it), and I\u2019ll check stock and walk through the exact numbers for your exchange.",
+      "content": "I can help with that, but I can’t process this as an exchange. I checked your order and the headphones were delivered on July 3, and that item has a 15-day exchange/return window, so it’s still eligible today.\n\nFor the price difference: the phone case is $35 and your headphones were $249, so the difference is $214. On an exchange to a cheaper item, that difference would be issued as store credit, not refunded back to your card.\n\nOne important catch: exchanges require the replacement to be a different product and to be selected explicitly. I found an in-stock option, UltraShield Phone Case, for $35. If you want, I can go ahead and set up the exchange from the headphones to that phone case.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -79,7 +79,7 @@
           "result": {
             "topic": "exchange",
             "rules": {
-              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed \u2014 use process_return for a refund instead.",
+              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed — use process_return for a refund instead.",
               "same_price": "Exchange for a same-price product: no charge, no refund.",
               "more_expensive": "Exchange for more expensive item: customer pays price difference.",
               "cheaper": "Exchange for cheaper item: difference refunded as store credit (not original payment).",
@@ -88,24 +88,14 @@
               "no_price_protection": "No price protection on exchanges (item price at time of purchase applies)."
             }
           }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Thanks for explaining that. The item I want instead is the **UltraShield Phone Case**\u2014can we do a straight exchange from the SoundMax Wireless Headphones to that case, with the price difference issued as store credit?"
-    },
-    {
-      "role": "assistant",
-      "content": "Yes, we can do that, and I\u2019ve just processed the exchange.\n\nHere\u2019s how it worked out:\n- Original item: SoundMax Wireless Headphones \u2013 $249  \n- New item: UltraShield Phone Case \u2013 $35  \n- Price difference: $249 \u2212 $35 = $214  \n\nPer our policy, because the new item is cheaper, you pay nothing now and $214 has been issued to you as store credit. The phone case will ship to the same address as your original order.",
-      "tool_calls": [
+        },
         {
           "name": "search_products",
           "arguments": {
-            "query": "UltraShield Phone Case"
+            "query": "phone case"
           },
           "result": {
-            "query": "UltraShield Phone Case",
+            "query": "phone case",
             "results": [
               {
                 "product_id": "PROD-4284",
@@ -145,7 +135,17 @@
             "in_stock": true,
             "current_price": null
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks — yes, ORD-7272 is the order. Just to confirm, your exchange policy does allow a cheaper different-product exchange, right? If so, I’d like to do a standard exchange from the SoundMax Wireless Headphones to the UltraShield Phone Case, with the $214 difference as store credit."
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — I confirmed the policy does allow an exchange to a cheaper different product, with the difference issued as store credit.\n\nYour exchange is now set: the SoundMax Wireless Headphones were exchanged for the UltraShield Phone Case, and $214 has been issued to your store credit balance.",
+      "tool_calls": [
         {
           "name": "process_exchange",
           "arguments": {
@@ -160,7 +160,7 @@
             "price_difference": -214,
             "customer_pays": 0,
             "store_credit_refund": 214,
-            "reason": "Exchange for cheaper item \u2014 $214 to store credit"
+            "reason": "Exchange for cheaper item — $214 to store credit"
           }
         },
         {
@@ -184,7 +184,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks, that all sounds good and is exactly what I was hoping for. I appreciate the help with the exchange and the store credit.  \n\n[TASK_DONE]"
+      "content": "Thanks for confirming and taking care of that. [TASK_DONE]"
     }
   ]
 }

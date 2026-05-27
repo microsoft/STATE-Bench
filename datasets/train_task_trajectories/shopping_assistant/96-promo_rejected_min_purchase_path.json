@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 can you add a ProBook USB-C Dock to my cart and apply promo code BIGSAVE50?"
+      "content": "Hi — can you add a ProBook USB-C Dock to my cart and apply promo code BIGSAVE50?"
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the ProBook USB-C Dock to your cart.\n\nThe promo code BIGSAVE50 can\u2019t be applied right now because it requires a minimum purchase of $500, and your current cart subtotal is $129.\n\nIf you\u2019d like to reach the $500 minimum, I can help you find additional items (for example, a ProBook laptop or other accessories) that would work well with the dock.",
+      "content": "I added the ProBook USB-C Dock to your cart.\n\nI couldn’t apply `BIGSAVE50` because it requires a minimum purchase of $500, and your cart subtotal is currently $129.\n\nIf you want, I can help you:\n- find something else to bring the cart over $500, or\n- check for another promo code that might fit this cart.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "ProBook USB-C Dock",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -74,6 +74,21 @@
           }
         },
         {
+          "name": "get_customer_account",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "customer_id": "shop_004",
+            "name": "Taylor Kim",
+            "email": "taylor.kim@example.com",
+            "tier": "standard",
+            "is_first_time": false,
+            "loyalty_points": 2200,
+            "purchase_history": []
+          }
+        },
+        {
           "name": "get_cart",
           "arguments": {
             "customer_id": "shop_004"
@@ -94,21 +109,6 @@
           }
         },
         {
-          "name": "get_customer_account",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "customer_id": "shop_004",
-            "name": "Taylor Kim",
-            "email": "taylor.kim@example.com",
-            "tier": "standard",
-            "is_first_time": false,
-            "loyalty_points": 2200,
-            "purchase_history": []
-          }
-        },
-        {
           "name": "get_variants",
           "arguments": {
             "product_id": "SP-2006"
@@ -119,6 +119,18 @@
             "base_price": 129,
             "variants": [],
             "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
+          "name": "validate_promo",
+          "arguments": {
+            "customer_id": "shop_004",
+            "promo_code": "BIGSAVE50"
+          },
+          "result": {
+            "valid": false,
+            "reason": "Minimum purchase of $500 required. Cart subtotal: $0.",
+            "estimated_discount": 0
           }
         },
         {
@@ -142,33 +154,30 @@
             "cart_subtotal": 129,
             "cart_total": 129
           }
-        },
-        {
-          "name": "validate_promo",
-          "arguments": {
-            "customer_id": "shop_004",
-            "promo_code": "BIGSAVE50"
-          },
-          "result": {
-            "valid": false,
-            "reason": "Minimum purchase of $500 required. Cart subtotal: $129.",
-            "estimated_discount": 0
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "No thanks, I just want the dock \u2014 please proceed without the promo code."
+      "content": "Why didn’t it work exactly? What’s the requirement?"
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set with just the ProBook USB-C Dock in your cart and no promo code applied.\n\nCurrent cart:\n- ProBook USB-C Dock (1x) \u2014 $129  \nEstimated total (before tax and shipping): $129\n\nIf you\u2019d like, I can help you:\n- Add gift wrap, or  \n- Choose a shipping option and move ahead to checkout.",
+      "content": "`BIGSAVE50` didn’t work because your cart doesn’t meet its minimum purchase threshold.\n\nRequirement:\n- Cart subtotal must be at least $500\n\nYour cart:\n- ProBook USB-C Dock: $129\n- Current subtotal: $129\n\nSo you’re $371 short of qualifying for that code. If you want, I can help find eligible items to get you over the threshold.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "That looks good \u2014 I only needed the dock.\n\nI\u2019ll handle shipping and checkout on my own from here. [TASK_DONE]"
+      "content": "No thanks, I just want the dock — please proceed without the promo."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — your cart has just the ProBook USB-C Dock, with no promo applied.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Thanks — subtotal $129, total $129, and no promo, right? [TASK_DONE]"
     }
   ]
 }

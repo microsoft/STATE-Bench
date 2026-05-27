@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I'd like to add the SlimBook Touch 15 to my cart please."
+      "content": "Hi — I'd like to add the SlimBook Touch 15 to my cart please."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the SlimBook Touch 15 (1 unit, no gift wrap) to your cart.  \n\nWould you like to see details about it (specs, ports, weight, etc.) or compare it with another laptop before checking out?",
+      "content": "Done — I added 1 × SlimBook Touch 15 to your cart for $1,099.\n\nIf you want, I can also:\n- check your cart total,\n- add gift wrap,\n- look for any eligible promos,\n- or help you pick accessories for it.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -134,47 +134,7 @@
     },
     {
       "role": "user",
-      "content": "No need to compare, I\u2019m good with this one.  \n\nCan you just show me a quick summary of what\u2019s in my cart and then we\u2019re all set?"
-    },
-    {
-      "role": "assistant",
-      "content": "Here\u2019s a quick summary of your cart:\n\n- SlimBook Touch 15 \u2014 1 unit  \n  - Gift wrap: No  \n  - Price: $1,099  \n  - Line total: $1,099  \n\nCart totals:\n- Subtotal: $1,099  \n- Discounts: $0  \n- Gift wrap: $0  \n- Shipping: Not selected yet (cost $0 for now)  \n- Order total (current): $1,099  \n\nYou\u2019re all set from my side. If you\u2019d like, I can also:\n- Add gift wrap to the laptop, or  \n- Help you choose a shipping speed (standard/express/next-day).",
-      "tool_calls": [
-        {
-          "name": "get_cart",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "cart_id": "CART-shop_004",
-            "customer_id": "shop_004",
-            "items": [
-              {
-                "cart_item_id": "CI-0001",
-                "product_id": "SP-1107",
-                "product_name": "SlimBook Touch 15",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 1099,
-                "line_total": 1099
-              }
-            ],
-            "subtotal": 1099,
-            "discount_amount": 0,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 1099,
-            "applied_promo_codes": []
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Perfect, that summary looks good to me. I don\u2019t need to pick shipping right now \u2014 skip it, I\u2019ll handle it at checkout.  \n\n[TASK_DONE]"
+      "content": "Thanks — that works for me. [TASK_DONE]"
     }
   ]
 }

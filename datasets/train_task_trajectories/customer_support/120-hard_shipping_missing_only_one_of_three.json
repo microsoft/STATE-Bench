@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I see the USB hub (7-Port USB-C Hub) is marked as delivered with your order, so it should have been in the box.  \n\nI can either send a replacement hub or issue a refund for that item\u2014whichever you prefer. Before I proceed, can you confirm:\n1) That no one else at your address might have removed it, and  \n2) That the shipping box didn\u2019t show signs of being opened or damaged?  \n\nOnce you confirm, tell me whether you\u2019d like a replacement or a refund for the USB hub.",
+      "content": "I’m sorry about that. I checked your order, and the missing item is the 7-Port USB-C Hub from order ORD-7223. Since it was missing from the box, I can help with a replacement or a refund—just tell me which you’d prefer.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -124,16 +124,77 @@
               }
             ]
           }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "return"
+          },
+          "result": {
+            "topic": "return",
+            "rules": {
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "windows_by_category": {
+                "electronics": "15-day return window",
+                "clothing": "30-day return window",
+                "kitchen": "30-day return window",
+                "books": "14-day return window",
+                "accessories": "30-day return window"
+              },
+              "window_extensions": {
+                "membership": "Gold/Platinum members get +15 days",
+                "prime": "Prime shipping members get +15 additional days",
+                "seasonal": "Orders placed in November or December extend through January 31 of the following year. Seasonal extension applies if it gives more time than tier/prime extensions.",
+                "store_credit_grace": "Up to 15 days past the return window: store credit only."
+              },
+              "eligibility": {
+                "defective_items": "No window restriction for defective, wrong item, or damaged in transit.",
+                "already_returned": "Items already returned/exchanged/cancelled are ineligible."
+              },
+              "restocking_fee": {
+                "base": "15% restocking fee for opened electronics returned for changed_mind.",
+                "tier_discount": {
+                  "platinum": "Restocking fee fully waived.",
+                  "gold": "50% off the restocking fee.",
+                  "silver": "25% off the restocking fee.",
+                  "standard": "No discount."
+                },
+                "auto_applied": "Restocking fee and any tier discount are folded into the process_return refund amount automatically; the result reports the discount under 'restocking_discount' for transparency."
+              },
+              "return_shipping_fee": {
+                "low_value": "Orders with subtotal < $50: customer pays $8 return shipping fee.",
+                "free_threshold": "Orders >= $50: free return label provided.",
+                "fault_exempt": "Defective, wrong item, damaged in transit, or missing: always free return shipping.",
+                "deduction": "Return shipping fee, when charged, is deducted from the return refund."
+              },
+              "bulk_purchase_clawback": {
+                "applies_when": "Order originally qualified for a bulk discount (3+ items with a discount code) AND the return drops remaining count below 3.",
+                "amount": "$5 per remaining item, deducted from the return refund.",
+                "no_discount_code": "If order had no discount code, no clawback applies."
+              },
+              "free_shipping_clawback": {
+                "applies_when": "Order originally qualified for free shipping (subtotal >= $100) AND the return drops remaining subtotal below $100.",
+                "amount": "$8 standard shipping fee is deducted from the return refund. This is a flat policy charge, not the original shipping cost (which was $0 on free-shipping orders).",
+                "fault_exempt": "Defective, wrong item, damaged in transit, or missing: no clawback (customer-fault returns only).",
+                "paid_shipping": "If the order did not qualify for free shipping originally (subtotal < $100), no clawback applies."
+              },
+              "repeat_category_surcharge": {
+                "rule": "Returning 2+ items from the same product category in one order: $5 surcharge per additional return (first return in each category is free).",
+                "different_categories": "Returns from different categories do not trigger the surcharge.",
+                "deduction": "Surcharge is deducted from the return refund."
+              }
+            }
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "The box wasn\u2019t damaged or opened, and no one else here removed anything from it.  \n\nI\u2019d like a refund for the missing USB hub, issued back to my original payment method."
+      "content": "I’d like a refund to my original payment method for the USB hub, please."
     },
     {
       "role": "assistant",
-      "content": "Thanks for confirming those details.  \n\nI\u2019ve issued a $45 refund for the 7-Port USB-C Hub back to your original payment method; it should appear on your card within 3\u201310 business days, depending on your bank. You don\u2019t need to return anything for this item.",
+      "content": "Done — I’ve processed a $45 refund for the USB hub back to your original payment method. You should see it post in a few business days depending on your card issuer.",
       "tool_calls": [
         {
           "name": "get_policies",
@@ -147,7 +208,7 @@
                 "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
                 "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
                 "outside_window": "Outside return window but within store-credit grace: store credit only.",
-                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order \u2014 read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
+                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order — read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
               },
               "method": {
                 "original_payment": "Default refund method when item was paid for and is being returned for fault.",
@@ -195,7 +256,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for taking care of that and refunding just the USB hub back to my card.  \n\nThat resolves my issue. [TASK_DONE]"
+      "content": "Thanks for taking care of that. [TASK_DONE]"
     }
   ]
 }

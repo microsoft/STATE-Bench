@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Add the ErgoDesk Standing Desk to my cart. I've got two promo codes \u2014 SAVE10 and OFFICE20 \u2014 which one's better for this? Just use the better one."
+      "content": "Add the ErgoDesk Standing Desk to my cart. I've got two promo codes — SAVE10 and OFFICE20 — which one's better for this? Just use the better one."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the ErgoDesk Standing Desk to your cart and applied the better promo code.\n\n- Item added: ErgoDesk Standing Desk \u2014 $449\n- Compared codes:\n  - SAVE10 \u2192 10% off \u2192 $44 discount\n  - OFFICE20 \u2192 20% off home office (cap $90) \u2192 $89 discount\n\nI applied **OFFICE20**, so your current cart totals are:\n\n- Subtotal: $449  \n- Discount (OFFICE20): -$89  \n- Estimated total (before tax/shipping): **$360**\n\nIf you\u2019d like, I can also check shipping options or help you add a chair or accessories to match the desk.",
+      "content": "Done — I added the ErgoDesk Standing Desk to your cart and applied the better promo code: OFFICE20.\n\nWhy OFFICE20 is better:\n- SAVE10: estimated discount $44\n- OFFICE20: estimated discount $89\n\nYour cart now:\n- ErgoDesk Standing Desk ×1 — $449\n- Promo applied: OFFICE20\n- Discount: $89\n- Total before shipping/tax: $360\n\nIf you want, I can also check whether using your loyalty points would lower it even more.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "home_office",
             "min_price": 0,
             "max_price": 5000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -84,6 +84,40 @@
             "shipping_cost": 0,
             "total": 0,
             "applied_promo_codes": []
+          }
+        },
+        {
+          "name": "get_promotions",
+          "arguments": {
+            "category": "home_office"
+          },
+          "result": {
+            "promotions": [
+              {
+                "promo_code": "SAVE10",
+                "description": "10% off any order over $100.",
+                "discount_type": "percentage",
+                "discount_value": 10,
+                "min_purchase": 100,
+                "max_discount": 0,
+                "category_restriction": null,
+                "expiry_date": "2026-12-31",
+                "active": true
+              },
+              {
+                "promo_code": "OFFICE20",
+                "description": "20% off home office items, max $90 discount, min $200 order.",
+                "discount_type": "percentage",
+                "discount_value": 20,
+                "min_purchase": 200,
+                "max_discount": 90,
+                "category_restriction": [
+                  "home_office"
+                ],
+                "expiry_date": "2026-12-31",
+                "active": true
+              }
+            ]
           }
         },
         {
@@ -153,7 +187,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s exactly what I needed. Thanks for applying OFFICE20 and breaking down the savings.  \n\n[TASK_DONE]"
+      "content": "[TASK_DONE]"
     }
   ]
 }

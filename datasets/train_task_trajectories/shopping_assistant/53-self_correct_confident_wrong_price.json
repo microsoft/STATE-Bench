@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hey \u2014 quick question. Isn't the SlimBook Air 13 (SP-1001) $749? That's the price I remember from last time I looked."
+      "content": "Hey — quick question. Isn't the SlimBook Air 13 (SP-1001) $749? That's the price I remember from last time I looked."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re right that it *might* have been $749 when you last checked, but the current price in our system for the SlimBook Air 13 (SP-1001) is $849.\n\nA few useful details:\n- Current price: $849  \n- In stock: Yes (ships in about 3 business days)  \n- Our record doesn\u2019t show a recent price drop; it\u2019s possible you saw:\n  - A temporary promotion (e.g., a sale or coupon), or  \n  - A different configuration (like a lower SSD/RAM model), or  \n  - A bundle/education discount at $749.\n\nIf you\u2019d like, I can:\n- Check current promotions on electronics to see if we can bring the price closer to what you remember, and/or  \n- Suggest similar 13\" laptops around the $700\u2013$750 range.",
+      "content": "Right now, the SlimBook Air 13 (SP-1001) is listed at $849, not $749.\n\nI checked the current product details, and there’s no previous-price field showing a recent drop from $749. If you want, I can also check whether there’s an active promo that could bring it closer to that price.",
       "tool_calls": [
         {
           "name": "get_product_details",
@@ -53,7 +53,16 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the SlimBook Air 13 (SP-1001) to your cart at the current price of $849 (no gift wrap), quantity 1.\n\nCart snapshot:\n- SlimBook Air 13 \u2014 $849  \n- Quantity: 1  \n- Gift wrap: No  \n- Cart total so far: $849 (before any shipping, promos, or taxes)\n\nDo you want me to:\n- Check for any current electronics promos or coupons, or  \n- Add anything else (case, mouse, keyboard, or a laptop sleeve) to go with it?",
+      "content": "I can add it, but I need one quick preference first: do you want gift wrap on it? It’s available for this item and adds $5 per unit.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "No preference, use the default."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I added 1 × SlimBook Air 13 to your cart at $849.\n\nCart total so far: $849\n\nIf you want, I can also check for any promo codes or discounts you might qualify for.",
       "tool_calls": [
         {
           "name": "add_to_cart",
@@ -81,7 +90,7 @@
     },
     {
       "role": "user",
-      "content": "No, that\u2019s all I needed for now, thanks. [TASK_DONE]"
+      "content": "[TASK_DONE]"
     }
   ]
 }

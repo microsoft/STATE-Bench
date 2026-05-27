@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the SlimBook Air 13 to your cart (1 unit, no gift wrap).",
+      "content": "Done — I added the SlimBook Air 13 to your cart for $849.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -90,7 +90,7 @@
     },
     {
       "role": "user",
-      "content": "Cool, thanks.  \n\n[TASK_DONE]"
+      "content": "Cool, thanks. [TASK_DONE]"
     }
   ]
 }

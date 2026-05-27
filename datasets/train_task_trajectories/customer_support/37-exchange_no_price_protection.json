@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "I want to exchange my headphones from order ORD-6038. I see they're now $199 \u2014 I paid $249. Can I get the difference back with the exchange?"
+      "content": "I want to exchange my headphones from order ORD-6038. I see they're now $199 — I paid $249. Can I get the difference back with the exchange?"
     },
     {
       "role": "assistant",
-      "content": "I checked your order and our exchange policy. Because exchanges don\u2019t offer price protection and are meant for swapping to a different product, we can\u2019t do a same-item exchange to refund the $50 price drop.\n\nIf you want the lower $199 price on the same headphones, the option would be to return your current pair (you\u2019re still within the 15\u2011day window) and then place a new order at the current price, subject to standard return eligibility and any restocking rules.",
+      "content": "You can exchange them, but not for the same headphones, and the lower current price wouldn’t be refunded as cash. I checked the policy: exchanges have to be for a different product, and if the replacement is cheaper, the difference is issued as store credit only.\n\nSo for these headphones, a straight swap to the same model at $199 isn’t treated as an exchange with a $50 refund. If you want, I can help you look at either a return instead or find a different headphone model to exchange into.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -102,7 +102,7 @@
           "result": {
             "topic": "exchange",
             "rules": {
-              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed \u2014 use process_return for a refund instead.",
+              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed — use process_return for a refund instead.",
               "same_price": "Exchange for a same-price product: no charge, no refund.",
               "more_expensive": "Exchange for more expensive item: customer pays price difference.",
               "cheaper": "Exchange for cheaper item: difference refunded as store credit (not original payment).",
@@ -116,16 +116,16 @@
     },
     {
       "role": "user",
-      "content": "Ah, ok\u2014so just to be clear, even though it\u2019s the exact same headphones and the price dropped, there\u2019s no way to get that $50 difference back through an exchange at all? It feels a bit rough given how soon I bought them."
+      "content": "Got it, thanks — but just to be clear, there’s no way to get that $50 difference back as part of the exchange? If that’s definitely the policy, I’ll consider doing a return and rebuy instead."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re understanding it correctly: under our current policy, there isn\u2019t a way to use an exchange to get that $50 back on the same headphones, even with the recent price drop.\n\nThe only path that could effectively get you to the lower price is to return the original pair (since you\u2019re still within the 15\u2011day window) and reorder at $199, keeping in mind any applicable restocking or return conditions. I know that feels rough given the timing; if you\u2019d like, I can walk you through exactly what a return would look like for your order (eligibility, any fees, and what you\u2019d get back) before you decide.",
+      "content": "Correct — not as part of an exchange. The policy is definite: there’s no price protection on exchanges, and any cheaper replacement only generates store credit, not a $50 refund back to your card.\n\nIf your goal is to capture the lower price, a return and new purchase would be the path to consider, assuming the item is still within the return window and in returnable condition.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "Got it, thanks for explaining\u2014that\u2019s disappointing, but I appreciate the clarity and I\u2019ll think about whether I want to do the return-and-rebuy route instead. For now I\u2019ll hold off on starting a return or exchange and just stick with what I have.  \n\nThanks for the help. [TASK_DONE]"
+      "content": "Understood, thanks for clarifying. I’ll consider the return-and-rebuy option, but I won’t start anything right now. [TASK_DONE]"
     }
   ]
 }

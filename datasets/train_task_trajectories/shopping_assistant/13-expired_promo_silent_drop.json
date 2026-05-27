@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hey \u2014 I'd like to order the SlimBook Air 13. Can you add it to my cart and apply the code SPRING20? I saw it online."
+      "content": "Hey — I'd like to order the SlimBook Air 13. Can you add it to my cart and apply the code SPRING20? I saw it online."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the SlimBook Air 13 to your cart.\n\nAbout the promo code: SPRING20 is no longer valid (it expired on 2026-03-31), so I can\u2019t apply it to your order.\n\nYour cart right now:\n- SlimBook Air 13 \u2014 $849\n- Quantity: 1\n- Gift wrap: No  \n- Current total (before tax & shipping): $849\n\nIf you\u2019d like, I can:\n- Check current electronics promotions to see if there\u2019s another discount you can use, and/or\n- Help you use some of your loyalty points toward this purchase.",
+      "content": "Done — I added 1 × SlimBook Air 13 to your cart.\n\nAbout `SPRING20`: I couldn’t apply it because it expired on 2026-03-31.\n\nCurrent cart:\n- SlimBook Air 13 — $849\n- Total: $849\n\nYou also have 2,200 loyalty points on your account. If you want, I can check for any active promo codes or help redeem points.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "SlimBook Air 13",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 10000,
-            "min_rating": 1,
+            "max_price": 5000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -63,6 +63,21 @@
           }
         },
         {
+          "name": "get_customer_account",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "customer_id": "shop_004",
+            "name": "Taylor Kim",
+            "email": "taylor.kim@example.com",
+            "tier": "standard",
+            "is_first_time": false,
+            "loyalty_points": 2200,
+            "purchase_history": []
+          }
+        },
+        {
           "name": "get_cart",
           "arguments": {
             "customer_id": "shop_004"
@@ -83,21 +98,6 @@
           }
         },
         {
-          "name": "get_customer_account",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "customer_id": "shop_004",
-            "name": "Taylor Kim",
-            "email": "taylor.kim@example.com",
-            "tier": "standard",
-            "is_first_time": false,
-            "loyalty_points": 2200,
-            "purchase_history": []
-          }
-        },
-        {
           "name": "get_variants",
           "arguments": {
             "product_id": "SP-1001"
@@ -108,18 +108,6 @@
             "base_price": 849,
             "variants": [],
             "note": "This product has no variants; no variant_id is needed for add_to_cart."
-          }
-        },
-        {
-          "name": "validate_promo",
-          "arguments": {
-            "customer_id": "shop_004",
-            "promo_code": "SPRING20"
-          },
-          "result": {
-            "valid": false,
-            "reason": "Promo code expired on 2026-03-31.",
-            "estimated_discount": 0
           }
         },
         {
@@ -143,12 +131,54 @@
             "cart_subtotal": 849,
             "cart_total": 849
           }
+        },
+        {
+          "name": "validate_promo",
+          "arguments": {
+            "customer_id": "shop_004",
+            "promo_code": "SPRING20"
+          },
+          "result": {
+            "valid": false,
+            "reason": "Promo code expired on 2026-03-31.",
+            "estimated_discount": 0
+          }
+        },
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "cart_id": "CART-shop_004",
+            "customer_id": "shop_004",
+            "items": [
+              {
+                "cart_item_id": "CI-0001",
+                "product_id": "SP-1001",
+                "product_name": "SlimBook Air 13",
+                "quantity": 1,
+                "gift_wrap": false,
+                "unit_price": 849,
+                "line_total": 849
+              }
+            ],
+            "subtotal": 849,
+            "discount_amount": 0,
+            "gift_wrap_fee": 0,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 849,
+            "applied_promo_codes": []
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Got it, thanks for checking \u2014 if SPRING20 expired on March 31, that\u2019s fine, I\u2019ll just go with the SlimBook Air 13 at the current price and not use any points this time.  \n\nEverything in the cart looks good to me as is.  \n\n[TASK_DONE]"
+      "content": "No, not this time — I don't want to use points. The full-price cart is fine. [TASK_DONE]"
     }
   ]
 }

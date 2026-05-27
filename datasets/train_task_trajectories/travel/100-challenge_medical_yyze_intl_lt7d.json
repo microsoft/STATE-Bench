@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve changed your booking BK-1000 to Toronto on June 27 in economy, keeping your preferences the same.\n\nHere are the new details:\n- Route: JFK \u2192 YYZ (Toronto)\n- Airline / Flight: AA101\n- Date: 27 June 2026\n- Departure: 10:00\n- Arrival: 12:57\n- Cabin: Economy\n- Seat: Aisle\n- Wi\u2011Fi: Added\n- Extra legroom: Added\n- Insurance: Included\n\nCosts/fees:\n- Original price paid: $550\n- New total price: $680\n- Change fee (medical reason recorded): $100\n- Fare difference: $30\n\nIf you have any medical documentation, keep it handy in case the airline requests it at the airport or for any post\u2011travel review.",
+      "content": "Your booking BK-1000 has been changed to Toronto on June 27.\n\nUpdated flight:\n- Flight: AA101\n- Route: JFK → YYZ\n- Departure: 2026-06-27 10:00\n- Arrival: 2026-06-27 12:57\n- Cabin: Economy\n\nPreferences kept the same:\n- Seat: Aisle\n- Meal: Standard\n- Wi‑Fi: Yes\n- Extra legroom: Yes\n- Insurance: Yes\n- Extra checked bags: 0\n\nCharges:\n- Change fee: $100\n- Fare difference: $30\n- New total paid: $680\n\nI applied the change under a medical reason.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -51,9 +51,9 @@
             "origin": "JFK",
             "destination": "YYZ",
             "date": "2026-06-27",
-            "airline": "AA",
+            "airline": "",
             "time_range": "morning",
-            "max_stops": 0,
+            "max_stops": 1,
             "max_price": -1
           },
           "result": {
@@ -116,7 +116,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for laying that out.  \n\nJust to confirm:\n- Same booking ID BK-1000  \n- JFK \u2192 YYZ on June 27  \n- Flight AA101, economy  \n- Aisle seat  \n- Wi\u2011Fi, extra legroom, and insurance all included  \n- New total $680 with $100 change fee and $30 fare difference  \n\nEverything looks correct and the cost is fine. I\u2019ll keep my medical documentation with me.  \n\n[TASK_DONE]"
+      "content": "Thanks. Just to confirm, the change fee is $100 and the fare difference is $30, correct? If so, that works for me. [TASK_DONE]"
     }
   ]
 }

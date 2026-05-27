@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve set up a return for the SprintMax Running Shoes from that order; you\u2019ll be refunded $121 to your original payment method, and there\u2019s an $8 adjustment because returning them drops the order below the free\u2011shipping threshold.\n\nFor the shirt: the Large size of that same shirt is currently out of stock, and our policy doesn\u2019t allow a direct size swap as an \u201cexchange\u201d for the identical item. If you\u2019d like, I can instead process a return for the current shirt so you get a refund, and you can reorder the Large once it\u2019s back in stock, or I can help you pick a different in\u2011stock shirt in Large and set that up as an exchange.",
+      "content": "I checked both. The shoes can be returned for a $121 refund to your original payment method.\n\nFor the shirt, Large is currently out of stock, so I can’t complete a direct exchange right now. The available option is store credit for the $59 shirt instead. If you want, I can process the shoe return now and also convert the shirt to store credit, or just do the shoes and leave the shirt alone.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -99,29 +99,6 @@
           }
         },
         {
-          "name": "get_customer",
-          "arguments": {
-            "customer_id": "cust_003"
-          },
-          "result": {
-            "customer_id": "cust_003",
-            "name": "Sarah Williams",
-            "email": "sarah.w@example.com",
-            "membership_tier": "gold",
-            "account_created": "2021-11-20",
-            "total_orders": 53,
-            "preferred_refund_method": "original_payment",
-            "store_credit_balance": 45,
-            "has_prime_shipping": true,
-            "benefits": {
-              "return_window_extension": "+15 days",
-              "compensation_multiplier": "1.5x",
-              "restocking_fee_waiver": false,
-              "prime_shipping": true
-            }
-          }
-        },
-        {
           "name": "get_policies",
           "arguments": {
             "topic": "exchange"
@@ -129,7 +106,7 @@
           "result": {
             "topic": "exchange",
             "rules": {
-              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed \u2014 use process_return for a refund instead.",
+              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed — use process_return for a refund instead.",
               "same_price": "Exchange for a same-price product: no charge, no refund.",
               "more_expensive": "Exchange for more expensive item: customer pays price difference.",
               "cheaper": "Exchange for cheaper item: difference refunded as store credit (not original payment).",
@@ -147,7 +124,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -228,6 +205,23 @@
           }
         },
         {
+          "name": "process_exchange",
+          "arguments": {
+            "item_id": "ITEM-10281",
+            "new_product_id": "PROD-4292",
+            "confirm": false
+          },
+          "result": {
+            "status": "preview",
+            "item_id": "ITEM-10281",
+            "new_product_id": "PROD-4292",
+            "out_of_stock": true,
+            "store_credit_amount": 59,
+            "refund_method": "store_credit",
+            "reason": "Requested item out of stock — store credit is available for the original item"
+          }
+        },
+        {
           "name": "process_return",
           "arguments": {
             "item_id": "ITEM-10282",
@@ -252,7 +246,35 @@
             "paid_return_shipping_fee": 0,
             "restocking_discount": 0
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Please just process the shoe return and leave the shirt as-is since Large isn’t available. If you can, send me the preview for the shoe return only."
+    },
+    {
+      "role": "assistant",
+      "content": "Here’s the shoe return preview only:\n\n- Item: SprintMax Running Shoes\n- Return reason: uncomfortable / changed mind\n- Refund: $121 to your original payment method\n- Adjustment included: $8 shipping clawback\n- Return is eligible\n\nI’ve left the shirt unchanged. If you want, I can go ahead and finalize the shoe return.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "That looks good, but can you clarify the $8 shipping clawback? I just want to make sure the shoe return is being processed on its own and the shirt is staying unchanged."
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — only the shoe return is being handled, and the shirt is staying unchanged.\n\nThe $8 clawback applies because the original order total was $188, which qualified for free shipping, but if the $129 shoes are returned, the remaining order is just the $59 shirt, which falls below the free-shipping threshold. Per policy, that reduces the shoe refund by $8, which is why the refund is $121 instead of $129.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Got it, thanks for explaining. Please go ahead and finalize the shoe return only, with the shirt left unchanged."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I processed the return for the running shoes only.\n\nYou’ll receive $121 back to your original payment method, and the shirt remains unchanged.",
+      "tool_calls": [
         {
           "name": "process_return",
           "arguments": {
@@ -280,16 +302,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for setting up the shoe return.  \n\nSince the Large in the same shirt is out of stock and you can\u2019t do a direct size swap, I\u2019ll skip any exchange on the shirt for now and just keep it\u2014please leave the shirt as-is and only process the return for the running shoes as you described."
-    },
-    {
-      "role": "assistant",
-      "content": "You\u2019re all set\u2014only the running shoes are being returned, and the shirt will remain on your order as-is.\n\nYou\u2019ll receive a $121 refund to your original payment method for the shoes per the return that\u2019s already been processed. If you later decide you want to return the shirt (and it\u2019s still within the return window) or swap to a different Large shirt, I can help with that too.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Perfect, that\u2019s exactly what I wanted\u2014shoes returned, shirt unchanged.  \n\nThanks for the help! [TASK_DONE]"
+      "content": "Thanks so much for your help! [TASK_DONE]"
     }
   ]
 }

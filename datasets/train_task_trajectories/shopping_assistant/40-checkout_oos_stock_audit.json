@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what your cart looks like right now:\n\n- SlimBook Air 13 (Previous Gen) \u2014 $699 \u2014 Qty 1\n- PixelShot Webcam 1080p \u2014 $79 \u2014 Qty 1  \nSubtotal: $778  \nDiscounts: $0  \nGift wrap: $0  \nShipping: not selected yet  \nTotal (before shipping): $778  \nLoyalty points available: 2,200 (worth up to $22, but can be capped by store rules)\n\nI can finalize this in two ways, depending on what you prefer:\n\n1) Use loyalty points or not  \n- Do you want to redeem some of your 2,200 points to reduce the total, or save them for later?\n\n2) Shipping speed  \n- Which shipping option would you like: standard, express, or next-day?\n\nReply with:\n- \u201cUse X points and standard/express/next-day shipping\u201d\nor\n- \u201cNo points, standard/express/next-day shipping\u201d\n\nand I\u2019ll apply that and finalize your cart setup for checkout.",
+      "content": "I can help, but I need one checkout choice from you first.\n\nCurrent cart:\n- SlimBook Air 13 (Previous Gen) — $699\n- PixelShot Webcam 1080p — $79\n- Total before shipping: $778\n\nWhat I found:\n- No active electronics promo codes are available right now.\n- You have 2,200 loyalty points available, but I can only redeem points if you tell me the exact amount you want to use.\n  - 500 points = $5 minimum\n  - 2,200 points = $22 maximum available to you\n\nTo finalize, please tell me:\n1. Do you want to redeem loyalty points? If yes, how many?\n2. Do you want gift wrap on either item?\n3. If you want, I can also help with shipping options.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -74,21 +74,40 @@
           "result": {
             "promotions": []
           }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "loyalty_redemption"
+          },
+          "result": {
+            "topic": "loyalty_redemption",
+            "summary": "Loyalty points can be redeemed at checkout to offset part of the cart total. 100 points = $1.",
+            "rules": [
+              "Rate: 100 loyalty points = $1.00 off.",
+              "Cap: redemption cannot exceed 50% of the current cart total.",
+              "Minimum redemption: 500 points ($5).",
+              "Stacking: stacks with promo codes and category bundles.",
+              "Restriction: not combinable with the first-time welcome discount.",
+              "Points are debited from the customer's balance at redemption.",
+              "Agent action rule: do NOT call redeem_loyalty_points without an explicit customer-specified amount. You may discuss and recommend redemption in chat, but the write call must come AFTER the customer names a specific number of points."
+            ]
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "No points, and I don\u2019t need to pick shipping right now \u2014 skip it, I\u2019ll handle shipping at checkout."
+      "content": "No, not this time — I don’t want to use points. No preference on gift wrap, and I don’t need to pick shipping right now — skip it, I’ll handle it at checkout."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set from the store side.\n\nHere\u2019s your finalized cart (before shipping):\n\n- SlimBook Air 13 (Previous Gen) \u2014 $699 \u2014 Qty 1  \n- PixelShot Webcam 1080p \u2014 $79 \u2014 Qty 1  \n\nSubtotal: $778  \nDiscounts: $0  \nLoyalty points used: 0 (you still have 2,200 available)  \nShipping: to be selected at checkout  \nTotal (before shipping): $778  \n\nYou can proceed to the checkout page now and choose your shipping option there.",
+      "content": "All set from my side.\n\nYour cart is currently ready with:\n- No loyalty points redeemed\n- No gift wrap added\n- No shipping option selected yet\n\nCurrent total before shipping/tax: $778\n\nSince you don’t want any changes, there’s nothing else I need to update in the cart. You can proceed to checkout and choose shipping there.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "Great, thanks. [TASK_DONE]"
+      "content": "great, thanks. [TASK_DONE]"
     }
   ]
 }

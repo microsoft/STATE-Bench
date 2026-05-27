@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hey \u2014 can you read back my cart for me, item by item? Include the gift wrap and the promo discount so I can double-check the math."
+      "content": "Hey — can you read back my cart for me, item by item? Include the gift wrap and the promo discount so I can double-check the math."
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s your current cart, line by line, with the math broken out.\n\nITEMS  \n1) SlimBook Air 13 (SP-1001)  \n   - Quantity: 1  \n   - Unit price: $849  \n   - Gift wrap: No  \n   - Line total: $849  \n\n2) SoundMax Wireless Headphones (SP-2003)  \n   - Quantity: 1  \n   - Unit price: $149  \n   - Gift wrap: Yes  \n   - Line total (items only): $149  \n\n3) PixelShot Webcam 1080p (SP-2005)  \n   - Quantity: 2  \n   - Unit price: $79  \n   - Gift wrap: No  \n   - Line total: 2 \u00d7 $79 = $158  \n\nSUBTOTAL (items only, before gift wrap & discounts)  \n- $849 + $149 + $158 = **$1,156**\n\nGIFT WRAP  \n- 1 item gift-wrapped (the headphones)  \n- Gift-wrap fee: $5 per wrapped item  \n- Gift-wrap total: **$5**\n\nPROMO DISCOUNT  \n- Applied code(s): SAVE50  \n- Discount amount: **$50** off the subtotal  \n\nLOYALTY  \n- Loyalty discount: $0  \n- Points redeemed: 0  \n\nSHIPPING  \n- Shipping option: not selected yet  \n- Shipping cost: $0 (for now)\n\nFINAL TOTAL  \n- Subtotal: $1,156  \n- Minus promo discount: $1,156 \u2212 $50 = $1,106  \n- Plus gift wrap: $1,106 + $5 = **$1,111**\n\nSo your cart total is **$1,111**, with **$50** in promo savings and **$5** in gift-wrap fees.",
+      "content": "Absolutely — here’s your cart item by item:\n\n1. SlimBook Air 13  \n   - Qty: 1  \n   - Unit price: $849  \n   - Gift wrap: No  \n   - Line total: $849\n\n2. SoundMax Wireless Headphones  \n   - Qty: 1  \n   - Unit price: $149  \n   - Gift wrap: Yes  \n   - Line total: $149\n\n3. PixelShot Webcam 1080p  \n   - Qty: 2  \n   - Unit price: $79 each  \n   - Gift wrap: No  \n   - Line total: $158\n\nMath summary:\n- Subtotal: $1,156\n- Promo code: SAVE50\n- Promo discount: -$50\n- Gift wrap fee: +$5\n- Loyalty discount: $0\n- Shipping: $0\n\nTotal:\n- $1,156 - $50 + $5 = $1,111\n\nSo your current total is $1,111.\n\nIf you want, I can also format this as a compact receipt-style breakdown.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -66,7 +66,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, that matches what I expected. Thanks. [TASK_DONE]"
+      "content": "perfect, that matches what I expected. Thanks. [TASK_DONE]"
     }
   ]
 }

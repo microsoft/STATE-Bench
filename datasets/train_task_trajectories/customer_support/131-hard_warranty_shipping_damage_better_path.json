@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "No\u2014don\u2019t use your warranty for this. Since the blender arrived shattered and the shipment is marked as damaged, this is a shipping/damaged-in-transit issue, not a wear-and-tear defect, so it should be replaced or refunded under our normal damage policy at no cost to you.\n\nI can help you start that process next: do you want a replacement blender or a refund?",
+      "content": "No—since it arrived shattered, this should be handled as shipping damage, not a warranty repair. I checked your order, and the blender was delivered yesterday with damage noted, so you’re eligible for a no-cost return/replacement path rather than using the warranty.\n\nIf you want, I can help start a damaged-item return or exchange for a replacement blender.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -74,65 +74,12 @@
         {
           "name": "get_policies",
           "arguments": {
-            "topic": "warranty"
-          },
-          "result": {
-            "topic": "warranty",
-            "rules": {
-              "active": "Active warranty: eligible for claim.",
-              "expired_recent": "Expired <30 days: 50% off repair.",
-              "expired_old": "Expired >30 days: full-price repair or 25% off replacement.",
-              "claim_limit": "Max claims reached: paid repair only (40% of item price).",
-              "repair_vs_replace": "Items <$100: replacement. Items >=$100: repair first.",
-              "recurring_defect": "2+ prior claims for same issue: automatic replacement.",
-              "manufacturer": "Manufacturer warranty covers first 12 months.",
-              "extended": "Extended warranty covers after manufacturer period."
-            }
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Thanks, that helps.  \n\nIn that case I\u2019d like to go with a refund to my original payment method rather than a replacement."
-    },
-    {
-      "role": "assistant",
-      "content": "Done\u2014I\u2019ve set this up as a damaged-in-transit return with a refund to your original payment method.\n\nYou\u2019ll receive:\n- $89 for the blender itself  \n- $8 for the shipping cost  \n\nTotal: $97 back to your card.  \nYou\u2019ll also get a free return label; please package the shattered blender safely, and drop it off using the instructions in the email you\u2019ll receive shortly.",
-      "tool_calls": [
-        {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "refund"
-          },
-          "result": {
-            "topic": "refund",
-            "rules": {
-              "amount": {
-                "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
-                "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
-                "outside_window": "Outside return window but within store-credit grace: store credit only.",
-                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order \u2014 read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
-              },
-              "method": {
-                "original_payment": "Default refund method when item was paid for and is being returned for fault.",
-                "store_credit": "Required for: gift returns (at current product price), outside-window grace returns, and exchange-cheaper differences.",
-                "store_credit_only_constraint": "When a return is issued under the store-credit-only rule (gift return OR outside-window grace), the refund method cannot be changed back to original_payment afterward. process_refund will reject any attempt to flip the method on those returns."
-              },
-              "price_match": "If product price drops within 7 days of delivery, refund the difference (no return required).",
-              "goodwill_credit": "Goodwill credits (e.g., fragile-item damage bonus) are issued as a refund with the credit amount."
-            }
-          }
-        },
-        {
-          "name": "get_policies",
-          "arguments": {
             "topic": "return"
           },
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -186,6 +133,77 @@
           }
         },
         {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "warranty"
+          },
+          "result": {
+            "topic": "warranty",
+            "rules": {
+              "active": "Active warranty: eligible for claim.",
+              "expired_recent": "Expired <30 days: 50% off repair.",
+              "expired_old": "Expired >30 days: full-price repair or 25% off replacement.",
+              "claim_limit": "Max claims reached: paid repair only (40% of item price).",
+              "repair_vs_replace": "Items <$100: replacement. Items >=$100: repair first.",
+              "recurring_defect": "2+ prior claims for same issue: automatic replacement.",
+              "manufacturer": "Manufacturer warranty covers first 12 months.",
+              "extended": "Extended warranty covers after manufacturer period."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks for clarifying that. Before we start anything, can you tell me what my options are for the shipping-damage path?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — for an item that arrived shattered, your shipping-damage options are:\n\n- Return it for a full refund.\n- Exchange it for a replacement, if you want the same or another available item.\n- In either case, you shouldn’t be charged return shipping or restocking fees for shipping damage.\n\nSince this was delivered yesterday, you’re in a very straightforward case. If you want, I can check replacement availability or preview the refund/exchange before we do anything.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "What do you need from me to start the shipping-damage return, and do you need to know whether I want a refund or a replacement first?"
+    },
+    {
+      "role": "assistant",
+      "content": "To start, I just need your preference: refund or replacement. For a damaged-in-transit case, that determines which path I open first.\n\nIf you want a replacement, tell me whether you want the same blender again or a different item. If you want a refund, I can preview that next. Photos can help if the carrier asks later, so it’s a good idea to keep a couple showing the shattered blender and packaging.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "I want a refund to my original payment method, not a replacement or exchange. If you can, please show me the preview for the shipping-damage return/refund path."
+    },
+    {
+      "role": "assistant",
+      "content": "Here’s the preview for the shipping-damage refund path:\n\n- Item refund: $89\n- Shipping refund: $8\n- Total refund to your original payment method: $97\n\nThere are no restocking fees, no return-shipping charge, and no clawbacks. If you want, I can submit it now.",
+      "tool_calls": [
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "refund"
+          },
+          "result": {
+            "topic": "refund",
+            "rules": {
+              "amount": {
+                "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
+                "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
+                "outside_window": "Outside return window but within store-credit grace: store credit only.",
+                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order — read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
+              },
+              "method": {
+                "original_payment": "Default refund method when item was paid for and is being returned for fault.",
+                "store_credit": "Required for: gift returns (at current product price), outside-window grace returns, and exchange-cheaper differences.",
+                "store_credit_only_constraint": "When a return is issued under the store-credit-only rule (gift return OR outside-window grace), the refund method cannot be changed back to original_payment afterward. process_refund will reject any attempt to flip the method on those returns."
+              },
+              "price_match": "If product price drops within 7 days of delivery, refund the difference (no return required).",
+              "goodwill_credit": "Goodwill credits (e.g., fragile-item damage bonus) are issued as a refund with the credit amount."
+            }
+          }
+        },
+        {
           "name": "process_return",
           "arguments": {
             "item_id": "ITEM-10236",
@@ -211,6 +229,31 @@
             "restocking_discount": 0
           }
         },
+        {
+          "name": "process_refund",
+          "arguments": {
+            "item_id": "ITEM-10236",
+            "refund_method": "original_payment",
+            "amount": 97,
+            "confirm": false
+          },
+          "result": {
+            "status": "preview",
+            "item_id": "ITEM-10236",
+            "refund_amount": 97,
+            "refund_method": "original_payment"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "That looks right, and I appreciate that this is being handled as shipping damage rather than a warranty claim. Please go ahead and submit the return/refund to my original payment method."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I submitted the damaged-item return and the refund to your original payment method.\n\nYou should receive $97 total back. A return label was also issued for the blender.",
+      "tool_calls": [
         {
           "name": "process_return",
           "arguments": {
@@ -240,21 +283,6 @@
             "item_id": "ITEM-10236",
             "refund_method": "original_payment",
             "amount": 97,
-            "confirm": false
-          },
-          "result": {
-            "status": "preview",
-            "item_id": "ITEM-10236",
-            "refund_amount": 97,
-            "refund_method": "original_payment"
-          }
-        },
-        {
-          "name": "process_refund",
-          "arguments": {
-            "item_id": "ITEM-10236",
-            "refund_method": "original_payment",
-            "amount": 97,
             "confirm": true
           },
           "result": {
@@ -270,7 +298,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for getting that set up and for keeping it under shipping damage instead of warranty.  \n\nI\u2019ll watch for the email and send the shattered blender back with the return label. [TASK_DONE]"
+      "content": "Thanks for taking care of that. I appreciate you handling it through the shipping-damage return/refund path instead of warranty. [TASK_DONE]"
     }
   ]
 }

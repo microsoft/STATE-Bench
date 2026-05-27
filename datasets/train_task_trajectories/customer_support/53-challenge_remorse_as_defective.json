@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "I need to return the tablet from order ORD-7011 \u2014 it's defective. The silver color looks completely different from what was shown on the website. It doesn't match my setup at all."
+      "content": "I need to return the tablet from order ORD-7011 — it's defective. The silver color looks completely different from what was shown on the website. It doesn't match my setup at all."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve started a return for your SlateTab Pro 11-inch from order ORD-7011 as a defective item, and it\u2019s been approved.  \n\nYou\u2019ll receive a free return shipping label and a full refund of $599 back to your original payment method once the tablet is received and processed. Please pack it securely with all accessories; if you need packing or label instructions, tell me whether you\u2019re printing the label at home or need a QR code for drop-off.",
+      "content": "I can help with that. I checked your order and the tablet is eligible for return, but because “doesn’t match the website / setup” is treated as a not-as-described return rather than a defect claim, the current refund preview is **$591** back to your original payment method.\n\nThat amount reflects an **$8 shipping adjustment**; there’s no restocking fee. If you want, I can submit the return now.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -27,7 +27,7 @@
             "shipping_cost": 0,
             "tracking_number": "TRK97869202",
             "delivery_date": "2026-06-30T14:00:00",
-            "delivery_promised_date": "2026-06-05T18:00:00",
+            "delivery_promised_date": "2026-06-30T18:00:00",
             "signature_required": false,
             "signature_on_file": null,
             "payment_method": "credit_card",
@@ -79,7 +79,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -136,7 +136,7 @@
           "name": "process_return",
           "arguments": {
             "item_id": "ITEM-10011",
-            "reason": "defective",
+            "reason": "not_as_described",
             "amount": 0,
             "confirm": false
           },
@@ -144,37 +144,14 @@
             "status": "preview",
             "item_id": "ITEM-10011",
             "return_eligible": true,
-            "reason": "defective",
-            "refund_amount": 599,
+            "reason": "not_as_described",
+            "refund_amount": 591,
             "refund_method": "original_payment",
             "restocking_fee": 0,
             "discount_adjustment": 0,
-            "free_return_shipping": true,
-            "shipping_refund": true,
-            "shipping_clawback": 0,
-            "bulk_clawback": 0,
-            "repeat_surcharge": 0,
-            "paid_return_shipping_fee": 0,
-            "restocking_discount": 0
-          }
-        },
-        {
-          "name": "process_return",
-          "arguments": {
-            "item_id": "ITEM-10011",
-            "reason": "defective",
-            "amount": 599,
-            "confirm": true
-          },
-          "result": {
-            "status": "returned",
-            "item_id": "ITEM-10011",
-            "refund_amount": 599,
-            "policy_computed_amount": 599,
-            "refund_method": "original_payment",
-            "restocking_fee": 0,
-            "return_label_issued": true,
-            "shipping_clawback": 0,
+            "free_return_shipping": false,
+            "shipping_refund": false,
+            "shipping_clawback": 8,
             "bulk_clawback": 0,
             "repeat_surcharge": 0,
             "paid_return_shipping_fee": 0,
@@ -185,34 +162,40 @@
     },
     {
       "role": "user",
-      "content": "Oh, wow, okay \u2014 thanks for setting that up so quickly.  \n\nI can print the label at home; could you just confirm if there\u2019s anything specific I need to include in the box besides the tablet and charger?"
+      "content": "Okay, thanks for explaining that — I just wanted to make sure I wasn’t being treated like I was making up a defect. If the return is being handled that way, then yes, please go ahead and submit it."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set to print the label at home.  \n\nFor this tablet return, please include:\n- The tablet itself  \n- Charger and cable  \n- Any original accessories (e.g., stylus, adapter, etc., if they came in the box)  \n- Original box and packaging, if you still have them  \n- The packing slip or a note with your order ID (ORD-7011) and the return ID/barcode from the label  \n\nMake sure the device is powered off, packed securely, and that the return label fully covers any old shipping labels. If you tell me your country, I can also confirm the drop-off options for your label.",
-      "tool_calls": null
+      "content": "Done — the return has been submitted for the tablet.\n\nYou’ll receive **$591 refunded to your original payment method**. There’s **no restocking fee**. If you want, I can also help you find a tablet color that’s closer to the look you wanted.",
+      "tool_calls": [
+        {
+          "name": "process_return",
+          "arguments": {
+            "item_id": "ITEM-10011",
+            "reason": "not_as_described",
+            "amount": 591,
+            "confirm": true
+          },
+          "result": {
+            "status": "returned",
+            "item_id": "ITEM-10011",
+            "refund_amount": 591,
+            "policy_computed_amount": 591,
+            "refund_method": "original_payment",
+            "restocking_fee": 0,
+            "return_label_issued": false,
+            "shipping_clawback": 8,
+            "bulk_clawback": 0,
+            "repeat_surcharge": 0,
+            "paid_return_shipping_fee": 0,
+            "restocking_discount": 0
+          }
+        }
+      ]
     },
     {
       "role": "user",
-      "content": "Got it, that\u2019s clear, thanks.  \n\nI\u2019m in the US, so could you let me know what my drop\u2011off options are for this return label?"
-    },
-    {
-      "role": "assistant",
-      "content": "Since you\u2019re in the US and printing the label at home, your options will depend on the carrier shown on the label (it should be in the top corner or near the barcode). In general:\n\n- **If it\u2019s UPS:** You can drop it at any UPS Store, UPS Customer Center, or authorized UPS drop-off point (including many office supply stores and some lockers).  \n- **If it\u2019s FedEx:** Drop at a FedEx Office, FedEx Ship Center, or authorized FedEx drop-off location (often inside pharmacies or office supply stores).  \n- **If it\u2019s USPS:** You can drop it at any post office, USPS collection box (if the box size allows), or leave it in your mailbox/for carrier pickup if permitted in your area.\n\nCheck the carrier logo on your label and use their website\u2019s \u201cFind a Location\u201d tool with your ZIP code for the closest spot. If you tell me which carrier is on your label and your ZIP code, I can suggest specific nearby drop-off types.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "The label says UPS, and my ZIP code is 94610.  \n\nAre there any specific UPS drop\u2011off types I should use for returns like this, or is any UPS Store/authorized drop\u2011off fine?"
-    },
-    {
-      "role": "assistant",
-      "content": "Any standard UPS drop\u2011off option is fine for this return.  \n\nYou can use:\n- **UPS Store** locations  \n- **UPS Customer Centers**  \n- **Authorized UPS drop\u2011off points** (like some office supply stores)  \n- **UPS drop boxes** if the package fits and the label is scannable  \n\nFor electronics, I recommend a UPS Store or Customer Center so you can get a **drop\u2011off receipt with tracking**. That\u2019s especially easy to do around 94610 and gives you proof the package was handed over.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Okay, I\u2019ll take it to a UPS Store so I can get a receipt with tracking.  \n\nThanks for all the help getting this set up and explaining everything. [TASK_DONE]"
+      "content": "Thanks, I appreciate you sorting that out and explaining the classification clearly. [TASK_DONE]"
     }
   ]
 }

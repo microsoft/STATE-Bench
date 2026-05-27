@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the ErgoDesk Mesh Chair to your cart alongside your ErgoDesk Standing Desk.\n\nCurrent cart highlights:\n- ErgoDesk Standing Desk \u2013 Qty 1 \u2013 $449  \n- ErgoDesk Mesh Chair \u2013 Qty 1 \u2013 $329  \n\nYour updated subtotal is $778, and your current discounts (including SAVE10) bring the total to about $701 before tax and shipping.\n\nIf you\u2019d like, I can:\n- Add gift wrap for the chair or desk  \n- Help you choose a shipping speed or estimate delivery dates",
+      "content": "Done — I added the ErgoDesk Mesh Chair to your cart.\n\nCart now includes:\n- ErgoDesk Standing Desk\n- ErgoDesk Mesh Chair\n\nChair details:\n- Qty: 1\n- Price: $329\n- Gift wrap: No\n\nYour updated cart subtotal is $778, and the current total is $701.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "ErgoDesk Mesh Chair",
             "category": "home_office",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -52,35 +52,16 @@
           }
         },
         {
-          "name": "get_cart",
+          "name": "get_variants",
           "arguments": {
-            "customer_id": "shop_004"
+            "product_id": "SP-3004"
           },
           "result": {
-            "cart_id": "CART-shop_004",
-            "customer_id": "shop_004",
-            "items": [
-              {
-                "cart_item_id": "CI-0001",
-                "product_id": "SP-3003",
-                "product_name": "ErgoDesk Standing Desk",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 449,
-                "line_total": 449
-              }
-            ],
-            "subtotal": 449,
-            "discount_amount": 44,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 405,
-            "applied_promo_codes": [
-              "SAVE10"
-            ]
+            "product_id": "SP-3004",
+            "product_name": "ErgoDesk Mesh Chair",
+            "base_price": 329,
+            "variants": [],
+            "note": "This product has no variants; no variant_id is needed for add_to_cart."
           }
         },
         {
@@ -109,7 +90,7 @@
     },
     {
       "role": "user",
-      "content": "Looks good, thanks \u2014 I\u2019ll handle the rest at checkout.  \n\n[TASK_DONE]"
+      "content": "[TASK_DONE]"
     }
   ]
 }

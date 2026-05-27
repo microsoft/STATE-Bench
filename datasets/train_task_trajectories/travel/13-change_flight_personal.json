@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "You\u2019re currently booked on WN100 from Denver (DEN) to Chicago (ORD) on 2026-06-20 at 08:00, in economy, window seat.\n\nTo change it, I need a bit more detail:\n\n1) What new date do you want to travel?\n2) Do you have a preferred time window?  \n   - early morning (5\u20138am)  \n   - morning (8am\u201312pm)  \n   - afternoon (12\u20135pm)  \n   - evening (5\u20139pm)  \n   - red-eye (9pm\u20135am)  \n3) Are you okay with:  \n   - any airline, or do you prefer the same airline if possible?  \n   - nonstop only, or are 1-stop flights okay?  \n4) Any budget limit for the new flight?\n\nOnce you tell me this, I\u2019ll search for options and then we can pick one and process the change.",
+      "content": "I found your current booking:\n\n- Booking ID: BK-1000\n- Route: Denver (DEN) → Chicago (ORD)\n- Current departure: 2026-06-20 08:00\n- Cabin: Economy\n\nI can help change it to a different date. Please tell me:\n\n1. What new date would you like to travel?  \n2. Do you want to keep the same route: DEN → ORD?  \n3. If you already have preferences, do you want to keep these the same?\n   - cabin: economy\n   - seat: window\n   - meal: standard\n   - Wi‑Fi: no\n   - extra legroom: no\n   - insurance: yes\n\nIf you want, I can also search for flight options for your new date once you share it.",
       "tool_calls": [
         {
           "name": "get_user_reservations",
@@ -63,11 +63,11 @@
     },
     {
       "role": "user",
-      "content": "I\u2019d like to move it to June 22nd.  \n\nFor time, I\u2019d prefer a morning departure (8am\u201312pm).  \n\nSame airline is fine, and I\u2019d prefer nonstop if possible.  \n\nMy budget for the new flight is $600 total."
+      "content": "I’d like to move it to June 22 and keep the same DEN to ORD route. Yes, please keep the existing preferences the same and search for flight options for that date."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve moved your flight successfully.\n\nHere are your new details:\n- Route: Denver (DEN) \u2192 Chicago (ORD)  \n- Airline: WN (same as before)  \n- New date: 2026-06-22  \n- Departure: 11:30  \n- Arrival: 15:33  \n- Cabin: Economy  \n- Seat: Window  \n- Extras: No Wi\u2011Fi, no extra legroom, travel insurance kept, 0 paid checked bags  \n\nCost summary:\n- Original ticket: $350  \n- Fare difference: +$30  \n- Change fee (domestic, economy, personal reason): +$150  \n- New total paid: $530  \n\nThis keeps you within your $600 budget.  \nWould you like me to adjust anything (seat type, add Wi\u2011Fi, extra legroom, or change meal preference)?",
+      "content": "Here are the DEN → ORD options I found for June 22, keeping your preferences in mind:\n\n1. AS100  \n   - Departs: 8:30 AM  \n   - Arrives: 1:34 PM  \n   - Stops: nonstop  \n   - Economy: $425\n\n2. WN101  \n   - Departs: 11:30 AM  \n   - Arrives: 3:33 PM  \n   - Stops: nonstop  \n   - Economy: $380\n\nYour current booking was $350, so the fare difference may apply depending on which flight you choose, plus any change fee if applicable.\n\nReply with the flight ID you want, and I’ll process the change using your same preferences:\n- Economy\n- Window seat\n- Standard meal\n- No Wi‑Fi\n- No extra legroom\n- Insurance kept on",
       "tool_calls": [
         {
           "name": "search_flights",
@@ -75,13 +75,29 @@
             "origin": "DEN",
             "destination": "ORD",
             "date": "2026-06-22",
-            "airline": "WN",
+            "airline": "",
             "time_range": "morning",
-            "max_stops": 0,
-            "max_price": 600
+            "max_stops": 1,
+            "max_price": -1
           },
           "result": {
             "flights": [
+              {
+                "flight_id": "AS100",
+                "airline_code": "AS",
+                "origin": "DEN",
+                "destination": "ORD",
+                "departure_time": "2026-06-22T08:30:00",
+                "arrival_time": "2026-06-22T13:34:00",
+                "duration_minutes": 304,
+                "stops": 0,
+                "cabin_prices": {
+                  "economy": 425,
+                  "business": 975
+                },
+                "status": "scheduled",
+                "route_type": "domestic"
+              },
               {
                 "flight_id": "WN101",
                 "airline_code": "WN",
@@ -100,6 +116,29 @@
               }
             ]
           }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "I’ll take WN101, please. Before you process it, what’s the change fee, and does my insurance cover that?"
+    },
+    {
+      "role": "assistant",
+      "content": "For your booking, the change fee would be $150.\n\nWhy:\n- Your current flight departs on June 20\n- Today is June 15\n- That’s within 7 days of departure\n- For a domestic economy ticket changed for a personal reason, the fee is $150\n- Fare difference also applies\n\nFor WN101:\n- New fare: $380\n- Original fare paid: $350\n- Fare difference: $30\n\nEstimated total to change:\n- Change fee: $150\n- Fare difference: $30\n- Total: $180\n\nAbout your insurance:\n- I don’t see any indication that the travel insurance automatically covers voluntary personal change fees.\n- In this system, change fees are determined by fare rules and change reason, not waived just because insurance was added.\n- Insurance may help in covered situations like certain disruptions or emergencies, but not a standard personal date change by default.\n\nIf you want, I can proceed with the change to WN101 using:\n- change reason: personal\n- same preferences as your current booking\n\nIf you’d like, I can also check whether you might qualify under a different change reason, but I’d only use that if it genuinely applies.",
+      "tool_calls": [
+        {
+          "name": "get_user_details",
+          "arguments": {
+            "user_id": "user_004"
+          },
+          "result": {
+            "user_id": "user_004",
+            "name": "Noah Brown",
+            "email": "noah.brown@example.com",
+            "loyalty_tier": "silver",
+            "loyalty_points": 15000
+          }
         },
         {
           "name": "get_policies",
@@ -114,8 +153,8 @@
             "rules": {
               "free_change_window": "Free changes within 24 hours (domestic) or 48 hours (international) of booking",
               "basic_economy": "Not changeable after free window",
-              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if \u22647 days. Fare difference also applies.",
-              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if \u22647 days. Fare difference also applies.",
+              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if ≤7 days. Fare difference also applies.",
+              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if ≤7 days. Fare difference also applies.",
               "economy_medical": "Medical changes: 50% discount on standard fee (requires change_reason='medical')",
               "economy_bereavement": "Bereavement changes: 75% discount on standard fee (requires change_reason='bereavement')",
               "jury_duty": "Jury duty: free change (change_reason='jury_duty')",
@@ -130,7 +169,17 @@
             "applicable_cabin_class": "economy",
             "applicable_route_type": "domestic"
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks, that makes sense. One correction: my loyalty tier is silver, not basic.\n\nIf the insurance doesn’t cover the change fee, that’s fine — please go ahead with the change to WN101 for June 22 using the same preferences."
+    },
+    {
+      "role": "assistant",
+      "content": "Your flight has been changed successfully.\n\nUpdated booking:\n- Booking ID: BK-1000\n- New flight: WN101\n- Route: DEN → ORD\n- New departure: June 22, 2026 at 11:30 AM\n\nPreferences kept the same:\n- Economy\n- Window seat\n- Standard meal\n- No Wi‑Fi\n- No extra legroom\n- Insurance: yes\n\nCharges:\n- Change fee: $150\n- Fare difference: $30\n- New total paid: $530\n\nAnd yes — you were right that your loyalty tier is silver. Thanks for catching that.",
+      "tool_calls": [
         {
           "name": "update_booking",
           "arguments": {
@@ -170,7 +219,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for updating it, that schedule and price work for me.\n\nOne thing though: you listed my loyalty tier as basic in the policy check, but I\u2019m actually silver\u2014can you just double-check that\u2019s correctly reflected in my profile, even if it doesn\u2019t change this booking?\n\nOtherwise, all the details (economy, window seat, standard meal, no Wi\u2011Fi or extra legroom, insurance kept) look good to me. [TASK_DONE]"
+      "content": "Thanks, that looks good. Just to confirm, the change fee was $150 and the fare difference was $30, and the booking still has economy, window seat, standard meal, no Wi‑Fi, no extra legroom, and insurance kept on. [TASK_DONE]"
     }
   ]
 }

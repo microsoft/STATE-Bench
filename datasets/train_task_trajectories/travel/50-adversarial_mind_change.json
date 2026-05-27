@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s the breakdown for cancelling booking BK-A07:\n\n- Cancellation fee: **$57**\n- Refund amount: **$323**\n- Explanation: Economy fare cancellation fee is **max($50, 15% of $380)** \u2192 **$57**\n\nIf you\u2019d like, I can go ahead and **complete the cancellation** now.",
+      "content": "Here’s the cancellation preview for BK-A07:\n\n- Cancellation fee: $57\n- Refund amount: $323\n- Basis: Economy fare cancellation fee = max($50, 15% of $380) = $57\n\nIf you want, I can go ahead and cancel it now.",
       "tool_calls": [
         {
           "name": "cancel_booking",
@@ -30,11 +30,11 @@
     },
     {
       "role": "user",
-      "content": "Oof, $57 feels like a lot for a cancellation fee. That\u2019s too much.  \n\nWhat would the change fee be if I changed the date instead? I don\u2019t have a new date picked yet\u2014I'd just like the standard change-fee estimate for this booking before I decide."
+      "content": "That's too much. What would the change fee be if I changed the date instead? I don't have a new date picked yet."
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s how it works for your booking BK-A07 (JFK \u2192 MIA, economy, domestic):\n\n1. **Are you still in the free-change window?**  \n   - You booked: **2026-06-10**  \n   - Today: **2026-06-15**  \n   - Free window (domestic): **within 24 hours of booking**  \n   \u2192 You\u2019re **outside** the free-change window.\n\n2. **Standard change fee for you (personal reason):**  \n   - Departure: **2026-06-20** \u2192 **5 days away** (\u2264 7 days)  \n   - Policy: **Domestic economy, personal reason, \u22647 days: $150 change fee**  \n   - Plus: any **fare difference** between your current ticket and the new date\u2019s fare.\n\nSo the estimate if you change the date later (for a normal personal change) is:\n\n- **Change fee:** **$150**  \n- **Fare difference:** unknown until you pick a new date (could be $0, more, or occasionally less, but they don\u2019t refund if the new fare is cheaper\u2014just lower/no extra).\n\nCompared to cancellation:\n- Cancel now: **$57 fee**, **$323 refunded**.\n- Change later: **$150 fee + fare difference**.\n\nIf your reason is something like **medical, bereavement, jury duty, or military**, the fee could be reduced or waived:\n- Medical: ~**$75** (50% off)\n- Bereavement: ~**$37.50** (75% off)\n- Jury duty / military / airline schedule change / weather: **$0 fee** (just fare difference, if any)\n\nTell me your situation (e.g., just changed plans vs medical/family issue), and I can advise whether a change or cancellation makes more sense for you. If you decide to cancel, I can process the **$57-fee cancellation** right away.",
+      "content": "If you change the date instead of canceling, the change fee for BK-A07 would be:\n\n- $75 if the new flight departs more than 7 days before departure\n- $150 if the change is made when departure is 7 days away or less\n- Plus any fare difference\n\nFor your booking:\n- Fare: Economy\n- Route: Domestic\n- Current departure: 2026-06-20 8:00 PM\n- Today: 2026-06-15\n\nSo right now you’re within 7 days of departure, which means the personal change fee would be $150, plus any difference in ticket price.\n\nIf your reason qualifies, the fee could be lower or waived:\n- Medical: 50% off\n- Bereavement: 75% off\n- Jury duty / military / airline schedule change / weather: no change fee\n\nIf you want, I can also help you compare alternate dates once you have one.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -82,8 +82,8 @@
             "rules": {
               "free_change_window": "Free changes within 24 hours (domestic) or 48 hours (international) of booking",
               "basic_economy": "Not changeable after free window",
-              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if \u22647 days. Fare difference also applies.",
-              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if \u22647 days. Fare difference also applies.",
+              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if ≤7 days. Fare difference also applies.",
+              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if ≤7 days. Fare difference also applies.",
               "economy_medical": "Medical changes: 50% discount on standard fee (requires change_reason='medical')",
               "economy_bereavement": "Bereavement changes: 75% discount on standard fee (requires change_reason='bereavement')",
               "jury_duty": "Jury duty: free change (change_reason='jury_duty')",
@@ -103,7 +103,7 @@
     },
     {
       "role": "user",
-      "content": "That\u2019s even worse! Never mind, I\u2019ll just keep the booking as is.  \n\nPlease do not cancel or change anything on BK-A07 \u2014 I\u2019m keeping the flight exactly as it is.  \n\n[TASK_DONE]"
+      "content": "That’s even worse. Never mind, I’ll just keep the booking as is.\n\n[TASK_DONE]"
     }
   ]
 }

@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I'm coming back to finish my checkout. What's my cart total right now?"
+      "content": "Hi — I'm coming back to finish my checkout. What's my cart total right now?"
     },
     {
       "role": "assistant",
-      "content": "Right now your cart total is **$900.00**.\n\nHere\u2019s the breakdown:\n- Items subtotal: **$999.00** (ProBook Laptop 13-inch \u00d7 1)  \n- Promo discount (**WELCOME10**): **\u2013$99.00**  \n- Gift wrap: **$0.00**  \n- Shipping: **not selected yet** (currently **$0.00** shown as a placeholder)  \n\n**Current total (before choosing shipping): $900.00**\n\nIf you\u2019d like, I can:\n- Show you available shipping options and delivery estimates, or  \n- Help you adjust anything in the cart (quantity, gift wrap, or promo code).",
+      "content": "Your cart total right now is **$900**.\n\nBreakdown:\n- **Subtotal:** $999\n- **Promo discount:** -$99 (`WELCOME10`)\n- **Gift wrap:** $0\n- **Shipping:** $0\n- **Total:** **$900**\n\nYou currently have:\n- **ProBook Laptop 13-inch** × 1\n\nIf you want, I can also check whether that promo still makes sense for your account or help you finish checkout.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -48,7 +48,16 @@
     },
     {
       "role": "user",
-      "content": "Ok great, let\u2019s go ahead and check out at that total.  \n\n[TASK_DONE]"
+      "content": "ok great, let's check out"
+    },
+    {
+      "role": "assistant",
+      "content": "I can help you review the cart, but I can’t complete payment/checkout from here.\n\nRight now your cart is at **$900** with:\n- **ProBook Laptop 13-inch** × 1\n- Promo applied: **WELCOME10**\n\nIf you want, I can still help with any last checkout details, like:\n- adding or removing **gift wrap**\n- checking **shipping options**\n- reviewing whether any **other promo or loyalty points** could help\n- making any final cart changes",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "[TASK_DONE]"
     }
   ]
 }

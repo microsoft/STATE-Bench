@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "My laptop from order ORD-6006 has a defective screen \u2014 it flickers constantly. I'd like to return it."
+      "content": "My laptop from order ORD-6006 has a defective screen — it flickers constantly. I'd like to return it."
     },
     {
       "role": "assistant",
-      "content": "I\u2019m sorry the laptop screen is flickering\u2014that\u2019s frustrating. I\u2019ve processed a return for the laptop from order ORD-6006 as a defective item; you\u2019ll be refunded $1,299 back to your original payment method. A free return shipping label has been issued\u2014please use it to send the laptop back with all accessories and packaging. Once the return is received and checked in, your refund will finalize (typically within 3\u20135 business days, depending on your bank).",
+      "content": "I can help with that. I checked your order and this laptop is eligible for a full return as defective, with a refund of $1,299 to your original payment method and no return shipping fee.\n\nIf you want, I can go ahead and submit the return now.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -79,7 +79,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -133,25 +133,6 @@
           }
         },
         {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "warranty"
-          },
-          "result": {
-            "topic": "warranty",
-            "rules": {
-              "active": "Active warranty: eligible for claim.",
-              "expired_recent": "Expired <30 days: 50% off repair.",
-              "expired_old": "Expired >30 days: full-price repair or 25% off replacement.",
-              "claim_limit": "Max claims reached: paid repair only (40% of item price).",
-              "repair_vs_replace": "Items <$100: replacement. Items >=$100: repair first.",
-              "recurring_defect": "2+ prior claims for same issue: automatic replacement.",
-              "manufacturer": "Manufacturer warranty covers first 12 months.",
-              "extended": "Extended warranty covers after manufacturer period."
-            }
-          }
-        },
-        {
           "name": "get_warranty_status",
           "arguments": {
             "item_id": "ITEM-9050"
@@ -187,7 +168,26 @@
             "paid_return_shipping_fee": 0,
             "restocking_discount": 0
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks — before you submit it, can you confirm this is the defective-item return path with a full refund, no restocking fee, and a free return label?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — I confirmed it’s being handled as a defective-item return. That means a full $1,299 refund to your original payment method, no restocking fee, and a free return label.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Great, please go ahead and submit the return."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — your return has been submitted.\n\nYou’ll receive a full refund of $1,299 to your original payment method, and a free return label has been issued for the laptop.",
+      "tool_calls": [
         {
           "name": "process_return",
           "arguments": {
@@ -215,7 +215,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for taking care of that and confirming it\u2019s being handled as a defective-item return with a full refund and free label. I\u2019ll ship it back with everything included.  \n\n[TASK_DONE]"
+      "content": "Thanks for confirming and submitting it. I appreciate the help. [TASK_DONE]"
     }
   ]
 }

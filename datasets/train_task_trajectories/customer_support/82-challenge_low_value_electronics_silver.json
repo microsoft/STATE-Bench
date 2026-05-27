@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve submitted a return for the 7-Port USB-C Hub from order ORD-7115 as a \u201cchanged my mind\u201d return.  \n\nYou\u2019ll be refunded $32 to your original payment method, reflecting a restocking fee and the $8 return shipping deduction; no return label is needed since the order total was under $50 and shipping isn\u2019t being refunded.",
+      "content": "I checked the order and the USB-C hub is eligible for return. Because it’s an electronics item returned for changed mind, the estimated refund is **$32** after a **$6 restocking fee**, a **$1 membership discount on that fee**, and **$8 return shipping**.\n\nIf you want, I can go ahead and submit the return now.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -79,7 +79,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -133,29 +133,6 @@
           }
         },
         {
-          "name": "get_customer",
-          "arguments": {
-            "customer_id": "cust_004"
-          },
-          "result": {
-            "customer_id": "cust_004",
-            "name": "David Kim",
-            "email": "david.kim@example.com",
-            "membership_tier": "silver",
-            "account_created": "2022-08-10",
-            "total_orders": 31,
-            "preferred_refund_method": "original_payment",
-            "store_credit_balance": 25,
-            "has_prime_shipping": false,
-            "benefits": {
-              "return_window_extension": "+0 days",
-              "compensation_multiplier": "1.0x",
-              "restocking_fee_waiver": false,
-              "prime_shipping": false
-            }
-          }
-        },
-        {
           "name": "process_return",
           "arguments": {
             "item_id": "ITEM-10143",
@@ -180,7 +157,26 @@
             "paid_return_shipping_fee": 8,
             "restocking_discount": 1
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks, that helps. Just to confirm, that $32 estimate already reflects the Silver discount on the restocking fee, and the $8 return shipping is the low-value return-shipping charge, right?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — the **$32** already includes the **Silver restocking-fee discount**, and the **$8** is the standard return-shipping charge for orders under **$50**.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Got it, thanks for breaking that out clearly. Please go ahead and submit the return."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — the return has been submitted for the USB-C hub.\n\nYour refund will be **$32** back to your **original payment method**. No prepaid label was issued, so you’ll need to arrange the return shipment yourself.",
+      "tool_calls": [
         {
           "name": "process_return",
           "arguments": {
@@ -208,16 +204,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks. Could you break down the $32 for me\u2014how much was the original price, how much is the restocking fee, and how much is the return shipping? Also, is any Silver member discount applied to reduce that restocking fee?"
-    },
-    {
-      "role": "assistant",
-      "content": "Here\u2019s the breakdown:\n\n- Original item price: $45  \n- Restocking fee (electronics, changed mind): $6  \n- Silver tier discount on restocking fee: $1 off (so you effectively pay $5 in restocking)  \n- Return shipping fee (order under $50, non-defective): $8  \n\nNet refund: $45 \u2212 $6 + $1 \u2212 $8 = $32. So yes, your Silver membership did reduce the restocking fee by $1.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Got it, that breakdown makes sense now\u2014thanks for spelling out the restocking fee, Silver discount, and shipping so clearly. I\u2019m all set with the $32 refund as described.  \n\nThanks for your help today. [TASK_DONE]"
+      "content": "Thanks, appreciate the clear breakdown and getting it submitted. [TASK_DONE]"
     }
   ]
 }

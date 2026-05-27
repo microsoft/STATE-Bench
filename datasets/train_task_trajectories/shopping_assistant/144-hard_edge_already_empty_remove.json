@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Your cart is currently empty, so there was no laptop to remove and nothing has been removed.",
+      "content": "Your cart is empty, so there was no laptop to remove. Nothing was removed.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -36,7 +36,7 @@
     },
     {
       "role": "user",
-      "content": "Got it, thanks for confirming\u2014since my cart is empty and nothing was removed, that\u2019s all I needed. [TASK_DONE]"
+      "content": "Got it, thanks for checking—if the cart’s empty and nothing was removed, that’s all I needed. [TASK_DONE]"
     }
   ]
 }

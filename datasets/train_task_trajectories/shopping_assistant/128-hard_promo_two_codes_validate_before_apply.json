@@ -10,8 +10,51 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what I can tell so far:\n\n- **SAVE10**\n  - Status: **Valid** for your current cart.\n  - Effect: **10% off** eligible items/orders.\n  - Current estimated discount: **$0** only because your cart subtotal is $0 right now (SlimBook isn\u2019t in the cart yet).\n\n- **TECH20**\n  - Status: **Not valid right now.**\n  - Reason: Requires a **minimum purchase of $500**; your current cart subtotal is **$0**.\n  - Until the SlimBook (and any other items) bring your subtotal to at least $500, this code won\u2019t apply.\n\n### Which is better?\n\n- If your **SlimBook + any extras total under $500**:  \n  - **SAVE10 is the only one that will work**, so it\u2019s better by default.\n- If your **SlimBook configuration will be $500 or more** *and* TECH20 is a **20% off tech promo** (as the name suggests), then:\n  - **TECH20 would be better** than SAVE10 once the subtotal hits $500, because 20% > 10%.\n  - Right now, though, it\u2019s blocked by the minimum purchase requirement.\n\nTo give a precise recommendation, I need two things:\n1. Which exact **SlimBook model/price** you\u2019re looking at (or your target configuration/price range).\n2. Whether you plan to add any **other items** with it.\n\nOnce you confirm that and tell me your expected total, I can say definitively which code saves you more and then, if you want, apply the better one\u2014but I will not apply anything until you explicitly tell me to.",
+      "content": "I found the SlimBook as **SlimBook Air 13** at **$849**.\n\nFor your current situation:\n\n- You are a **first-time customer**\n- Your cart is currently **empty**\n- I **did not apply** any code\n\n### Promo check\n- **SAVE10**: valid now  \n  - 10% off eligible orders\n  - On the SlimBook price of $849, that would be about **$84.90 off**\n- **TECH20**: not valid on your current empty cart, but it **would become eligible** once the SlimBook is in the cart because:\n  - it applies to **electronics**\n  - requires **$500+ subtotal**\n  - gives **20% off**, capped at **$200**\n\n### Which is better for the SlimBook?\nFor the SlimBook at **$849**:\n\n- **SAVE10** → about **$84.90 off**\n- **TECH20** → 20% of $849 = **$169.80 off**\n\nSo **TECH20 is better** for the SlimBook.\n\n### Important note\nBecause you’re a **first-time customer**, you also qualify for an automatic **5% welcome discount** on your first order. That **does not stack** with promo codes, and you get the **better discount**.  \nSo among those options:\n\n- Welcome discount: about **$42.45 off**\n- SAVE10: about **$84.90 off**\n- TECH20: about **$169.80 off**\n\n**Best choice: TECH20**\n\nIf you want, I can next:\n1. add the SlimBook to your cart, and/or  \n2. apply **TECH20** after you confirm.",
       "tool_calls": [
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "SlimBook",
+            "category": "electronics",
+            "min_price": 0,
+            "max_price": 100000,
+            "min_rating": 0,
+            "in_stock_only": false,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-H101",
+                "name": "SlimBook Air 13",
+                "brand": "Northstar",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 849,
+                "rating": 4.6,
+                "review_count": 1400,
+                "in_stock": true
+              }
+            ],
+            "total_found": 1
+          }
+        },
+        {
+          "name": "get_customer_account",
+          "arguments": {
+            "customer_id": "shop_002"
+          },
+          "result": {
+            "customer_id": "shop_002",
+            "name": "Jordan Lee",
+            "email": "jordan.lee@example.com",
+            "tier": "standard",
+            "is_first_time": true,
+            "loyalty_points": 0,
+            "purchase_history": []
+          }
+        },
         {
           "name": "get_cart",
           "arguments": {
@@ -30,21 +73,6 @@
             "shipping_cost": 0,
             "total": 0,
             "applied_promo_codes": []
-          }
-        },
-        {
-          "name": "get_customer_account",
-          "arguments": {
-            "customer_id": "shop_002"
-          },
-          "result": {
-            "customer_id": "shop_002",
-            "name": "Jordan Lee",
-            "email": "jordan.lee@example.com",
-            "tier": "standard",
-            "is_first_time": true,
-            "loyalty_points": 0,
-            "purchase_history": []
           }
         },
         {
@@ -70,54 +98,113 @@
             "reason": "Minimum purchase of $500 required. Cart subtotal: $0.",
             "estimated_discount": 0
           }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "I\u2019m just getting the standard SlimBook, no extras, and I don\u2019t know the exact price\u2014please look it up and tell me which of SAVE10 or TECH20 will actually give me the bigger discount for that model before applying anything."
-    },
-    {
-      "role": "assistant",
-      "content": "For the **standard SlimBook** in our catalog:\n\n- Model: **SlimBook Air 13 (SP-H101)**\n- Price: **$849**\n\nNow compare the two codes on that price:\n\n- **SAVE10**  \n  - 10% of $849 = **$84.90** discount  \n  - You\u2019d pay about **$764.10** before tax/shipping.\n\n- **TECH20**  \n  - Has a **$500 minimum**, which $849 meets.  \n  - If it\u2019s a 20% tech promo (as implied by the name and validation result), 20% of $849 = **$169.80** discount  \n  - You\u2019d pay about **$679.20** before tax/shipping.\n\n**Conclusion:**  \nFor the standard SlimBook at **$849**, **TECH20 gives you the bigger discount** (about $169.80 vs. $84.90 with SAVE10), and it meets the $500 minimum.\n\nI have **not** applied any promo code yet.  \nIf you\u2019d like, tell me which one to apply\u2014**SAVE10** or **TECH20**\u2014and I\u2019ll add the SlimBook Air 13 to your cart and then apply that code.",
-      "tool_calls": [
+        },
         {
-          "name": "search_products",
+          "name": "get_product_details",
           "arguments": {
-            "query": "SlimBook",
-            "category": "electronics",
-            "min_price": 0,
-            "max_price": 5000,
-            "min_rating": 1,
-            "in_stock_only": true,
-            "sort_by": "relevance"
+            "product_id": "SP-H101"
           },
           "result": {
-            "products": [
+            "product_id": "SP-H101",
+            "name": "SlimBook Air 13",
+            "category": "electronics",
+            "subcategory": "laptop",
+            "brand": "Northstar",
+            "price": 849,
+            "rating": 4.6,
+            "review_count": 1400,
+            "description": "SlimBook Air 13 from Northstar.",
+            "specs": {
+              "weight_lb": 2.6,
+              "ram_gb": 8,
+              "battery_hours": 12
+            },
+            "compatible_with": [],
+            "in_stock": true,
+            "stock_quantity": 50,
+            "shipping_days": 2,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "2 business days (standard)"
+          }
+        },
+        {
+          "name": "get_promotions",
+          "arguments": {
+            "category": "electronics"
+          },
+          "result": {
+            "promotions": [
               {
-                "product_id": "SP-H101",
-                "name": "SlimBook Air 13",
-                "brand": "Northstar",
-                "category": "electronics",
-                "subcategory": "laptop",
-                "price": 849,
-                "rating": 4.6,
-                "review_count": 1400,
-                "in_stock": true
+                "promo_code": "SAVE10",
+                "description": "10% off eligible orders",
+                "discount_type": "percentage",
+                "discount_value": 10,
+                "min_purchase": 0,
+                "max_discount": 0,
+                "category_restriction": null,
+                "expiry_date": "2026-12-31T23:59:59",
+                "active": true
+              },
+              {
+                "promo_code": "TECH20",
+                "description": "20% off electronics over $500",
+                "discount_type": "percentage",
+                "discount_value": 20,
+                "min_purchase": 500,
+                "max_discount": 200,
+                "category_restriction": [
+                  "electronics"
+                ],
+                "expiry_date": "2026-12-31T23:59:59",
+                "active": true
               }
-            ],
-            "total_found": 1
+            ]
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "welcome_discount"
+          },
+          "result": {
+            "topic": "welcome_discount",
+            "summary": "First-time customers receive an automatic 5% welcome discount on their first order.",
+            "rules": [
+              "Eligibility: customer.is_first_time is True (empty purchase history).",
+              "Application: applied automatically at checkout, not via promo code.",
+              "Stacking: not combinable with promo codes. Customer gets the better of the two.",
+              "One-time: returning customers are not eligible."
+            ]
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "promo_stacking"
+          },
+          "result": {
+            "topic": "promo_stacking",
+            "summary": "At most one promo code per cart. Some discounts stack with each other but not with promo codes.",
+            "rules": [
+              "One promo code per cart.",
+              "Category bundle (5%) does NOT stack with promo codes on the same items — customer gets the better of the two.",
+              "Welcome discount (5%) does NOT stack with promo codes — customer gets the better of the two.",
+              "Brand bundle bonus (3%) DOES stack with everything."
+            ]
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Thanks, that\u2019s exactly what I wanted to know. Since TECH20 clearly gives the bigger discount on the standard SlimBook, please add the SlimBook Air 13 to my cart and apply **TECH20** (just that one code, not both)."
+      "content": "That sounds right, but don’t apply anything yet unless the SlimBook is actually in the cart. Please add the SlimBook first, then apply TECH20 only after that."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set.\n\n- **Added to cart:** SlimBook Air 13 (SP-H101), qty 1, no gift wrap  \n- **Promo applied:** TECH20 (only)  \n- **Cart subtotal:** $849  \n- **Discount from TECH20:** $169  \n- **Estimated total (before tax/shipping):** **$680**\n\nIf you\u2019d like, I can:\n- Check shipping options and delivery estimates, or\n- Help you compare a couple of similar laptops before you finalize checkout.",
+      "content": "Done — I added the **SlimBook Air 13** to your cart first, then applied **TECH20**.\n\n### Cart update\n- **Item:** SlimBook Air 13\n- **Qty:** 1\n- **Price:** $849\n- **Promo:** TECH20\n- **Discount:** $169\n- **Current total:** **$680**\n\nIf you want, I can also check shipping options or review the full cart.",
       "tool_calls": [
         {
           "name": "add_to_cart",
@@ -162,7 +249,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s all I needed for now\u2014thanks for applying TECH20 and adding the SlimBook to my cart.  \n\n[TASK_DONE]"
+      "content": "I asked you to add it first and apply TECH20 only after that, so that part is fine. If the SlimBook is in the cart and TECH20 is the applied promo, we’re done. [TASK_DONE]"
     }
   ]
 }

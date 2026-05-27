@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I can help with that. Here are the cancellation terms for your Denver \u2192 San Francisco flight (booking ID BK-1000):\n\n- Status: Eligible for full refund  \n- Cancellation fee: $0  \n- Refund amount: $400  \n- Reason: Your travel insurance covers the cancellation\n\nWould you like me to proceed and finalize the cancellation of this flight now?",
+      "content": "I found your Denver to San Francisco flight booking: BK-1000.\n\nCancellation preview:\n- Cancellation fee: $0\n- Refund amount: $400\n- Reason: Travel insurance covers cancellation\n\nIf you’d like, I can go ahead and cancel it now.",
       "tool_calls": [
         {
           "name": "get_user_reservations",
@@ -79,11 +79,11 @@
     },
     {
       "role": "user",
-      "content": "Yes, please go ahead and cancel the flight and process the $400 refund."
+      "content": "Thanks, I appreciate that. Since the fee is waived and the refund is $400, please go ahead and cancel it."
     },
     {
       "role": "assistant",
-      "content": "Your flight booking BK-1000 (Denver \u2192 San Francisco, flight WN100) has been cancelled.\n\nDetails:\n- Status: Cancelled\n- Refund amount: $400\n- Cancellation fee: $0\n- Reason: Travel insurance covers cancellation\n\nThe $400 refund will be processed back to your original payment method. Depending on your bank, it may take a few business days to appear on your statement.\n\nAnything else you\u2019d like to adjust for this trip, such as your hotel (HR-0100) or any other plans?",
+      "content": "Your flight booking BK-1000 has been cancelled.\n\nSummary:\n- Refund: $400\n- Cancellation fee: $0\n\nReason:\n- Travel insurance covers cancellation",
       "tool_calls": [
         {
           "name": "cancel_booking",
@@ -103,77 +103,7 @@
     },
     {
       "role": "user",
-      "content": "Yes, I also have a hotel booked for this trip\u2014reservation ID HR-0100 in San Francisco from June 19\u201322.  \n\nI\u2019d like to cancel that as well. Can you check the cancellation terms and any fees, and let me know the total refund before proceeding?"
-    },
-    {
-      "role": "assistant",
-      "content": "Here are the cancellation terms for your hotel reservation HR-0100 at SFO Inn (June 19\u201322):\n\n- Status: Eligible for full refund  \n- Total price: $540  \n- Cancellation fee: $0  \n- Refund amount: $540  \n- Reason: Free cancellation (48+ hours before check-in)\n\nIf you\u2019d like, I can now proceed to cancel this reservation and process the $540 refund back to your original payment method.",
-      "tool_calls": [
-        {
-          "name": "get_hotel_reservation",
-          "arguments": {
-            "reservation_id": "HR-0100"
-          },
-          "result": {
-            "reservation_id": "HR-0100",
-            "user_id": "user_004",
-            "hotel_name": "SFO Inn",
-            "city": "SFO",
-            "check_in": "2026-06-19",
-            "check_out": "2026-06-22",
-            "room_type": "standard",
-            "nightly_rate": 180,
-            "total_price": 540,
-            "hotel_id": null,
-            "status": "confirmed",
-            "booked_at": "2026-06-10T10:00:00",
-            "cancellation_fee": null,
-            "refund_amount": null
-          }
-        },
-        {
-          "name": "cancel_hotel_reservation",
-          "arguments": {
-            "reservation_id": "HR-0100",
-            "confirm": false
-          },
-          "result": {
-            "status": "preview",
-            "reservation_id": "HR-0100",
-            "cancellation_fee": 0,
-            "refund_amount": 540,
-            "reason": "Free cancellation (48+ hours before check-in)."
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Yes, please go ahead and cancel the hotel reservation HR-0100 and process the $540 refund back to my original payment method."
-    },
-    {
-      "role": "assistant",
-      "content": "Your hotel reservation HR-0100 at SFO Inn (June 19\u201322) has been cancelled.\n\nDetails:\n- Status: Cancelled  \n- Total refund: $540  \n- Cancellation fee: $0  \n- Reason: Free cancellation (48+ hours before check-in)\n\nThe $540 will be refunded to your original payment method; your bank/card issuer may take a few business days to post it.\n\nYour trip to San Francisco is now fully cancelled (flight BK-1000 and hotel HR-0100).  \nDo you also need to arrange anything else\u2014like booking new dates, or adding a car rental for a different trip?",
-      "tool_calls": [
-        {
-          "name": "cancel_hotel_reservation",
-          "arguments": {
-            "reservation_id": "HR-0100",
-            "confirm": true
-          },
-          "result": {
-            "status": "cancelled",
-            "reservation_id": "HR-0100",
-            "cancellation_fee": 0,
-            "refund_amount": 540,
-            "reason": "Free cancellation (48+ hours before check-in)."
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "No, that covers everything I needed for this trip. Thanks for helping with the cancellations and refunds.  \n\n[TASK_DONE]"
+      "content": "Thanks, that looks right. [TASK_DONE]"
     }
   ]
 }

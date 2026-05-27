@@ -10,32 +10,45 @@
     },
     {
       "role": "assistant",
-      "content": "The store\u2019s rules don\u2019t allow that:\n\n- Minimum redemption is **500 points** per use.\n- Conversion is **100 points = $1**.\n- Redemption is also capped at **50% of the cart total**.\n\nSo I can\u2019t redeem **300 points**\u2014the system will only process a redemption of **500 points or more**.\n\nIf you\u2019d like, tell me which phone case you\u2019re getting and your budget, and I can:\n- Help you pick a case, and  \n- Redeem **500 points** on your cart to give you a small discount while staying within the rules.",
+      "content": "I can’t redeem 300 points because the store’s minimum redemption is 500 points.\n\nYou do have enough overall points for a valid redemption, though:\n- 500 points = $5 off\n- 1,000 points = $10 off\n- up to the cart’s allowed cap\n\nIf you want, I can redeem 500 points instead.",
       "tool_calls": [
         {
-          "name": "get_customer_account",
+          "name": "get_policies",
           "arguments": {
-            "customer_id": "shop_004"
+            "topic": "loyalty_redemption"
           },
           "result": {
-            "customer_id": "shop_004",
-            "name": "Taylor Kim",
-            "email": "taylor.kim@example.com",
-            "tier": "standard",
-            "is_first_time": false,
-            "loyalty_points": 2200,
-            "purchase_history": []
+            "topic": "loyalty_redemption",
+            "summary": "Loyalty points can be redeemed at checkout to offset part of the cart total. 100 points = $1.",
+            "rules": [
+              "Rate: 100 loyalty points = $1.00 off.",
+              "Cap: redemption cannot exceed 50% of the current cart total.",
+              "Minimum redemption: 500 points ($5).",
+              "Stacking: stacks with promo codes and category bundles.",
+              "Restriction: not combinable with the first-time welcome discount.",
+              "Points are debited from the customer's balance at redemption.",
+              "Agent action rule: do NOT call redeem_loyalty_points without an explicit customer-specified amount. You may discuss and recommend redemption in chat, but the write call must come AFTER the customer names a specific number of points."
+            ]
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "I get that 300 points isn\u2019t allowed, but I don\u2019t want to use 500 points or any other workaround.  \n\nLet\u2019s skip points entirely\u2014please just add the phone case with no loyalty redemption or extra discount."
+      "content": "No, please don’t improvise another discount. Can you still add the phone case without using any points?"
     },
     {
       "role": "assistant",
-      "content": "I can definitely add a phone case with no loyalty redemption or extra discount\u2014but I don\u2019t yet know which case you want.\n\nPlease tell me one of the following so I can add it correctly:\n- The exact case you picked (product name or ID from the store), or  \n- What you\u2019re looking for (phone model + style, e.g., \u201cTechPhone Pro 16, clear slim case, under $25\u201d).\n\nAlso confirm:\n- Quantity (just 1?), and  \n- Whether you want gift wrap (adds a small fee per item, optional).\n\nOnce you tell me that, I\u2019ll add the case to your cart with **no points redeemed and no extra discounts**.",
+      "content": "Yes — I can add it without using points.\n\nI just need to know which phone case you want, since I don’t yet have the exact product/variant in this chat. If you already picked one, send me:\n- the product name or product ID\n- your phone model\n- color/variant, if applicable\n- whether you want gift wrap\n\nThen I’ll add it with no points redeemed.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "I don’t know the exact product details from here. If you can look up the phone case I already picked and add that one, no points and no substitute discount please."
+    },
+    {
+      "role": "assistant",
+      "content": "I can add it without points or any other discount, but I can’t see a previously selected phone case in your account/cart right now:\n- your cart is empty\n- there’s no purchase history to infer a prior pick from\n\nSo I don’t have enough information to identify “the one you already picked.”\n\nIf you want, I can quickly help you find the right case if you send just your phone model, and I’ll narrow it down from there.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -56,27 +69,51 @@
             "total": 0,
             "applied_promo_codes": []
           }
+        },
+        {
+          "name": "get_customer_account",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "customer_id": "shop_004",
+            "name": "Taylor Kim",
+            "email": "taylor.kim@example.com",
+            "tier": "standard",
+            "is_first_time": false,
+            "loyalty_points": 2200,
+            "purchase_history": []
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "No gift wrap, default is fine, and quantity is just 1.  \n\nI need a case for an iPhone 15 Pro, clear slim style, no kickstand, and I\u2019d like it to be on the cheaper side (around $20\u2013$30 if possible)."
+      "content": "I can send the phone model, but just to correct one thing: I’m not a first-time customer. If you can look up cases from my phone model, that works."
     },
     {
       "role": "assistant",
-      "content": "It looks like our current catalog doesn\u2019t have any phone cases for the iPhone 15 Pro available right now (even when I broaden the search and relax price/rating filters).\n\nGiven that, I unfortunately can\u2019t add a suitable case to your cart from this store at the moment.\n\nIf you\u2019d like, I can:\n- Suggest what specs to look for elsewhere (drop protection level, MagSafe compatibility, yellowing resistance for clear cases, etc.), or  \n- Help you pick a different accessory for your phone (screen protector, cable, charger, etc.) in the $20\u2013$30 range, with no loyalty redemption and no gift wrap.",
+      "content": "You're right — and I already confirmed your account shows you're not a first-time customer.\n\nPlease send your exact phone model, and I’ll look up compatible cases for it.You’re right — your account shows you’re **not** a first-time customer.\n\nSend me your **exact phone model**, and I’ll look up compatible cases for it.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Sure — my phone model is iPhone 14. Please look up compatible cases and add one without using any points or substitute discount."
+    },
+    {
+      "role": "assistant",
+      "content": "I found one compatible option for your phone:\n- ClearGrip Slim Case for iPhone 14 — $35\n\nIt’s compatible and in stock. I can add it with no points and no promo/other discount.\n\nSince there’s no variant to choose, I just need one last preference before I make the cart change: do you want gift wrap?I found one compatible option:\n- **ClearGrip Slim Case for iPhone 14** — **$35**\n\nIt’s in stock, compatible, and has no variant selection.\n\nBefore I add it: **gift wrap or no gift wrap?**",
       "tool_calls": [
         {
           "name": "search_products",
           "arguments": {
-            "query": "clear slim phone case iPhone 15 Pro",
+            "query": "iPhone 14 phone case",
             "category": "accessories",
-            "min_price": 10,
-            "max_price": 40,
-            "min_rating": 3.5,
+            "min_price": 0,
+            "max_price": 500,
+            "min_rating": 0,
             "in_stock_only": true,
-            "sort_by": "price_low"
+            "sort_by": "relevance"
           },
           "result": {
             "products": [],
@@ -87,25 +124,128 @@
         {
           "name": "search_products",
           "arguments": {
-            "query": "phone case iPhone 15 Pro",
+            "query": "phone case",
             "category": "accessories",
-            "min_price": 5,
-            "max_price": 60,
+            "min_price": 0,
+            "max_price": 500,
             "min_rating": 0,
             "in_stock_only": true,
-            "sort_by": "price_low"
+            "sort_by": "relevance"
           },
           "result": {
             "products": [],
             "total_found": 0,
             "note": "No products match the hard filters (category / price / rating / stock). Try relaxing them and search again."
           }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "case",
+            "category": "electronics",
+            "min_price": 0,
+            "max_price": 500,
+            "min_rating": 0,
+            "in_stock_only": true,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-H109",
+                "name": "ClearGrip Slim Case for iPhone 14",
+                "brand": "NovaShield",
+                "category": "electronics",
+                "subcategory": "phone_case",
+                "price": 35,
+                "rating": 4.7,
+                "review_count": 990,
+                "in_stock": true
+              }
+            ],
+            "total_found": 1
+          }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "case",
+            "category": "accessories",
+            "min_price": 0,
+            "max_price": 500,
+            "min_rating": 0,
+            "in_stock_only": false,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [],
+            "total_found": 0,
+            "note": "No products match the hard filters (category / price / rating / stock). Try relaxing them and search again."
+          }
+        },
+        {
+          "name": "check_compatibility",
+          "arguments": {
+            "product_id": "SP-H109",
+            "device_name": "iPhone 14"
+          },
+          "result": {
+            "compatible": true,
+            "product_id": "SP-H109",
+            "device": "iPhone 14",
+            "reason": "ClearGrip Slim Case for iPhone 14 is compatible with iPhone 14."
+          }
+        },
+        {
+          "name": "get_variants",
+          "arguments": {
+            "product_id": "SP-H109"
+          },
+          "result": {
+            "product_id": "SP-H109",
+            "product_name": "ClearGrip Slim Case for iPhone 14",
+            "base_price": 35,
+            "variants": [],
+            "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Got it, thanks for checking.  \n\nIn that case I\u2019ll skip the phone case here\u2014no need to add anything else right now. [TASK_DONE]"
+      "content": "No preference, use the default. Please add it without points or any substitute discount."
+    },
+    {
+      "role": "assistant",
+      "content": "Added: **ClearGrip Slim Case for iPhone 14**\n- Qty: 1\n- Gift wrap: No\n- Points used: 0\n- Promo/other discount: none\n- Cart total: **$35**",
+      "tool_calls": [
+        {
+          "name": "add_to_cart",
+          "arguments": {
+            "customer_id": "shop_004",
+            "product_id": "SP-H109",
+            "quantity": 1,
+            "gift_wrap": false,
+            "variant_id": ""
+          },
+          "result": {
+            "status": "added",
+            "cart_item_id": "CI-0001",
+            "product_id": "SP-H109",
+            "product_name": "ClearGrip Slim Case for iPhone 14",
+            "variant_id": null,
+            "quantity": 1,
+            "gift_wrap": false,
+            "unit_price": 35,
+            "cart_subtotal": 35,
+            "cart_total": 35
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Great, thanks. That’s exactly what I wanted — the case added with no points and no substitute discount. [TASK_DONE]"
     }
   ]
 }

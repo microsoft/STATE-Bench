@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what\u2019s currently in your cart:\n\n1. SlimBook Air 13  \n   - Qty: 1  \n   - Price: $849  \n   - Gift wrap: No  \n\n2. SoundMax Wireless Headphones  \n   - Qty: 1  \n   - Price: $149  \n   - Gift wrap: No  \n\nCart summary:\n- Subtotal: $998  \n- Discounts: $0  \n- Gift-wrap fees: $0  \n- Shipping: Not selected yet (currently $0)  \n- Estimated total: $998  \n\nIf you\u2019d like, I can:\n- Pull up details/specs on either item  \n- Help you compare alternatives before you decide  \n- Look for any promotions that might apply to this kind of setup (laptop + headphones)",
+      "content": "Right now your cart has:\n\n- SlimBook Air 13 — qty 1 — $849\n- SoundMax Wireless Headphones — qty 1 — $149\n\nCart summary:\n- Subtotal: $998\n- Discounts: $0\n- Gift wrap: $0\n- Shipping: not selected\n- Total so far: $998\n\nNo promo code is applied at the moment.\n\nIf you want, I can also:\n- pull full details on either item,\n- check if any promos might fit your cart,\n- or help you compare whether these are worth keeping.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -55,16 +55,7 @@
     },
     {
       "role": "user",
-      "content": "Looks good\u2014that\u2019s exactly what I wanted to see. I\u2019m just thinking about it today, so no promos or shipping options for now."
-    },
-    {
-      "role": "assistant",
-      "content": "You\u2019re all set\u2014nothing else is being changed on your cart.\n\nIf you want to:\n- Remove or swap either item\n- Compare that SlimBook Air 13 to a couple of similar laptops\n- Check if those headphones are the best fit for how you\u2019ll use them (travel, work, gaming, etc.)\n\njust tell me what you\u2019re considering and I\u2019ll walk through options without touching promos or shipping.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Perfect, that\u2019s all I needed for now. I\u2019ll come back later when I\u2019m ready to decide. [TASK_DONE]"
+      "content": "great, I'll come back later. Thanks. [TASK_DONE]"
     }
   ]
 }

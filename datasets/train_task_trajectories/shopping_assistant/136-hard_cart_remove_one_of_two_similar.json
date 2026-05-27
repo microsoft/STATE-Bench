@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Here are the two items in your cart:\n\n- Pixel 7 case: product ID **SP-H107** (\u201cClearGrip Case for Pixel 7\u201d)\n- Pixel 8 case: product ID **SP-H108** (\u201cClearGrip Case for Pixel 8\u201d)\n\nPlease confirm: do you want me to remove the **Pixel 8** case (SP-H108) from your cart?",
+      "content": "In your cart I see:\n\n- Pixel 7 ClearGrip Case — product ID `SP-H107`\n- Pixel 8 ClearGrip Case — product ID `SP-H108`\n\nPlease confirm: should I remove the Pixel 8 case (`SP-H108`) from your cart?",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -55,22 +55,24 @@
     },
     {
       "role": "user",
-      "content": "Yes, please remove only the Pixel 8 ClearGrip case, product ID SP-H108, and leave the Pixel 7 case in the cart."
+      "content": "Yes—please remove only the Pixel 8 ClearGrip Case, product ID `SP-H108`. Keep the Pixel 7 case in the cart."
     },
     {
       "role": "assistant",
-      "content": "Done. I\u2019ve removed the Pixel 8 ClearGrip case (product ID SP-H108) from your cart and left the Pixel 7 ClearGrip case in place.\n\nYour updated cart subtotal and total are now **$29**.",
+      "content": "Done — I removed the Pixel 8 ClearGrip Case (`SP-H108`).\n\nYour cart still has:\n- Pixel 7 ClearGrip Case (`SP-H107`)\n\nCurrent cart total: $29",
       "tool_calls": [
         {
           "name": "remove_from_cart",
           "arguments": {
             "customer_id": "shop_004",
-            "product_id": "SP-H108"
+            "product_id": "SP-H108",
+            "variant_id": ""
           },
           "result": {
             "status": "removed",
             "cart_id": "CART-shop_004",
             "product_id": "SP-H108",
+            "variant_id": null,
             "cart_subtotal": 29,
             "cart_total": 29
           }
@@ -79,7 +81,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s exactly what I wanted\u2014Pixel 8 case removed and Pixel 7 case still in the cart. I\u2019ll handle checkout later.  \n\n[TASK_DONE]"
+      "content": "Thanks, that’s exactly what I wanted — Pixel 7 stays and Pixel 8 is removed. [TASK_DONE]"
     }
   ]
 }

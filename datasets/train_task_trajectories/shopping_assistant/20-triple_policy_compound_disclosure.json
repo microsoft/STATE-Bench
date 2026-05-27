@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 please add the SoundMax Wireless Headphones and the SoundMax Beat Pro Wireless Speaker to my cart. Gift wrap the speaker please."
+      "content": "Hi — please add the SoundMax Wireless Headphones and the SoundMax Beat Pro Wireless Speaker to my cart. Gift wrap the speaker please."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added both items to your cart:\n\n- SoundMax Wireless Headphones \u2014 quantity 1, no gift wrap  \n- SoundMax Beat Pro Wireless Speaker \u2014 quantity 1, gift wrapped  \n\nYour current cart subtotal is $498, and the total with gift wrap is $503.",
+      "content": "Done — I added both items to your cart:\n\n- SoundMax Wireless Headphones — $149\n- SoundMax Beat Pro Wireless Speaker — $349, gift wrapped\n\nCurrent cart total: $503",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "SoundMax Wireless Headphones",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -57,8 +57,8 @@
             "query": "SoundMax Beat Pro Wireless Speaker",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -113,6 +113,32 @@
           }
         },
         {
+          "name": "get_variants",
+          "arguments": {
+            "product_id": "SP-2003"
+          },
+          "result": {
+            "product_id": "SP-2003",
+            "product_name": "SoundMax Wireless Headphones",
+            "base_price": 149,
+            "variants": [],
+            "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
+          "name": "get_variants",
+          "arguments": {
+            "product_id": "SP-2009"
+          },
+          "result": {
+            "product_id": "SP-2009",
+            "product_name": "SoundMax Beat Pro Wireless Speaker",
+            "base_price": 349,
+            "variants": [],
+            "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
           "name": "add_to_cart",
           "arguments": {
             "customer_id": "shop_001",
@@ -160,7 +186,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s exactly what I wanted \u2014 one pair of the SoundMax Wireless Headphones without gift wrap and one SoundMax Beat Pro Wireless Speaker with gift wrap. Thanks, I\u2019m all set.  \n\n[TASK_DONE]"
+      "content": "Looks good, thanks. [TASK_DONE]"
     }
   ]
 }

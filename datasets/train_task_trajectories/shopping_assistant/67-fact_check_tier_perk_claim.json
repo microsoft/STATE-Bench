@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hey \u2014 I'm about to buy the SlimBook Air 13. Before I do, can you confirm my Gold perks still apply? I get free express shipping AND free next-day on orders over $500, right? Just want to make sure before I pull the trigger."
+      "content": "Hey — I'm about to buy the SlimBook Air 13. Before I do, can you confirm my Gold perks still apply? I get free express shipping AND free next-day on orders over $500, right? Just want to make sure before I pull the trigger."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re on Gold, and your perks are:\n\n- **Express shipping:** Free for Gold and Platinum on all orders (no minimum).  \n- **Next-day shipping:** Free only for **Platinum**. For Gold, next-day is still **$15**.\n\nSo your current benefits are:\n- \u2705 Free **express** shipping (any order total)\n- \u274c Not free **next-day**; that perk is Platinum-only, not Gold, and there\u2019s no $500 override in the policy.\n\nIf you\u2019d like, tell me your budget and how soon you need the SlimBook Air 13, and I can help you plan whether express is fast enough or if next-day is worth paying for.",
+      "content": "I checked your account and shipping policy.\n\n- You are currently **Gold**\n- **Free express shipping:** **Yes**\n- **Free next-day shipping on orders over $500:** **No**\n\nFor **Gold**, the policy says:\n- **Express** is free for **Gold and Platinum**\n- **Next-day** is free for **Platinum only**\n\nSo even if your order is over $500, **Gold does not get free next-day** under the current policy.\n\nIf you want, I can also help check the **SlimBook Air 13** price and whether it qualifies for any promos before you buy.",
       "tool_calls": [
         {
           "name": "get_customer_account",
@@ -48,11 +48,11 @@
     },
     {
       "role": "user",
-      "content": "Oh got it \u2014 okay, free express then. Go ahead and add the SlimBook Air 13."
+      "content": "Oh got it — okay, free express then. Go ahead and add the SlimBook Air 13."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set \u2014 I\u2019ve added **SlimBook Air 13** (1 unit, no gift wrap) to your cart at **$849**.\n\nYour **Gold** perks still apply:\n- **Express shipping:** free for you  \n- **Next-day:** still $15 if you choose it\n\nIf you tell me whether you want **standard, express, or next-day**, I can set the shipping option and then check for any promos or loyalty point redemptions that might lower your total.",
+      "content": "I can add it, but I need one quick preference first:\n\n**Do you want gift wrap on the SlimBook Air 13?**  \n- **No gift wrap**\n- **Gift wrap for $5**\n\nI need that choice before I add it to your cart.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -61,7 +61,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -105,18 +105,48 @@
           }
         },
         {
-          "name": "get_variants",
+          "name": "get_product_details",
           "arguments": {
             "product_id": "SP-1001"
           },
           "result": {
             "product_id": "SP-1001",
-            "product_name": "SlimBook Air 13",
-            "base_price": 849,
-            "variants": [],
-            "note": "This product has no variants; no variant_id is needed for add_to_cart."
+            "name": "SlimBook Air 13",
+            "category": "electronics",
+            "subcategory": "laptop",
+            "brand": "SlimBook",
+            "price": 849,
+            "rating": 4.5,
+            "review_count": 1240,
+            "description": "Lightweight 13-inch laptop built for students. All-day battery and durable chassis.",
+            "specs": {
+              "weight_lb": 2.6,
+              "battery_hours": 14,
+              "ram": "8GB",
+              "ssd": "256GB",
+              "screen_inches": 13
+            },
+            "compatible_with": [],
+            "in_stock": true,
+            "stock_quantity": 40,
+            "shipping_days": 3,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "3 business days (standard)"
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "No gift wrap."
+    },
+    {
+      "role": "assistant",
+      "content": "Added — **SlimBook Air 13** is now in your cart.\n\nCurrent cart:\n- **SlimBook Air 13** ×1 — **$849**\n- **Gift wrap:** No\n\nSince you mentioned shipping earlier: your **Gold** perks mean you can choose **free express shipping** when you're ready. If you want, I can also check whether there’s a promo worth applying.",
+      "tool_calls": [
         {
           "name": "add_to_cart",
           "arguments": {
@@ -147,7 +177,7 @@
     },
     {
       "role": "assistant",
-      "content": "Done \u2014 your shipping is set to **Express**, and as a **Gold** member it\u2019s **free** (shipping cost: $0).\n\nYour current cart:\n- **SlimBook Air 13** \u2013 $849  \n- **Shipping:** Express (free)  \n- **Estimated total:** **$849**\n\nYou also have **18,500 loyalty points** (worth up to $185). If you\u2019d like, I can:\n- Redeem some points to lower this purchase, or  \n- Check for any active electronics promos that might stack with your points.",
+      "content": "Done — **express shipping** is set, and with your **Gold** tier it’s **free**.\n\n**Updated total: $849**\n\nIf you want, I can also check for:\n- any **promo codes**\n- whether using **loyalty points** would save you more",
       "tool_calls": [
         {
           "name": "set_shipping_option",

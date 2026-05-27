@@ -10,53 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I can\u2019t apply a \u201csustainability discount\u201d directly because discounts in this store only work via specific promo codes or built\u2011in rules, and there isn\u2019t a generic \u201ceco = 20% off\u201d switch I can toggle.\n\nTo help you properly, I need to clarify two things:\n\n1. **Is the ErgoLift Standing Desk already in your cart?**  \n   - I don\u2019t see any items in your cart right now.\n2. **Do you have a promo code for that 20% eco discount?**  \n   - For example, something like `ECO20`, `GREEN20`, etc.\n\nIf you can share:\n- The exact product (or a link / product ID) for the \u201cErgoLift Standing Desk\u201d, and  \n- Any code or email text mentioning the 20% sustainability discount,\n\nI can:\n1. Make sure we add the correct ErgoLift desk to your cart.\n2. Check if there\u2019s an active eco/sustainability promotion for that item.\n3. Validate and apply the correct promo code, and confirm your new total.",
-      "tool_calls": [
-        {
-          "name": "get_cart",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "cart_id": "CART-shop_004",
-            "customer_id": "shop_004",
-            "items": [],
-            "subtotal": 0,
-            "discount_amount": 0,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 0,
-            "applied_promo_codes": []
-          }
-        },
-        {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "promo_stacking"
-          },
-          "result": {
-            "topic": "promo_stacking",
-            "summary": "At most one promo code per cart. Some discounts stack with each other but not with promo codes.",
-            "rules": [
-              "One promo code per cart.",
-              "Category bundle (5%) does NOT stack with promo codes on the same items \u2014 customer gets the better of the two.",
-              "Welcome discount (5%) does NOT stack with promo codes \u2014 customer gets the better of the two.",
-              "Brand bundle bonus (3%) DOES stack with everything."
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "I don\u2019t have a promo code\u2014I just heard there was a general 20% sustainability discount on eco items, so I was asking you to check if that actually exists for the ErgoLift Standing Desk.  \n\nThe desk isn\u2019t in my cart yet; can you look up whether there\u2019s any eco/sustainability promotion for that product on your side first?"
-    },
-    {
-      "role": "assistant",
-      "content": "Here\u2019s what I can see on my side:\n\n1. **Product check**  \n   - The \u201cErgoLift Standing Desk\u201d (WorkWell, product ID SP-H120) is in our catalog and in stock at **$299**.\n\n2. **Current promotions for home office items**  \n   - The only active promo I see for home office is:  \n     - **Code:** `OFFICE20`  \n     - **Offer:** **$20 off** home office orders over **$250**  \n     - **Type:** fixed discount, not 20%  \n   - There is **no store-wide 20% \u201csustainability\u201d or \u201ceco\u201d discount** showing in the active promotions for this category.\n\n3. **Is ErgoLift tagged as an eco/sustainable item?**  \n   - In the product data I can see, there\u2019s **no special eco/sustainability flag or note** attached to the ErgoLift Standing Desk, and no linked \u201cgreen\u201d promotion.\n\nSo:  \n- I **can\u2019t apply a 20% sustainability discount** because it doesn\u2019t exist as an active promotion for this product in our system.  \n- The best available deal right now is **$20 off** with `OFFICE20` if your home office subtotal is at least $250 (the ErgoLift alone qualifies at $299).\n\nIf you\u2019d like, I can:\n- Add the ErgoLift Standing Desk to your cart, and  \n- Apply the `OFFICE20` promo so you\u2019d pay **$279 before tax and shipping**.",
+      "content": "I checked, and I don’t see a 20% sustainability promo available right now for home office items.\n\nWhat is currently active:\n- ErgoLift Standing Desk: $299\n- Available home office promo: `OFFICE20`\n  - $20 off home office orders over $250\n\nA couple important notes:\n- Your cart is currently empty, so there’s nothing for me to apply yet.\n- I also don’t see any active “eco” or “sustainability” 20% discount in the current promotions.\n\nIf you want, I can:\n1. add the ErgoLift Standing Desk to your cart, and\n2. apply `OFFICE20`\n\nThat would bring the desk from $299 to $279 before tax/shipping.\n\nIf you’d like me to do that, just say “add it and apply OFFICE20.”",
       "tool_calls": [
         {
           "name": "search_products",
@@ -64,9 +18,9 @@
             "query": "ErgoLift Standing Desk",
             "category": "home_office",
             "min_price": 0,
-            "max_price": 5000,
-            "min_rating": 1,
-            "in_stock_only": false,
+            "max_price": 10000,
+            "min_rating": 0,
+            "in_stock_only": true,
             "sort_by": "relevance"
           },
           "result": {
@@ -84,33 +38,6 @@
               }
             ],
             "total_found": 1
-          }
-        },
-        {
-          "name": "get_product_details",
-          "arguments": {
-            "product_id": "SP-H120"
-          },
-          "result": {
-            "product_id": "SP-H120",
-            "name": "ErgoLift Standing Desk",
-            "category": "home_office",
-            "subcategory": "desk",
-            "brand": "WorkWell",
-            "price": 299,
-            "rating": 4.4,
-            "review_count": 500,
-            "description": "ErgoLift Standing Desk from WorkWell.",
-            "specs": {},
-            "compatible_with": [],
-            "in_stock": true,
-            "stock_quantity": 50,
-            "shipping_days": 5,
-            "gift_wrap_available": true,
-            "backorder_available": false,
-            "previous_price": null,
-            "variants": null,
-            "shipping_estimate": "5 business days (standard)"
           }
         },
         {
@@ -135,16 +62,51 @@
               }
             ]
           }
+        },
+        {
+          "name": "get_customer_account",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "customer_id": "shop_004",
+            "name": "Taylor Kim",
+            "email": "taylor.kim@example.com",
+            "tier": "standard",
+            "is_first_time": false,
+            "loyalty_points": 2200,
+            "purchase_history": []
+          }
+        },
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "cart_id": "CART-shop_004",
+            "customer_id": "shop_004",
+            "items": [],
+            "subtotal": 0,
+            "discount_amount": 0,
+            "gift_wrap_fee": 0,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 0,
+            "applied_promo_codes": []
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Thanks for checking\u2014that\u2019s clear.  \n\nI\u2019d still like the ErgoLift Standing Desk, but please add it to my cart **at the regular price without using OFFICE20 or any other promo**."
+      "content": "Thanks for checking. I don’t want a substitute promo—please add the ErgoLift Standing Desk at the regular price without any promo."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the **ErgoLift Standing Desk (SP-H120)** to your cart:\n\n- Quantity: **1**\n- Gift wrap: **No**\n- Unit price: **$299**\n- Promos applied: **None** (per your request)\n- Current cart total (before tax/shipping): **$299**\n\nIf you\u2019d like, I can next:\n- Show your full cart summary, or  \n- Help you choose a shipping option and move toward checkout.",
+      "content": "Done — I added 1 × ErgoLift Standing Desk to your cart at the regular price.\n\nCart so far:\n- ErgoLift Standing Desk: $299\n- Promo applied: none\n- Total before tax/shipping: $299\n\nIf you want, I can also show your full cart or help with anything else.",
       "tool_calls": [
         {
           "name": "add_to_cart",
@@ -172,7 +134,7 @@
     },
     {
       "role": "user",
-      "content": "The cart summary you gave is enough for me\u2014no need to pick shipping now; I\u2019ll handle checkout later.  \n\nThat\u2019s all I needed for this; thanks for confirming there wasn\u2019t an eco discount and adding the desk at full price.  \n\n[TASK_DONE]"
+      "content": "That’s all I needed, thanks. [TASK_DONE]"
     }
   ]
 }

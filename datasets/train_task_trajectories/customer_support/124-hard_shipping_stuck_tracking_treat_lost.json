@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "You\u2019re right that something\u2019s off here\u2014your order shows as \u201cin transit\u201d with tracking TRK77719664, but it\u2019s past the promised delivery date and hasn\u2019t updated in over a week. At this point, that\u2019s treated as a likely lost or stalled shipment, not something you should just keep waiting on.\n\nI can do one of two things for you right now:\n1) Send a free replacement BrewPerfect Coffee Maker, or  \n2) Issue a full refund of the $149 to your original payment method.\n\nTell me which you prefer, and if you choose a replacement, confirm the shipping address is still the same as on ORD-7227 or let me know what to change.",
+      "content": "I checked this, and since there’s been no tracking movement for 7+ days, we treat it as lost in transit. Because this order is under $500, you’re eligible for an immediate replacement or a full refund right now — no need to keep waiting.\n\nIf you want, I can help you proceed with either:\n- a replacement of the BrewPerfect Coffee Maker, or\n- a full refund of $149 to your original payment method.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -70,16 +70,80 @@
               }
             ]
           }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "shipping"
+          },
+          "result": {
+            "topic": "shipping",
+            "rules": {
+              "not_received": {
+                "under_500": "Delivered but not received (<$500): reship or refund.",
+                "over_500": "Delivered but not received (>=$500): mandatory investigation (3-5 business days).",
+                "signature_on_file": "Delivery with signature on file: claim denied."
+              },
+              "lost_in_transit": {
+                "under_500": "Lost in transit (<$500): immediate reship or refund.",
+                "over_500": "Lost in transit (>=$500): carrier claim required first.",
+                "stuck_7_days": "No tracking update for 7+ days: treat as lost."
+              },
+              "damaged": {
+                "rule": "Damaged in transit: full refund or replacement.",
+                "fragile_bonus": "Fragile items damaged in transit qualify for a separate $10 goodwill credit, issued as a refund in addition to the return refund."
+              },
+              "late_delivery_compensation": {
+                "tiers": {
+                  "1_to_2_days_late": "$5 credit",
+                  "3_to_5_days_late": "$15 credit",
+                  "6_plus_days_late": "Full shipping refund + $15 credit"
+                },
+                "shipping_refund_basis": "When refunding shipping, refund the actual shipping cost the customer was charged on the order — read order.shipping_cost. Standard policy charges $0 on free-shipping orders (subtotal >= $100) and $8 otherwise.",
+                "tier_multipliers": {
+                  "gold": "1.5x multiplier on the base late-delivery credit only (NOT on shipping refund or goodwill). Rounded down (e.g., int(15*1.5) = 22).",
+                  "platinum": "2x multiplier on the base late-delivery credit only. Rounded down."
+                },
+                "repeated_issues": "3+ PRIOR issues in 6 months (not counting current incident): additional $25 goodwill credit.",
+                "loyalty_bonus": "Platinum members with 50+ total orders: one-time $50 loyalty bonus on next compensation claim. Confirm with customer if already redeemed.",
+                "max_cap": "Maximum compensation: 50% of order total (rounded down).",
+                "calculation_order": "1) Compute base credit by days-late tier. 2) Apply tier multiplier to base credit only. 3) Add shipping refund (if 6+ days late) using order.shipping_cost. 4) Add goodwill (if 3+ prior issues or fragile damage). 5) Apply loyalty bonus if eligible. 6) Apply 50%-of-order cap on the sum."
+              }
+            }
+          }
+        },
+        {
+          "name": "get_customer",
+          "arguments": {
+            "customer_id": "cust_003"
+          },
+          "result": {
+            "customer_id": "cust_003",
+            "name": "Sarah Williams",
+            "email": "sarah.w@example.com",
+            "membership_tier": "gold",
+            "account_created": "2021-11-20",
+            "total_orders": 53,
+            "preferred_refund_method": "original_payment",
+            "store_credit_balance": 45,
+            "has_prime_shipping": true,
+            "benefits": {
+              "return_window_extension": "+15 days",
+              "compensation_multiplier": "1.5x",
+              "restocking_fee_waiver": false,
+              "prime_shipping": true
+            }
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Thanks for laying out the options so clearly. I\u2019d like to go with a full refund of the $149 back to my original payment method, please."
+      "content": "Thanks — I’d like the full refund of $149 to my original payment method, please."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve processed a full refund of $149 back to your original payment method for the BrewPerfect Coffee Maker on order ORD-7227. \n\nYou\u2019ll see it on your card within 3\u201310 business days, depending on your bank. If the original package eventually shows up, you don\u2019t need to send it back\u2014consider it on us given the delay.",
+      "content": "Done — I’ve processed the full $149 refund to your original payment method.\n\nYou should see it post back to your card based on your bank’s timing, typically within 3–5 business days.",
       "tool_calls": [
         {
           "name": "get_policies",
@@ -93,7 +157,7 @@
                 "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
                 "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
                 "outside_window": "Outside return window but within store-credit grace: store credit only.",
-                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order \u2014 read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
+                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order — read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
               },
               "method": {
                 "original_payment": "Default refund method when item was paid for and is being returned for fault.",
@@ -141,7 +205,7 @@
     },
     {
       "role": "user",
-      "content": "That\u2019s perfect, thank you for handling it so quickly and for letting me keep it if it ever shows up. Appreciate the help!  \n\n[TASK_DONE]"
+      "content": "Thanks so much for taking care of that. [TASK_DONE]"
     }
   ]
 }

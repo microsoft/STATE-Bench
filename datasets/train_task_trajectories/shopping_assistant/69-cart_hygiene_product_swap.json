@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hey \u2014 please add the BudgetLine Notebook 15 to my cart, that's the one I want."
+      "content": "Hey — please add the BudgetLine Notebook 15 to my cart, that's the one I want."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the BudgetLine Notebook 15 (SP-1103) to your cart with quantity 1 and no gift wrap.  \n\nIf you\u2019d like, I can:\n- Adjust the quantity  \n- Add gift wrap  \n- Compare it quickly with a higher-end 15\" option before you check out.",
+      "content": "Before I add it: would you like gift wrap on this item? It’s $5 per unit, and I need your preference before acting.Before I add it: do you want gift wrap for the BudgetLine Notebook 15? It’s $5 for this item.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -96,7 +96,17 @@
             "variants": [],
             "note": "This product has no variants; no variant_id is needed for add_to_cart."
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "No preference, use the default."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — BudgetLine Notebook 15 has been added to your cart.\n\nCart total: $449",
+      "tool_calls": [
         {
           "name": "add_to_cart",
           "arguments": {
@@ -123,11 +133,11 @@
     },
     {
       "role": "user",
-      "content": "Actually wait \u2014 my friend just reminded me the ProBook Chromebook 11 is better for what I need. Can we switch to that instead?"
+      "content": "Actually wait — my friend just reminded me the ProBook Chromebook 11 is better for what I need. Can we switch to that instead?"
     },
     {
       "role": "assistant",
-      "content": "Done. I\u2019ve removed the BudgetLine Notebook 15 and added the ProBook Chromebook 11 (SP-1106) to your cart, quantity 1, no gift wrap.  \n\nDo you want to:\n- Add any accessories (case, mouse, USB-C hub), or  \n- See your current cart total with tax/shipping options?",
+      "content": "Switched — I removed the BudgetLine Notebook 15 and added the ProBook Chromebook 11.\n\nNew cart total: $329",
       "tool_calls": [
         {
           "name": "search_products",
@@ -136,7 +146,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -202,20 +212,6 @@
           }
         },
         {
-          "name": "remove_from_cart",
-          "arguments": {
-            "customer_id": "shop_004",
-            "product_id": "SP-1103"
-          },
-          "result": {
-            "status": "removed",
-            "cart_id": "CART-shop_004",
-            "product_id": "SP-1103",
-            "cart_subtotal": 0,
-            "cart_total": 0
-          }
-        },
-        {
           "name": "get_variants",
           "arguments": {
             "product_id": "SP-1106"
@@ -226,6 +222,22 @@
             "base_price": 329,
             "variants": [],
             "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
+          "name": "remove_from_cart",
+          "arguments": {
+            "customer_id": "shop_004",
+            "product_id": "SP-1103",
+            "variant_id": ""
+          },
+          "result": {
+            "status": "removed",
+            "cart_id": "CART-shop_004",
+            "product_id": "SP-1103",
+            "variant_id": null,
+            "cart_subtotal": 0,
+            "cart_total": 0
           }
         },
         {
@@ -254,47 +266,7 @@
     },
     {
       "role": "user",
-      "content": "Can you show me what\u2019s in my cart now, including the total?"
-    },
-    {
-      "role": "assistant",
-      "content": "Here\u2019s your current cart:\n\n1) ProBook Chromebook 11 (SP-1106)  \n- Quantity: 1  \n- Unit price: $329  \n- Gift wrap: No  \n- Line total: $329  \n\nCart summary (before tax & shipping):  \n- Subtotal: $329  \n- Discounts: $0  \n- Gift wrap: $0  \n- Shipping: Not selected yet (currently $0 placeholder)  \n- Total (pre-tax, before shipping): **$329**\n\nIf you tell me your state or country, I can estimate tax, and I can also pull in available shipping options (standard/express/next-day) with prices and delivery estimates.",
-      "tool_calls": [
-        {
-          "name": "get_cart",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "cart_id": "CART-shop_004",
-            "customer_id": "shop_004",
-            "items": [
-              {
-                "cart_item_id": "CI-0002",
-                "product_id": "SP-1106",
-                "product_name": "ProBook Chromebook 11",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 329,
-                "line_total": 329
-              }
-            ],
-            "subtotal": 329,
-            "discount_amount": 0,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 329,
-            "applied_promo_codes": []
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Total looks good.  \n\n[TASK_DONE]"
+      "content": "Total looks good. [TASK_DONE]"
     }
   ]
 }

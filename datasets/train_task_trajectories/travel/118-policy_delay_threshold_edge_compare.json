@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what each booking qualifies for based on the current delays and our delay-compensation policy for domestic economy tickets:\n\n**Policy (domestic, economy, basic tier):**\n- Under 2 hours: No compensation  \n- 2\u20134 hours: $25 meal voucher  \n- Over 4 hours: Rebooking + $25 meal voucher + hotel (if overnight)\n\n---\n\n### BK-EP05A (Flight AA100)\n- Delay: **119 minutes** (1 hour 59 minutes)\n- Compensation tier: **Under 2 hours**\n- **Compensation: No compensation** under the current rules.\n\nIt\u2019s just under the 2-hour threshold, so it does not qualify for a meal voucher.\n\n---\n\n### BK-EP05B (Flight AA101)\n- Delay: **120 minutes** (2 hours exactly)\n- Compensation tier: **2\u20134 hours**\n- **Compensation: $25 meal voucher**\n\nThis one meets the 2-hour minimum, so you\u2019re eligible for a $25 meal voucher on this booking.\n\n---\n\nIf either delay increases past 2 hours (for BK-EP05A) or 4 hours (for either flight), the compensation could change. If you\u2019d like, I can also request that the $25 meal voucher for BK-EP05B be added to your booking notes and explain how to claim it at the airport.",
+      "content": "Here’s what each booking qualifies for based on the current delay policy:\n\n- BK-EP05A / flight AA100\n  - Delay: 119 minutes\n  - Qualification: No compensation\n  - Reason: this is under 2 hours\n\n- BK-EP05B / flight AA101\n  - Delay: 120 minutes\n  - Qualification: $25 meal voucher\n  - Reason: this is exactly 2 hours, which falls into the 2–4 hour tier\n\nPolicy summary:\n- Under 2 hours: no compensation\n- 2 to 4 hours: $25 meal voucher\n- Over 4 hours: rebooking + $25 meal voucher + hotel if overnight\n\nThat 1-minute difference is exactly why the outcomes are different here. If you want, I can also help you check whether either booking should be updated with delay compensation.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -132,16 +132,16 @@
     },
     {
       "role": "user",
-      "content": "Thanks, that\u2019s exactly the kind of detail I needed.\n\nJust to be absolutely literal: BK-EP05A at 119 minutes is **definitely** in the \u201cunder 2 hours, no compensation\u201d bucket, and BK-EP05B at 120 minutes is **definitely** in the \u201c2\u20134 hours, $25 voucher\u201d bucket, with the line drawn **right at 120 minutes**, not rounded\u2014correct?\n\nIf that\u2019s right, then I\u2019m clear on the difference and how the threshold works. Once you confirm that the cutoff is \u201c119 = no / 120 = yes\u201d with no rounding, I\u2019m all set."
+      "content": "Thanks. Just to be very literal about it, can you confirm the cutoff is exactly at 120 minutes? I want each booking stated separately: BK-EP05A at 119 minutes gets nothing, and BK-EP05B at 120 minutes starts the $25 meal voucher tier, correct?"
     },
     {
       "role": "assistant",
-      "content": "Yes, your understanding is exactly correct under the policy we just pulled:\n\n- **BK-EP05A \u2013 119 minutes**\n  - Falls in **\u201cunder 2 hours\u201d** \u2192 **no compensation**\n  - 119 is treated as **less than** 120; there is **no rounding up**.\n\n- **BK-EP05B \u2013 120 minutes**\n  - Falls in **\u201c2\u20134 hours\u201d** \u2192 **$25 meal voucher**\n  - The threshold is **inclusive at 120 minutes**; 120 is the first value that qualifies.\n\nSo the cutoff is literally:\n\n- **0\u2013119 minutes:** \u201cunder 2 hours\u201d \u2192 no compensation  \n- **120\u2013239 minutes:** \u201c2\u20134 hours\u201d \u2192 $25 meal voucher  \n\nNo rounding, no averaging\u2014just the exact delay_minutes value.",
+      "content": "Yes, correct.\n\n- BK-EP05A: 119 minutes delayed → under 2 hours → no compensation\n- BK-EP05B: 120 minutes delayed → exactly 2 hours → qualifies for the $25 meal voucher tier\n\nSo the cutoff begins at exactly 120 minutes.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s exactly what I needed to confirm\u2014119 = no compensation and 120 = the first value that gets the $25 voucher, with no rounding involved.\n\nI\u2019m all set now, thanks for spelling it out so literally.  \n\n[TASK_DONE]"
+      "content": "Got it, thank you — that’s the exact distinction I needed. [TASK_DONE]"
     }
   ]
 }

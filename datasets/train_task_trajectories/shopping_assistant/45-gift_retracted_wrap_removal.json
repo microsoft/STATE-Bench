@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what I see in your cart right now:\n\n- **AlpineGear Rain Jacket** (Product ID: SP-3006)  \n  - Quantity: **1**  \n  - **Gift wrap: Yes** (birthday-ready)  \n  - Price: **$139**  \n  - Gift-wrap fee: **$5**\n\n**Order summary (so far):**\n- Subtotal: **$139**\n- Gift-wrap: **$5**\n- Discounts/promo codes: **None applied**\n- Shipping: **Not selected yet** (cost currently $0)\n- **Current total: $144** (before shipping)\n\nSo yes: your rain jacket is in the cart, wrapped and ready to go.  \nIf you tell me when you need it delivered, I can check shipping options and help you pick the right speed.",
+      "content": "Confirmed — your cart currently has:\n\n- AlpineGear Rain Jacket ×1\n- Gift wrap: yes\n- Item subtotal: $139\n- Gift wrap fee: $5\n- Shipping: not selected\n- Discounts: none\n- Total so far: $144\n\nSo yes, the rain jacket is wrapped and in your cart, ready to go.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -46,11 +46,11 @@
     },
     {
       "role": "user",
-      "content": "What does shipping look like on this?"
+      "content": "what does shipping look like on this?"
     },
     {
       "role": "assistant",
-      "content": "Here are the shipping options available for your current cart:\n\n- **Standard** \u2013 **$6**  \n  - ETA: **3 business days**\n\n- **Express** \u2013 **$12**  \n  - ETA: **2 business days**\n\n- **Next-day** \u2013 **$15**  \n  - ETA: **Next business day**\n\nIf you tell me what day you\u2019d like it to arrive (or the date of your brother\u2019s birthday), I can recommend the safest option and set it on your cart for you.",
+      "content": "Here are your shipping options for the current cart:\n\n- Standard: $6 — arrives in 3 business days\n- Express: $12 — arrives in 2 business days\n- Next day: $15 — arrives next business day\n\nYour current total is $144 before shipping, so totals would be:\n\n- Standard: $150\n- Express: $156\n- Next day: $159\n\nIf you want, I can set one for you.",
       "tool_calls": [
         {
           "name": "get_shipping_options",
@@ -86,26 +86,27 @@
     },
     {
       "role": "user",
-      "content": "Oh, got it. Actually my brother ended up getting one from someone else already. No biggie, I\u2019ll just use it myself on rainy commutes."
+      "content": "oh btw, my brother ended up getting one from someone else. No biggie, I'll just use it myself on rainy commutes"
     },
     {
       "role": "assistant",
-      "content": "Nice, that works out well then\u2014AlpineGear is a solid choice for commuting.\n\nRight now your cart is still set up as a **gift**:\n\n- **AlpineGear Rain Jacket** \u2013 1  \n  - Gift wrap: **Yes** (+$5)  \n  - Item total: **$144** (including wrap, before shipping)\n\nIf you\u2019re using it for yourself, do you want me to:\n1. **Remove the gift wrap** (save the $5), or  \n2. Leave it wrapped anyway (some people like the unboxing)?  \n\nAlso, if you tell me roughly when you need it, I can pick the cheapest shipping option that still gets it to you in time.",
+      "content": "Makes sense — then it’s still a good pick, just no longer a birthday gift.\n\nRight now it’s still marked with gift wrap in your cart. If you want, I can remove the gift wrap so you don’t pay the extra $5.\n\nThat would bring your pre-shipping total from $144 down to $139.\n\nWant me to take gift wrap off?",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "Oh, yes, please remove the gift wrap. I\u2019m still keeping the jacket, just don\u2019t need it wrapped anymore."
+      "content": "oh, yes please remove"
     },
     {
       "role": "assistant",
-      "content": "Done \u2014 I\u2019ve removed the gift wrap from your jacket.\n\nYour cart now has:\n\n- **AlpineGear Rain Jacket** \u2013 1  \n  - Gift wrap: **No**  \n  - Price: **$139**\n\n**Updated totals (before shipping):**\n- Subtotal: **$139**\n- Gift-wrap fee: **$0**\n- Total: **$139**\n\nIf you\u2019d like, I can also set a shipping option (standard, express, or next-day) and show you the exact final total.",
+      "content": "Done — I removed the gift wrap.\n\nUpdated cart:\n- AlpineGear Rain Jacket ×1\n- Gift wrap: no\n- New pre-shipping total: $139\n\nIf you want, I can also set a shipping option next.",
       "tool_calls": [
         {
           "name": "update_cart_item",
           "arguments": {
             "customer_id": "shop_004",
             "product_id": "SP-3006",
+            "variant_id": "",
             "quantity": 1,
             "gift_wrap": false
           },
@@ -113,6 +114,7 @@
             "status": "updated",
             "cart_item_id": "CI-A1",
             "product_id": "SP-3006",
+            "variant_id": null,
             "product_name": "AlpineGear Rain Jacket",
             "quantity": 1,
             "gift_wrap": false,
@@ -124,11 +126,11 @@
     },
     {
       "role": "user",
-      "content": "Perfect, thanks."
+      "content": "perfect, thanks."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set\u2014jacket in the cart, no gift wrap, total is $139 before shipping.\n\nIf you want, I can finalize a shipping option next.",
+      "content": "You’re welcome!",
       "tool_calls": null
     },
     {

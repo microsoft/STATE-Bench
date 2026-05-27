@@ -6,94 +6,37 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I need a ProBook Laptop 13-inch delivered TODAY. Someone on the phone last week told me you offer same-day for orders placed before noon. It's only 10am \u2014 can you make that happen?"
+      "content": "Hi — I need a ProBook Laptop 13-inch delivered TODAY. Someone on the phone last week told me you offer same-day for orders placed before noon. It's only 10am — can you make that happen?"
     },
     {
       "role": "assistant",
-      "content": "Short answer: I can\u2019t promise same\u2011day delivery, and based on the store\u2019s current shipping policy I see, we only officially support next\u2011business\u2011day as the fastest option, not guaranteed same\u2011day.\n\nHere\u2019s what I can do and what we should check:\n\n1. **Policy vs what you were told**\n   - The current policy lists:\n     - **Standard**: several days (depends on item listing)\n     - **Express**: 1 day faster than standard\n     - **Next\u2011day**: *next business day*, not \u201ctoday\u201d\n   - There\u2019s no documented \u201csame\u2011day\u201d tier in the system I have access to, even for orders before noon. That means I **can\u2019t reliably arrange or guarantee same\u2011day** through the normal checkout tools.\n\n2. **About the ProBook Laptop 13\u2011inch**\n   - I can absolutely help you **find a ProBook Laptop 13\u2011inch**, confirm it\u2019s in stock, and get it into your cart right away.\n   - What I *can\u2019t* do is override the shipping system or create a special same\u2011day option that isn\u2019t in the policy.\n\n3. **Fastest realistic option I can set up**\n   - The fastest option I can help you with is **next\u2011day delivery** (next business day), assuming:\n     - The **ProBook Laptop 13\u2011inch** is in stock.\n     - Your address is in a region where next\u2011day is available (the system assumes this for eligible orders, but I can\u2019t see your exact address from here).\n\n4. **If same\u2011day is absolutely critical**\n   - Since the online system doesn\u2019t expose a same\u2011day tier, your best bet is:\n     - **Call customer support again** and reference your previous conversation about same\u2011day before noon, or\n     - Ask if there\u2019s a **local store pickup / courier arrangement** they can do manually for your area.\n   - I\u2019m constrained to what\u2019s in the online policy and tools, so I can\u2019t trigger a special courier or override shipping.\n\nIf you\u2019d like, I can now:\n- Locate the **ProBook Laptop 13\u2011inch** in our catalog,\n- Confirm it\u2019s in stock,\n- Add it to your cart,\n- Then you can choose **\u201cnext_day\u201d** shipping at checkout for the fastest available delivery.\n\nDo you want me to proceed with finding and adding a **ProBook Laptop 13\u2011inch**, and are you okay with **next\u2011day** as the fastest option I can actually arrange here?",
+      "content": "I can’t promise same-day based on what I can verify here.\n\nWhat I found:\n- ProBook Laptop 13-inch is in stock: $999\n- Its listed standard shipping estimate is 3 business days\n- Our current shipping policy offers:\n  - Standard\n  - Express\n  - Next-day\n- The fastest documented option is next business day, not same-day\n\nSo based on the store policy and this product’s shipping info, I do not see a same-day delivery option I can confirm for today.\n\nIf you want, I can do either of these right now:\n1. Add the ProBook Laptop 13-inch to your cart and set up the fastest available shipping once you confirm, or\n2. Check the available shipping options for your cart to see the exact ETA/cost shown for your address\n\nIf you want me to check that, I’ll first need to add the laptop to your cart.",
       "tool_calls": [
         {
-          "name": "get_cart",
+          "name": "get_policies",
           "arguments": {
-            "customer_id": "shop_004"
+            "topic": "shipping"
           },
           "result": {
-            "cart_id": "CART-shop_004",
-            "customer_id": "shop_004",
-            "items": [],
-            "subtotal": 0,
-            "discount_amount": 0,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 0,
-            "applied_promo_codes": []
+            "topic": "shipping",
+            "summary": "Shipping speed depends on customer preference and tier. Three options: standard, express, next_day.",
+            "rules": [
+              "Standard: listed shipping_days, $6 fee.",
+              "Express: -1 day vs standard, $12 fee. Free for Gold and Platinum.",
+              "Next-day: next business day, $15 fee. Free for Platinum.",
+              "Bundle override: 5+ items total grants free standard shipping regardless of tier.",
+              "Agent action rule: do NOT call set_shipping_option without an explicit customer choice. You may discuss options in chat when the customer asks about shipping/delivery/deadlines, but the write call must come AFTER the customer names a specific option."
+            ]
           }
         },
-        {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "shipping"
-          },
-          "result": {
-            "topic": "shipping",
-            "summary": "Shipping speed depends on customer preference and tier. Three options: standard, express, next_day.",
-            "rules": [
-              "Standard: listed shipping_days, $6 fee.",
-              "Express: -1 day vs standard, $12 fee. Free for Gold and Platinum.",
-              "Next-day: next business day, $15 fee. Free for Platinum.",
-              "Bundle override: 5+ items total grants free standard shipping regardless of tier.",
-              "Agent action rule: do NOT call set_shipping_option without an explicit customer choice. You may discuss options in chat when the customer asks about shipping/delivery/deadlines, but the write call must come AFTER the customer names a specific option."
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "The person on the phone was really clear though \u2014 can you double-check with a supervisor or your system? Look for a \u201csame-day\u201d or \u201cbefore-noon\u201d perk."
-    },
-    {
-      "role": "assistant",
-      "content": "I checked the shipping policy again in the system I have access to, and it still only shows three options:\n\n- **Standard** \u2013 several days, $6  \n- **Express** \u2013 1 day faster than standard, $12 (free for Gold/Platinum)  \n- **Next_day** \u2013 next *business* day, $15 (free for Platinum)  \n\nThere is **no \u201csame-day\u201d or \u201cbefore\u2011noon\u201d perk** documented anywhere in the tools or policies I can see, and I don\u2019t have a way to \u201cask a supervisor\u201d or access any hidden tiers beyond these. That means:\n\n- I **can\u2019t enable or guarantee same\u2011day** delivery from here.\n- The **fastest option I can actually set up** for you through this system is **next\u2011day**.\n\nIt\u2019s possible:\n- The phone agent was referring to a **regional pilot**, **store\u2011level courier**, or **special case** that isn\u2019t part of the standard online policy I\u2019m bound to.\n- Or they may have misspoken / been working from outdated info.\n\nTo move forward, we have two tracks:\n\n1. **If you must have it today**\n   - You\u2019ll need to **call customer support again** and reference that prior conversation about \u201csame\u2011day for orders before noon.\u201d  \n   - Ask specifically whether there\u2019s:\n     - A **local store** that has the **ProBook Laptop 13\u2011inch** in stock with same\u2011day pickup or courier, or  \n     - A **manual same\u2011day override** they can apply that doesn\u2019t show up in the online system.\n\n2. **If next\u2011day is acceptable**\n   - I can help you **right now** with:\n     1. Finding a **ProBook Laptop 13\u2011inch** that\u2019s in stock.\n     2. Adding it to your cart.\n     3. Then you can choose **\u201cnext_day\u201d** shipping at checkout for the fastest available delivery I can actually arrange.\n\nIf you want me to proceed with the order here, please confirm:\n\n1. You\u2019re okay with **next\u2011day (not same\u2011day)** as the shipping speed I can set up, and  \n2. Whether you want any particular specs for the **ProBook Laptop 13\u2011inch** (e.g., RAM, storage, color), or if \u201cany ProBook Laptop 13\u2011inch that\u2019s in stock\u201d is fine.",
-      "tool_calls": [
-        {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "shipping"
-          },
-          "result": {
-            "topic": "shipping",
-            "summary": "Shipping speed depends on customer preference and tier. Three options: standard, express, next_day.",
-            "rules": [
-              "Standard: listed shipping_days, $6 fee.",
-              "Express: -1 day vs standard, $12 fee. Free for Gold and Platinum.",
-              "Next-day: next business day, $15 fee. Free for Platinum.",
-              "Bundle override: 5+ items total grants free standard shipping regardless of tier.",
-              "Agent action rule: do NOT call set_shipping_option without an explicit customer choice. You may discuss options in chat when the customer asks about shipping/delivery/deadlines, but the write call must come AFTER the customer names a specific option."
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Ugh, that\u2019s really stressful on my end because I was counting on today, but if your system truly only supports next-day, then ok, tomorrow works \u2014 please add the ProBook Laptop 13-inch and set next-day shipping."
-    },
-    {
-      "role": "assistant",
-      "content": "I\u2019ve added the laptop and set up next\u2011day shipping:\n\n- **Item:** ProBook Laptop 13-inch (ProBook)  \n- **Price:** $999  \n- **Quantity:** 1  \n- **Shipping:** Next-day  \n- **Shipping cost:** $15  \n- **Current total:** $1,014 (before any taxes your region may add at checkout)\n\nA couple of quick notes and options for you:\n\n- Your account tier is **standard**, so next\u2011day isn\u2019t free, but you **do** have **2,200 loyalty points** (worth up to $22 off, capped at 50% of the cart total).  \n- If you\u2019d like, I can **redeem some of your loyalty points** to lower the price, or leave them for a future purchase.\n\nDo you want me to apply loyalty points to this order, and if so, about how much (e.g., 1,000 points = $10, 2,000 points = $20)?",
-      "tool_calls": [
         {
           "name": "search_products",
           "arguments": {
             "query": "ProBook Laptop 13-inch",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 5000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -214,6 +157,39 @@
           }
         },
         {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-1002"
+          },
+          "result": {
+            "product_id": "SP-1002",
+            "name": "ProBook Laptop 13-inch",
+            "category": "electronics",
+            "subcategory": "laptop",
+            "brand": "ProBook",
+            "price": 999,
+            "rating": 4.6,
+            "review_count": 2180,
+            "description": "13-inch everyday laptop with strong battery and solid performance for schoolwork.",
+            "specs": {
+              "weight_lb": 2.9,
+              "battery_hours": 12,
+              "ram": "16GB",
+              "ssd": "512GB",
+              "screen_inches": 13
+            },
+            "compatible_with": [],
+            "in_stock": true,
+            "stock_quantity": 35,
+            "shipping_days": 3,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "3 business days (standard)"
+          }
+        },
+        {
           "name": "get_customer_account",
           "arguments": {
             "customer_id": "shop_004"
@@ -228,6 +204,97 @@
             "purchase_history": []
           }
         },
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "cart_id": "CART-shop_004",
+            "customer_id": "shop_004",
+            "items": [],
+            "subtotal": 0,
+            "discount_amount": 0,
+            "gift_wrap_fee": 0,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 0,
+            "applied_promo_codes": []
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "The person on the phone was really clear though — can you double-check with a supervisor or your system? Look for a “same-day” or “before-noon” perk."
+    },
+    {
+      "role": "assistant",
+      "content": "I double-checked the system for anything like that, and I still don’t see a same-day or “before noon” shipping perk.\n\nWhat I verified:\n- Shipping policy only lists 3 speeds:\n  - Standard\n  - Express\n  - Next-day\n- The fastest documented option is next business day\n- There are no active electronics promotions related to shipping\n- I don’t see any policy mention of same-day delivery or a before-noon cutoff benefit\n\nSo from the system I have access to, I can’t confirm same-day delivery for today.\n\nIf you want, I can still help with the fastest available path:\n- add the ProBook Laptop 13-inch to your cart\n- then check the exact shipping options and ETA/cost available for your order\n- and if next-day is available, you can choose it\n\nIf you’d like, I can add the laptop now.",
+      "tool_calls": [
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "shipping"
+          },
+          "result": {
+            "topic": "shipping",
+            "summary": "Shipping speed depends on customer preference and tier. Three options: standard, express, next_day.",
+            "rules": [
+              "Standard: listed shipping_days, $6 fee.",
+              "Express: -1 day vs standard, $12 fee. Free for Gold and Platinum.",
+              "Next-day: next business day, $15 fee. Free for Platinum.",
+              "Bundle override: 5+ items total grants free standard shipping regardless of tier.",
+              "Agent action rule: do NOT call set_shipping_option without an explicit customer choice. You may discuss options in chat when the customer asks about shipping/delivery/deadlines, but the write call must come AFTER the customer names a specific option."
+            ]
+          }
+        },
+        {
+          "name": "get_promotions",
+          "arguments": {
+            "category": "electronics"
+          },
+          "result": {
+            "promotions": []
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "promo_stacking"
+          },
+          "result": {
+            "topic": "promo_stacking",
+            "summary": "At most one promo code per cart. Some discounts stack with each other but not with promo codes.",
+            "rules": [
+              "One promo code per cart.",
+              "Category bundle (5%) does NOT stack with promo codes on the same items — customer gets the better of the two.",
+              "Welcome discount (5%) does NOT stack with promo codes — customer gets the better of the two.",
+              "Brand bundle bonus (3%) DOES stack with everything."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "If same-day really isn’t an option, any faster option at all, even tomorrow?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — the fastest option I can confirm from policy is **next-day delivery**, meaning **next business day**, not today.\n\nFor the **ProBook Laptop 13-inch**:\n- It’s in stock\n- Standard estimate is **3 business days**\n- Faster store options are:\n  - **Express**: typically 1 day faster than standard\n  - **Next-day**: **next business day**\n\nSince you asked about faster delivery, I can check the **exact shipping options and cost for your cart**. To do that, I need to put the laptop in your cart first.\n\nIf you want me to proceed, just say:\n- **“Add it and check shipping”**\n\nAnd if you already know your preference, you can also say:\n- **“Add it with next-day”**",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "ok, tomorrow works — please add the laptop and set next-day shipping."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I added the **ProBook Laptop 13-inch** and set **next-day shipping**.\n\nCurrent cart:\n- ProBook Laptop 13-inch: **$999**\n- Shipping: **Next-day — $15**\n- Total: **$1,014**\n\nIf you want, I can also check whether any discount or loyalty points can reduce the total.",
+      "tool_calls": [
         {
           "name": "add_to_cart",
           "arguments": {
@@ -268,7 +335,7 @@
     },
     {
       "role": "user",
-      "content": "No, don\u2019t apply any loyalty points\u2014I'll save them for later.  \n\nGreat \u2014 $1014 total looks right. [TASK_DONE]"
+      "content": "great — $1014 total looks right. [TASK_DONE]"
     }
   ]
 }

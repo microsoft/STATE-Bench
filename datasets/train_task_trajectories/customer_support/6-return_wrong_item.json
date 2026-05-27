@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "That\u2019s a really frustrating mix-up, and I\u2019m sorry that happened. I\u2019ve processed a return for the incorrect item and you\u2019ll get a full refund of $1,299 back to your original payment method, with free return shipping. \n\nYou\u2019ll receive a prepaid return label shortly\u2014please use it to send the blender back. If you\u2019d like, I can also help you place a new order for the laptop so you get the correct item as soon as possible.",
+      "content": "I’m sorry about that. I checked your order and this qualifies as a wrong-item delivery, so you’re eligible for a full return with a $1,299 refund and no return shipping charge.\n\nIf you want, I can start the return now and get the replacement/wrong-item return process moving for the blender.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -79,7 +79,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -157,7 +157,17 @@
             "paid_return_shipping_fee": 0,
             "restocking_discount": 0
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks for confirming that. I’d prefer a refund rather than a replacement, and I’ll reorder the laptop separately. If you can send the free return label and process the full refund with no restocking fee, that works for me."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I’ve processed the return for the wrong item and your full $1,299 refund is going back to your original payment method with no restocking fee. A free return label has been issued for the blender.\n\nYou can go ahead and place a new order for the laptop whenever you’re ready.",
+      "tool_calls": [
         {
           "name": "process_return",
           "arguments": {
@@ -185,7 +195,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for taking care of that and confirming it\u2019s a full refund with free return shipping. I\u2019ll use the label to send the blender back and I\u2019ll reorder the laptop myself, so I\u2019m all set now. [TASK_DONE]"
+      "content": "Thanks, I appreciate the help getting that sorted out. [TASK_DONE]"
     }
   ]
 }

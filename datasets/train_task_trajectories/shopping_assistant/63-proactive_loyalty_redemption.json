@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hey \u2014 please add the ProBook 15 to my cart and let's get checked out."
+      "content": "Hey — please add the ProBook 15 to my cart and let's get checked out."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the ProBook Laptop 15-inch to your cart.\n\nBefore we finish checkout, I need a couple of details:\n1) Do you want any add-ons, like:\n   - ProBook USB-C Dock\n   - Laptop sleeve or mouse\n   - Extended protection plan (if you care about that)?\n\n2) Shipping and timing:\n   - Do you need it by a specific date?\n   - Are you okay with standard shipping, or do you prefer faster delivery?\n\n3) Discounts:\n   - Do you have any promo codes you\u2019d like me to apply?\n   - Are you interested in using loyalty points if you have them, or should I leave those alone?\n\nOnce you answer these, I can finalize your cart setup and then summarize everything so you can place the order.",
+      "content": "I found **ProBook Laptop 15-inch** for **$1,299**, and it has **no variants**.\n\nBefore I add it and move toward checkout, I need one choice from you:\n- **Gift wrap?** Yes or no\n\nOnce you confirm, I can add it to your cart.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -129,7 +129,17 @@
             "variants": [],
             "note": "This product has no variants; no variant_id is needed for add_to_cart."
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "No gift wrap. Please just confirm the item, any loyalty redemption option, and the total."
+    },
+    {
+      "role": "assistant",
+      "content": "Confirmed in your cart:\n\n- **ProBook Laptop 15-inch**\n- Qty: **1**\n- Gift wrap: **No**\n- Item total: **$1,299**\n\nLoyalty option:\n- You have **104,000 points**\n- Redemption rate is **100 points = $1**\n- On this cart, the max redemption is **50% of total**, so you could use up to **64,900 points** for **$649 off**\n\nCurrent total:\n- **$1,299** before any loyalty redemption or shipping\n\nIf you want, I can redeem the **maximum $649** or a smaller amount.",
+      "tool_calls": [
         {
           "name": "add_to_cart",
           "arguments": {
@@ -151,17 +161,81 @@
             "cart_subtotal": 1299,
             "cart_total": 1299
           }
+        },
+        {
+          "name": "get_customer_account",
+          "arguments": {
+            "customer_id": "shop_005"
+          },
+          "result": {
+            "customer_id": "shop_005",
+            "name": "Morgan Patel",
+            "email": "morgan.patel@example.com",
+            "tier": "platinum",
+            "is_first_time": false,
+            "loyalty_points": 104000,
+            "purchase_history": []
+          }
+        },
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_005"
+          },
+          "result": {
+            "cart_id": "CART-shop_005",
+            "customer_id": "shop_005",
+            "items": [
+              {
+                "cart_item_id": "CI-0001",
+                "product_id": "SP-1101",
+                "product_name": "ProBook Laptop 15-inch",
+                "quantity": 1,
+                "gift_wrap": false,
+                "unit_price": 1299,
+                "line_total": 1299
+              }
+            ],
+            "subtotal": 1299,
+            "discount_amount": 0,
+            "gift_wrap_fee": 0,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 1299,
+            "applied_promo_codes": []
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "No add\u2011ons for me, thanks, and no gift wrap.  \n\nNo shipping selection right now \u2014 I\u2019ll handle shipping later; please just confirm the ProBook 15 in my cart, let me know what loyalty points I can use on this order and what they\u2019re worth in dollars, and then give me the total."
+      "content": "wait, can I actually redeem that much? What's the cap?"
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s where things stand:\n\n1) Cart contents  \n   - ProBook Laptop 15-inch \u2014 1 unit  \n   - Price: $1,299.00  \n   - Gift wrap: No  \n   - Current discounts: $0  \n   - Shipping: Not selected yet  \n   - Current total: **$1,299.00**\n\n2) Your loyalty points and value  \n   - Available points: **104,000**  \n   - Conversion: **100 points = $1**  \n   - So your full balance is worth **$1,040.00** in potential discounts.\n\n   However, store rules for redemption (which I must follow):\n   - Minimum redemption: **500 points** ($5)  \n   - Maximum redemption: **50% of cart total**  \n\n   On this $1,299 cart:\n   - 50% of $1,299 = **$649.50** max discount  \n   - That corresponds to **64,900 points** (since 100 pts = $1)\n\n   So for this order you can redeem **up to 64,900 points** for **$649.00** off (the system will cap at 50% of the total).\n\n3) What I need from you  \n   - How many points would you like to redeem on this order (any amount up to 64,900)?  \n     - Example choices:\n       - 50,000 points \u2192 $500 off \u2192 new total \u2248 **$799.00** (before shipping)\n       - 64,900 points \u2192 $649 off \u2192 new total \u2248 **$650.00** (before shipping)\n       - 0 points \u2192 keep your full balance \u2192 total stays **$1,299.00**\n\nTell me how many points to apply (or say \u201cuse the max\u201d or \u201cdon\u2019t use any\u201d), and I\u2019ll apply that and then give you the updated total.",
+      "content": "Yes — but the cap is **50% of the current cart total**.\n\nFor your cart:\n- Current total: **$1,299**\n- 50% cap: **$649.50**\n- Since points redeem at **100 points = $1**, the practical max is **64,900 points = $649 off**\n\nWhy not $649.50?\n- Redemptions are effectively in whole-dollar increments via points, so **64,900 points** is the highest usable amount under the cap.\n\nYou also meet the other rules:\n- Minimum redemption is **500 points**\n- You have **104,000 points**\n- You’re **not** using a first-time welcome discount\n\nSo yes, you can redeem **up to 64,900 points** on this order. If you want, tell me the exact amount of points to redeem.",
       "tool_calls": [
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "loyalty_redemption"
+          },
+          "result": {
+            "topic": "loyalty_redemption",
+            "summary": "Loyalty points can be redeemed at checkout to offset part of the cart total. 100 points = $1.",
+            "rules": [
+              "Rate: 100 loyalty points = $1.00 off.",
+              "Cap: redemption cannot exceed 50% of the current cart total.",
+              "Minimum redemption: 500 points ($5).",
+              "Stacking: stacks with promo codes and category bundles.",
+              "Restriction: not combinable with the first-time welcome discount.",
+              "Points are debited from the customer's balance at redemption.",
+              "Agent action rule: do NOT call redeem_loyalty_points without an explicit customer-specified amount. You may discuss and recommend redemption in chat, but the write call must come AFTER the customer names a specific number of points."
+            ]
+          }
+        },
         {
           "name": "get_cart",
           "arguments": {
@@ -211,11 +285,11 @@
     },
     {
       "role": "user",
-      "content": "Oh nice \u2014 let\u2019s redeem **50,000 points** then. What\u2019s my new total (item + loyalty, still before shipping)?"
+      "content": "50,000 points please."
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s your updated order summary (before shipping):\n\n- Item: ProBook Laptop 15-inch \u2014 **$1,299.00**\n- Loyalty points redeemed: **50,000 points** \u2192 **$500.00** discount\n- New total (before shipping & tax): **$799.00**\n- Remaining loyalty balance: **54,000 points** (worth $540.00 on future orders, subject to the same 50% cap per order)\n\nYou\u2019re all set on the cart side; you can now proceed to checkout and choose your shipping option when you\u2019re ready.",
+      "content": "Done.\n\n- **Redeemed:** 50,000 points\n- **Loyalty discount:** **$500**\n- **Remaining points balance:** **54,000**\n- **New cart total:** **$799**  \n  - shipping not included yet",
       "tool_calls": [
         {
           "name": "redeem_loyalty_points",
@@ -236,7 +310,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, $799 before shipping works for me.  \n\n[TASK_DONE]"
+      "content": "Perfect, that works. [TASK_DONE]"
     }
   ]
 }

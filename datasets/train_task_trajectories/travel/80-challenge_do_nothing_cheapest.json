@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "You\u2019re on an ORD\u2013DEN economy ticket for $300 on UA100 (June 24, 11:30), and you\u2019ve found another flight on the same route for $270.\n\nUnder your fare rules (economy, domestic, personal change):\n\n- Change fee is **$75** (since departure is more than 7 days away).\n- Fare difference applies as well.\n\nIn your case, you\u2019re trying to move to a **cheaper** $270 option, so:\n\n- Fare difference: **\u2013$30** (you\u2019d get $30 back in theory)\n- Change fee: **$75**\n- Net effect: **you\u2019d pay $45 more** overall, not save $30.\n\nBecause of that, switching to the $270 flight would **cost you extra**, so I don\u2019t recommend changing this booking.\n\nIf you\u2019d like, I can:\n- Explain any other ways you might save (e.g., checking if a fully flexible fare or different dates make sense), or  \n- Help you compare alternative flights on that route within a specific budget and time window.",
+      "content": "I checked booking BK-1000.\n\nBecause this is an economy domestic ticket and your flight departs on 2026-06-24, changing for a personal reason would incur a change fee:\n- $150 change fee if departure is within 7 days\n- plus/minus any fare difference\n\nSince the new flight is only $30 cheaper, switching would not save you money — you’d pay a $150 fee to get a $30 lower fare, for a net loss of $120.\n\nSo I should not make that change unless you still want it for another reason. If you want, I can help compare other options.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -58,8 +58,8 @@
             "rules": {
               "free_change_window": "Free changes within 24 hours (domestic) or 48 hours (international) of booking",
               "basic_economy": "Not changeable after free window",
-              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if \u22647 days. Fare difference also applies.",
-              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if \u22647 days. Fare difference also applies.",
+              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if ≤7 days. Fare difference also applies.",
+              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if ≤7 days. Fare difference also applies.",
               "economy_medical": "Medical changes: 50% discount on standard fee (requires change_reason='medical')",
               "economy_bereavement": "Bereavement changes: 75% discount on standard fee (requires change_reason='bereavement')",
               "jury_duty": "Jury duty: free change (change_reason='jury_duty')",
@@ -79,7 +79,7 @@
     },
     {
       "role": "user",
-      "content": "Oh, I didn\u2019t realize the change fee would wipe out the $30 savings.  \n\nIn that case I\u2019ll just keep my current ORD\u2013DEN booking as is. Thanks for breaking down the math for me.  \n\n[TASK_DONE]"
+      "content": "Oh, I did not realize the fees would wipe out the savings. I will keep my current booking then. [TASK_DONE]"
     }
   ]
 }

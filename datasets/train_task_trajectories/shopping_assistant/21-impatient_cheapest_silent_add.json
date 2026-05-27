@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "I'm in a rush \u2014 just add the cheapest laptop you have to my cart. I don't care about specs, just need something that works. Thanks."
+      "content": "I'm in a rush — just add the cheapest laptop you have to my cart. I don't care about specs, just need something that works. Thanks."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the cheapest in-stock laptop to your cart:\n\n- **Product:** ProBook Chromebook 11  \n- **Price:** $329  \n- **Quantity:** 1  \n- **Gift wrap:** No  \n\nIf you want, I can quickly:  \n- Add a second one, or  \n- Suggest the next step to checkout, or  \n- Swap it for the cheapest **15-inch** laptop instead.",
+      "content": "Done — I added the cheapest in-stock laptop to your cart:\n\n- ProBook Chromebook 11 — $329\n\nIf you want, I can also quickly check for any promo code or discount you might qualify for.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,7 +18,7 @@
             "query": "laptop",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 10000,
+            "max_price": 100000,
             "min_rating": 1,
             "in_stock_only": true,
             "sort_by": "price_low"
@@ -140,6 +140,19 @@
           }
         },
         {
+          "name": "get_variants",
+          "arguments": {
+            "product_id": "SP-1106"
+          },
+          "result": {
+            "product_id": "SP-1106",
+            "product_name": "ProBook Chromebook 11",
+            "base_price": 329,
+            "variants": [],
+            "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
           "name": "add_to_cart",
           "arguments": {
             "customer_id": "shop_004",
@@ -165,7 +178,7 @@
     },
     {
       "role": "user",
-      "content": "Great, thanks.  \n\n[TASK_DONE]"
+      "content": "Great, thanks. [TASK_DONE]"
     }
   ]
 }

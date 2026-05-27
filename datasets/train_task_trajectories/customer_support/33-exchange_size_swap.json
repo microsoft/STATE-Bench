@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve processed an exchange of your Premium Cotton Shirt in medium for the large size\u2014there\u2019s no price difference, so you weren\u2019t charged anything. \n\nYou\u2019ll receive a confirmation email shortly with the new item details and return instructions for the original shirt. Please use the provided label to send back the medium once that email arrives.",
+      "content": "I can do that — the large version is in stock, and there’s no price difference.  \nIf you want, I can go ahead and process the exchange for the shirt from order ORD-6034 now.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -102,7 +102,7 @@
           "result": {
             "topic": "exchange",
             "rules": {
-              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed \u2014 use process_return for a refund instead.",
+              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed — use process_return for a refund instead.",
               "same_price": "Exchange for a same-price product: no charge, no refund.",
               "more_expensive": "Exchange for more expensive item: customer pays price difference.",
               "cheaper": "Exchange for cheaper item: difference refunded as store credit (not original payment).",
@@ -173,9 +173,19 @@
             "price_difference": 0,
             "customer_pays": 0,
             "store_credit_refund": 0,
-            "reason": "Exchange for same-price item \u2014 no charge, no refund"
+            "reason": "Exchange for same-price item — no charge, no refund"
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yes please — I’d like a direct exchange for the same shirt in Large, as long as there’s no restocking fee or extra charge."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I’ve processed the exchange for the Large shirt. There’s no restocking fee and no extra charge.",
+      "tool_calls": [
         {
           "name": "process_exchange",
           "arguments": {
@@ -197,7 +207,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, thanks for setting that up and confirming there\u2019s no extra charge. I\u2019ll watch for the email and use the return label to send the medium back.  \n\n[TASK_DONE]"
+      "content": "Perfect, thank you so much for your help! [TASK_DONE]"
     }
   ]
 }
