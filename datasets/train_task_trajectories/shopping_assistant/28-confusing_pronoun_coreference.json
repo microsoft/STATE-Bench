@@ -6,20 +6,20 @@
     },
     {
       "role": "user",
-      "content": "Tell me about the SlimBook Air 13 and the ProBook 13 \u2014 what are the specs, prices, and main differences?"
+      "content": "Tell me about the SlimBook Air 13 and the ProBook 13 — what are the specs, prices, and main differences?"
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s a side\u2011by\u2011side overview of the two 13\" models in our store:\n\n### 1) SlimBook Air 13 (SP-1001)\n\n- **Price:** $849  \n- **Positioning:** Lightweight 13\" laptop aimed at students / portability  \n- **Key specs:**\n  - Screen: **13\"**\n  - RAM: **8GB**\n  - Storage: **256GB SSD**\n  - Battery: **Up to 14 hours**\n  - Weight: **2.6 lb**\n- **Other details:**\n  - Rating: **4.5** (1,240 reviews)\n  - In stock: **Yes** (40 units)\n  - Shipping estimate: ~**3 business days** (standard)\n  - Gift wrap: **Available**\n\n---\n\n### 2) ProBook Laptop 13-inch (SP-1002)\n\n- **Price:** $999  \n- **Positioning:** 13\" everyday laptop with stronger performance and more memory/storage  \n- **Key specs:**\n  - Screen: **13\"**\n  - RAM: **16GB**\n  - Storage: **512GB SSD**\n  - Battery: **Up to 12 hours**\n  - Weight: **2.9 lb**\n- **Other details:**\n  - Rating: **4.6** (2,180 reviews)\n  - In stock: **Yes** (35 units)\n  - Shipping estimate: ~**3 business days** (standard)\n  - Gift wrap: **Available**\n\n---\n\n### Main differences\n\n**Price & value**\n- SlimBook Air 13: **$849**\n- ProBook 13: **$999**  \n\u2192 ProBook is **$150 more**, but with double the RAM and storage.\n\n**Performance & capacity**\n- SlimBook Air 13: **8GB RAM, 256GB SSD** \u2013 fine for web, documents, light multitasking.\n- ProBook 13: **16GB RAM, 512GB SSD** \u2013 better for heavy multitasking, lots of browser tabs, light creative work, and more local files.\n\n**Portability & battery**\n- SlimBook Air 13: **Lighter (2.6 lb)** and **longer battery (up to 14h)** \u2013 better if you carry it all day.\n- ProBook 13: **Slightly heavier (2.9 lb)** and **12h battery** \u2013 still portable, but not quite as optimized for all\u2011day unplugged use.\n\n**Who each is best for**\n\n- **Choose SlimBook Air 13 if:**\n  - You prioritize **light weight and battery life**.\n  - Your use is mostly **notes, browsing, streaming, office apps**.\n  - You want to save the **$150**.\n\n- **Choose ProBook 13 if:**\n  - You want **smoother performance** with many apps/tabs open.\n  - You need more space for **files, photos, or apps** (512GB).\n  - You\u2019re okay with a bit more weight and slightly shorter battery for the extra power.\n\nIf you tell me how you plan to use the laptop (school, coding, photo/video editing, travel, etc.), I can say which one fits you better and whether the extra $150 for the ProBook is worth it in your case.",
+      "content": "Here’s a quick comparison of the two 13-inch laptops:\n\n## 1) SlimBook Air 13\n- **Price:** $849\n- **Rating:** 4.5/5\n- **Reviews:** 1,240\n- **Description:** Lightweight 13-inch laptop built for students, with all-day battery and a durable chassis.\n\n### Specs\n- **Screen:** 13\"\n- **Weight:** 2.6 lb\n- **Battery life:** 14 hours\n- **RAM:** 8GB\n- **Storage:** 256GB SSD\n\n## 2) ProBook 13-inch\n- **Price:** $999\n- **Rating:** 4.6/5\n- **Reviews:** 2,180\n- **Description:** 13-inch everyday laptop with strong battery and solid performance for schoolwork.\n\n### Specs\n- **Screen:** 13\"\n- **Weight:** 2.9 lb\n- **Battery life:** 12 hours\n- **RAM:** 16GB\n- **Storage:** 512GB SSD\n\n## Main differences\n- **Price:** SlimBook Air 13 is **$150 cheaper**.\n- **Performance/value:** ProBook 13 gives you **more RAM (16GB vs 8GB)** and **more storage (512GB vs 256GB)**.\n- **Portability:** SlimBook Air 13 is **lighter** at **2.6 lb vs 2.9 lb**.\n- **Battery:** SlimBook Air 13 lasts a bit longer: **14 hours vs 12 hours**.\n- **Social proof:** ProBook 13 has a slightly **higher rating** and **more reviews**.\n\n## Best fit\n- **Choose SlimBook Air 13** if you want:\n  - lower price\n  - lighter weight\n  - longer battery life\n\n- **Choose ProBook 13** if you want:\n  - better multitasking\n  - more storage\n  - a bit more overall performance headroom\n\nBoth are currently **in stock** and estimate about **3 business days standard shipping**.\n\nIf you want, I can also give you a **side-by-side recommendation based on your use case** like school, travel, office work, or light creative work.",
       "tool_calls": [
         {
           "name": "search_products",
           "arguments": {
-            "query": "SlimBook Air 13",
+            "query": "SlimBook Air 13 ProBook 13",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 5000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": false,
             "sort_by": "relevance"
           },
@@ -46,6 +46,17 @@
                 "rating": 4.4,
                 "review_count": 3200,
                 "in_stock": false
+              },
+              {
+                "product_id": "SP-1002",
+                "name": "ProBook Laptop 13-inch",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 999,
+                "rating": 4.6,
+                "review_count": 2180,
+                "in_stock": true
               },
               {
                 "product_id": "SP-1107",
@@ -59,45 +70,6 @@
                 "in_stock": true
               },
               {
-                "product_id": "SP-1002",
-                "name": "ProBook Laptop 13-inch",
-                "brand": "ProBook",
-                "category": "electronics",
-                "subcategory": "laptop",
-                "price": 999,
-                "rating": 4.6,
-                "review_count": 2180,
-                "in_stock": true
-              }
-            ],
-            "total_found": 4
-          }
-        },
-        {
-          "name": "search_products",
-          "arguments": {
-            "query": "ProBook 13",
-            "category": "electronics",
-            "min_price": 0,
-            "max_price": 5000,
-            "min_rating": 1,
-            "in_stock_only": false,
-            "sort_by": "relevance"
-          },
-          "result": {
-            "products": [
-              {
-                "product_id": "SP-1002",
-                "name": "ProBook Laptop 13-inch",
-                "brand": "ProBook",
-                "category": "electronics",
-                "subcategory": "laptop",
-                "price": 999,
-                "rating": 4.6,
-                "review_count": 2180,
-                "in_stock": true
-              },
-              {
                 "product_id": "SP-1101",
                 "name": "ProBook Laptop 15-inch",
                 "brand": "ProBook",
@@ -107,28 +79,6 @@
                 "rating": 4.7,
                 "review_count": 1890,
                 "in_stock": true
-              },
-              {
-                "product_id": "SP-1001",
-                "name": "SlimBook Air 13",
-                "brand": "SlimBook",
-                "category": "electronics",
-                "subcategory": "laptop",
-                "price": 849,
-                "rating": 4.5,
-                "review_count": 1240,
-                "in_stock": true
-              },
-              {
-                "product_id": "SP-1104",
-                "name": "SlimBook Air 13 (Previous Gen)",
-                "brand": "SlimBook",
-                "category": "electronics",
-                "subcategory": "laptop",
-                "price": 699,
-                "rating": 4.4,
-                "review_count": 3200,
-                "in_stock": false
               },
               {
                 "product_id": "SP-2006",
@@ -150,17 +100,6 @@
                 "price": 329,
                 "rating": 3.9,
                 "review_count": 530,
-                "in_stock": true
-              },
-              {
-                "product_id": "SP-1107",
-                "name": "SlimBook Touch 15",
-                "brand": "SlimBook",
-                "category": "electronics",
-                "subcategory": "laptop",
-                "price": 1099,
-                "rating": 4.5,
-                "review_count": 410,
                 "in_stock": true
               }
             ],
@@ -237,17 +176,26 @@
     },
     {
       "role": "user",
-      "content": "Yeah, sounds good \u2014 that one\u2019s perfect. Just add it real quick, I have a meeting in 2 minutes."
+      "content": "Yeah, sounds good — that one's perfect. Just add it real quick, I have a meeting in 2 minutes."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set \u2014 I\u2019ve added **1\u00d7 ProBook Laptop 13-inch** to your cart (no gift wrap).  \n\nCurrent cart total: **$999** before tax and shipping.  \n\nIf you want, I can also:\n- Add a basic USB\u2011C hub or sleeve, or  \n- Proceed to checkout and help you pick a shipping speed.",
+      "content": "I can do that — just to make sure I add the right one, do you mean the **SlimBook Air 13 ($849)** or the **ProBook 13-inch ($999)**?",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Oh sorry, the SlimBook Air. Just one, no wrap."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — **1× SlimBook Air 13** has been added to your cart for **$849**.",
       "tool_calls": [
         {
           "name": "add_to_cart",
           "arguments": {
             "customer_id": "shop_004",
-            "product_id": "SP-1002",
+            "product_id": "SP-1001",
             "quantity": 1,
             "gift_wrap": false,
             "variant_id": ""
@@ -255,21 +203,21 @@
           "result": {
             "status": "added",
             "cart_item_id": "CI-0001",
-            "product_id": "SP-1002",
-            "product_name": "ProBook Laptop 13-inch",
+            "product_id": "SP-1001",
+            "product_name": "SlimBook Air 13",
             "variant_id": null,
             "quantity": 1,
             "gift_wrap": false,
-            "unit_price": 999,
-            "cart_subtotal": 999,
-            "cart_total": 999
+            "unit_price": 849,
+            "cart_subtotal": 849,
+            "cart_total": 849
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Cool, thanks.  \n\n[TASK_DONE]"
+      "content": "[TASK_DONE]"
     }
   ]
 }

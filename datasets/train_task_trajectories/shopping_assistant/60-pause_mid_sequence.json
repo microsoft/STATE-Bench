@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Ok here's what I want \u2014 add the ProBook 13 laptop, apply promo code SAVE10, set gift wrap on it, and tell me the total. I'm in a hurry."
+      "content": "Ok here's what I want — add the ProBook 13 laptop, apply promo code SAVE10, set gift wrap on it, and tell me the total. I'm in a hurry."
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what I\u2019ve done:\n\n- Added: ProBook Laptop 13-inch (1 unit)  \n- Gift wrap: Enabled for this item  \n- Promo code: SAVE10 applied (\u2212$99)\n\nCurrent cart summary:\n- Item subtotal: $999  \n- Gift wrap: $5  \n- Discount: \u2212$99  \n- Shipping: Not selected yet (currently $0)  \n- **Total: $905**\n\nIf you want, I can also pick the cheapest shipping option or the fastest one and update the total.",
+      "content": "Done — I added the ProBook Laptop 13-inch, turned on gift wrap, and applied SAVE10.\n\nTotal: $905\n\nBreakdown:\n- Laptop: $999\n- Promo discount: -$99\n- Gift wrap: $5\n\nNo shipping selected yet.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -140,6 +140,21 @@
           }
         },
         {
+          "name": "get_customer_account",
+          "arguments": {
+            "customer_id": "shop_001"
+          },
+          "result": {
+            "customer_id": "shop_001",
+            "name": "Alex Rivera",
+            "email": "alex.rivera@example.com",
+            "tier": "platinum",
+            "is_first_time": false,
+            "loyalty_points": 52000,
+            "purchase_history": []
+          }
+        },
+        {
           "name": "get_cart",
           "arguments": {
             "customer_id": "shop_001"
@@ -160,21 +175,6 @@
           }
         },
         {
-          "name": "get_customer_account",
-          "arguments": {
-            "customer_id": "shop_001"
-          },
-          "result": {
-            "customer_id": "shop_001",
-            "name": "Alex Rivera",
-            "email": "alex.rivera@example.com",
-            "tier": "platinum",
-            "is_first_time": false,
-            "loyalty_points": 52000,
-            "purchase_history": []
-          }
-        },
-        {
           "name": "get_variants",
           "arguments": {
             "product_id": "SP-1002"
@@ -185,6 +185,18 @@
             "base_price": 999,
             "variants": [],
             "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
+          "name": "validate_promo",
+          "arguments": {
+            "customer_id": "shop_001",
+            "promo_code": "SAVE10"
+          },
+          "result": {
+            "valid": true,
+            "reason": "Promo applied: 10% off any order.",
+            "estimated_discount": 0
           }
         },
         {
@@ -262,17 +274,18 @@
     },
     {
       "role": "user",
-      "content": "Wait \u2014 hold on a second. Actually, can you hold off on the extras? I want to just have the laptop for now."
+      "content": "wait — hold on a second. Actually, can you hold off on the extras? I want to just have the laptop for now."
     },
     {
       "role": "assistant",
-      "content": "Got it \u2014 I\u2019ve removed the extras.\n\nCurrent cart:\n- ProBook Laptop 13-inch \u2014 1 unit\n- Gift wrap: None\n- Promo codes: None applied\n- Shipping: Not selected yet (currently $0)\n\nTotal (before tax & shipping): **$999**\n\nIf you\u2019d like, I can:\n- Re-apply SAVE10 to lower the price, or  \n- Add gift wrap back, or  \n- Pick a shipping option (cheapest or fastest) and give you the updated total.",
+      "content": "Done — I removed the gift wrap and promo code, so it’s just the laptop now.\n\nNew total: $999",
       "tool_calls": [
         {
           "name": "update_cart_item",
           "arguments": {
             "customer_id": "shop_001",
             "product_id": "SP-1002",
+            "variant_id": "",
             "quantity": 1,
             "gift_wrap": false
           },
@@ -280,6 +293,7 @@
             "status": "updated",
             "cart_item_id": "CI-0001",
             "product_id": "SP-1002",
+            "variant_id": null,
             "product_name": "ProBook Laptop 13-inch",
             "quantity": 1,
             "gift_wrap": false,
@@ -301,7 +315,17 @@
             "cart_subtotal": 999,
             "cart_total": 999
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "what's actually in my cart right now?"
+    },
+    {
+      "role": "assistant",
+      "content": "Your cart currently has:\n\n- ProBook Laptop 13-inch ×1 — $999\n\nCart summary:\n- Subtotal: $999\n- Promo discounts: $0\n- Gift wrap: $0\n- Shipping: not selected\n- Total: $999",
+      "tool_calls": [
         {
           "name": "get_cart",
           "arguments": {
@@ -336,16 +360,16 @@
     },
     {
       "role": "user",
-      "content": "Thanks, that\u2019s exactly what I wanted. What\u2019s actually in my cart right now, just to double-check?"
+      "content": "perfect, that's what I want"
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what\u2019s in your cart right now:\n\n- **ProBook Laptop 13-inch (SP-1002)**\n  - Quantity: **1**\n  - Unit price: **$999**\n  - Gift wrap: **No**\n\nCart totals (current):\n- Subtotal: **$999**\n- Discounts: **$0** (no promo codes applied)\n- Gift wrap fee: **$0**\n- Shipping: **$0** (not selected yet)\n- **Total (before tax & shipping): $999**\n\nNothing else is in your cart.",
+      "content": "Great — your cart is set with just the ProBook Laptop 13-inch at $999.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s what I want.  \n\n[TASK_DONE]"
+      "content": "[TASK_DONE]"
     }
   ]
 }

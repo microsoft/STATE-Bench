@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "My headphones from order ORD-7113 are broken AGAIN. This is the fourth time! I have a warranty \u2014 can you fix them?"
+      "content": "My headphones from order ORD-7113 are broken AGAIN. This is the fourth time! I have a warranty — can you fix them?"
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve checked your order and warranty details: your headphones are still under the manufacturer warranty, but you\u2019ve already hit the maximum number of warranty claims, so the standard coverage only allows a paid repair (quoted at $99).\n\nGiven that this is your fourth failure on the same product, I can offer two options as a goodwill exception:\n1) We waive the warranty limit once and send you a free replacement pair of the same model, or  \n2) You get a $249 credit toward a different set of headphones, and you send the broken pair back.\n\nTell me which option you prefer (replacement vs. credit toward something else), and I\u2019ll set it up right away.",
+      "content": "I checked your warranty, and it is active — but the item has already hit the maximum number of warranty claims. Because of that, I can’t process another free warranty repair/replacement.\n\nWhat I *can* do is help with the paid repair option, which would be 40% of the item price. For your headphones, that comes to **$99**. If you want, I can start that for you.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -136,59 +136,17 @@
             "days_past_expiry": 0,
             "has_warranty": true
           }
-        },
-        {
-          "name": "process_warranty_claim",
-          "arguments": {
-            "warranty_id": "WRT-4012",
-            "item_id": "ITEM-10141",
-            "issue_description": "Headphones broken again; this is the fourth failure for the same product within active warranty period.",
-            "confirm": false
-          },
-          "result": {
-            "status": "preview",
-            "warranty_id": "WRT-4012",
-            "item_id": "ITEM-10141",
-            "eligible": false,
-            "resolution": "paid_repair",
-            "cost": 99,
-            "reason": "Maximum claims (3) reached \u2014 paid repair only"
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Before I pick one of those, can you check whether these recently delivered defective headphones are eligible for a no-cost return/refund instead of going through warranty again?"
+      "content": "Isn't there a cheaper option? Can I just return them instead? Also, can you check whether these recently delivered defective headphones are eligible for a no-cost return/refund?"
     },
     {
       "role": "assistant",
-      "content": "Yes\u2014because they\u2019re defective, they\u2019re fully eligible for a no\u2011cost return and refund right now.\n\nYou\u2019d get a full $249 back to your original payment method, with free return shipping and no fees. If you\u2019d like to go this route instead of using the warranty, I can start the return and refund for these headphones.",
+      "content": "Yes — these headphones are eligible for a **no-cost defective return**, and the item qualifies for a **full $249 refund** to your original payment method.\n\nBecause it’s defective, there’s **no return window restriction, no restocking fee, no return shipping charge, and no shipping clawback**. If you want, I can go ahead and start the return/refund for you now.",
       "tool_calls": [
-        {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "refund"
-          },
-          "result": {
-            "topic": "refund",
-            "rules": {
-              "amount": {
-                "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
-                "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
-                "outside_window": "Outside return window but within store-credit grace: store credit only.",
-                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order \u2014 read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
-              },
-              "method": {
-                "original_payment": "Default refund method when item was paid for and is being returned for fault.",
-                "store_credit": "Required for: gift returns (at current product price), outside-window grace returns, and exchange-cheaper differences.",
-                "store_credit_only_constraint": "When a return is issued under the store-credit-only rule (gift return OR outside-window grace), the refund method cannot be changed back to original_payment afterward. process_refund will reject any attempt to flip the method on those returns."
-              },
-              "price_match": "If product price drops within 7 days of delivery, refund the difference (no return required).",
-              "goodwill_credit": "Goodwill credits (e.g., fragile-item damage bonus) are issued as a refund with the credit amount."
-            }
-          }
-        },
         {
           "name": "get_policies",
           "arguments": {
@@ -197,7 +155,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -251,6 +209,30 @@
           }
         },
         {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "refund"
+          },
+          "result": {
+            "topic": "refund",
+            "rules": {
+              "amount": {
+                "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
+                "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
+                "outside_window": "Outside return window but within store-credit grace: store credit only.",
+                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order — read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
+              },
+              "method": {
+                "original_payment": "Default refund method when item was paid for and is being returned for fault.",
+                "store_credit": "Required for: gift returns (at current product price), outside-window grace returns, and exchange-cheaper differences.",
+                "store_credit_only_constraint": "When a return is issued under the store-credit-only rule (gift return OR outside-window grace), the refund method cannot be changed back to original_payment afterward. process_refund will reject any attempt to flip the method on those returns."
+              },
+              "price_match": "If product price drops within 7 days of delivery, refund the difference (no return required).",
+              "goodwill_credit": "Goodwill credits (e.g., fragile-item damage bonus) are issued as a refund with the credit amount."
+            }
+          }
+        },
+        {
           "name": "process_return",
           "arguments": {
             "item_id": "ITEM-10141",
@@ -280,11 +262,11 @@
     },
     {
       "role": "user",
-      "content": "Yes, please go ahead and start the return and full refund to my original payment method for these headphones."
+      "content": "Yes, please go ahead with the no-cost return and full refund to the original payment method."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set\u2014I\u2019ve processed a return and a full $249 refund to your original payment method for the headphones.\n\nYou\u2019ll receive a confirmation email shortly along with a prepaid return label; just ship the headphones back within 14 days. The refund should appear on your card within 3\u201310 business days, depending on your bank.",
+      "content": "Done — I’ve started the return and issued the **$249 refund** back to your original payment method.\n\nYour **free return label** has been issued as well. Once the headphones are scanned by the carrier, the refund should continue processing according to your card issuer’s timeline.",
       "tool_calls": [
         {
           "name": "process_return",
@@ -308,44 +290,12 @@
             "paid_return_shipping_fee": 0,
             "restocking_discount": 0
           }
-        },
-        {
-          "name": "process_refund",
-          "arguments": {
-            "item_id": "ITEM-10141",
-            "refund_method": "original_payment",
-            "amount": 249,
-            "confirm": false
-          },
-          "result": {
-            "status": "preview",
-            "item_id": "ITEM-10141",
-            "refund_amount": 249,
-            "refund_method": "original_payment"
-          }
-        },
-        {
-          "name": "process_refund",
-          "arguments": {
-            "item_id": "ITEM-10141",
-            "refund_method": "original_payment",
-            "amount": 249,
-            "confirm": true
-          },
-          "result": {
-            "status": "refunded",
-            "item_id": "ITEM-10141",
-            "mode": "refund_method_update",
-            "refund_amount": 249,
-            "refund_method": "original_payment",
-            "total_goodwill_credit": 0
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s exactly what I wanted\u2014thanks for helping me avoid yet another repair cycle. I\u2019ll ship the headphones back as soon as the label comes through.  \n\n[TASK_DONE]"
+      "content": "Thanks, that’s exactly what I needed. Appreciate you checking the return option and getting the full refund started. [TASK_DONE]"
     }
   ]
 }

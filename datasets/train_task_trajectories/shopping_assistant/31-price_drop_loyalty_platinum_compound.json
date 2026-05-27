@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "The TechPhone Lite 15 has been added to your cart (quantity: 1, no gift wrap).",
+      "content": "Added TechPhone Lite 15 to your cart.\n\n- Quantity: 1\n- Price: $499\n- Gift wrap: No\n\nCart subtotal: $499",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "TechPhone Lite 15",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 5000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -123,7 +123,7 @@
     },
     {
       "role": "user",
-      "content": "Okay, thanks. Nothing else to add right now. [TASK_DONE]"
+      "content": "[TASK_DONE]"
     }
   ]
 }

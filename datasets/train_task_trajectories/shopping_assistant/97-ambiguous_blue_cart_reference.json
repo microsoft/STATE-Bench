@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 can you remove the blue one from my cart please?"
+      "content": "Hi — can you remove the blue one from my cart please?"
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve removed the Midnight Blue ProBook Laptop 13-inch from your cart. \n\nYou still have:\n- TechPhone Lite 15 (Ocean Blue), qty 1 \u2014 $499\n\nWant me to remove the phone as well or keep it?",
+      "content": "I see two blue items in your cart:\n\n- ProBook Laptop 13-inch — Midnight Blue\n- TechPhone Lite 15 — Ocean Blue\n\nWhich blue one would you like me to remove?",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -54,63 +54,29 @@
             "total": 1498,
             "applied_promo_codes": []
           }
-        },
-        {
-          "name": "remove_from_cart",
-          "arguments": {
-            "customer_id": "shop_004",
-            "product_id": "SP-1002"
-          },
-          "result": {
-            "status": "removed",
-            "cart_id": "CART-shop_004",
-            "product_id": "SP-1002",
-            "cart_subtotal": 499,
-            "cart_total": 499
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Hey, that\u2019s wrong \u2014 I meant the phone, not the laptop. Please put the ProBook laptop back and remove the blue phone instead."
+      "content": "oh right — the phone, please."
     },
     {
       "role": "assistant",
-      "content": "Got it \u2014 I\u2019ve fixed that:\n\n- Added back: ProBook Laptop 13-inch (Midnight Blue), qty 1 \u2014 $999  \n- Removed: TechPhone Lite 15 (Ocean Blue)\n\nYour cart total is now $999 with just the laptop in it.",
+      "content": "Done — I removed the blue TechPhone Lite 15 from your cart.\n\nYour cart total is now $999.",
       "tool_calls": [
-        {
-          "name": "add_to_cart",
-          "arguments": {
-            "customer_id": "shop_004",
-            "product_id": "SP-1002",
-            "quantity": 1,
-            "gift_wrap": false,
-            "variant_id": "blue"
-          },
-          "result": {
-            "status": "added",
-            "cart_item_id": "CI-0001",
-            "product_id": "SP-1002",
-            "product_name": "ProBook Laptop 13-inch",
-            "variant_id": "blue",
-            "quantity": 1,
-            "gift_wrap": false,
-            "unit_price": 999,
-            "cart_subtotal": 1498,
-            "cart_total": 1498
-          }
-        },
         {
           "name": "remove_from_cart",
           "arguments": {
             "customer_id": "shop_004",
-            "product_id": "SP-2004"
+            "product_id": "SP-2004",
+            "variant_id": "blue"
           },
           "result": {
             "status": "removed",
             "cart_id": "CART-shop_004",
             "product_id": "SP-2004",
+            "variant_id": "blue",
             "cart_subtotal": 999,
             "cart_total": 999
           }
@@ -119,7 +85,7 @@
     },
     {
       "role": "user",
-      "content": "Yep, that\u2019s exactly what I wanted \u2014 just the blue ProBook laptop for $999 in my cart.  \n\n[TASK_DONE]"
+      "content": "Yep, that looks right — thanks. [TASK_DONE]"
     }
   ]
 }

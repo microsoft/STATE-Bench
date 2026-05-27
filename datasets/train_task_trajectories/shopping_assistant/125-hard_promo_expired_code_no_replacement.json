@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "EXPIRED10 is not usable anymore. The system shows it as invalid because it expired on 2026-01-01.",
+      "content": "EXPIRED10 is not usable. It expired on 2026-01-01.\n\nEstimated discount: $0.",
       "tool_calls": [
         {
           "name": "validate_promo",
@@ -28,7 +28,7 @@
     },
     {
       "role": "user",
-      "content": "Got it, thanks for checking\u2014that\u2019s all I needed. [TASK_DONE]"
+      "content": "Got it. Since EXPIRED10 is expired, please leave everything as-is and don't check or suggest any other codes. [TASK_DONE]"
     }
   ]
 }

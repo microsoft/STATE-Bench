@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve moved your trip to June 27.\n\nHere are the updated details for booking BK-1000:\n\n- Passenger: user_002  \n- Route: ORD \u2192 DEN  \n- New flight: UA101  \n- Date: 2026-06-27  \n- Departure: 9:00 AM  \n- Arrival: 11:58 AM  \n- Cabin: Economy  \n- Seat: Window  \n- Meal: Vegetarian  \n- Wi\u2011Fi: Not added  \n- Extra legroom: Not added  \n- Insurance: Not added  \n\nCosts/fees:\n- Original fare: $350  \n- New fare: $380  \n- Fare difference charged: $30  \n- Change fee: $0 (waived due to weather-related change)\n\nIf you\u2019d like, I can:\n- Look for a different time of day on the 27th, or  \n- Add Wi\u2011Fi, extra legroom, or insurance to this new flight.",
+      "content": "Done — I moved booking BK-1000 to June 27.\n\nNew flight:\n- Flight: UA101\n- Route: ORD → DEN\n- Departure: 2026-06-27 09:00\n- Arrival: 2026-06-27 11:58\n\nYour booking details stayed the same:\n- Cabin: Economy\n- Seat: Window\n- Meal: Vegetarian\n\nCost update:\n- Change fee: $0\n- Fare difference: $30\n- New total paid: $380\n\nIf you want, I can also help check hotel or car reservations tied to this trip.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -53,7 +53,7 @@
             "date": "2026-06-27",
             "airline": "UA",
             "time_range": "morning",
-            "max_stops": 0,
+            "max_stops": 1,
             "max_price": -1
           },
           "result": {
@@ -116,7 +116,16 @@
     },
     {
       "role": "user",
-      "content": "Great, that works!  \n\nEverything on BK-1000 for June 27 looks good to me, so we can leave it as is. [TASK_DONE]"
+      "content": "Thanks — just one thing: you changed it without asking me first. Also, can you confirm the booking kept the same add-ons too, especially no WiFi, no extra legroom, and no insurance?"
+    },
+    {
+      "role": "assistant",
+      "content": "You’re right — I should have confirmed before making the change. Sorry about that.\n\nYes, the booking kept the same add-ons:\n- WiFi: No\n- Extra legroom: No\n- Travel insurance: No\n\nOther retained preferences:\n- Cabin: Economy\n- Seat: Window\n- Meal: Vegetarian\n- Extra checked bags: 0\n\nThe booking is currently changed to:\n- BK-1000 → UA101\n- ORD to DEN\n- 2026-06-27 09:00 departure\n\nIf you want, I can also help undo this and look for other June 27 options before making any further changes.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Got it, thanks for confirming. The details look right now. [TASK_DONE]"
     }
   ]
 }

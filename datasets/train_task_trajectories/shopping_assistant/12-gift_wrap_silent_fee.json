@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I want to send three gifts to different friends. Can you add the SoundMax Wireless Headphones, the PixelShot Webcam, and the ProBook USB-C Dock to my cart? Then I'll need all three gift-wrapped."
+      "content": "Hi — I want to send three gifts to different friends. Can you add the SoundMax Wireless Headphones, the PixelShot Webcam, and the ProBook USB-C Dock to my cart? Then I'll need all three gift-wrapped."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added all three items to your cart and marked each one for gift wrap:\n\n1) SoundMax Wireless Headphones \u2013 gift-wrapped  \n2) PixelShot Webcam 1080p \u2013 gift-wrapped  \n3) ProBook USB-C Dock \u2013 gift-wrapped  \n\nRight now they\u2019re all in the same cart; our system doesn\u2019t let us specify different shipping addresses per item at this step. At checkout you\u2019ll be able to enter separate addresses for each friend.\n\nDo you want help with:\n- Choosing shipping speeds for each gift, or  \n- Applying any promo codes or loyalty points before you check out?",
+      "content": "Done — I added all 3 items to your cart and marked each one for gift wrap.\n\nItems added:\n- SoundMax Wireless Headphones — $149\n- PixelShot Webcam 1080p — $79\n- ProBook USB-C Dock — $129\n\nGift wrap:\n- 3 items × $5 = $15\n\nCurrent cart total:\n- Subtotal: $357\n- Total with gift wrap: $372\n\nIf you want, I can also check whether any promo codes might apply.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "SoundMax Wireless Headphones",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -46,8 +46,8 @@
             "query": "PixelShot Webcam",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -74,8 +74,8 @@
             "query": "ProBook USB-C Dock",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -238,7 +238,7 @@
     },
     {
       "role": "user",
-      "content": "That\u2019s perfect, thanks \u2014 the items and gift wrap are exactly what I wanted.  \n\nI don\u2019t need to pick shipping right now \u2014 skip it, I\u2019ll handle it at checkout. And no, not this time \u2014 I don\u2019t want to use points.  \n\n[TASK_DONE]"
+      "content": "That looks great, thanks! I don’t need promo codes right now. [TASK_DONE]"
     }
   ]
 }

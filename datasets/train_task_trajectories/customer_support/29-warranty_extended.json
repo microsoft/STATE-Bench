@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "My tablet from order ORD-6031 won't charge anymore. I bought an extended warranty \u2014 is it covered?"
+      "content": "My tablet from order ORD-6031 won't charge anymore. I bought an extended warranty — is it covered?"
     },
     {
       "role": "assistant",
-      "content": "Yes, your tablet is covered.  \n\nYour extended warranty for the SlateTab Pro 11-inch is active until May 21, 2027 and includes repair-or-replace coverage, so a charging failure should be eligible. If you\u2019d like, I can start a warranty claim for you now\u2014please confirm that the issue is with the tablet itself (not just the cable/charger) and whether you\u2019ve already tried a different outlet and cable.",
+      "content": "Yes — your tablet is covered. I checked your warranty, and the extended coverage on the SlateTab Pro is active through 2027-05-21, with no claims used yet.\n\nBecause it’s a $599 item, the usual covered resolution is repair first, and if repair isn’t possible, replacement may be offered. If you want, I can start the warranty claim for the charging issue now.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -94,17 +94,7 @@
             "days_past_expiry": 0,
             "has_warranty": true
           }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Yes, please start a warranty claim.  \n\nI\u2019ve already tried multiple outlets and a different USB-C cable, and the tablet still won\u2019t charge at all, so the issue is definitely with the tablet itself, not the charger."
-    },
-    {
-      "role": "assistant",
-      "content": "I can file this under your extended warranty and it\u2019s fully covered. The resolution will be a no-cost repair under your active extended warranty.  \n\nBefore I finalize it, here\u2019s what will happen next:\n- We\u2019ll create a repair claim and provide you with instructions and a shipping label (if mail-in is required in your area).  \n- A technician will inspect and repair the tablet; if it can\u2019t be repaired, it may be replaced according to the warranty terms.  \n\nPlease confirm you want me to proceed with the repair claim under your warranty, and also let me know:\n1) Is there any physical damage (cracks, dents, liquid exposure)?  \n2) Can you still power it on at all, or is it completely dead now?",
-      "tool_calls": [
+        },
         {
           "name": "get_policies",
           "arguments": {
@@ -123,13 +113,23 @@
               "extended": "Extended warranty covers after manufacturer period."
             }
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yes, please start the warranty claim for the charging issue on the tablet. If you need the warranty ID, I have it."
+    },
+    {
+      "role": "assistant",
+      "content": "I’ve checked it, and the claim is eligible under your active extended warranty. The covered resolution is a repair at no cost.\n\nIf you want me to go ahead and submit it, just reply “confirm.”",
+      "tool_calls": [
         {
           "name": "process_warranty_claim",
           "arguments": {
             "warranty_id": "WRT-4012",
             "item_id": "ITEM-9210",
-            "issue_description": "Tablet (SlateTab Pro 11-inch) will not charge at all despite trying multiple outlets and a different USB-C cable. Issue confirmed to be with the tablet, not the charger.",
+            "issue_description": "Tablet will not charge anymore.",
             "confirm": false
           },
           "result": {
@@ -139,25 +139,25 @@
             "eligible": true,
             "resolution": "repair",
             "cost": 0,
-            "reason": "Active extended warranty \u2014 repair"
+            "reason": "Active extended warranty — repair"
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "That all sounds good\u2014yes, please proceed with the repair claim under my extended warranty.  \n\n1) There\u2019s no physical damage at all\u2014no cracks, dents, or liquid exposure.  \n2) It\u2019s completely dead now and won\u2019t power on, even when plugged in."
+      "content": "Confirm."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set\u2014I\u2019ve submitted the repair claim under your extended warranty, and it\u2019s fully covered at no cost to you.  \n\nNext steps:\n1. You\u2019ll receive an email shortly with your repair authorization and shipping instructions (including a prepaid label if mail-in is required in your area).  \n2. Please back up any data if the tablet briefly powers on at any point, and remove any cases or accessories before sending it in.  \n3. Once the repair center receives it, they\u2019ll inspect and repair it; if it can\u2019t be fixed, they may replace it according to the warranty terms.  \n\nIf you don\u2019t see the email within 10\u201315 minutes, check your spam/junk folder or tell me and I can resend the instructions.",
+      "content": "Done — your warranty claim has been submitted successfully.\n\nThe tablet is approved for repair at no cost under your extended warranty. If you want, I can also help you with what to expect next or summarize the claim details for your records.",
       "tool_calls": [
         {
           "name": "process_warranty_claim",
           "arguments": {
             "warranty_id": "WRT-4012",
             "item_id": "ITEM-9210",
-            "issue_description": "Tablet (SlateTab Pro 11-inch) will not charge or power on at all despite trying multiple outlets and a different USB-C cable. No physical damage, no cracks, dents, or liquid exposure reported. Issue confirmed to be with the tablet hardware, not the charger.",
+            "issue_description": "Tablet will not charge anymore.",
             "confirm": true
           },
           "result": {
@@ -174,7 +174,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, thanks for getting that set up under my extended warranty. I\u2019ll watch for the email with the shipping instructions and label, and if it doesn\u2019t show up in the next 15 minutes I\u2019ll reach back out. [TASK_DONE]"
+      "content": "Thanks, that’s exactly what I needed. I appreciate you confirming it’s covered under the extended warranty and submitting the repair claim. [TASK_DONE]"
     }
   ]
 }

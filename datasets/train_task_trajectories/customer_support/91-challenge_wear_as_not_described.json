@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Thanks for letting me know. I\u2019ve started a return for your Premium Cotton Shirt as \u201cnot as described,\u201d and you\u2019ll be refunded $59 back to your original payment method once the return is completed. \n\nBecause of how this item and order qualify under our policy, there\u2019s no restocking fee and no extra deductions. You can now go to your orders page to download the return instructions and send the shirt back.",
+      "content": "I can help with that. I checked your order, and the shirt is eligible for a return as “not as described,” with a full refund of $59 back to your original payment method.\n\nIf you want, I can start the return for the shirt now.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -79,7 +79,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -157,7 +157,17 @@
             "paid_return_shipping_fee": 0,
             "restocking_discount": 0
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks — that sounds fine to me. Please go ahead and start the return."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I’ve started the return for the shirt and the $59 refund will go back to your original payment method.\n\nIf you want, I can also help with what to expect next for sending it back.",
+      "tool_calls": [
         {
           "name": "process_return",
           "arguments": {
@@ -185,7 +195,16 @@
     },
     {
       "role": "user",
-      "content": "Thanks for sorting that out so quickly and explaining the refund. I\u2019ll follow the return instructions on my orders page and send the shirt back.  \n\n[TASK_DONE]"
+      "content": "Thanks, I appreciate it. What should I expect next for sending it back?"
+    },
+    {
+      "role": "assistant",
+      "content": "You’re all set on the return itself. Since this return didn’t generate a prepaid label, the next step is to pack the shirt securely and send it back using a carrier of your choice.\n\nI’d recommend keeping the tracking receipt until the refund finishes processing. Once the return is received and processed, the $59 refund should post back to your original payment method.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Got it, thanks for explaining what to expect. I’ll send it back and keep the tracking receipt. [TASK_DONE]"
     }
   ]
 }

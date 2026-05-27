@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "You\u2019re still getting free standard shipping.\n\nAfter removing the 7-Port USB-C Hub, your cart now has 4 accessories and the system still shows:\n- shipping_option: standard  \n- shipping_cost: $0  \n\nSo removing the USB hub did not change your shipping cost; standard shipping remains free on your current cart.",
+      "content": "Removed the USB hub from your cart.\n\nYes — shipping changed:\n- Before: standard shipping was free\n- Now: standard shipping is $6\n\nCurrent cart after removal:\n- 4 items\n- Subtotal: $224\n- Standard shipping: $6\n- New total if standard shipping is applied: $230\n\nOther shipping options now available:\n- Express: $12\n- Next day: $15\n\nIf you want, I can also update the cart’s shipping selection explicitly.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -82,78 +82,53 @@
           "name": "remove_from_cart",
           "arguments": {
             "customer_id": "shop_004",
-            "product_id": "SP-H111"
+            "product_id": "SP-H111",
+            "variant_id": ""
           },
           "result": {
             "status": "removed",
             "cart_id": "CART-shop_004",
             "product_id": "SP-H111",
+            "variant_id": null,
             "cart_subtotal": 224,
             "cart_total": 224
           }
         },
         {
-          "name": "get_cart",
+          "name": "get_shipping_options",
           "arguments": {
             "customer_id": "shop_004"
           },
           "result": {
-            "cart_id": "CART-shop_004",
-            "customer_id": "shop_004",
-            "items": [
+            "options": [
               {
-                "cart_item_id": "CI-0001",
-                "product_id": "SP-H107",
-                "product_name": "ClearGrip Case for Pixel 7",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 29,
-                "line_total": 29
+                "option": "standard",
+                "cost": 6,
+                "eta_description": "2 business days",
+                "eligibility": "$6"
               },
               {
-                "cart_item_id": "CI-0002",
-                "product_id": "SP-H108",
-                "product_name": "ClearGrip Case for Pixel 8",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 31,
-                "line_total": 31
+                "option": "express",
+                "cost": 12,
+                "eta_description": "1 business days",
+                "eligibility": "$12"
               },
               {
-                "cart_item_id": "CI-0003",
-                "product_id": "SP-H109",
-                "product_name": "ClearGrip Slim Case for iPhone 14",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 35,
-                "line_total": 35
-              },
-              {
-                "cart_item_id": "CI-0004",
-                "product_id": "SP-H110",
-                "product_name": "ProBook USB-C Dock",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 129,
-                "line_total": 129
+                "option": "next_day",
+                "cost": 15,
+                "eta_description": "next business day",
+                "eligibility": "$15"
               }
             ],
-            "subtotal": 224,
-            "discount_amount": 0,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": "standard",
-            "shipping_cost": 0,
-            "total": 224,
-            "applied_promo_codes": []
+            "cart_item_count": 4,
+            "customer_tier": "standard"
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s exactly what I needed\u2014hub removed, and free standard shipping still active. Thanks, I\u2019m all set.  \n\n[TASK_DONE]"
+      "content": "Thanks, that’s what I needed. Please leave everything else as is — I don’t need to pick shipping right now, I’ll handle checkout later. [TASK_DONE]"
     }
   ]
 }

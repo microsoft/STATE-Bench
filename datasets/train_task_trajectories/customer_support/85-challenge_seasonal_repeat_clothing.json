@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "I want to return the shirt and the running shoes from order ORD-7118. I ordered them in November \u2014 can I still return?"
+      "content": "I want to return the shirt and the running shoes from order ORD-7118. I ordered them in November — can I still return?"
     },
     {
       "role": "assistant",
-      "content": "You\u2019re outside the normal return window, but because this was a November order, our holiday/seasonal policy extends returns through January 31 of the following year. That means you can still return both the Premium Cotton Shirt and the SprintMax Running Shoes from order ORD-7118 right now.\n\nIf you tell me the reason for the return for each item (e.g., didn\u2019t fit, changed mind, defective, etc.), I can start the return and let you know the exact refund amounts.",
+      "content": "Yes — you still can. I checked your order and, because it was placed in November, both the shirt and the running shoes fall under the holiday return extension and are returnable through January 31.\n\nIf you want, I can start the return for both items now.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -27,7 +27,7 @@
             "shipping_cost": 0,
             "tracking_number": "TRK72644357",
             "delivery_date": "2026-12-01T14:00:00",
-            "delivery_promised_date": "2026-06-05T18:00:00",
+            "delivery_promised_date": "2026-12-01T18:00:00",
             "signature_required": false,
             "signature_on_file": null,
             "payment_method": "credit_card",
@@ -133,7 +133,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -185,16 +185,39 @@
               }
             }
           }
+        },
+        {
+          "name": "get_customer",
+          "arguments": {
+            "customer_id": "cust_002"
+          },
+          "result": {
+            "customer_id": "cust_002",
+            "name": "Marcus Johnson",
+            "email": "marcus.j@example.com",
+            "membership_tier": "standard",
+            "account_created": "2024-06-01",
+            "total_orders": 12,
+            "preferred_refund_method": "store_credit",
+            "store_credit_balance": 0,
+            "has_prime_shipping": false,
+            "benefits": {
+              "return_window_extension": "+0 days",
+              "compensation_multiplier": "1.0x",
+              "restocking_fee_waiver": false,
+              "prime_shipping": false
+            }
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Reason for both is just that I changed my mind."
+      "content": "Yes, please start it for both items. Does returning two clothing items affect the refund on the second item, and does sending both back change the original free-shipping qualification?"
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve started both returns as \u201cchanged mind.\u201d\n\nHere\u2019s how the refunds break down:\n- Premium Cotton Shirt ($59): You\u2019ll get $59 back to your original payment method.\n- SprintMax Running Shoes ($129): You\u2019ll get $116 back. There\u2019s an $8 adjustment because returning these drops the order below the free\u2011shipping threshold, and a $5 surcharge for returning a second clothing item from the same order.\n\nYou\u2019ll receive confirmation emails shortly with instructions on how to send the items back.",
+      "content": "Yes. Returning both clothing items affects the shoes refund because there’s an $8 free-shipping clawback once those two returns would leave only the $35 phone case on the order, which drops the kept subtotal below $100. There’s no extra “second clothing item” surcharge here in this setup, so the shirt previews at $59 and the shoes at $121, for a total refund of $180.\n\nIf you want, I can go ahead and finalize both returns now.",
       "tool_calls": [
         {
           "name": "process_return",
@@ -247,7 +270,17 @@
             "paid_return_shipping_fee": 0,
             "restocking_discount": 0
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks, that answers it — please go ahead and finalize both returns."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — both returns have been submitted.\n\nYour refunds are:\n- Shirt: $59\n- Running shoes: $121\n\nTotal refund: $180 back to your original payment method.",
+      "tool_calls": [
         {
           "name": "process_return",
           "arguments": {
@@ -298,7 +331,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for explaining everything so clearly and breaking out the timing, the shipping clawback, and the second\u2011item surcharge for both items. That all makes sense to me, so I\u2019m good with the returns as you\u2019ve processed them.  \n\nThanks for your help! [TASK_DONE]"
+      "content": "Thanks for your help. [TASK_DONE]"
     }
   ]
 }

@@ -10,26 +10,90 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s how KITCHEN10 compares to an automatic 3\u2011item kitchen bundle for your blender + skillet + pour\u2011over set, based on typical store rules and the current promos:\n\n1. What we know from the system\n- Active kitchen promo:  \n  - **KITCHEN10**: 10% off kitchen items, no minimum, no explicit max discount, valid through 2026\u201112\u201131.\n- No separate \u201c3\u2011item kitchen bundle\u201d promo is listed as an active promotion right now for kitchen. That means:\n  - If there *is* an automatic 3\u2011item bundle, it would have to be implemented as built\u2011in product discounts (e.g., \u201cbuy 3, get X% off automatically\u201d) rather than a promo code.\n  - The tools only expose explicit promotions, and they show **none** besides KITCHEN10 for kitchen.\n\n2. Likely pricing behavior for your 3 items\nLet\u2019s call your three items:\n- Blender (kitchen)\n- Skillet (kitchen)\n- Pour\u2011over set (kitchen)\n\nScenarios:\n\n**A. If there is no hidden automatic bundle discount (what the system currently indicates)**  \n- Your cart subtotal = blender + skillet + pour\u2011over set.\n- **KITCHEN10** applies 10% off the entire kitchen subtotal.\n- Effective discount: **10% off all three items**.\n\n**B. If the store had an automatic 3\u2011item bundle (hypothetical)**  \nTypical patterns:\n- Either a fixed percentage (e.g., 15% off when you buy 3 kitchen items), or\n- A fixed dollar amount off (e.g., $20 off when you buy 3).\n\nBut:\n- No such promotion is registered in the active promo list.\n- Without an explicit bundle rule, the system will not automatically apply a better 3\u2011item discount; it will just treat them as normal items and then KITCHEN10 is the only discount.\n\n3. Stacking / conflicts\n- If an automatic bundle existed and was implemented as a price reduction on the items themselves, **KITCHEN10 would usually apply on top of the reduced prices** (10% off the already\u2011discounted subtotal), unless store policy explicitly forbids it.\n- However, since no bundle promo is visible, there\u2019s nothing to compare or stack against in practice.\n\n4. Recommendation (before adding anything)\nGiven the actual data:\n\n- **Use KITCHEN10.**  \n  - It\u2019s active, applies to all kitchen items, and there is no visible automatic 3\u2011item kitchen bundle promotion to compete with it.\n  - For a blender + skillet + pour\u2011over set, KITCHEN10 will give you **10% off the combined price** of all three.\n\nIf you\u2019d like, next step I can:\n- Find specific blender, skillet, and pour\u2011over options in your price range,  \n- Show you the estimated total with KITCHEN10 applied for a couple of combinations,  \n- And only then add your chosen set to the cart.",
+      "content": "Recommendation: use **KITCHEN10**, not the automatic 3-item kitchen bundle.\n\nFor these three kitchen items:\n- **PowerBlend Pro Blender** — $229\n- **CasaGrande Cast-Iron Skillet** — $89\n- **HomeBrew Pour-Over Coffee Set** — $59\n\nSubtotal:\n- **$377**\n\nDiscount comparison:\n- **KITCHEN10**: 10% off kitchen items = **$37.70** off\n- **Automatic 3-item kitchen bundle**: 5% off 3+ same-category items = **$18.85** off\n\nEstimated total after discount:\n- With **KITCHEN10**: **$339.30**\n- With **3-item kitchen bundle**: **$358.15**\n\nImportant note:\n- The **3-item kitchen bundle does not stack with promo codes** on the same items.\n- So between the two, **KITCHEN10 is clearly better** for this set.\n\nIf you want, I can next add these three items and apply **KITCHEN10**.",
       "tool_calls": [
         {
-          "name": "get_cart",
+          "name": "search_products",
           "arguments": {
-            "customer_id": "shop_001"
+            "query": "blender",
+            "category": "kitchen",
+            "min_price": 0,
+            "max_price": 10000,
+            "min_rating": 0,
+            "in_stock_only": true,
+            "sort_by": "relevance"
           },
           "result": {
-            "cart_id": "CART-shop_001",
-            "customer_id": "shop_001",
-            "items": [],
-            "subtotal": 0,
-            "discount_amount": 0,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 0,
-            "applied_promo_codes": []
+            "products": [
+              {
+                "product_id": "SP-H116",
+                "name": "PowerBlend Pro Blender",
+                "brand": "HomePro",
+                "category": "kitchen",
+                "subcategory": "blender",
+                "price": 229,
+                "rating": 4.6,
+                "review_count": 890,
+                "in_stock": true
+              }
+            ],
+            "total_found": 1
+          }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "skillet",
+            "category": "kitchen",
+            "min_price": 0,
+            "max_price": 10000,
+            "min_rating": 0,
+            "in_stock_only": true,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-H117",
+                "name": "CasaGrande Cast-Iron Skillet",
+                "brand": "HomePro",
+                "category": "kitchen",
+                "subcategory": "cookware",
+                "price": 89,
+                "rating": 4.8,
+                "review_count": 1400,
+                "in_stock": true
+              }
+            ],
+            "total_found": 1
+          }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "pour over set",
+            "category": "kitchen",
+            "min_price": 0,
+            "max_price": 10000,
+            "min_rating": 0,
+            "in_stock_only": true,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-H118",
+                "name": "HomeBrew Pour-Over Coffee Set",
+                "brand": "BrewLab",
+                "category": "kitchen",
+                "subcategory": "coffee",
+                "price": 59,
+                "rating": 4.4,
+                "review_count": 610,
+                "in_stock": true
+              }
+            ],
+            "total_found": 1
           }
         },
         {
@@ -56,25 +120,41 @@
           }
         },
         {
-          "name": "get_customer_account",
+          "name": "get_policies",
           "arguments": {
-            "customer_id": "shop_001"
+            "topic": "category_bundle"
           },
           "result": {
-            "customer_id": "shop_001",
-            "name": "Alex Rivera",
-            "email": "alex.rivera@example.com",
-            "tier": "platinum",
-            "is_first_time": false,
-            "loyalty_points": 52000,
-            "purchase_history": []
+            "topic": "category_bundle",
+            "summary": "Buying 3+ items from the same category qualifies for a 5% bundle discount on those items.",
+            "rules": [
+              "Eligibility: 3+ items sharing the same category.",
+              "Discount: 5% off each qualifying item's line total.",
+              "Stacking: does NOT stack with promo codes on the same items. Customer gets the better of the two."
+            ]
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "promo_stacking"
+          },
+          "result": {
+            "topic": "promo_stacking",
+            "summary": "At most one promo code per cart. Some discounts stack with each other but not with promo codes.",
+            "rules": [
+              "One promo code per cart.",
+              "Category bundle (5%) does NOT stack with promo codes on the same items — customer gets the better of the two.",
+              "Welcome discount (5%) does NOT stack with promo codes — customer gets the better of the two.",
+              "Brand bundle bonus (3%) DOES stack with everything."
+            ]
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Thanks, that\u2019s exactly what I wanted.  \n\nI\u2019ll go with KITCHEN10 as the better path then, since there\u2019s no actual 3\u2011item kitchen bundle active to compare against. [TASK_DONE]"
+      "content": "That’s what I needed — thanks for comparing both without adding anything. Go with that recommendation for now. [TASK_DONE]"
     }
   ]
 }

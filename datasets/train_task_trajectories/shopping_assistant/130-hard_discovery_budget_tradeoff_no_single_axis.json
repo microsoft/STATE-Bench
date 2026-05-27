@@ -10,16 +10,16 @@
     },
     {
       "role": "assistant",
-      "content": "Here are two good options under $1,100, compared side by side:\n\n| Feature              | ProBook Laptop 13 (SP-H102) | SlimBook Air 13 (SP-H101) |\n|----------------------|-----------------------------|----------------------------|\n| Price                | $999                        | $849                       |\n| RAM                  | 16 GB                       | 8 GB                       |\n| Battery life         | 10 hours                    | 12 hours                   |\n| Weight               | 3.1 lb                      | 2.6 lb                     |\n| Rating               | 4.7 (980 reviews)           | 4.6 (1400 reviews)         |\n| Shipping estimate    | ~3 business days            | ~2 business days           |\n\nHow they differ for school use:\n\n- RAM (multitasking, heavier apps):\n  - **ProBook 13 (SP-H102)**: 16 GB is better if you:\n    - Keep many browser tabs open\n    - Run heavier apps (coding/IDE, design tools, data tools, VMs)\n    - Want the laptop to feel \u201cfast enough\u201d for more years\n  - **SlimBook Air 13 (SP-H101)**: 8 GB is fine for:\n    - Web browsing, Google Docs/Office, video calls, streaming\n    - Light photo editing and basic school software\n\n- Battery:\n  - **SlimBook Air 13**: ~12 hours \u2013 better if you\u2019re on campus all day without outlets.\n  - **ProBook 13**: ~10 hours \u2013 still solid, but a bit less.\n\n- Portability:\n  - **SlimBook Air 13** is lighter (2.6 lb vs 3.1 lb), nicer if you carry it around all day.\n\nRecommendation depends on your workload:\n\n- Choose **ProBook Laptop 13 (SP-H102)** if:\n  - You care more about **performance and RAM** than maximum battery.\n  - You might do programming, design, or anything beyond basic schoolwork.\n  - You want 16 GB so it ages better.\n\n- Choose **SlimBook Air 13 (SP-H101)** if:\n  - Your use is mostly **notes, web, docs, email, and streaming**.\n  - You really value **longer battery and lighter weight**.\n  - You\u2019d like to save $150.\n\nIf you tell me:\n1) Your major / typical software (e.g., just Office & Chrome vs. coding vs. Adobe, etc.), and  \n2) How often you have access to outlets on campus,  \n\nI can say clearly which one is the better fit for you and then add it to your cart.",
+      "content": "I found two in-stock laptops under $1,100, so here’s a direct comparison instead of forcing one pick:\n\n| Model | Price | RAM | Battery | Weight | Rating |\n|---|---:|---:|---:|---:|---:|\n| **Northstar ProBook Laptop 13** | **$999** | **16 GB** | 10 hrs | 3.1 lb | 4.7 |\n| **Northstar SlimBook Air 13** | **$849** | 8 GB | **12 hrs** | **2.6 lb** | 4.6 |\n\nQuick take:\n- **Best if RAM matters more:** **ProBook Laptop 13**\n  - 16 GB RAM is much better for multitasking, lots of browser tabs, school apps, and keeping it usable longer.\n  - Battery is still solid at 10 hours.\n- **Best if battery/portability matters more:** **SlimBook Air 13**\n  - Longer battery at 12 hours and lighter to carry.\n  - But 8 GB RAM is the weaker point, especially if you keep many apps open.\n\nMy recommendation based on what you said:\n- Since **battery matters, but so does RAM**, the **ProBook Laptop 13** looks like the better balanced school choice.\n- You give up 2 hours of battery, but gain **double the RAM**, which is usually the more important long-term difference for school use.\n\nIf you want, I can also help you decide based on your major/use case:\n- basic notes, docs, streaming\n- lots of tabs/research\n- coding\n- photo/video work\n\nOr I can add one of these to your cart.",
       "tool_calls": [
         {
           "name": "search_products",
           "arguments": {
-            "query": "laptop",
+            "query": "laptop school battery ram",
             "category": "electronics",
-            "min_price": 400,
+            "min_price": 0,
             "max_price": 1100,
-            "min_rating": 4,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -117,20 +117,11 @@
     },
     {
       "role": "user",
-      "content": "I\u2019m a CS major, so I\u2019ll likely be running IDEs, lots of browser tabs, maybe Docker later, plus the usual docs and video calls. I\u2019m on campus most of the day but can usually find an outlet between classes, so battery is important but doesn\u2019t have to be absolutely maxed."
+      "content": "That’s the kind of comparison I wanted. Go ahead and add the ProBook Laptop 13."
     },
     {
       "role": "assistant",
-      "content": "Given what you\u2019re doing as a CS major, the **ProBook Laptop 13 (SP-H102)** is the better fit.\n\nWhy, based on your needs:\n\n- **RAM for IDEs, Docker, and many tabs**\n  - **ProBook 13 (SP-H102): 16 GB RAM**  \n    - Much better for:\n      - VS Code / IntelliJ / other IDEs\n      - Multiple terminals, databases, local servers\n      - Docker containers or VMs later on\n      - 20+ browser tabs without things constantly reloading\n    - 16 GB is close to a \u201cmust-have\u201d for smooth CS work today.\n  - **SlimBook Air 13 (SP-H101): 8 GB RAM**  \n    - You\u2019ll hit limits faster with IDE + browser + maybe Docker.\n    - More likely to feel sluggish in 1\u20132 years.\n\n- **Battery vs. performance tradeoff**\n  - You said you can usually find outlets between classes.\n  - **ProBook: 10 hours** is still campus-friendly, and the performance gain from 16 GB is more valuable for your workload than the extra 2 hours on the SlimBook.\n\n- **Price**\n  - ProBook 13: **$999**\n  - SlimBook Air: **$849**\n  - For CS, the extra $150 for 16 GB RAM is very much worth it in terms of comfort and longevity.\n\nSummary:  \nFor CS (IDEs, many tabs, Docker later), **go with the ProBook Laptop 13 (SP-H102)**. It will age better and handle your workload more smoothly, and the battery is still solid for a day on campus with occasional charging.\n\nDo you want me to add the **ProBook Laptop 13 (SP-H102)** to your cart for customer **shop_002**?",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Yeah, that tradeoff makes sense for me. Go ahead and add the **ProBook Laptop 13 (SP-H102)** to my cart."
-    },
-    {
-      "role": "assistant",
-      "content": "You\u2019re all set\u2014**ProBook Laptop 13 (SP-H102)** has been added to your cart:\n\n- Quantity: 1  \n- Price: $999  \n- Gift wrap: No  \n- Current cart total: $999\n\nIf you\u2019d like, I can now:\n- Check for any **promotions or discounts** that might apply, and/or  \n- Help you pick accessories (mouse, backpack, external monitor, USB-C hub, etc.) that fit a CS workflow and your budget.",
+      "content": "Done — **ProBook Laptop 13** has been added to your cart for **$999**.\n\nCurrent cart:\n- **ProBook Laptop 13** ×1 — **$999**\n- Gift wrap: **No**\n- Cart total: **$999**\n\nIf you want, I can also:\n- check for any promo codes or discounts you might qualify for\n- compare accessories like a mouse, sleeve, or charger\n- review your cart before checkout",
       "tool_calls": [
         {
           "name": "add_to_cart",
@@ -158,7 +149,7 @@
     },
     {
       "role": "user",
-      "content": "Nice, thanks\u2014that\u2019s exactly what I needed. I\u2019m good for now and will handle the rest at checkout. [TASK_DONE]"
+      "content": "Looks good, thanks. [TASK_DONE]"
     }
   ]
 }

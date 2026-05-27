@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hey \u2014 before we check out, can you add the PixelShot Webcam 1080p to my cart? I forgot I need one for video calls."
+      "content": "Hey — before we check out, can you add the PixelShot Webcam 1080p to my cart? I forgot I need one for video calls."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the PixelShot Webcam 1080p to your cart (quantity: 1, no gift wrap). Your updated cart subtotal is $456.\n\nDo you want to gift-wrap the webcam or change the quantity before we proceed to checkout?",
+      "content": "Done — I added the PixelShot Webcam 1080p to your cart for $79.\n\nYour cart total is now $456.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 1000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -79,7 +79,7 @@
     },
     {
       "role": "user",
-      "content": "No changes\u20141 webcam with no gift wrap is perfect.  \n\n$456 works for me, let\u2019s go ahead. [TASK_DONE]"
+      "content": "Sounds good, $456 is fine. [TASK_DONE]"
     }
   ]
 }

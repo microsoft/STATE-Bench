@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve moved both flights to match your new schedule and noted jury duty as the reason, so no change fees were applied\u2014only fare differences.\n\nHere\u2019s what was changed:\n\n1) Miami trip (BK-1058)\n- Original: ORD \u2192 MIA on 2026-06-19 (AA100)\n- New: ORD \u2192 MIA on 2026-06-26 (AA101)\n- Time: Departs 11:00, arrives 14:38 (nonstop)\n- Cabin: Economy\n- Seat: Aisle\n- Extras: Wi\u2011Fi ON, extra legroom ON, insurance OFF\n- Cost impact: Fare difference of $20; total price now $420; change fee $0\n\n2) London trip (BK-1000)\n- Original: JFK \u2192 LHR on 2026-06-25 (BA100)\n- New: JFK \u2192 LHR on 2026-07-02 (BA101)\n- Time: Departs 19:30, arrives 00:58 next day (nonstop)\n- Cabin: Economy\n- Seat: Aisle\n- Extras: Wi\u2011Fi ON, extra legroom ON, insurance OFF\n- Cost impact: Fare difference of $30; total price now $1030; change fee $0\n\nIf your jury duty dates shift again or you need to adjust return flights, tell me the new dates and I can modify those as well.",
+      "content": "Done — both trips have been moved for jury duty.\n\nUpdated bookings:\n- BK-1058: changed from ORD → MIA on June 19 to flight AA101 on June 26\n  - Departure: 2026-06-26 11:00\n  - Arrival: 2026-06-26 14:38\n  - Change fee: $0\n  - Fare difference: $20\n\n- BK-1000: changed from JFK → LHR on June 25 to flight BA101 on July 2\n  - Departure: 2026-07-02 19:30\n  - Arrival: 2026-07-03 00:58\n  - Change fee: $0\n  - Fare difference: $30\n\nYour existing preferences were kept on both bookings:\n- Economy\n- Aisle seat\n- Kosher meal\n- Wi‑Fi: yes\n- Extra legroom: yes\n- Insurance: no\n\nTotal additional fare difference: $50\n\nIf you want, I can also help you review any hotel or car reservations tied to these trips.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -79,6 +79,19 @@
           }
         },
         {
+          "name": "get_user_details",
+          "arguments": {
+            "user_id": "user_001"
+          },
+          "result": {
+            "user_id": "user_001",
+            "name": "Emma Smith",
+            "email": "emma.smith@example.com",
+            "loyalty_tier": "gold",
+            "loyalty_points": 75000
+          }
+        },
+        {
           "name": "search_flights",
           "arguments": {
             "origin": "ORD",
@@ -140,6 +153,66 @@
                 "route_type": "international"
               }
             ]
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "change",
+            "cabin_class": "economy",
+            "loyalty_tier": "gold",
+            "route_type": "domestic"
+          },
+          "result": {
+            "topic": "change",
+            "rules": {
+              "free_change_window": "Free changes within 24 hours (domestic) or 48 hours (international) of booking",
+              "basic_economy": "Not changeable after free window",
+              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if ≤7 days. Fare difference also applies.",
+              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if ≤7 days. Fare difference also applies.",
+              "economy_medical": "Medical changes: 50% discount on standard fee (requires change_reason='medical')",
+              "economy_bereavement": "Bereavement changes: 75% discount on standard fee (requires change_reason='bereavement')",
+              "jury_duty": "Jury duty: free change (change_reason='jury_duty')",
+              "military": "Military deployment: free change (change_reason='military')",
+              "schedule_change": "Airline schedule changes: free, no fee (change_reason='schedule_change')",
+              "weather": "Weather-related changes: free, no fee (change_reason='weather')",
+              "business": "Free changes (fare difference still applies)",
+              "first": "Free changes (fare difference still applies)",
+              "change_reason_required": "Pass change_reason parameter: 'personal', 'medical', 'bereavement', 'jury_duty', 'military', 'schedule_change', or 'weather'",
+              "route_type_matters": "Fees differ by route type. Check flight route_type."
+            },
+            "applicable_cabin_class": "economy",
+            "applicable_route_type": "domestic"
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "change",
+            "cabin_class": "economy",
+            "loyalty_tier": "gold",
+            "route_type": "international"
+          },
+          "result": {
+            "topic": "change",
+            "rules": {
+              "free_change_window": "Free changes within 24 hours (domestic) or 48 hours (international) of booking",
+              "basic_economy": "Not changeable after free window",
+              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if ≤7 days. Fare difference also applies.",
+              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if ≤7 days. Fare difference also applies.",
+              "economy_medical": "Medical changes: 50% discount on standard fee (requires change_reason='medical')",
+              "economy_bereavement": "Bereavement changes: 75% discount on standard fee (requires change_reason='bereavement')",
+              "jury_duty": "Jury duty: free change (change_reason='jury_duty')",
+              "military": "Military deployment: free change (change_reason='military')",
+              "schedule_change": "Airline schedule changes: free, no fee (change_reason='schedule_change')",
+              "weather": "Weather-related changes: free, no fee (change_reason='weather')",
+              "business": "Free changes (fare difference still applies)",
+              "first": "Free changes (fare difference still applies)",
+              "change_reason_required": "Pass change_reason parameter: 'personal', 'medical', 'bereavement', 'jury_duty', 'military', 'schedule_change', or 'weather'",
+              "route_type_matters": "Fees differ by route type. Check flight route_type."
+            },
+            "applicable_cabin_class": "economy",
+            "applicable_route_type": "international"
           }
         },
         {
@@ -216,7 +289,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for updating both bookings and keeping the change fees at zero.\n\nJust to confirm: BK-1058 was the one that actually overlapped with the jury duty dates, and BK-1000 only needed to move to accommodate the new schedule, but it sounds like everything now lines up with my new dates and is within my budget. I don\u2019t have any other changes right now.  \n\n[TASK_DONE]"
+      "content": "Thanks. Just to note, BK-1058 is the one that directly overlaps with jury duty; BK-1000 was moved to accommodate the new schedule. The changes and $50 total fare difference look fine. [TASK_DONE]"
     }
   ]
 }

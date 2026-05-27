@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve checked your order, and the carrier has flagged this shipment as lost in transit, which is why the tracking hasn\u2019t updated since it left the warehouse.  \n\nI can either:  \n1) Send a free replacement of your \u201cPremium Cotton Shirt\u201d right away, or  \n2) Issue a full refund to your original payment method.  \n\nWhich option would you prefer?",
+      "content": "I checked your order, and the shipment is marked as lost in transit. It shipped with tracking **TRK56565790**, but it never progressed and missed the promised delivery date of **June 4**.\n\nAt this point, it isn’t still moving through the network. I can help you with the next step: either a **replacement** if the shirt is still in stock, or a **refund**.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -75,11 +75,11 @@
     },
     {
       "role": "user",
-      "content": "I\u2019d prefer a full refund back to my original payment method, please."
+      "content": "If it’s marked lost in transit, I’d like a refund instead of a replacement. Can you confirm that would go back to my original payment method for ORD-6027?"
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve processed a full refund of $67 (including your original shipping) back to your credit card for order ORD-6027, since the package was lost in transit.  \n\nYou\u2019ll see the refund on your statement within 3\u201310 business days, depending on your bank. If you\u2019d still like the shirt, I can help you place a fresh order as well.",
+      "content": "Yes — for a lost-in-transit order like this, the refund would go back to your **original payment method**, which for **ORD-6027** is the credit card ending in **67**.\n\nIf you want, I can process that refund for you now.",
       "tool_calls": [
         {
           "name": "get_policies",
@@ -93,7 +93,7 @@
                 "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
                 "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
                 "outside_window": "Outside return window but within store-credit grace: store credit only.",
-                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order \u2014 read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
+                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order — read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
               },
               "method": {
                 "original_payment": "Default refund method when item was paid for and is being returned for fault.",
@@ -104,19 +104,29 @@
               "goodwill_credit": "Goodwill credits (e.g., fragile-item damage bonus) are issued as a refund with the credit amount."
             }
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yes, please process the refund to the original payment method for ORD-6027. Since it’s already marked lost in transit, I’m not trying to cancel it — I just want the refund for the shirt."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I’ve processed a **$59 refund** for the shirt on **ORD-6027** back to your **original payment method**.\n\nYou should see it post to your card ending in **67** in a few business days, depending on your bank.",
+      "tool_calls": [
         {
           "name": "process_refund",
           "arguments": {
             "item_id": "ITEM-9175",
             "refund_method": "original_payment",
-            "amount": 67,
+            "amount": 59,
             "confirm": false
           },
           "result": {
             "status": "preview",
             "item_id": "ITEM-9175",
-            "refund_amount": 67,
+            "refund_amount": 59,
             "refund_method": "original_payment"
           }
         },
@@ -125,14 +135,14 @@
           "arguments": {
             "item_id": "ITEM-9175",
             "refund_method": "original_payment",
-            "amount": 67,
+            "amount": 59,
             "confirm": true
           },
           "result": {
             "status": "refunded",
             "item_id": "ITEM-9175",
             "mode": "refund",
-            "refund_amount": 67,
+            "refund_amount": 59,
             "refund_method": "original_payment",
             "total_goodwill_credit": 0
           }
@@ -141,7 +151,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for sorting that out and issuing the refund so clearly. That\u2019s all I needed, I\u2019ll skip reordering for now.  \n\n[TASK_DONE]"
+      "content": "Thanks, that’s exactly what I needed. [TASK_DONE]"
     }
   ]
 }

@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019m afraid I can\u2019t refund that phone case again. It\u2019s already been fully refunded to your original payment method for the full item price, and I\u2019m not able to apply a second refund on the same returned item.",
+      "content": "I checked the order, and that phone case has already been fully refunded to your original payment method for $35. I’m not able to issue a second refund for the same returned item as a courtesy.\n\nIf you’d like, I can still look into whether there’s any other adjustment that might apply on the order, but there isn’t a duplicate refund available for this return.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -70,21 +70,45 @@
               }
             ]
           }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "refund"
+          },
+          "result": {
+            "topic": "refund",
+            "rules": {
+              "amount": {
+                "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
+                "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
+                "outside_window": "Outside return window but within store-credit grace: store credit only.",
+                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order — read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
+              },
+              "method": {
+                "original_payment": "Default refund method when item was paid for and is being returned for fault.",
+                "store_credit": "Required for: gift returns (at current product price), outside-window grace returns, and exchange-cheaper differences.",
+                "store_credit_only_constraint": "When a return is issued under the store-credit-only rule (gift return OR outside-window grace), the refund method cannot be changed back to original_payment afterward. process_refund will reject any attempt to flip the method on those returns."
+              },
+              "price_match": "If product price drops within 7 days of delivery, refund the difference (no return required).",
+              "goodwill_credit": "Goodwill credits (e.g., fragile-item damage bonus) are issued as a refund with the credit amount."
+            }
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Got it, thanks for checking\u2014so just to confirm, there\u2019s no way to do any kind of courtesy credit or second refund on this particular returned phone case at all?"
+      "content": "I understand, but could you please check one more time whether any courtesy credit can be made as a one-time exception?"
     },
     {
       "role": "assistant",
-      "content": "That\u2019s correct\u2014on this specific phone case, I can\u2019t issue any additional refund or courtesy credit. The item has already been fully refunded, and our system doesn\u2019t allow a second refund or extra credit on the same returned item once it\u2019s been completed.",
+      "content": "I checked again, and there isn’t an additional courtesy credit available on top of the full refund already issued for that returned phone case. Since the item has already been refunded in full, I can’t add a second refund or extra credit for it.\n\nIf there was another issue with the order besides the return itself, tell me what happened and I’ll see whether anything else applies.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "Okay, I understand\u2014so no second refund or any kind of courtesy credit is possible for this returned phone case. Thanks for explaining it clearly.  \n\n[TASK_DONE]"
+      "content": "Understood. If no second refund or courtesy credit is available for this interaction, I accept that. Thanks for checking. [TASK_DONE]"
     }
   ]
 }

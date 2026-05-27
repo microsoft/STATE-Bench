@@ -10,7 +10,16 @@
     },
     {
       "role": "assistant",
-      "content": "You have three flight bookings on your account:\n\n- BK-A06a  \n- BK-A06b  \n- BK-A06c  \n\nI need to know which one(s) you want to cancel.\n\nPlease tell me:\n1) The booking ID(s) you want to cancel, and  \n2) Whether you just want to see the refund/fee terms first (a preview), or you\u2019re sure and want to fully cancel now.",
+      "content": "Sure — I can help with that.\n\nI’m assisting **user_002**, and I can review your reservation and cancellation terms first before cancelling.\n\nIf you want, I can go ahead and:\n1. find your current booking(s), and\n2. show you the cancellation terms for the flight booking before confirming.\n\nJust say **“yes, check my bookings”** and I’ll pull them up.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Yes, check my bookings."
+    },
+    {
+      "role": "assistant",
+      "content": "You have 3 active flight bookings:\n\n- **BK-A06a** — UA100, **ORD → LAX**, departs **2026-06-20 12:00**, economy, paid **$320**\n- **BK-A06b** — UA101, **ORD → DEN**, departs **2026-06-22 10:15**, economy, paid **$280**\n- **BK-A06c** — DL100, **ORD → MIA**, departs **2026-06-25 17:15**, economy, paid **$350**\n\nWhich booking would you like to cancel?  \nReply with the **booking ID** (for example, **BK-A06a**).",
       "tool_calls": [
         {
           "name": "get_user_reservations",
@@ -27,17 +36,7 @@
             "hotel_ids": [],
             "car_rental_ids": []
           }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Oh, I didn\u2019t realize I had that many. I want to cancel the Chicago to Los Angeles one on June 20.  \n\nI\u2019d like to see the refund/fee terms first as a preview, then I can confirm the cancellation."
-    },
-    {
-      "role": "assistant",
-      "content": "I found your Chicago (ORD) \u2192 Los Angeles (LAX) flight on June 20: booking ID BK-A06a.\n\nHere are the cancellation terms (preview only, nothing cancelled yet):\n- Ticket price paid: $320  \n- Cancellation fee: $50  \n- Refund amount: $270  \n- Reason: Economy cancellation fee is max($50, 15% of $320), which is $50.\n\nDo you want me to go ahead and confirm the cancellation of booking BK-A06a now?",
-      "tool_calls": [
+        },
         {
           "name": "get_booking",
           "arguments": {
@@ -136,7 +135,17 @@
             "departure_time": "2026-06-25T17:15:00",
             "route_type": "domestic"
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Oh, I didn’t realize I had that many. The Chicago to Los Angeles one on June 20."
+    },
+    {
+      "role": "assistant",
+      "content": "For **BK-A06a** (Chicago to Los Angeles on June 20), here are the cancellation terms:\n\n- **Cancellation fee:** $50\n- **Refund amount:** $270\n\nIf you want, I can cancel it now.  \nReply **“confirm cancel BK-A06a”** and I’ll process it.",
+      "tool_calls": [
         {
           "name": "cancel_booking",
           "arguments": {
@@ -155,11 +164,11 @@
     },
     {
       "role": "user",
-      "content": "Yes, please go ahead and confirm the cancellation of booking BK-A06a."
+      "content": "Okay, that’s fine — confirm cancel BK-A06a."
     },
     {
       "role": "assistant",
-      "content": "Your booking BK-A06a (Chicago ORD \u2192 Los Angeles LAX on June 20) is now cancelled.\n\nDetails:\n- Cancellation fee: $50  \n- Refund amount: $270  \n- Reason: Economy cancellation fee = max($50, 15% of $320) = $50  \n\nThe $270 refund will be returned to your original payment method. Processing time is typically 5\u201310 business days, depending on your bank.\n\nYou still have two active bookings:\n- BK-A06b: ORD \u2192 DEN on June 22  \n- BK-A06c: ORD \u2192 MIA on June 25  \n\nIf you\u2019d like, I can help cancel or change either of those as well.",
+      "content": "Your booking **BK-A06a** has been cancelled.\n\n- **Refund:** $270\n- **Cancellation fee:** $50\n\nAnything else I can help with?",
       "tool_calls": [
         {
           "name": "cancel_booking",
@@ -179,7 +188,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks, that all looks good. I don\u2019t need to change or cancel the other bookings right now.  \n\n[TASK_DONE]"
+      "content": "No, that’s all. [TASK_DONE]"
     }
   ]
 }

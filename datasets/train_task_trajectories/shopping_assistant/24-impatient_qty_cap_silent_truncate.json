@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "There\u2019s a store limit of 3 units per product per cart, and the system just blocked adding 5 PowerBlend Pro Blenders with this error:\n\n\u201cMaximum 3 of the same product per cart. You already have 0.\u201d\n\nBecause this is enforced by the store backend, I can\u2019t override it or force 5 into your cart.\n\nWhat I can do right now, if you\u2019d like, is:\n- Add 3 PowerBlend Pro Blenders to your cart immediately, and  \n- Help you pick 2 similar, in\u2011stock blenders as substitutes so you still end up with 5 gifts total.\n\nIf you want me to proceed, say \u201cAdd 3 and find 2 similar ones,\u201d and I\u2019ll do it in one go.",
+      "content": "I can’t add 5 of that blender to one cart.\n\nStore policy caps it at 3 units of the same product per cart, with no exceptions. I can add up to 3 right now if you want.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "kitchen",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -41,19 +41,6 @@
           }
         },
         {
-          "name": "get_variants",
-          "arguments": {
-            "product_id": "SP-3001"
-          },
-          "result": {
-            "product_id": "SP-3001",
-            "product_name": "PowerBlend Pro Blender",
-            "base_price": 229,
-            "variants": [],
-            "note": "This product has no variants; no variant_id is needed for add_to_cart."
-          }
-        },
-        {
           "name": "add_to_cart",
           "arguments": {
             "customer_id": "shop_004",
@@ -65,6 +52,21 @@
           "result": {
             "error": "Maximum 3 of the same product per cart. You already have 0."
           }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "quantity_limit"
+          },
+          "result": {
+            "topic": "quantity_limit",
+            "summary": "Anti-hoarding: maximum 3 units of the same product per cart.",
+            "rules": [
+              "Limit: 3 units of the same product per cart.",
+              "Enforcement: applies to total quantity in cart (existing + new).",
+              "No exceptions regardless of tier, promo, or reason."
+            ]
+          }
         }
       ]
     },
@@ -74,7 +76,7 @@
     },
     {
       "role": "assistant",
-      "content": "Done. I\u2019ve added 3 PowerBlend Pro Blenders to your cart (total: $687 before any shipping/tax).\n\nIf you change your mind and want help finding 2 similar blenders to make it 5 total gifts, tell me \u201cfind 2 similar blenders.\u201d",
+      "content": "Done — 3 PowerBlend Pro Blenders are in your cart.\n\nCart total: $687",
       "tool_calls": [
         {
           "name": "add_to_cart",

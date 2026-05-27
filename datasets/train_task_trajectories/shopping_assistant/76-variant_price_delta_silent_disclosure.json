@@ -6,20 +6,20 @@
     },
     {
       "role": "user",
-      "content": "Hey \u2014 please add the SlimBook Air 13 with 16GB RAM to my cart."
+      "content": "Hey — please add the SlimBook Air 13 with 16GB RAM to my cart."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the SlimBook Air 13 with 16GB RAM to your cart.\n\nDetails:\n- Model: SlimBook Air 13  \n- Configuration: 16GB RAM  \n- Price: $999  \n- Quantity: 1  \n- Gift wrap: No  \n\nDo you want to add anything else (e.g., a case, USB\u2011C hub, or extended warranty), or see your full cart/checkout options?",
+      "content": "Done — I added the SlimBook Air 13 with 16GB RAM to your cart for $999.",
       "tool_calls": [
         {
           "name": "search_products",
           "arguments": {
-            "query": "SlimBook Air 13 16GB",
+            "query": "SlimBook Air 13 16GB RAM",
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -57,9 +57,86 @@
                 "rating": 4.6,
                 "review_count": 2180,
                 "in_stock": true
+              },
+              {
+                "product_id": "SP-1101",
+                "name": "ProBook Laptop 15-inch",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1299,
+                "rating": 4.7,
+                "review_count": 1890,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1105",
+                "name": "CreatorStudio 15",
+                "brand": "CreatorStudio",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1499,
+                "rating": 4.7,
+                "review_count": 720,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1102",
+                "name": "GameForce Pro 16",
+                "brand": "GameForce",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 1799,
+                "rating": 4.6,
+                "review_count": 960,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1003",
+                "name": "SlateTab Studyline 14",
+                "brand": "SlateTab",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 749,
+                "rating": 4.3,
+                "review_count": 640,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-2002",
+                "name": "PowerDesk Mini PC",
+                "brand": "PowerDesk",
+                "category": "electronics",
+                "subcategory": "desktop",
+                "price": 699,
+                "rating": 4.2,
+                "review_count": 240,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1106",
+                "name": "ProBook Chromebook 11",
+                "brand": "ProBook",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 329,
+                "rating": 3.9,
+                "review_count": 530,
+                "in_stock": true
+              },
+              {
+                "product_id": "SP-1103",
+                "name": "BudgetLine Notebook 15",
+                "brand": "BudgetLine",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 449,
+                "rating": 3.4,
+                "review_count": 210,
+                "in_stock": true
               }
             ],
-            "total_found": 3
+            "total_found": 10
           }
         },
         {
@@ -122,25 +199,7 @@
     },
     {
       "role": "user",
-      "content": "oh \u2014 ok, $999 works.  \n\nNothing else for now; we can go ahead with just that."
-    },
-    {
-      "role": "assistant",
-      "content": "You\u2019re all set with just the SlimBook Air 13 (16GB RAM) in your cart at $999.\n\nIf you\u2019d like, I can:\n- Show your current cart summary, or\n- Proceed to set a shipping option (standard/express/next-day) and review the final total before checkout.\n\nWhat shipping speed do you prefer, and do you need an estimated delivery date?",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "I don\u2019t need to pick shipping right now \u2014 skip it, I\u2019ll handle it at checkout.  \n\nOtherwise this looks good, thanks."
-    },
-    {
-      "role": "assistant",
-      "content": "Sounds good. Right now your cart has:\n\n- SlimBook Air 13 \u2014 16GB RAM  \n- Quantity: 1  \n- Price: $999 (before tax and shipping)\n\nYou\u2019re all set to continue whenever you\u2019re ready; you can choose shipping and complete payment at checkout later.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Perfect, that\u2019s exactly what I wanted. [TASK_DONE]"
+      "content": "Okay, thanks. [TASK_DONE]"
     }
   ]
 }

@@ -10,31 +10,16 @@
     },
     {
       "role": "assistant",
-      "content": "For your account (shop_004), a single TechPhone Lite 15 (SP-H105) is $499 before tax and without using any loyalty points or your wife\u2019s Platinum points.\n\nI won\u2019t add anything to your cart yet.",
+      "content": "I can’t use points from shop_005 on your cart. Loyalty redemption is tied to the same customer account/cart, and I’m currently helping shop_004.\n\nYour no-points total for the TechPhone Lite I found:\n\n- TechPhone Lite 15: $499\n\nI have not added anything to your cart. If you want, I can wait here or help check promos that might apply to your account.",
       "tool_calls": [
-        {
-          "name": "get_customer_account",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "customer_id": "shop_004",
-            "name": "Taylor Kim",
-            "email": "taylor.kim@example.com",
-            "tier": "standard",
-            "is_first_time": false,
-            "loyalty_points": 2200,
-            "purchase_history": []
-          }
-        },
         {
           "name": "search_products",
           "arguments": {
             "query": "TechPhone Lite",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 5000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -56,39 +41,44 @@
           }
         },
         {
-          "name": "get_product_details",
+          "name": "get_customer_account",
           "arguments": {
-            "product_id": "SP-H105"
+            "customer_id": "shop_004"
           },
           "result": {
-            "product_id": "SP-H105",
-            "name": "TechPhone Lite 15",
-            "category": "electronics",
-            "subcategory": "phone",
-            "brand": "Orion",
-            "price": 499,
-            "rating": 4.4,
-            "review_count": 2100,
-            "description": "TechPhone Lite 15 from Orion.",
-            "specs": {
-              "storage_gb": 128
-            },
-            "compatible_with": [],
-            "in_stock": true,
-            "stock_quantity": 50,
-            "shipping_days": 2,
-            "gift_wrap_available": true,
-            "backorder_available": false,
-            "previous_price": 549,
-            "variants": null,
-            "shipping_estimate": "2 business days (standard)"
+            "customer_id": "shop_004",
+            "name": "Taylor Kim",
+            "email": "taylor.kim@example.com",
+            "tier": "standard",
+            "is_first_time": false,
+            "loyalty_points": 2200,
+            "purchase_history": []
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "loyalty_redemption"
+          },
+          "result": {
+            "topic": "loyalty_redemption",
+            "summary": "Loyalty points can be redeemed at checkout to offset part of the cart total. 100 points = $1.",
+            "rules": [
+              "Rate: 100 loyalty points = $1.00 off.",
+              "Cap: redemption cannot exceed 50% of the current cart total.",
+              "Minimum redemption: 500 points ($5).",
+              "Stacking: stacks with promo codes and category bundles.",
+              "Restriction: not combinable with the first-time welcome discount.",
+              "Points are debited from the customer's balance at redemption.",
+              "Agent action rule: do NOT call redeem_loyalty_points without an explicit customer-specified amount. You may discuss and recommend redemption in chat, but the write call must come AFTER the customer names a specific number of points."
+            ]
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s exactly what I needed\u2014$499 before tax on my account with no points used and nothing added to the cart. Thanks, I\u2019m all set for now.  \n\n[TASK_DONE]"
+      "content": "Got it, thanks. If cross-account points can’t be used, then $499 with no cart changes is what I needed. [TASK_DONE]"
     }
   ]
 }

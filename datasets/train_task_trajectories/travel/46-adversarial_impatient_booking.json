@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set.\n\nI\u2019ve booked you on the afternoon JetBlue nonstop from JFK to Miami on June 22 in economy:\n\n- Airline: JetBlue (B6)\n- Flight: B6100  \n- Route: JFK \u2192 MIA  \n- Departure: June 22, 2026, 12:00 PM  \n- Arrival: June 22, 2026, 4:35 PM  \n- Cabin: Economy  \n- Seat: Aisle  \n- Extras: No Wi\u2011Fi, no extra legroom, no insurance, no paid checked bags  \n- Payment: Credit card, $270  \n- Booking ID: **BK-0001**\n\nIf you want, I can change the seat (window/middle), add Wi\u2011Fi, extra legroom, or insurance.",
+      "content": "I found one matching afternoon JetBlue nonstop flight:\n\n- B6100 — JFK to MIA\n- Departs: 2026-06-22 12:00\n- Arrives: 16:35\n- Economy: $270\n\nTo book it, I still need your required booking preferences:\n- seat preference: window, middle, or aisle\n- meal preference: standard, vegetarian, vegan, kosher, halal, or gluten_free\n- payment method: credit_card, points, or points_plus_cash\n\nOptional add-ons I can set if you want:\n- Wi‑Fi\n- extra legroom\n- travel insurance\n- extra checked bags beyond allowance\n\nReply with something like:\n“aisle, standard, credit card, no extras”\n\nAnd I’ll book it right away.",
       "tool_calls": [
         {
           "name": "search_flights",
@@ -43,7 +43,35 @@
               }
             ]
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "aisle. Just book it already."
+    },
+    {
+      "role": "assistant",
+      "content": "I can do that, but I still need the other required booking fields before the system will let me complete it:\n\n- meal preference\n- payment method\n\nIf you want the fastest default-style option, reply with:\n- “standard, credit card”\n\nIf you also want me to assume no extras, say:\n- “standard, credit card, no extras”",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "vegan. Just book it already."
+    },
+    {
+      "role": "assistant",
+      "content": "I’m one field short: payment method is still required.\n\nReply with one of:\n- credit card\n- points\n- points_plus_cash\n\nIf you choose points_plus_cash, I’ll also need how much cash and how many points to use.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "credit card. Just book it already."
+    },
+    {
+      "role": "assistant",
+      "content": "Booked.\n\n- Booking ID: BK-0001\n- Flight: B6100\n- Route: JFK → MIA\n- Date: 2026-06-22\n- Cabin: Economy\n- Seat: Aisle\n- Meal: Vegan\n- Payment: Credit card\n- Total: $270\n\nNo extras were added.",
+      "tool_calls": [
         {
           "name": "create_booking",
           "arguments": {
@@ -52,9 +80,9 @@
             "cabin_class": "economy",
             "seat_type": "aisle",
             "payment_method": "credit_card",
-            "cash_amount": 270,
+            "cash_amount": 0,
             "points_used": 0,
-            "meal_preference": "standard",
+            "meal_preference": "vegan",
             "add_wifi": false,
             "add_extra_legroom": false,
             "add_insurance": false,
@@ -73,50 +101,7 @@
     },
     {
       "role": "user",
-      "content": "Change the meal to vegan and add Wi\u2011Fi."
-    },
-    {
-      "role": "assistant",
-      "content": "Done. I\u2019ve updated your booking.\n\nHere are your current details for **BK-0001**:\n\n- Flight: JetBlue B6100, JFK \u2192 MIA, June 22, 2026  \n- Cabin: Economy  \n- Seat: Aisle  \n- Meal preference: **Vegan**  \n- Wi\u2011Fi: **Added**  \n- Extra legroom: No  \n- Insurance: No  \n- Paid checked bags: 0  \n\nAnything else you\u2019d like to adjust (seat type, bags, extra legroom, etc.)?",
-      "tool_calls": [
-        {
-          "name": "update_booking",
-          "arguments": {
-            "booking_id": "BK-0001",
-            "flight_id": "",
-            "change_reason": "personal",
-            "cabin_class": "economy",
-            "seat_type": "aisle",
-            "meal_preference": "vegan",
-            "add_wifi": true,
-            "add_extra_legroom": false,
-            "add_insurance": false,
-            "delay_compensation": "none",
-            "paid_checked_bags": 0
-          },
-          "result": {
-            "status": "updated",
-            "booking_id": "BK-0001",
-            "changes_applied": [
-              "flight_id",
-              "change_reason",
-              "cabin_class",
-              "seat_type",
-              "meal_preference",
-              "add_wifi",
-              "add_extra_legroom",
-              "add_insurance",
-              "delay_compensation",
-              "paid_checked_bags"
-            ],
-            "price_paid": 270
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "No.  \n[TASK_DONE]"
+      "content": "fine [TASK_DONE]"
     }
   ]
 }

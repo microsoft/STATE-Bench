@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I checked your order details and the shipment is marked as \u201clost\u201d with tracking TRK32329990, and it\u2019s already past the promised delivery date. At this point, the carrier won\u2019t be able to \u201cfind\u201d it in transit, so the next step is for us to resolve it for you.\n\nWe can either:  \n1) Send you a replacement PowerBlend Pro Blender at no extra cost, or  \n2) Issue a full refund to your original payment method.\n\nTell me which option you prefer, and I\u2019ll process it right away.",
+      "content": "I checked your order, and the carrier status shows the blender shipment is officially marked **lost in transit**. Since the item is under $500, I can’t recover or trace it further from here, but it does qualify for an **immediate replacement or refund**.\n\nIf you want, I can help you next with either:\n- **sending a replacement blender**, or\n- **issuing a refund**\n\nJust tell me which you prefer.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -27,7 +27,7 @@
             "shipping_cost": 8,
             "tracking_number": "TRK32329990",
             "delivery_date": null,
-            "delivery_promised_date": "2026-06-05T18:00:00",
+            "delivery_promised_date": "2026-06-25T18:00:00",
             "signature_required": false,
             "signature_on_file": null,
             "payment_method": "credit_card",
@@ -70,25 +70,57 @@
               }
             ]
           }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "shipping"
+          },
+          "result": {
+            "topic": "shipping",
+            "rules": {
+              "not_received": {
+                "under_500": "Delivered but not received (<$500): reship or refund.",
+                "over_500": "Delivered but not received (>=$500): mandatory investigation (3-5 business days).",
+                "signature_on_file": "Delivery with signature on file: claim denied."
+              },
+              "lost_in_transit": {
+                "under_500": "Lost in transit (<$500): immediate reship or refund.",
+                "over_500": "Lost in transit (>=$500): carrier claim required first.",
+                "stuck_7_days": "No tracking update for 7+ days: treat as lost."
+              },
+              "damaged": {
+                "rule": "Damaged in transit: full refund or replacement.",
+                "fragile_bonus": "Fragile items damaged in transit qualify for a separate $10 goodwill credit, issued as a refund in addition to the return refund."
+              },
+              "late_delivery_compensation": {
+                "tiers": {
+                  "1_to_2_days_late": "$5 credit",
+                  "3_to_5_days_late": "$15 credit",
+                  "6_plus_days_late": "Full shipping refund + $15 credit"
+                },
+                "shipping_refund_basis": "When refunding shipping, refund the actual shipping cost the customer was charged on the order — read order.shipping_cost. Standard policy charges $0 on free-shipping orders (subtotal >= $100) and $8 otherwise.",
+                "tier_multipliers": {
+                  "gold": "1.5x multiplier on the base late-delivery credit only (NOT on shipping refund or goodwill). Rounded down (e.g., int(15*1.5) = 22).",
+                  "platinum": "2x multiplier on the base late-delivery credit only. Rounded down."
+                },
+                "repeated_issues": "3+ PRIOR issues in 6 months (not counting current incident): additional $25 goodwill credit.",
+                "loyalty_bonus": "Platinum members with 50+ total orders: one-time $50 loyalty bonus on next compensation claim. Confirm with customer if already redeemed.",
+                "max_cap": "Maximum compensation: 50% of order total (rounded down).",
+                "calculation_order": "1) Compute base credit by days-late tier. 2) Apply tier multiplier to base credit only. 3) Add shipping refund (if 6+ days late) using order.shipping_cost. 4) Add goodwill (if 3+ prior issues or fragile damage). 5) Apply loyalty bonus if eligible. 6) Apply 50%-of-order cap on the sum."
+              }
+            }
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Don\u2019t you need to investigate first? I was expecting you to track it down\u2014can you check what happened to it?"
+      "content": "Don't you need to investigate first? If that's not required, I'd prefer a refund."
     },
     {
       "role": "assistant",
-      "content": "I did check the shipment status on your order, and it\u2019s already classified as \u201clost\u201d in the carrier\u2019s system, which means it\u2019s no longer trackable in a way that will get it to you. At this stage, any \u201cinvestigation\u201d the carrier runs is internal and doesn\u2019t usually change the outcome for you\u2014it just confirms what we already see: the package isn\u2019t going to arrive.\n\nWhat I *can* do for you is fix the impact: either send a replacement blender right away or refund you in full, while we handle any follow\u2011up with the carrier in the background. If you\u2019d like, I can also note that you requested a carrier investigation so it\u2019s logged on our side, but it won\u2019t delay your replacement or refund. Which resolution would you like me to proceed with?",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Got it, thanks for explaining. If policy allows it, I\u2019d rather just go ahead with a full refund instead of waiting on any investigation."
-    },
-    {
-      "role": "assistant",
-      "content": "Policy does allow a full refund here, since the shipment is marked as lost and it\u2019s past the promised delivery date. I\u2019ve processed a full refund of $97 (including the $8 shipping) back to your original payment method.\n\nYou\u2019ll see the refund on your card within 3\u201310 business days, depending on your bank. If the blender ever does show up after all, you don\u2019t need to send it back\u2014just let me know so we can note it on your account.",
+      "content": "No investigation is required here because the shipment is already classified as **lost in transit**, and for orders under $500 that qualifies for immediate resolution.\n\nI’ve processed a **$97 refund** back to your original payment method for the blender order. If you want, I can also help you find a replacement blender to reorder.",
       "tool_calls": [
         {
           "name": "get_policies",
@@ -102,7 +134,7 @@
                 "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
                 "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
                 "outside_window": "Outside return window but within store-credit grace: store credit only.",
-                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order \u2014 read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
+                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order — read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
               },
               "method": {
                 "original_payment": "Default refund method when item was paid for and is being returned for fault.",
@@ -150,7 +182,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, thanks for taking care of that and for refunding the shipping as well. I\u2019ll keep an eye out for the refund on my statement and let you know if the blender randomly turns up.  \n\n[TASK_DONE]"
+      "content": "Thanks, I appreciate the quick resolution. [TASK_DONE]"
     }
   ]
 }

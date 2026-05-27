@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I see that order ORD-6050 was delivered on June 8 and includes a shirt, a hardcover book, and a blender.  \n\nCan you tell me what\u2019s wrong with it\u2014did something arrive damaged, missing, incorrect, or is there an issue with how/when it was delivered? If you can specify which item(s) and what happened, I can jump straight into fixing it (replacement, return, or refund options).",
+      "content": "I’m sorry about that. I checked order ORD-6050 and it shows as delivered on June 8, with three items in the box: a Premium Cotton Shirt, *The Great Algorithm* hardcover, and a PowerBlend Pro Blender.\n\nCan you tell me what’s wrong specifically—was something missing, damaged, defective, late, or the wrong item? If you want, you can just name the item and the issue, and I’ll take it from there.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -133,35 +133,26 @@
     },
     {
       "role": "assistant",
-      "content": "Got it\u2014thanks for letting me know.  \n\nWhich item was wrong: the Premium Cotton Shirt, the book \u201cThe Great Algorithm,\u201d or the PowerBlend Pro Blender? Also, did you receive a completely different product, or just the wrong size/color/version? Once I know that, I can set up a free replacement or a return/refund for you.",
+      "content": "Got it — I can help with that. Which item was wrong: the shirt, the book, or the blender? If you can, also tell me what you actually received instead.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "The issue is with the blender\u2014I actually ordered a phone case but a blender showed up instead."
+      "content": "I ordered a phone case but got a blender instead."
     },
     {
       "role": "assistant",
-      "content": "Thanks for explaining\u2014that definitely sounds like our mistake.  \n\nI see your order shows a blender, so it looks like the wrong item was packed. I can either:  \n1) Arrange a free return of the blender and refund you, or  \n2) Set up an exchange so you get the correct phone case instead (at the right price).  \n\nWhich would you prefer, and do you remember which phone case (model/phone type and any color/style) you originally meant to order?",
+      "content": "Thanks — I checked this order, and it doesn’t include a phone case. It shows a shirt, a book, and a blender, so it sounds like either the wrong order was placed or you may be looking at a different order number.\n\nIf you have another order number for the phone case, send it over and I’ll check that one right away. If this blender itself wasn’t supposed to be in this order, tell me which item on ORD-6050 should have been there instead and I’ll help with the next step.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "The shirt and book are correct, it’s just the blender/phone case issue that’s wrong. I only have ORD-6050—can you tell me the return process for the wrong item and how long a replacement would take?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — since the blender is the wrong item, you’d be eligible to return it at no cost, and wrong-item returns aren’t blocked by the normal return window. Once the return is started, we’d send a prepaid return label.\n\nFor a replacement, it depends on the correct phone case being available. If it’s in stock, a replacement would typically ship on the normal fulfillment timeline after the exchange is processed; if it isn’t in stock, the fallback is store credit rather than a direct exchange. If you want, I can look up the phone case and check whether a replacement is possible and how quickly it could ship.",
       "tool_calls": [
-        {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "exchange"
-          },
-          "result": {
-            "topic": "exchange",
-            "rules": {
-              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed \u2014 use process_return for a refund instead.",
-              "same_price": "Exchange for a same-price product: no charge, no refund.",
-              "more_expensive": "Exchange for more expensive item: customer pays price difference.",
-              "cheaper": "Exchange for cheaper item: difference refunded as store credit (not original payment).",
-              "out_of_stock": "If requested item is out of stock: issue store credit for the original item; do not complete the exchange.",
-              "return_window": "Must be within return window (same rules as returns).",
-              "no_price_protection": "No price protection on exchanges (item price at time of purchase applies)."
-            }
-          }
-        },
         {
           "name": "get_policies",
           "arguments": {
@@ -170,7 +161,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -222,56 +213,75 @@
               }
             }
           }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "I\u2019d like an exchange so I can get the phone case I meant to order.  \n\nIt was for an iPhone 13; I wanted just a simple black case\u2014nothing fancy, just a basic protective one."
-    },
-    {
-      "role": "assistant",
-      "content": "Thanks, that helps. It looks like the exact phone case you meant to order isn\u2019t in our current catalog under that description.  \n\nHere are two ways we can handle this right now:  \n1) I can process a free return of the blender and issue you a full refund; you can then order any iPhone 13 black case you like.  \n2) If you\u2019d like me to try to match something close, tell me your priorities (slim vs. extra protective, budget range), and I\u2019ll suggest the closest option we carry; if one works for you, I\u2019ll set up an exchange to that specific case.  \n\nWhich option would you prefer?",
-      "tool_calls": [
+        },
         {
-          "name": "search_products",
+          "name": "get_policies",
           "arguments": {
-            "query": "iPhone 13 black basic protective case"
+            "topic": "exchange"
           },
           "result": {
-            "query": "iPhone 13 black basic protective case",
-            "results": []
+            "topic": "exchange",
+            "rules": {
+              "must_be_different_product": "Exchanges must specify a different product than the original item. Self-swap (exchanging an item for the same product) is not allowed — use process_return for a refund instead.",
+              "same_price": "Exchange for a same-price product: no charge, no refund.",
+              "more_expensive": "Exchange for more expensive item: customer pays price difference.",
+              "cheaper": "Exchange for cheaper item: difference refunded as store credit (not original payment).",
+              "out_of_stock": "If requested item is out of stock: issue store credit for the original item; do not complete the exchange.",
+              "return_window": "Must be within return window (same rules as returns).",
+              "no_price_protection": "No price protection on exchanges (item price at time of purchase applies)."
+            }
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "shipping"
+          },
+          "result": {
+            "topic": "shipping",
+            "rules": {
+              "not_received": {
+                "under_500": "Delivered but not received (<$500): reship or refund.",
+                "over_500": "Delivered but not received (>=$500): mandatory investigation (3-5 business days).",
+                "signature_on_file": "Delivery with signature on file: claim denied."
+              },
+              "lost_in_transit": {
+                "under_500": "Lost in transit (<$500): immediate reship or refund.",
+                "over_500": "Lost in transit (>=$500): carrier claim required first.",
+                "stuck_7_days": "No tracking update for 7+ days: treat as lost."
+              },
+              "damaged": {
+                "rule": "Damaged in transit: full refund or replacement.",
+                "fragile_bonus": "Fragile items damaged in transit qualify for a separate $10 goodwill credit, issued as a refund in addition to the return refund."
+              },
+              "late_delivery_compensation": {
+                "tiers": {
+                  "1_to_2_days_late": "$5 credit",
+                  "3_to_5_days_late": "$15 credit",
+                  "6_plus_days_late": "Full shipping refund + $15 credit"
+                },
+                "shipping_refund_basis": "When refunding shipping, refund the actual shipping cost the customer was charged on the order — read order.shipping_cost. Standard policy charges $0 on free-shipping orders (subtotal >= $100) and $8 otherwise.",
+                "tier_multipliers": {
+                  "gold": "1.5x multiplier on the base late-delivery credit only (NOT on shipping refund or goodwill). Rounded down (e.g., int(15*1.5) = 22).",
+                  "platinum": "2x multiplier on the base late-delivery credit only. Rounded down."
+                },
+                "repeated_issues": "3+ PRIOR issues in 6 months (not counting current incident): additional $25 goodwill credit.",
+                "loyalty_bonus": "Platinum members with 50+ total orders: one-time $50 loyalty bonus on next compensation claim. Confirm with customer if already redeemed.",
+                "max_cap": "Maximum compensation: 50% of order total (rounded down).",
+                "calculation_order": "1) Compute base credit by days-late tier. 2) Apply tier multiplier to base credit only. 3) Add shipping refund (if 6+ days late) using order.shipping_cost. 4) Add goodwill (if 3+ prior issues or fragile damage). 5) Apply loyalty bonus if eligible. 6) Apply 50%-of-order cap on the sum."
+              }
+            }
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Let\u2019s try option 2\u2014I\u2019d still prefer an exchange if possible.  \n\nI\u2019d like something fairly slim but still protective if it\u2019s dropped, and I\u2019d like to stay around a budget/basic price range, not a premium case."
+      "content": "Before we do anything, I need to explain which item was wrong so it’s handled correctly. Can you give me a concrete wrong-item return or refund preview for just the blender/phone-case issue, with the shirt and book left unchanged?"
     },
     {
       "role": "assistant",
-      "content": "Understood\u2014slim, protective, black, and budget-friendly.  \n\nI\u2019ve checked our current catalog and unfortunately we don\u2019t have any iPhone 13 black basic cases available to exchange to right now. Because of that, the best I can do is:  \n- Set up a free return for the blender (since it was our mistake), and  \n- Issue you a full refund for the blender so you can buy the exact case you want elsewhere or when we restock.  \n\nIf you confirm you\u2019re okay with that, I\u2019ll go ahead and start the return/refund for the blender.",
-      "tool_calls": [
-        {
-          "name": "search_products",
-          "arguments": {
-            "query": "iPhone 13 slim protective black case basic"
-          },
-          "result": {
-            "query": "iPhone 13 slim protective black case basic",
-            "results": []
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Okay, let\u2019s go ahead with the free return and full refund for the blender.  \n\nBefore you finalize anything, can you confirm that this will only affect the blender and that the shirt and the book on the order will stay as they are?"
-    },
-    {
-      "role": "assistant",
-      "content": "Yes\u2014this return only affects the blender. The shirt and the book will remain on your order exactly as they are and won\u2019t be changed or refunded.  \n\nI\u2019ve processed a free return for the blender: you\u2019ll get a prepaid return label, and a full refund of $89 will go back to your original payment method once the return is scanned/processed.",
+      "content": "Yes — for just the blender item on ORD-6050, with the shirt and book left as-is, the preview is:\n\n- Item: PowerBlend Pro Blender\n- Reason: wrong item\n- Eligible: yes\n- Return shipping: free prepaid label\n- Restocking fee: $0\n- Shipping clawback: $0\n- Other deductions: $0\n- Refund method: original payment\n- Net refund preview: $89\n\nSo if handled as a wrong-item return for only the blender, nothing changes on the shirt or book, and the expected refund would be the full $89.",
       "tool_calls": [
         {
           "name": "process_return",
@@ -298,35 +308,21 @@
             "paid_return_shipping_fee": 0,
             "restocking_discount": 0
           }
-        },
-        {
-          "name": "process_return",
-          "arguments": {
-            "item_id": "ITEM-9412",
-            "reason": "wrong_item",
-            "amount": 89,
-            "confirm": true
-          },
-          "result": {
-            "status": "returned",
-            "item_id": "ITEM-9412",
-            "refund_amount": 89,
-            "policy_computed_amount": 89,
-            "refund_method": "original_payment",
-            "restocking_fee": 0,
-            "return_label_issued": true,
-            "shipping_clawback": 0,
-            "bulk_clawback": 0,
-            "repeat_surcharge": 0,
-            "paid_return_shipping_fee": 0,
-            "restocking_discount": 0
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Thanks for confirming it only affects the blender and that the shirt and book stay as-is\u2014that\u2019s exactly what I needed.  \n\nI\u2019ll watch for the return label and send the blender back for the refund. Appreciate the help. [TASK_DONE]"
+      "content": "Thanks, that’s the kind of preview I needed. Just to confirm, this is only for the blender as the wrong item, with the shirt and book staying unchanged, right?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — exactly. This preview applies only to the blender item, and the shirt and book would remain unchanged on the order.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Great, thanks for confirming. Please go ahead with just that blender wrong-item return/refund, and leave the shirt and book alone. [TASK_DONE]"
     }
   ]
 }

@@ -10,21 +10,83 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s why the Pixel 8 ClearGrip case is not the right fit for your Pixel 7:\n\n- The **Pixel 8 case (SP-H108)** is explicitly listed as compatible with: **\u201cGoogle Pixel 8\u201d** only.  \n- The **Pixel 7 case (SP-H107)** is explicitly listed as compatible with: **\u201cGoogle Pixel 7\u201d** only.  \n\nPhone cases are molded to the exact dimensions and port/camera cutouts of a specific model. The Pixel 7 and Pixel 8 have different body dimensions and camera module layouts, so:\n\n- The **camera cutout** on the Pixel 8 case will not align correctly with the Pixel 7 camera bar.\n- The **button and port cutouts** (power, volume, microphones) are positioned for the Pixel 8\u2019s hardware layout, not the Pixel 7\u2019s.\n- Even if you could force it on, it may be loose/tight in the wrong places and not protect the phone properly.\n\nSo, the Pixel 8 ClearGrip case is not suitable for a Pixel 7; you should use the **ClearGrip Case for Pixel 7 (SP-H107)** instead.\n\nIf you\u2019d like, I can add the **ClearGrip Case for Pixel 7** to your cart now.",
+      "content": "Verified: the **Pixel 8 ClearGrip case is not the right fit** because it is **only compatible with Google Pixel 8**, and the catalog explicitly marks it **not compatible with Google Pixel 7**.\n\nWhat I checked:\n- **ClearGrip Case for Pixel 7** — compatible with **Google Pixel 7**\n- **ClearGrip Case for Pixel 8** — **not compatible** with **Google Pixel 7**\n\nThe correct item is:\n- **NovaShield ClearGrip Case for Pixel 7** (`SP-H107`)\n- **$29**\n- **In stock**\n- **Rating: 4.5/5** (840 reviews)\n\nI have **not added it yet**, per your instruction. If you want, I can add the Pixel 7 case now.",
       "tool_calls": [
         {
           "name": "search_products",
           "arguments": {
-            "query": "ClearGrip case Pixel 8",
-            "category": "electronics",
+            "query": "ClearGrip case",
+            "category": "accessories",
             "min_price": 0,
-            "max_price": 500,
-            "min_rating": 1,
+            "max_price": 200,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
           "result": {
+            "products": [],
+            "total_found": 0,
+            "note": "No products match the hard filters (category / price / rating / stock). Try relaxing them and search again."
+          }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "ClearGrip",
+            "category": "accessories",
+            "min_price": 0,
+            "max_price": 200,
+            "min_rating": 0,
+            "in_stock_only": false,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [],
+            "total_found": 0,
+            "note": "No products match the hard filters (category / price / rating / stock). Try relaxing them and search again."
+          }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "Pixel case",
+            "category": "accessories",
+            "min_price": 0,
+            "max_price": 200,
+            "min_rating": 0,
+            "in_stock_only": false,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [],
+            "total_found": 0,
+            "note": "No products match the hard filters (category / price / rating / stock). Try relaxing them and search again."
+          }
+        },
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "case",
+            "category": "electronics",
+            "min_price": 0,
+            "max_price": 200,
+            "min_rating": 0,
+            "in_stock_only": false,
+            "sort_by": "relevance"
+          },
+          "result": {
             "products": [
+              {
+                "product_id": "SP-H109",
+                "name": "ClearGrip Slim Case for iPhone 14",
+                "brand": "NovaShield",
+                "category": "electronics",
+                "subcategory": "phone_case",
+                "price": 35,
+                "rating": 4.7,
+                "review_count": 990,
+                "in_stock": true
+              },
               {
                 "product_id": "SP-H108",
                 "name": "ClearGrip Case for Pixel 8",
@@ -46,20 +108,38 @@
                 "rating": 4.5,
                 "review_count": 840,
                 "in_stock": true
-              },
-              {
-                "product_id": "SP-H109",
-                "name": "ClearGrip Slim Case for iPhone 14",
-                "brand": "NovaShield",
-                "category": "electronics",
-                "subcategory": "phone_case",
-                "price": 35,
-                "rating": 4.7,
-                "review_count": 990,
-                "in_stock": true
               }
             ],
             "total_found": 3
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-H107"
+          },
+          "result": {
+            "product_id": "SP-H107",
+            "name": "ClearGrip Case for Pixel 7",
+            "category": "electronics",
+            "subcategory": "phone_case",
+            "brand": "NovaShield",
+            "price": 29,
+            "rating": 4.5,
+            "review_count": 840,
+            "description": "ClearGrip Case for Pixel 7 from NovaShield. Electronics accessory.",
+            "specs": {},
+            "compatible_with": [
+              "Google Pixel 7"
+            ],
+            "in_stock": true,
+            "stock_quantity": 50,
+            "shipping_days": 1,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "1 business days (standard)"
           }
         },
         {
@@ -92,43 +172,76 @@
           }
         },
         {
-          "name": "get_product_details",
+          "name": "check_compatibility",
           "arguments": {
-            "product_id": "SP-H107"
+            "product_id": "SP-H107",
+            "device_name": "Pixel 7"
           },
           "result": {
+            "compatible": false,
             "product_id": "SP-H107",
-            "name": "ClearGrip Case for Pixel 7",
-            "category": "electronics",
-            "subcategory": "phone_case",
-            "brand": "NovaShield",
-            "price": 29,
-            "rating": 4.5,
-            "review_count": 840,
-            "description": "ClearGrip Case for Pixel 7 from NovaShield. Electronics accessory.",
-            "specs": {},
-            "compatible_with": [
-              "Google Pixel 7"
-            ],
-            "in_stock": true,
-            "stock_quantity": 50,
-            "shipping_days": 1,
-            "gift_wrap_available": true,
-            "backorder_available": false,
-            "previous_price": null,
-            "variants": null,
-            "shipping_estimate": "1 business days (standard)"
+            "device": "Pixel 7",
+            "reason": "Unknown device name 'Pixel 7'. Canonical devices in this catalog: Google Pixel 7, Google Pixel 8, iPhone 14.",
+            "canonical_devices": [
+              "Google Pixel 7",
+              "Google Pixel 8",
+              "iPhone 14"
+            ]
+          }
+        },
+        {
+          "name": "check_compatibility",
+          "arguments": {
+            "product_id": "SP-H108",
+            "device_name": "Pixel 7"
+          },
+          "result": {
+            "compatible": false,
+            "product_id": "SP-H108",
+            "device": "Pixel 7",
+            "reason": "Unknown device name 'Pixel 7'. Canonical devices in this catalog: Google Pixel 7, Google Pixel 8, iPhone 14.",
+            "canonical_devices": [
+              "Google Pixel 7",
+              "Google Pixel 8",
+              "iPhone 14"
+            ]
+          }
+        },
+        {
+          "name": "check_compatibility",
+          "arguments": {
+            "product_id": "SP-H107",
+            "device_name": "Google Pixel 7"
+          },
+          "result": {
+            "compatible": true,
+            "product_id": "SP-H107",
+            "device": "Google Pixel 7",
+            "reason": "ClearGrip Case for Pixel 7 is compatible with Google Pixel 7."
+          }
+        },
+        {
+          "name": "check_compatibility",
+          "arguments": {
+            "product_id": "SP-H108",
+            "device_name": "Google Pixel 7"
+          },
+          "result": {
+            "compatible": false,
+            "product_id": "SP-H108",
+            "device": "Google Pixel 7",
+            "reason": "ClearGrip Case for Pixel 8 is not compatible with Google Pixel 7. Compatible devices for this product: Google Pixel 8."
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Thanks for checking that. Yes, please add the ClearGrip Case for Pixel 7 (SP-H107) to my cart."
+      "content": "Yes, that’s the one I want. Please add the Pixel 7 ClearGrip case."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the **ClearGrip Case for Pixel 7 (SP-H107)** to your cart:\n\n- Item: ClearGrip Case for Pixel 7  \n- Quantity: 1  \n- Price: $29  \n- Gift wrap: No  \n\nIf you\u2019d like, I can help you review your cart, add screen protectors or chargers for your Pixel 7, or go over shipping options.",
+      "content": "Added: **ClearGrip Case for Pixel 7** — **1 qty**, **$29**.\n\nCurrent cart total: **$29**.\n\nIf you want, I can also check for any promo codes or review your cart.",
       "tool_calls": [
         {
           "name": "add_to_cart",
@@ -156,7 +269,7 @@
     },
     {
       "role": "user",
-      "content": "That\u2019s exactly what I needed\u2014thanks for confirming the fit and adding the Pixel 7 ClearGrip case.\n\nI\u2019m all set for now and will handle checkout and shipping later. [TASK_DONE]"
+      "content": "No, that’s all I needed. [TASK_DONE]"
     }
   ]
 }

@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I want to add the SlimBook Air 13 to my cart. I have two promo codes I'd like to use: SAVE10 and SPRING20. Can you apply both for me?"
+      "content": "Hi — I want to add the SlimBook Air 13 to my cart. I have two promo codes I'd like to use: SAVE10 and SPRING20. Can you apply both for me?"
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the SlimBook Air 13 to your cart and applied both promo codes.\n\nHere\u2019s your current cart summary:\n- Item: SlimBook Air 13 \u2014 $849\n- Promos applied: SAVE10 and SPRING20 (they stack in our system)\n- Total discount: $253\n- Estimated total after discounts (before tax & shipping): **$596**\n\nIf you\u2019d like, I can also:\n- Add gift wrap for the laptop, or\n- Help you choose a shipping speed and show the final total with shipping included.",
+      "content": "Done — I added the SlimBook Air 13 to your cart.\n\nAbout the promo codes:\n- I could not apply both.\n- Store policy allows only one promo code per cart.\n- Between your two codes, I applied SPRING20 because it gives the larger discount.\n\nCart summary:\n- SlimBook Air 13: $849\n- Promo applied: SPRING20\n- Discount: $169\n- Current total: $680\n\nYou also have 2,200 loyalty points available if you want me to redeem some, but that would be separate from promo-code stacking rules.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "SlimBook Air 13",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 10000,
-            "min_rating": 1,
+            "max_price": 5000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -63,21 +63,6 @@
           }
         },
         {
-          "name": "get_customer_account",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "customer_id": "shop_004",
-            "name": "Taylor Kim",
-            "email": "taylor.kim@example.com",
-            "tier": "standard",
-            "is_first_time": false,
-            "loyalty_points": 2200,
-            "purchase_history": []
-          }
-        },
-        {
           "name": "get_cart",
           "arguments": {
             "customer_id": "shop_004"
@@ -98,6 +83,37 @@
           }
         },
         {
+          "name": "get_customer_account",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "customer_id": "shop_004",
+            "name": "Taylor Kim",
+            "email": "taylor.kim@example.com",
+            "tier": "standard",
+            "is_first_time": false,
+            "loyalty_points": 2200,
+            "purchase_history": []
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "promo_stacking"
+          },
+          "result": {
+            "topic": "promo_stacking",
+            "summary": "At most one promo code per cart. Some discounts stack with each other but not with promo codes.",
+            "rules": [
+              "One promo code per cart.",
+              "Category bundle (5%) does NOT stack with promo codes on the same items — customer gets the better of the two.",
+              "Welcome discount (5%) does NOT stack with promo codes — customer gets the better of the two.",
+              "Brand bundle bonus (3%) DOES stack with everything."
+            ]
+          }
+        },
+        {
           "name": "get_variants",
           "arguments": {
             "product_id": "SP-1001"
@@ -108,6 +124,30 @@
             "base_price": 849,
             "variants": [],
             "note": "This product has no variants; no variant_id is needed for add_to_cart."
+          }
+        },
+        {
+          "name": "validate_promo",
+          "arguments": {
+            "customer_id": "shop_004",
+            "promo_code": "SAVE10"
+          },
+          "result": {
+            "valid": true,
+            "reason": "Promo applied: Site-wide 10% off, any category, any purchase size.",
+            "estimated_discount": 0
+          }
+        },
+        {
+          "name": "validate_promo",
+          "arguments": {
+            "customer_id": "shop_004",
+            "promo_code": "SPRING20"
+          },
+          "result": {
+            "valid": true,
+            "reason": "Promo applied: Spring sale: 20% off any order.",
+            "estimated_discount": 0
           }
         },
         {
@@ -133,47 +173,6 @@
           }
         },
         {
-          "name": "validate_promo",
-          "arguments": {
-            "customer_id": "shop_004",
-            "promo_code": "SAVE10"
-          },
-          "result": {
-            "valid": true,
-            "reason": "Promo applied: Site-wide 10% off, any category, any purchase size.",
-            "estimated_discount": 84
-          }
-        },
-        {
-          "name": "validate_promo",
-          "arguments": {
-            "customer_id": "shop_004",
-            "promo_code": "SPRING20"
-          },
-          "result": {
-            "valid": true,
-            "reason": "Promo applied: Spring sale: 20% off any order.",
-            "estimated_discount": 169
-          }
-        },
-        {
-          "name": "apply_promo",
-          "arguments": {
-            "customer_id": "shop_004",
-            "promo_code": "SAVE10"
-          },
-          "result": {
-            "status": "applied",
-            "promo_code": "SAVE10",
-            "applied_promo_codes": [
-              "SAVE10"
-            ],
-            "discount_amount": 84,
-            "cart_subtotal": 849,
-            "cart_total": 765
-          }
-        },
-        {
           "name": "apply_promo",
           "arguments": {
             "customer_id": "shop_004",
@@ -183,19 +182,18 @@
             "status": "applied",
             "promo_code": "SPRING20",
             "applied_promo_codes": [
-              "SAVE10",
               "SPRING20"
             ],
-            "discount_amount": 253,
+            "discount_amount": 169,
             "cart_subtotal": 849,
-            "cart_total": 596
+            "cart_total": 680
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Nice, that sounds perfect \u2014 let\u2019s keep it as is with both codes applied and no gift wrap.  \n\nI\u2019ll handle the shipping choice at checkout myself, so we\u2019re all set. [TASK_DONE]"
+      "content": "oh — ok, makes sense. Go with the bigger one. $680 total works for me, and no points this time. [TASK_DONE]"
     }
   ]
 }

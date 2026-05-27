@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Please remove the mesh chair from my cart \u2014 I don't need it after all."
+      "content": "Please remove the mesh chair from my cart — I don't need it after all."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve removed the ErgoDesk Mesh Chair from your cart. \n\nYour cart now has:\n- ErgoDesk Standing Desk \u2014 $449\n\nCurrent estimated total: $449 (before tax and shipping).",
+      "content": "Done — I removed the ErgoDesk Mesh Chair from your cart.\n\nYour cart now has:\n- ErgoDesk Standing Desk ×1\n\nUpdated totals:\n- Subtotal: $449\n- Total: $449\n\nNote: your previous promo no longer appears to apply after removing the chair.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -57,12 +57,14 @@
           "name": "remove_from_cart",
           "arguments": {
             "customer_id": "shop_004",
-            "product_id": "SP-3004"
+            "product_id": "SP-3004",
+            "variant_id": ""
           },
           "result": {
             "status": "removed",
             "cart_id": "CART-shop_004",
             "product_id": "SP-3004",
+            "variant_id": null,
             "cart_subtotal": 449,
             "cart_total": 449
           }
@@ -71,7 +73,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks, that\u2019s all I needed for now. [TASK_DONE]"
+      "content": "Okay, thanks. [TASK_DONE]"
     }
   ]
 }

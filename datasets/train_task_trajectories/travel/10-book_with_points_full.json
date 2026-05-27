@@ -10,7 +10,16 @@
     },
     {
       "role": "assistant",
-      "content": "I can help with that. I have a couple of quick questions so I can search the right flights and use your points:\n\n1. Which New York airport do you prefer (JFK, LGA, or EWR)?  \n2. What date do you want to depart? One-way or round trip? If round trip, what return date?  \n3. Do you have a preferred time of day (morning, afternoon, evening) or airline?  \n4. Which cabin would you like to book with points: economy, business, or first?  \n\nOnce you share these, I\u2019ll search flights and then book using your loyalty points balance (you currently have 75,000 points).",
+      "content": "Sure — I can help with that.\n\nTo find and book the right flight using your loyalty points, I need a few details:\n\n1. Which date would you like to travel?\n2. Which New York airport do you want to depart from?\n   - JFK\n   - LGA\n   - EWR\n3. Do you have any preferences for:\n   - cabin class: economy, business, or first\n   - time of day\n   - nonstop only or max stops\n4. If you want, I can also check your loyalty points balance before we choose a flight.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "June 24 from JFK. I’m looking for economy class, preferably Delta, morning departure, nonstop, and I’d like to pay entirely with points."
+    },
+    {
+      "role": "assistant",
+      "content": "I found 1 matching flight, and you have enough points to book it fully.\n\nYour points:\n- Gold tier\n- 75,000 points available\n\nMatching flight:\n- Delta DL100\n- JFK → SFO\n- Jun 24\n- Departs 11:45 AM\n- Arrives 5:11 PM\n- Nonstop\n- Economy: $500\n\nPoints needed:\n- Domestic redemption rate: 1 point = $0.01\n- Economy fare $500 = 50,000 points\n\nYou can book this entirely with points and would have 25,000 points remaining.\n\nTo complete the booking, I need your preferences for:\n1. Seat: window, middle, or aisle\n2. Meal: standard, vegetarian, vegan, kosher, halal, or gluten_free\n3. Add Wi‑Fi? yes/no\n4. Add extra legroom? yes/no\n5. Add travel insurance? yes/no\n6. Any extra checked bags beyond your free allowance? If yes, how many?\n\nOnce you send those, I can book it.",
       "tool_calls": [
         {
           "name": "get_user_details",
@@ -24,17 +33,7 @@
             "loyalty_tier": "gold",
             "loyalty_points": 75000
           }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "I\u2019d like to depart from JFK on June 24th, one-way to San Francisco.  \n\nMy preferences are:  \n- Airline: Delta (DL)  \n- Time: morning departure  \n- Cabin: economy class  \n\nAnd I\u2019d like to pay entirely with my loyalty points."
-    },
-    {
-      "role": "assistant",
-      "content": "Here are the best Delta options I found for June 24 from JFK \u2192 SFO in economy:\n\n1) DL102 \u2013 1 stop  \n- Departs JFK: 09:45  \n- Arrives SFO: 15:19  \n- Duration: 5h 34m, 1 stop  \n- Economy cash fare: $228  \n\n2) DL100 \u2013 nonstop  \n- Departs JFK: 11:45  \n- Arrives SFO: 17:11  \n- Duration: 5h 26m, nonstop  \n- Economy cash fare: $500  \n\nYou have 75,000 points, which is enough to pay fully with points for either option.\n\nBefore I book, I need a few details:\n\n1. Which flight would you like: DL102 (1 stop, 09:45) or DL100 (nonstop, 11:45)?  \n2. Seat type: window, aisle, or middle?  \n3. Meal preference: standard, vegetarian, vegan, kosher, halal, or gluten_free?  \n4. Do you want to add any of these (they may affect points required):  \n   - In\u2011flight Wi\u2011Fi (yes/no)  \n   - Extra legroom seat (yes/no)  \n   - Travel insurance (yes/no)  \n   - Any paid extra checked bags beyond your free allowance (0, 1, 2, \u2026)?  \n\nOnce you confirm these, I\u2019ll proceed to book in economy using only your loyalty points.",
-      "tool_calls": [
+        },
         {
           "name": "search_flights",
           "arguments": {
@@ -43,27 +42,11 @@
             "date": "2026-06-24",
             "airline": "DL",
             "time_range": "morning",
-            "max_stops": 1,
+            "max_stops": 0,
             "max_price": -1
           },
           "result": {
             "flights": [
-              {
-                "flight_id": "DL102",
-                "airline_code": "DL",
-                "origin": "JFK",
-                "destination": "SFO",
-                "departure_time": "2026-06-24T09:45:00",
-                "arrival_time": "2026-06-24T15:19:00",
-                "duration_minutes": 334,
-                "stops": 1,
-                "cabin_prices": {
-                  "economy": 228,
-                  "business": 1216
-                },
-                "status": "scheduled",
-                "route_type": "domestic"
-              },
               {
                 "flight_id": "DL100",
                 "airline_code": "DL",
@@ -82,16 +65,37 @@
               }
             ]
           }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "loyalty",
+            "cabin_class": "economy",
+            "loyalty_tier": "gold",
+            "route_type": "domestic"
+          },
+          "result": {
+            "topic": "loyalty_points",
+            "rules": {
+              "minimum_redemption": "1,000 points minimum to redeem",
+              "domestic_rate": "1 point = $0.01 (100 points = $1)",
+              "international_rate": "1 point = $0.015 (100 points = $1.50)",
+              "rounding": "Points used are rounded to the nearest 100",
+              "max_coverage": "Points can cover up to 100% of flight price"
+            },
+            "applicable_loyalty_tier": "gold",
+            "applicable_route_type": "domestic"
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "I\u2019ll take DL100, the nonstop 11:45 JFK \u2192 SFO flight in economy.\n\nSeat: aisle  \nMeal: kosher  \nWi\u2011Fi: yes  \nExtra legroom: yes  \nTravel insurance: no  \nExtra checked bags beyond any free allowance: 0  \n\nAnd please pay entirely with my loyalty points."
+      "content": "That sounds reasonable, thanks. Please book it with an aisle seat, kosher meal, Wi‑Fi yes, extra legroom yes, insurance no, and no extra checked bags."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set\u2014your flight is booked using your loyalty points.\n\nHere are your booking details:\n\n- Passenger: Emma Smith  \n- Booking ID: BK-0001  \n- Flight: DL100 (Delta)  \n- Route: JFK \u2192 SFO  \n- Date: June 24, 2026  \n- Departure: 11:45  \n- Arrival: 17:11  \n- Cabin: Economy  \n- Seat: Aisle  \n- Meal: Kosher  \n- Wi\u2011Fi: Added  \n- Extra legroom: Added  \n- Travel insurance: Not added  \n- Extra checked bags: 0  \n\nPayment:\n- Payment method: Loyalty points  \n- Points used: 50,000  \n- Cash charged: $0  \n\nIf you\u2019d like, I can also help you add a hotel in San Francisco or a car rental for your trip.",
+      "content": "Your flight is booked.\n\nBooking details:\n- Booking ID: BK-0001\n- Flight: Delta DL100\n- Route: JFK → SFO\n- Date: 2026-06-24\n- Cabin: Economy\n- Seat: Aisle\n- Meal: Kosher\n- Wi‑Fi: Yes\n- Extra legroom: Yes\n- Insurance: No\n- Extra checked bags: 0\n\nPayment:\n- Paid with points: 50,000\n- Cash charged: $0\n\nIf you'd like, I can also help with a hotel or car rental in San Francisco.",
       "tool_calls": [
         {
           "name": "create_booking",
@@ -124,7 +128,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks, this looks perfect and exactly what I wanted.\n\nJust to confirm:\n- JFK \u2192 SFO on DL100, June 24, in economy  \n- Morning-ish nonstop, aisle seat, kosher meal  \n- Wi\u2011Fi and extra legroom added  \n- No insurance, no extra bags  \n- Fully covered by points with $0 cash\n\nEverything matches my preferences, so I\u2019m all set. No hotel or car needed.  \n\n[TASK_DONE]"
+      "content": "Thanks, that looks correct, and I’m glad it was fully covered by points. No hotel or car rental needed. [TASK_DONE]"
     }
   ]
 }

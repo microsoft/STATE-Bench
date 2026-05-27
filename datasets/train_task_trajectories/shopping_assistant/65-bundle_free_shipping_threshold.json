@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the PixelShot Webcam 1080p to your cart and set the fastest shipping option.\n\nHere\u2019s where you are for checkout:\n\n- Items in cart: 5 (including the PixelShot Webcam)\n- Merchandise subtotal: $845  \n- Shipping: next-day delivery \u2014 $15  \n- Order total: $860  \n\n\u201cFast\u201d shipping options and prices:\n- Express (2 business days): $12  \n- Next-day (fastest): $15  \u2705 currently selected\n\nIf you\u2019re ready, you can proceed to payment/confirmation in checkout now. If you\u2019d like, I can also:\n- Switch to express instead of next-day, or  \n- Help apply any promo code you have before you pay.",
+      "content": "Added: **PixelShot Webcam 1080p** — **$79**\n\nYour cart is now **$845 before shipping**.\n\nFast shipping options:\n- **Express**: **$12** — arrives in **2 business days**\n- **Next day**: **$15** — arrives **next business day**\n- **Standard**: **Free** — **3 business days**\n\nIf you want it fastest, I can set **Next day shipping** and get your cart ready for checkout.  \nJust say **“use next day”** or **“use express.”**",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -38,71 +38,6 @@
               }
             ],
             "total_found": 1
-          }
-        },
-        {
-          "name": "get_variants",
-          "arguments": {
-            "product_id": "SP-2005"
-          },
-          "result": {
-            "product_id": "SP-2005",
-            "product_name": "PixelShot Webcam 1080p",
-            "base_price": 79,
-            "variants": [],
-            "note": "This product has no variants; no variant_id is needed for add_to_cart."
-          }
-        },
-        {
-          "name": "add_to_cart",
-          "arguments": {
-            "customer_id": "shop_004",
-            "product_id": "SP-2005",
-            "quantity": 1,
-            "gift_wrap": false,
-            "variant_id": ""
-          },
-          "result": {
-            "status": "added",
-            "cart_item_id": "CI-0001",
-            "product_id": "SP-2005",
-            "product_name": "PixelShot Webcam 1080p",
-            "variant_id": null,
-            "quantity": 1,
-            "gift_wrap": false,
-            "unit_price": 79,
-            "cart_subtotal": 845,
-            "cart_total": 845
-          }
-        },
-        {
-          "name": "get_shipping_options",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "options": [
-              {
-                "option": "standard",
-                "cost": 0,
-                "eta_description": "3 business days",
-                "eligibility": "free \u2014 5+ items in cart"
-              },
-              {
-                "option": "express",
-                "cost": 12,
-                "eta_description": "2 business days",
-                "eligibility": "$12"
-              },
-              {
-                "option": "next_day",
-                "cost": 15,
-                "eta_description": "next business day",
-                "eligibility": "$15"
-              }
-            ],
-            "cart_item_count": 5,
-            "customer_tier": "standard"
           }
         },
         {
@@ -149,60 +84,80 @@
                 "gift_wrap": false,
                 "unit_price": 499,
                 "line_total": 499
-              },
-              {
-                "cart_item_id": "CI-0001",
-                "product_id": "SP-2005",
-                "product_name": "PixelShot Webcam 1080p",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 79,
-                "line_total": 79
               }
             ],
-            "subtotal": 845,
+            "subtotal": 766,
             "discount_amount": 0,
             "gift_wrap_fee": 0,
             "loyalty_discount": 0,
             "loyalty_points_redeemed": 0,
             "shipping_option": null,
             "shipping_cost": 0,
-            "total": 845,
+            "total": 766,
             "applied_promo_codes": []
           }
         },
         {
-          "name": "set_shipping_option",
+          "name": "add_to_cart",
           "arguments": {
             "customer_id": "shop_004",
-            "option": "next_day"
+            "product_id": "SP-2005",
+            "quantity": 1,
+            "gift_wrap": false,
+            "variant_id": ""
           },
           "result": {
-            "status": "set",
-            "shipping_option": "next_day",
-            "shipping_cost": 15,
+            "status": "added",
+            "cart_item_id": "CI-0001",
+            "product_id": "SP-2005",
+            "product_name": "PixelShot Webcam 1080p",
+            "variant_id": null,
+            "quantity": 1,
+            "gift_wrap": false,
+            "unit_price": 79,
             "cart_subtotal": 845,
-            "cart_total": 860
+            "cart_total": 845
+          }
+        },
+        {
+          "name": "get_shipping_options",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "options": [
+              {
+                "option": "standard",
+                "cost": 0,
+                "eta_description": "3 business days",
+                "eligibility": "free — 5+ items in cart"
+              },
+              {
+                "option": "express",
+                "cost": 12,
+                "eta_description": "2 business days",
+                "eligibility": "$12"
+              },
+              {
+                "option": "next_day",
+                "cost": 15,
+                "eta_description": "next business day",
+                "eligibility": "$15"
+              }
+            ],
+            "cart_item_count": 5,
+            "customer_tier": "standard"
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Hold on \u2014 did you pick next\u2011day for me? I wanted to see all the options (including the cheapest) before choosing."
+      "content": "Oh nice — standard works then, let's do that."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re right to ask \u2014 I went ahead and set next\u2011day based on \u201cI want it fast\u201d without confirming with you first. I should have shown you the options and waited for your choice.\n\nHere are all your current shipping options:\n\n- Standard: $0 \u2014 about 3 business days (free because you have 5+ items in your cart)  \n- Express: $12 \u2014 about 2 business days  \n- Next\u2011day: $15 \u2014 next business day (this is what\u2019s currently selected)\n\nYour cart right now with next\u2011day:\n- Subtotal (items): $845  \n- Shipping (next\u2011day): $15  \n- Total: $860  \n\nTell me which option you prefer:\n- \u201cStandard (free)\u201d  \n- \u201cExpress\u201d  \n- \u201cNext\u2011day\u201d\n\nI\u2019ll switch it to that and then you\u2019ll be set to proceed to checkout.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Oh nice \u2014 standard works then, let\u2019s do that."
-    },
-    {
-      "role": "assistant",
-      "content": "Got it \u2014 I\u2019ve switched you to standard shipping.\n\nYour checkout summary now:\n\n- Shipping: Standard (3 business days) \u2014 $0  \n- Items subtotal: $845  \n- Order total: $845  \n\nYou\u2019re all set to proceed to payment and place your order whenever you\u2019re ready. If you have a promo code or want to review/remove anything in the cart before paying, tell me what you\u2019d like to change.",
+      "content": "Done — **standard shipping** is set.\n\n**Checkout total: $845**\n- Items: **$845**\n- Shipping: **$0**\n\nYour cart is ready for checkout.",
       "tool_calls": [
         {
           "name": "set_shipping_option",
@@ -222,7 +177,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, $845 total sounds good.  \n\n[TASK_DONE]"
+      "content": "Perfect, $845 total sounds good. [TASK_DONE]"
     }
   ]
 }

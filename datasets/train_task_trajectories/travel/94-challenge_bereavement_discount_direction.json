@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve moved your booking BK-1000 to June 24.\n\nHere are the new details:\n- Route: SEA \u2192 LAX  \n- New flight: AS101  \n- Departure: 2026-06-24 16:45  \n- Arrival: 2026-06-24 20:57  \n- Cabin: Economy  \n- Seat: Aisle  \n- Meal: Kosher  \n- Wi\u2011Fi: Yes  \n- Extra legroom: Yes  \n- Insurance: No  \n\nBecause this was changed under a bereavement reason, only a reduced change fee was applied:\n- Previous total paid: $500  \n- Fare difference: +$20  \n- Change fee (bereavement): +$37  \n- New total: $557  \n\nNo action is needed from you; the change is complete and your booking ID remains BK-1000.\n\nIf you\u2019d like, I can also:\n- Add checked bags, or  \n- Help with a last-minute hotel or car rental for this trip.",
+      "content": "Done — I changed booking **BK-1000** to **June 24, 2026**.\n\nNew flight:\n- **Flight:** AS101\n- **Route:** SEA → LAX\n- **Departure:** 2026-06-24 16:45\n- **Arrival:** 2026-06-24 20:57\n\nYour preferences were kept the same:\n- Economy\n- Aisle seat\n- Kosher meal\n- Wi‑Fi: yes\n- Extra legroom: yes\n- Insurance: no\n\nCost update:\n- **Fare difference:** $20\n- **Change fee:** $37\n- **New total paid:** $557\n\nI’m sorry for your loss. If you want, I can also help check hotel or car changes tied to this trip.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -51,9 +51,9 @@
             "origin": "SEA",
             "destination": "LAX",
             "date": "2026-06-24",
-            "airline": "AS",
+            "airline": "",
             "time_range": "morning",
-            "max_stops": 0,
+            "max_stops": 1,
             "max_price": -1
           },
           "result": {
@@ -67,9 +67,9 @@
             "origin": "SEA",
             "destination": "LAX",
             "date": "2026-06-24",
-            "airline": "AS",
+            "airline": "",
             "time_range": "afternoon",
-            "max_stops": 0,
+            "max_stops": 1,
             "max_price": -1
           },
           "result": {
@@ -132,16 +132,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for changing it.\n\nCan you just clarify one thing for me: without the bereavement reason, would that $37 change fee have been higher, and roughly by how much? Then I\u2019m done."
-    },
-    {
-      "role": "assistant",
-      "content": "Yes. Without the bereavement reason, the change fee would typically have been higher.\n\nFor a domestic economy ticket like yours, standard (non-bereavement) change fees are usually in the range of about $75\u2013$150, depending on fare rules and timing. Your $37 fee reflects a reduced/waived portion due to the bereavement consideration.\n\nSo, very roughly, you likely saved on the order of $40\u2013$100 in change fees compared with a normal personal-change scenario.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "That helps, thank you for explaining the difference and how the bereavement reduced the fee.\n\nI don\u2019t have any other questions.  \n[TASK_DONE]"
+      "content": "Thanks. Just to be clear, the bereavement reason reduced the ordinary change fee to $37, right? If so, that’s fine. [TASK_DONE]"
     }
   ]
 }

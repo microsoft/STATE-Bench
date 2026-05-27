@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I'm setting up a new kitchen. Can you add the PowerBlend Pro Blender, the CasaGrande Cast-Iron Skillet, and the HomeBrew Pour-Over Coffee Set to my cart? I have a promo code KITCHEN10 I'd like to use."
+      "content": "Hi — I'm setting up a new kitchen. Can you add the PowerBlend Pro Blender, the CasaGrande Cast-Iron Skillet, and the HomeBrew Pour-Over Coffee Set to my cart? I have a promo code KITCHEN10 I'd like to use."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added all three items to your cart and applied your promo code.\n\nHere\u2019s your updated cart summary:\n\n- PowerBlend Pro Blender \u2014 $229  \n- CasaGrande Cast-Iron Skillet 12\" \u2014 $89  \n- HomeBrew Pour-Over Coffee Set \u2014 $59  \n\nSubtotal: $377  \nKITCHEN10 (10% off kitchen): -$37  \nEstimated total (before tax & shipping): **$340**\n\nA couple of quick questions so I can help you finish up if you\u2019d like:\n- Do you want any of these items gift-wrapped?\n- Do you want to use any of your loyalty points (you have 2,200 available) toward this purchase, or save them for later?",
+      "content": "Done — I added all 3 items and applied promo code **KITCHEN10**.\n\nCart:\n- PowerBlend Pro Blender — $229\n- CasaGrande Cast-Iron Skillet 12\" — $89\n- HomeBrew Pour-Over Coffee Set — $59\n\nSummary:\n- Subtotal: **$377**\n- Promo discount: **$37**\n- Total: **$340**\n\nYou also have **2,200 loyalty points** available if you want me to apply some of those too.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "PowerBlend Pro Blender",
             "category": "kitchen",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -46,8 +46,8 @@
             "query": "CasaGrande Cast-Iron Skillet",
             "category": "kitchen",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -74,8 +74,8 @@
             "query": "HomeBrew Pour-Over Coffee Set",
             "category": "kitchen",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -109,100 +109,6 @@
             "is_first_time": false,
             "loyalty_points": 2200,
             "purchase_history": []
-          }
-        },
-        {
-          "name": "get_cart",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "cart_id": "CART-shop_004",
-            "customer_id": "shop_004",
-            "items": [],
-            "subtotal": 0,
-            "discount_amount": 0,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 0,
-            "applied_promo_codes": []
-          }
-        },
-        {
-          "name": "get_promotions",
-          "arguments": {
-            "category": "kitchen"
-          },
-          "result": {
-            "promotions": [
-              {
-                "promo_code": "KITCHEN10",
-                "description": "10% off any kitchen-category purchase.",
-                "discount_type": "percentage",
-                "discount_value": 10,
-                "min_purchase": 0,
-                "max_discount": 0,
-                "category_restriction": [
-                  "kitchen"
-                ],
-                "expiry_date": "2026-12-31",
-                "active": true
-              }
-            ]
-          }
-        },
-        {
-          "name": "get_variants",
-          "arguments": {
-            "product_id": "SP-3001"
-          },
-          "result": {
-            "product_id": "SP-3001",
-            "product_name": "PowerBlend Pro Blender",
-            "base_price": 229,
-            "variants": [],
-            "note": "This product has no variants; no variant_id is needed for add_to_cart."
-          }
-        },
-        {
-          "name": "get_variants",
-          "arguments": {
-            "product_id": "SP-3007"
-          },
-          "result": {
-            "product_id": "SP-3007",
-            "product_name": "CasaGrande Cast-Iron Skillet 12\"",
-            "base_price": 89,
-            "variants": [],
-            "note": "This product has no variants; no variant_id is needed for add_to_cart."
-          }
-        },
-        {
-          "name": "get_variants",
-          "arguments": {
-            "product_id": "SP-3008"
-          },
-          "result": {
-            "product_id": "SP-3008",
-            "product_name": "HomeBrew Pour-Over Coffee Set",
-            "base_price": 59,
-            "variants": [],
-            "note": "This product has no variants; no variant_id is needed for add_to_cart."
-          }
-        },
-        {
-          "name": "validate_promo",
-          "arguments": {
-            "customer_id": "shop_004",
-            "promo_code": "KITCHEN10"
-          },
-          "result": {
-            "valid": true,
-            "reason": "Promo applied: 10% off any kitchen-category purchase.",
-            "estimated_discount": 0
           }
         },
         {
@@ -272,6 +178,89 @@
           }
         },
         {
+          "name": "validate_promo",
+          "arguments": {
+            "customer_id": "shop_004",
+            "promo_code": "KITCHEN10"
+          },
+          "result": {
+            "valid": true,
+            "reason": "Promo applied: 10% off any kitchen-category purchase.",
+            "estimated_discount": 37
+          }
+        },
+        {
+          "name": "get_promotions",
+          "arguments": {
+            "category": "kitchen"
+          },
+          "result": {
+            "promotions": [
+              {
+                "promo_code": "KITCHEN10",
+                "description": "10% off any kitchen-category purchase.",
+                "discount_type": "percentage",
+                "discount_value": 10,
+                "min_purchase": 0,
+                "max_discount": 0,
+                "category_restriction": [
+                  "kitchen"
+                ],
+                "expiry_date": "2026-12-31",
+                "active": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_004"
+          },
+          "result": {
+            "cart_id": "CART-shop_004",
+            "customer_id": "shop_004",
+            "items": [
+              {
+                "cart_item_id": "CI-0001",
+                "product_id": "SP-3001",
+                "product_name": "PowerBlend Pro Blender",
+                "quantity": 1,
+                "gift_wrap": false,
+                "unit_price": 229,
+                "line_total": 229
+              },
+              {
+                "cart_item_id": "CI-0002",
+                "product_id": "SP-3007",
+                "product_name": "CasaGrande Cast-Iron Skillet 12\"",
+                "quantity": 1,
+                "gift_wrap": false,
+                "unit_price": 89,
+                "line_total": 89
+              },
+              {
+                "cart_item_id": "CI-0003",
+                "product_id": "SP-3008",
+                "product_name": "HomeBrew Pour-Over Coffee Set",
+                "quantity": 1,
+                "gift_wrap": false,
+                "unit_price": 59,
+                "line_total": 59
+              }
+            ],
+            "subtotal": 377,
+            "discount_amount": 0,
+            "gift_wrap_fee": 0,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 377,
+            "applied_promo_codes": []
+          }
+        },
+        {
           "name": "apply_promo",
           "arguments": {
             "customer_id": "shop_004",
@@ -292,7 +281,7 @@
     },
     {
       "role": "user",
-      "content": "No gift wrap on any of them, please. And no, not this time \u2014 I don't want to use points.  \n\nEverything in the cart with KITCHEN10 applied looks good. [TASK_DONE]"
+      "content": "No, not this time — I don't want to use points. Thanks, that cart looks good. [TASK_DONE]"
     }
   ]
 }

@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what I see for your booking BK-I06 on UA100 (LAX \u2192 SFO):\n\nCurrent ticket:\n- Cabin: Economy  \n- Price paid: $280  \n\nAvailable upgrade options on the same flight:\n- Business class: $700 total fare  \n  - Additional cost from your current ticket: $700 \u2212 $280 = **$420**  \n- First class: $1,260 total fare  \n  - Additional cost from your current ticket: $1,260 \u2212 $280 = **$980**\n\nSo you can upgrade:\n- Economy \u2192 Business for **$420 more**, or  \n- Economy \u2192 First for **$980 more**.\n\nIf you tell me which cabin you prefer (business or first), I can proceed to change the booking and explain any applicable change/upgrade rules before confirming.",
+      "content": "For booking **BK-I06**, you’re currently in **economy** on **UA100**.\n\nYour upgrade options are:\n\n- **Economy → Business:** **$420**\n  - Business fare: **$700**\n  - Amount already paid: **$280**\n  - Upgrade cost = **$700 - $280 = $420**\n\n- **Economy → First:** **Not available directly**\n  - Policy says economy bookings must upgrade to **business first**\n  - So you **cannot go straight from economy to first** on this booking\n\nIf you want, I can also help you **process the upgrade to business**.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -43,6 +43,25 @@
             "destination": "SFO",
             "departure_time": "2026-06-20T12:45:00",
             "route_type": "domestic"
+          }
+        },
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "upgrade",
+            "cabin_class": "economy",
+            "loyalty_tier": "basic",
+            "route_type": "domestic"
+          },
+          "result": {
+            "topic": "upgrade",
+            "rules": {
+              "economy_to_business": "Upgrade fee = target cabin listed price minus amount already paid",
+              "business_to_first": "Upgrade fee = target cabin listed price minus amount already paid",
+              "economy_to_first": "Not available directly (must upgrade to business first)",
+              "basic_economy": "Not eligible for upgrades"
+            },
+            "applicable_cabin_class": "economy"
           }
         },
         {
@@ -82,36 +101,16 @@
     },
     {
       "role": "user",
-      "content": "For now I\u2019m just comparing options, not actually upgrading.\n\nYou said I can go straight from economy to first for $980 more \u2014 can you double\u2011check whether first class is actually available as a direct upgrade from economy on this ticket, or if I\u2019d have to go economy \u2192 business \u2192 first instead?"
+      "content": "Thanks, that helps. If first class isn’t available directly, what would the next step be for first class?"
     },
     {
       "role": "assistant",
-      "content": "I checked your upgrade rules for this domestic economy ticket.\n\nPolicy for your fare:\n- Economy \u2192 Business: Allowed  \n- Business \u2192 First: Allowed  \n- Economy \u2192 First: **Not allowed directly** \u2014 policy says you must upgrade to business first.\n\nWhat this means for you:\n- You can\u2019t do a single-step upgrade from economy straight to first.\n- To end up in first, it would be processed as:\n  1) Economy \u2192 Business (pay the difference up to business), then  \n  2) Business \u2192 First (pay the difference from business to first).\n\nIn terms of total cost, it still effectively comes out to the difference between your current fare and the first-class fare, but operationally it\u2019s treated as two upgrade steps, not one direct economy \u2192 first upgrade.\n\nSo:\n- Economy \u2192 Business: about **$420 more**  \n- Then Business \u2192 First: about **$560 more**  \n- Combined: **$980 more** over what you originally paid, but via two upgrades rather than one.",
-      "tool_calls": [
-        {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "upgrade",
-            "cabin_class": "economy",
-            "loyalty_tier": "basic",
-            "route_type": "domestic"
-          },
-          "result": {
-            "topic": "upgrade",
-            "rules": {
-              "economy_to_business": "Upgrade fee = target cabin listed price minus amount already paid",
-              "business_to_first": "Upgrade fee = target cabin listed price minus amount already paid",
-              "economy_to_first": "Not available directly (must upgrade to business first)",
-              "basic_economy": "Not eligible for upgrades"
-            },
-            "applicable_cabin_class": "economy"
-          }
-        }
-      ]
+      "content": "The next step would be:\n\n1. **Upgrade from economy to business first** for **$420**\n2. Then request a **business → first** upgrade\n\nBased on the current fare for this flight:\n\n- **First class fare:** **$1,260**\n- **Amount already paid after moving to business:** effectively **$700**\n- So the **business → first** step would be **$560**\n\nThat means the total additional cost from your current economy ticket to first, via the required path, would be:\n\n- **$420** to business\n- **$560** to first\n- **Total: $980 extra**\n\nIf you want, I can help upgrade you to **business now**.",
+      "tool_calls": null
     },
     {
       "role": "user",
-      "content": "Thanks, that helps.\n\nJust to be sure I\u2019ve got it right: to end up in first I\u2019d have to do economy \u2192 business for about $420 more, then business \u2192 first for about $560 more, for a total of $980 over my original ticket, correct?\n\nIf so, that gives me all the info I needed\u2014I\u2019m not looking to actually process any upgrade right now.  \n[TASK_DONE]"
+      "content": "Got it, thanks for laying that out. Since the total to reach first would be $980, that’s over my budget, so I’m not looking to proceed—I just wanted the pricing and upgrade rules. [TASK_DONE]"
     }
   ]
 }

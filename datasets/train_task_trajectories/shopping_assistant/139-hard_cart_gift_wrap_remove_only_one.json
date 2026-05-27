@@ -10,7 +10,7 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what\u2019s currently in your cart with gift wrap:\n\n1. SoundCore Basic Headphones \u2013 gift wrap: ON  \n2. ClearGrip Slim Case for iPhone 14 \u2013 gift wrap: ON  \n\nCurrent gift-wrap fee: **$10** total (2 wrapped items \u00d7 $5 each).",
+      "content": "Currently gift-wrapped:\n- SoundCore Basic Headphones — qty 1\n- ClearGrip Slim Case for iPhone 14 — qty 1\n\nCurrent gift-wrap fee: $10 total\n\nI haven’t changed anything.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -55,7 +55,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, that\u2019s exactly what I needed\u2014both items are wrapped and the fee is $10 total. [TASK_DONE]"
+      "content": "Got it, thanks. That matches what I needed, and I don’t want any wrap changed yet. [TASK_DONE]"
     }
   ]
 }

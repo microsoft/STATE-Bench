@@ -10,7 +10,16 @@
     },
     {
       "role": "assistant",
-      "content": "Here are good options from Chicago (ORD) to London (LHR) on June 25:\n\n1) DL300 (Delta) \u2013 Nonstop  \n- Depart: 09:30 (ORD)  \n- Arrive: 15:15 (LHR)  \n- Duration: 5h 45m  \n- Stops: Nonstop  \n- Prices: Economy $850, Business $2,125  \n\n2) UA302 (United) \u2013 1 stop  \n- Depart: 09:45 (ORD)  \n- Arrive: 14:52 (LHR)  \n- Duration: 5h 7m  \n- Stops: 1  \n- Prices: Economy $460, Business $1,150  \n\nTo book, tell me:\n1) Which flight: DL300 or UA302  \n2) Cabin: economy or business  \n3) Seat type: window, aisle, or middle  \n4) Meal preference: standard, vegetarian, vegan, kosher, halal, or gluten_free  \n5) Add-ons (yes/no for each): in\u2011flight Wi\u2011Fi, extra\u2011legroom seat, travel insurance  \n6) Extra checked bags (number beyond the free allowance, if any)  \n7) How you want to pay: credit_card, points, or points_plus_cash  \n\nOnce you choose, I\u2019ll complete the booking for your account (user_002).",
+      "content": "Sure — I can help with that.\n\nBefore I search, I need a few preferences since booking requires them:\n\n1. Which Chicago airport do you want to depart from?\n   - ORD (O’Hare)\n   - MDW (Midway)\n\n2. Which London airport do you prefer?\n   - LHR (Heathrow)\n   - LGW (Gatwick)\n   - LCY (London City)\n\n3. Cabin class:\n   - economy\n   - business\n   - first\n\n4. Seat preference:\n   - window / middle / aisle\n\n5. Meal preference:\n   - standard / vegetarian / vegan / kosher / halal / gluten_free\n\n6. Any add-ons?\n   - Wi‑Fi: yes/no\n   - Extra legroom: yes/no\n   - Travel insurance: yes/no\n   - Extra checked bags beyond free allowance: number\n\n7. Payment method:\n   - credit_card\n   - points\n   - points_plus_cash\n\nIf you want, I can also first show you available flight options once you tell me the airports and cabin class.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "ORD to LHR, economy class. I’d like a window seat and vegetarian meal, with no Wi‑Fi, no extra legroom, and no insurance; no extra checked bags. Credit card is fine, and my flight preferences are UA, afternoon departure, nonstop if possible."
+    },
+    {
+      "role": "assistant",
+      "content": "I found one matching option:\n\n- UA300 — ORD → LHR\n- Thu, Jun 25\n- Departs 1:15 PM\n- Arrives 7:02 PM\n- Nonstop\n- Economy: $820\n\nYour requested booking details:\n- Cabin: economy\n- Seat: window\n- Meal: vegetarian\n- Wi‑Fi: no\n- Extra legroom: no\n- Insurance: no\n- Extra checked bags: 0\n- Payment: credit card\n\nIf you want, I can book UA300 now.",
       "tool_calls": [
         {
           "name": "search_flights",
@@ -18,41 +27,25 @@
             "origin": "ORD",
             "destination": "LHR",
             "date": "2026-06-25",
-            "airline": "",
-            "time_range": "morning",
-            "max_stops": 1,
+            "airline": "UA",
+            "time_range": "afternoon",
+            "max_stops": 0,
             "max_price": -1
           },
           "result": {
             "flights": [
               {
-                "flight_id": "DL300",
-                "airline_code": "DL",
-                "origin": "ORD",
-                "destination": "LHR",
-                "departure_time": "2026-06-25T09:30:00",
-                "arrival_time": "2026-06-25T15:15:00",
-                "duration_minutes": 345,
-                "stops": 0,
-                "cabin_prices": {
-                  "economy": 850,
-                  "business": 2125
-                },
-                "status": "scheduled",
-                "route_type": "international"
-              },
-              {
-                "flight_id": "UA302",
+                "flight_id": "UA300",
                 "airline_code": "UA",
                 "origin": "ORD",
                 "destination": "LHR",
-                "departure_time": "2026-06-25T09:45:00",
-                "arrival_time": "2026-06-25T14:52:00",
-                "duration_minutes": 307,
-                "stops": 1,
+                "departure_time": "2026-06-25T13:15:00",
+                "arrival_time": "2026-06-25T19:02:00",
+                "duration_minutes": 347,
+                "stops": 0,
                 "cabin_prices": {
-                  "economy": 460,
-                  "business": 1150
+                  "economy": 820,
+                  "business": 2050
                 },
                 "status": "scheduled",
                 "route_type": "international"
@@ -64,11 +57,11 @@
     },
     {
       "role": "user",
-      "content": "I\u2019m Liam Johnson. I\u2019m looking for economy, preferably on United in the afternoon and nonstop if possible.\n\nBetween these two, I\u2019d lean toward United, but this UA302 departs in the morning and has a stop, and the Delta nonstop is over my $800 budget. Are there any United afternoon options within $800, and can you explain what I\u2019d be trading off (price vs. stops vs. time of day)?"
+      "content": "That nonstop option is over my $800 budget, so I can’t take it. What alternatives do you have within $800, and can you explain what each option trades off?"
     },
     {
       "role": "assistant",
-      "content": "I found one United option that matches your preferences better:\n\n**UA301 (United)**  \n- Cabin: Economy from **$480**  \n- Depart: **15:30** (ORD) \u2013 afternoon  \n- Arrive: **19:40** (LHR)  \n- Duration: **4h 10m** (per system; likely reflects time-zone handling, but we\u2019ll go with the quoted duration)  \n- Stops: **1 stop**  \n- Status: Scheduled  \n\nSo your main choices now are:\n\n1) **UA301 \u2013 United, afternoon, 1 stop, $480 (economy)**  \n2) **UA302 \u2013 United, morning, 1 stop, $460 (economy)**  \n3) **DL300 \u2013 Delta, morning, nonstop, $850 (economy, over budget)**  \n\n### Trade-offs for you (Liam Johnson)\n\n**1) Price**\n- UA302: **$460** (cheapest)  \n- UA301: **$480** (only $20 more than UA302)  \n- DL300: **$850** (about **$370\u2013$390 more** than the United options and above your $800 cap)\n\nGiven your $800 budget and United preference, **UA301 and UA302 are both comfortably within budget**; Delta is not.\n\n**2) Time of day**\n- UA302: Morning departure (**09:45**) \u2013 you said you prefer **afternoon**, so this is less ideal.\n- UA301: Afternoon departure (**15:30**) \u2013 matches your stated preference.\n- DL300: Morning departure (**09:30**).\n\nSo **UA301 best matches your time-of-day preference**.\n\n**3) Stops vs. nonstop**\n- UA301: 1 stop  \n- UA302: 1 stop  \n- DL300: Nonstop  \n\nTo get **nonstop**, you\u2019d need to:\n- Switch to **Delta**, and  \n- Go **over your budget** by about $50 (your cap is $800; Delta is $850).\n\nIf you want to stay on **United and under $800**, you\u2019re effectively choosing between **UA301 (afternoon)** and **UA302 (morning)**, both with 1 stop.\n\n**4) Overall recommendation based on what you said**\n- You prefer **United**, **economy**, **afternoon**, and **under $800**.  \n- That points very clearly to **UA301** as the best fit:\n  - United \u2714  \n  - Economy \u2714  \n  - Afternoon \u2714  \n  - Under $800 \u2714  \n  - Same 1-stop trade-off as UA302, but at a better time of day for only $20 more.\n\n---\n\nIf you\u2019d like to book **UA301 in economy**, I can do that now. I just need:\n\n1) **Seat type**: window, aisle, or middle  \n2) **Meal preference**: standard, vegetarian, vegan, kosher, halal, or gluten_free  \n3) Add-ons (yes/no for each):  \n   - In\u2011flight Wi\u2011Fi  \n   - Extra\u2011legroom seat  \n   - Travel insurance  \n4) **Extra checked bags**: how many beyond the free allowance (0, 1, 2, etc.)  \n5) **Payment method**: credit_card, points, or points_plus_cash  \n\nYou\u2019re already set up as **user_002**, so once you confirm these, I\u2019ll place the booking.",
+      "content": "Here are the options I found within your $800 budget for ORD → LHR on June 25:\n\n1. UA302 — $460\n   - United\n   - Departs 9:45 AM\n   - 1 stop\n   - Economy\n\n2. UA301 — $480\n   - United\n   - Departs 3:30 PM\n   - 1 stop\n   - Economy\n\n3. AA300 — $520\n   - American\n   - Departs 6:45 PM\n   - 1 stop\n   - Economy\n\nTrade-offs for each:\n\n- UA302 ($460):\n  - Cheapest option\n  - Keeps your airline preference with United\n  - Trade-off: morning departure instead of afternoon, and not nonstop\n\n- UA301 ($480):\n  - Still United\n  - Keeps your preferred afternoon departure\n  - Trade-off: has 1 stop instead of nonstop\n  - Best match to your preferences while staying under budget\n\n- AA300 ($520):\n  - Within budget\n  - Evening departure\n  - Trade-off: different airline and 1 stop\n\nWhat changed versus the original nonstop:\n- To get under $800, the main compromise is giving up nonstop service.\n- If you want to keep United and afternoon departure, UA301 is the closest fit.\n- If lowest price matters most, UA302 is best.\n\nIf you'd like, I can book UA301, UA302, or AA300 with your saved preferences:\n- economy\n- window seat\n- vegetarian meal\n- no Wi‑Fi\n- no extra legroom\n- no insurance\n- 0 extra checked bags\n- credit card",
       "tool_calls": [
         {
           "name": "search_flights",
@@ -101,16 +94,160 @@
               }
             ]
           }
+        },
+        {
+          "name": "search_flights",
+          "arguments": {
+            "origin": "ORD",
+            "destination": "LHR",
+            "date": "2026-06-25",
+            "airline": "UA",
+            "time_range": "morning",
+            "max_stops": 1,
+            "max_price": 800
+          },
+          "result": {
+            "flights": [
+              {
+                "flight_id": "UA302",
+                "airline_code": "UA",
+                "origin": "ORD",
+                "destination": "LHR",
+                "departure_time": "2026-06-25T09:45:00",
+                "arrival_time": "2026-06-25T14:52:00",
+                "duration_minutes": 307,
+                "stops": 1,
+                "cabin_prices": {
+                  "economy": 460,
+                  "business": 1150
+                },
+                "status": "scheduled",
+                "route_type": "international"
+              }
+            ]
+          }
+        },
+        {
+          "name": "search_flights",
+          "arguments": {
+            "origin": "ORD",
+            "destination": "LHR",
+            "date": "2026-06-25",
+            "airline": "UA",
+            "time_range": "evening",
+            "max_stops": 1,
+            "max_price": 800
+          },
+          "result": {
+            "flights": [],
+            "message": "No flights found matching your criteria."
+          }
+        },
+        {
+          "name": "search_flights",
+          "arguments": {
+            "origin": "ORD",
+            "destination": "LHR",
+            "date": "2026-06-25",
+            "airline": "",
+            "time_range": "afternoon",
+            "max_stops": 1,
+            "max_price": 800
+          },
+          "result": {
+            "flights": [
+              {
+                "flight_id": "UA301",
+                "airline_code": "UA",
+                "origin": "ORD",
+                "destination": "LHR",
+                "departure_time": "2026-06-25T15:30:00",
+                "arrival_time": "2026-06-25T19:40:00",
+                "duration_minutes": 250,
+                "stops": 1,
+                "cabin_prices": {
+                  "economy": 480,
+                  "business": 1200
+                },
+                "status": "scheduled",
+                "route_type": "international"
+              }
+            ]
+          }
+        },
+        {
+          "name": "search_flights",
+          "arguments": {
+            "origin": "ORD",
+            "destination": "LHR",
+            "date": "2026-06-25",
+            "airline": "",
+            "time_range": "morning",
+            "max_stops": 1,
+            "max_price": 800
+          },
+          "result": {
+            "flights": [
+              {
+                "flight_id": "UA302",
+                "airline_code": "UA",
+                "origin": "ORD",
+                "destination": "LHR",
+                "departure_time": "2026-06-25T09:45:00",
+                "arrival_time": "2026-06-25T14:52:00",
+                "duration_minutes": 307,
+                "stops": 1,
+                "cabin_prices": {
+                  "economy": 460,
+                  "business": 1150
+                },
+                "status": "scheduled",
+                "route_type": "international"
+              }
+            ]
+          }
+        },
+        {
+          "name": "search_flights",
+          "arguments": {
+            "origin": "ORD",
+            "destination": "LHR",
+            "date": "2026-06-25",
+            "airline": "",
+            "time_range": "evening",
+            "max_stops": 1,
+            "max_price": 800
+          },
+          "result": {
+            "flights": [
+              {
+                "flight_id": "AA300",
+                "airline_code": "AA",
+                "origin": "ORD",
+                "destination": "LHR",
+                "departure_time": "2026-06-25T18:45:00",
+                "arrival_time": "2026-06-25T23:38:00",
+                "duration_minutes": 293,
+                "stops": 1,
+                "cabin_prices": {
+                  "economy": 520,
+                  "business": 1300
+                },
+                "status": "scheduled",
+                "route_type": "international"
+              }
+            ]
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "UA301 in economy sounds good\u2014let\u2019s go with that.\n\nHere are my details:\n1) Seat type: window  \n2) Meal preference: vegetarian  \n3) Add-ons:  \n   - In\u2011flight Wi\u2011Fi: no  \n   - Extra\u2011legroom seat: no  \n   - Travel insurance: no  \n4) Extra checked bags: 0 beyond the free allowance  \n5) Payment method: credit_card"
+      "content": "UA301 sounds like the best fit since it keeps United and the afternoon departure while staying under my $800 budget. Please book that one with economy, a window seat, vegetarian meal, and no Wi‑Fi, extra legroom, or insurance."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set, Liam.\n\nI\u2019ve booked **UA301 (United) \u2013 ORD \u2192 LHR** for **June 25** with the following details:\n\n- **Booking ID:** BK-0001  \n- **Cabin:** Economy  \n- **Seat:** Window  \n- **Meal:** Vegetarian  \n- **Add-ons:**  \n  - In\u2011flight Wi\u2011Fi: No  \n  - Extra\u2011legroom seat: No  \n  - Travel insurance: No  \n- **Extra checked bags:** 0 beyond free allowance  \n- **Price charged to credit card:** **$480**  \n- **Status:** Confirmed  \n\nWould you like me to also look at **hotel options in London** or a **return flight** back to Chicago?",
+      "content": "Your flight is booked.\n\nBooking details:\n- Booking ID: BK-0001\n- Flight: UA301\n- Route: ORD → LHR\n- Date: June 25, 2026\n- Cabin: Economy\n- Seat: Window\n- Meal: Vegetarian\n- Wi‑Fi: No\n- Extra legroom: No\n- Insurance: No\n- Extra checked bags: 0\n- Total charged: $480\n- Payment method: Credit card\n\nIf you want, I can also help with a hotel or car rental in London.",
       "tool_calls": [
         {
           "name": "create_booking",
@@ -120,7 +257,7 @@
             "cabin_class": "economy",
             "seat_type": "window",
             "payment_method": "credit_card",
-            "cash_amount": 480,
+            "cash_amount": 0,
             "points_used": 0,
             "meal_preference": "vegetarian",
             "add_wifi": false,
@@ -141,7 +278,7 @@
     },
     {
       "role": "user",
-      "content": "Everything on the booking looks correct, thanks.\n\nNo need for hotel or a return flight right now\u2014I\u2019m all set.  \n[TASK_DONE]"
+      "content": "That looks good, thanks for confirming the details. No hotel or car needed. [TASK_DONE]"
     }
   ]
 }

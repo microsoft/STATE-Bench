@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I'm resuming my cart from earlier. Can you confirm what's in there?"
+      "content": "Hi — I'm resuming my cart from earlier. Can you confirm what's in there?"
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what\u2019s currently in your cart:\n\n1. SlimBook Air 13  \n   - Quantity: 1  \n   - Gift wrap: No  \n   - Price: $849  \n   - Line total: $849  \n\n2. SoundMax Wireless Headphones  \n   - Quantity: 1  \n   - Gift wrap: No  \n   - Price: $149  \n   - Line total: $149  \n\nCart summary:\n- Subtotal: $998  \n- Discounts: $0 (no promo codes applied yet)  \n- Gift wrap: $0  \n- Shipping: Not selected yet  \n- Order total (before shipping): $998  \n\nTell me what you\u2019d like to do next: adjust quantities, remove anything, add items, or apply a promo code if you have one.",
+      "content": "Your cart currently has:\n\n- SlimBook Air 13 — qty 1 — $849\n- SoundMax Wireless Headphones — qty 1 — $149\n\nSummary:\n- Subtotal: $998\n- Discounts: $0\n- Gift wrap: $0\n- Shipping: not selected\n- Total: $998\n\nNo promo code is currently applied. If you want, I can also check whether you have any eligible discounts or promotions.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -59,25 +59,16 @@
     },
     {
       "role": "assistant",
-      "content": "Got it.  \n\nIf you\u2019d like, I can:\n- Check for any current promotions that might apply\n- Help you pick a shipping option\n- Add accessories for your laptop or headphones\n- Or update/remove items in your cart\n\nWhat would you like to do before checking out?",
+      "content": "Sure — if you want, I can:\n\n- check active promo codes\n- see whether your account qualifies for any discounts\n- update quantities or remove items\n- add gift wrap\n- help compare these items before checkout\n\nJust tell me what you want to do.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "What\u2019s my total right now, including everything in the cart (before shipping)?"
+      "content": "what's my total?"
     },
     {
       "role": "assistant",
-      "content": "Your current total, including everything in the cart but **before shipping**, is:\n\n**$998.00**  \n\n- Subtotal: $998  \n- Discounts: $0  \n- Gift wrap: $0  \n- Shipping: not selected yet (so $0 for now)\n\nIf you want, I can look for promotions that might reduce that total.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Wait \u2014 I thought it was cheaper before."
-    },
-    {
-      "role": "assistant",
-      "content": "Right now your cart total before shipping is still **$998**. I don\u2019t see any discounts or promo codes applied at the moment.\n\nA couple of reasons it might have looked cheaper before:\n- You may have previously had a promo code applied that has since expired or been removed.\n- There might have been a temporary sale price on one of the items that has ended.\n- If you used loyalty points earlier, those redemptions aren\u2019t currently applied.\n\nI don\u2019t have a log of your past cart totals, but I can try to bring the price back down by:\n- Checking current promotions that might apply to your items\n- Seeing if you\u2019re eligible to redeem loyalty points\n\nDo you want me to:\n1) Check active promos for electronics,  \n2) Look up your account to see your loyalty points, or  \n3) Both?",
+      "content": "Your current total is $998.\n\nBreakdown:\n- Subtotal: $998\n- Discounts: $0\n- Gift wrap: $0\n- Shipping: $0 not selected yet\n\nIf you want, I can also check for any promo codes or loyalty savings.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -122,16 +113,16 @@
     },
     {
       "role": "user",
-      "content": "I don\u2019t want to use points or promos right now.  \n\nFine, let\u2019s just proceed with the cart as it is."
+      "content": "wait — I thought it was cheaper before"
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set to proceed with your current cart as-is.\n\nHere\u2019s the final pre-shipping total you\u2019ll be checking out with:\n- Items total: **$998**\n- Discounts: **$0**\n- Gift wrap: **$0**\n- Total before shipping and tax: **$998**\n\nNext step: would you like to:\n- See and choose a **shipping option** (standard/express/next-day), or  \n- Go straight to **checkout** with the default standard shipping?",
+      "content": "Right now the cart total is still $998, with no promo code, loyalty discount, gift wrap, or shipping applied.\n\nIf it looked cheaper earlier, likely reasons are:\n- a promo code was applied before and isn’t now\n- loyalty points were redeemed earlier\n- one item was previously removed or had a lower quantity\n- a sale price changed since then\n\nIf you want, I can check:\n1. your account for possible discounts, and\n2. current active promotions\n\nand tell you what savings might apply.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "I don\u2019t need to pick shipping right now \u2014 skip it, I\u2019ll handle it at checkout.  \n\n[TASK_DONE]"
+      "content": "ok, thanks. [TASK_DONE]"
     }
   ]
 }

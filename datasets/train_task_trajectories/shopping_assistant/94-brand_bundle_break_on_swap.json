@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I need to swap the dock in my cart for a webcam instead. Can you handle that?"
+      "content": "Hi — I need to swap the dock in my cart for a webcam instead. Can you handle that?"
     },
     {
       "role": "assistant",
-      "content": "Yes, I can handle that.\n\nRight now your cart has:\n- ProBook Laptop 13-inch (SP-1002)\n- ProBook USB-C Dock (SP-2006) \u2190 this is the one to remove\n\nTo swap it for a webcam, I need two things from you:\n1. Do you want any particular type of webcam? (e.g., 1080p vs 4K, built\u2011in mic, privacy shutter, budget range)\n2. Once we pick a webcam, is it okay to fully remove the dock, or did you want to keep a dock and just add a webcam?\n\nIf you\u2019d like, you can just say something like:\n- \u201c1080p, under $80, with a mic\u201d  \nand I\u2019ll:\n1) remove the ProBook USB-C Dock from your cart, and  \n2) suggest 2\u20133 webcam options and add the one you choose.",
+      "content": "Absolutely — I can swap out the dock for a webcam.\n\nI see this in your cart now:\n- ProBook Laptop 13-inch\n- ProBook USB-C Dock\n\nBefore I make the change, which webcam would you like instead?\n\nIf you want, I can:\n- find a few webcam options for you, or\n- swap in a specific one if you already know the model.",
       "tool_calls": [
         {
           "name": "get_cart",
@@ -55,34 +55,20 @@
     },
     {
       "role": "user",
-      "content": "I don\u2019t need the dock anymore, so please fully remove it.  \n\nFor the webcam, I don\u2019t have strong preferences on specs \u2014 no preference, use a good default option that works well for video classes."
+      "content": "I don’t have a specific model in mind — just swap in a webcam, please. No preference, use the default."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve taken care of the swap.\n\nChanges made:\n- Removed: ProBook USB-C Dock (SP-2006)\n- Added: PixelShot Webcam 1080p (SP-2005) \u2014 $79, 1080p, well\u2011rated and suitable for video classes\n\nYour cart now has:\n- ProBook Laptop 13-inch \u2014 $999  \n- PixelShot Webcam 1080p \u2014 $79  \n\nCurrent total: $1,078 (before tax/shipping).\n\nIf you\u2019d like a higher-end 4K option or something with a privacy shutter or better mic, I can suggest an alternative as well.",
+      "content": "Done — I removed the dock and added:\n- PixelShot Webcam 1080p — $79\n\nYour cart total is now $1,078 before shipping.\n\nIf you want, I can also check whether there’s a promo code that might apply.",
       "tool_calls": [
-        {
-          "name": "remove_from_cart",
-          "arguments": {
-            "customer_id": "shop_004",
-            "product_id": "SP-2006"
-          },
-          "result": {
-            "status": "removed",
-            "cart_id": "CART-shop_004",
-            "product_id": "SP-2006",
-            "cart_subtotal": 999,
-            "cart_total": 999
-          }
-        },
         {
           "name": "search_products",
           "arguments": {
             "query": "webcam",
             "category": "electronics",
-            "min_price": 20,
-            "max_price": 200,
-            "min_rating": 4,
+            "min_price": 0,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -104,30 +90,19 @@
           }
         },
         {
-          "name": "get_product_details",
+          "name": "remove_from_cart",
           "arguments": {
-            "product_id": "SP-2005"
+            "customer_id": "shop_004",
+            "product_id": "SP-2006",
+            "variant_id": ""
           },
           "result": {
-            "product_id": "SP-2005",
-            "name": "PixelShot Webcam 1080p",
-            "category": "electronics",
-            "subcategory": "webcam",
-            "brand": "PixelShot",
-            "price": 79,
-            "rating": 4.1,
-            "review_count": 680,
-            "description": "1080p webcam for video calls.",
-            "specs": {},
-            "compatible_with": [],
-            "in_stock": true,
-            "stock_quantity": 50,
-            "shipping_days": 3,
-            "gift_wrap_available": true,
-            "backorder_available": false,
-            "previous_price": null,
-            "variants": null,
-            "shipping_estimate": "3 business days (standard)"
+            "status": "removed",
+            "cart_id": "CART-shop_004",
+            "product_id": "SP-2006",
+            "variant_id": null,
+            "cart_subtotal": 999,
+            "cart_total": 999
           }
         },
         {
@@ -156,7 +131,7 @@
     },
     {
       "role": "user",
-      "content": "Sounds good \u2014 $1078 it is.  \n\n[TASK_DONE]"
+      "content": "sounds good — $1078 it is. [TASK_DONE]"
     }
   ]
 }

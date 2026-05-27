@@ -10,16 +10,16 @@
     },
     {
       "role": "assistant",
-      "content": "I can help with that. Let\u2019s first figure out what you already have booked and what you want to change.\n\n1) To see your current Paris trip details, I need to confirm:\n- Rough dates of the trip\n- Whether you booked flights, hotel, and/or car through us\n\n2) Then tell me what you\u2019d like to change:\n- Flights: change dates/times, airports, cabin, seats, add bags, etc.\n- Hotel: change dates, hotel, room type, or cancel\n- Car rental: change dates, car type, or cancel\n\nFor now, I\u2019ll pull up all your existing reservations so we know what\u2019s on file. Once you confirm, I can start modifying specific items.",
+      "content": "Absolutely — I can help with your Paris trip changes.\n\nI’m assisting your account as **user_003**. To get started, I can look up your current trip reservations and then help with things like:\n\n- **Flight changes**\n- **Flight cancellation**\n- **Seat / meal / baggage updates**\n- **Hotel changes or cancellation**\n- **Car rental changes or cancellation**\n- **Checking flight status**\n\nIf you want, I can first pull up **all your current reservations** for the Paris trip and identify what’s booked.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "I have a flight, hotel, and car booked for Paris next week, all through you.  \n\nThe dates are next week for about five days in Paris\u2014can you pull up everything tied to my profile and then I\u2019ll tell you what I need to change?"
+      "content": "Yes, please. I have a flight, hotel, and car booked for Paris next week."
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s what you currently have for your Paris trip next week:\n\n1) Flight\n- Booking ID: BK-MS07  \n- Airline/Flight: AA100  \n- Route: JFK \u2192 CDG (Paris)  \n- Date/Time: Departs 2026-06-20 at 17:30  \n- Cabin: Business  \n- Seat: Aisle  \n- Extras: Wi\u2011Fi, extra legroom, travel insurance  \n- Status: Confirmed  \n\n2) Hotel\n- Reservation ID: HR-0107  \n- Hotel: CDG Inn (near Paris CDG)  \n- Dates: Check-in 2026-06-20, check-out 2026-06-25 (5 nights)  \n- Room type: Standard  \n- Status: Confirmed  \n\n3) Car rental\n- Rental ID: CR-0102  \n- Company: Enterprise  \n- Location: CDG (pickup and dropoff)  \n- Dates: 2026-06-20 to 2026-06-25  \n- Car class: Midsize  \n- Status: Confirmed  \n\nTell me what you\u2019d like to change, for example:\n- Flight: different dates, different time, different airport (e.g., ORY instead of CDG), cabin, or cancel?  \n- Hotel: shift dates, change hotel/room type, or cancel?  \n- Car: adjust pickup/dropoff dates or car type, or cancel?\n\nOnce you specify what you want to adjust, I\u2019ll walk through the options and any fees before making changes.",
+      "content": "Here’s your Paris trip currently on file for **next week**:\n\n### Flight\n- **Booking ID:** BK-MS07\n- **Flight:** **AA100**\n- **Route:** **JFK → CDG**\n- **Departure:** **2026-06-20 at 5:30 PM**\n- **Status:** Confirmed\n- **Cabin:** Business\n- **Seat:** Aisle\n- **Meal:** Standard\n- **Extras:** Wi‑Fi, extra legroom, insurance\n- **Paid:** **$1,400**\n\n### Hotel\n- **Reservation ID:** HR-0107\n- **Hotel:** **CDG Inn**\n- **Check-in:** **2026-06-20**\n- **Check-out:** **2026-06-25**\n- **Room:** Standard\n- **Total:** **$1,000**\n- **Status:** Confirmed\n\n### Car rental\n- **Rental ID:** CR-0102\n- **Company:** Enterprise\n- **Pickup/Dropoff:** **CDG**\n- **Dates:** **2026-06-20 to 2026-06-25**\n- **Car class:** Midsize\n- **Total:** **$325**\n- **Insurance included:** No\n- **Status:** Confirmed\n\nTell me what you want to change, and I can help with any of these:\n- change your **flight**\n- update **seat / meal / bags**\n- **cancel** flight, hotel, or car\n- look for a **different hotel**\n- look for a **different car rental**\n- check your **flight status**",
       "tool_calls": [
         {
           "name": "get_user_reservations",
@@ -122,117 +122,92 @@
     },
     {
       "role": "user",
-      "content": "Well, my friend offered to drive me there, so I won\u2019t need the flight anymore. But I\u2019m not sure about the car yet."
+      "content": "Well, my friend offered to drive me there, so I won't need the flight anymore. But I'm not sure about the car."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set to skip the flight if you\u2019d like\u2014because you added travel insurance, your ticket is fully refundable.\n\nHere\u2019s what I\u2019m seeing for your flight BK-MS07 (JFK \u2192 CDG, AA100):\n- Cancellation fee: $0  \n- Refund amount: $1,400 back to your original payment method  \n- Reason: Covered by your travel insurance  \n\nYour hotel (HR-0107) and car (CR-0102) are still confirmed and unchanged.\n\nBefore I actually cancel the flight, please confirm:\n- Do you want me to go ahead and cancel flight booking BK-MS07 and process the $1,400 refund?\n\nAnd about the car:\n- Do you think you\u2019ll still want a car in Paris (for day trips, etc.), or are you considering canceling or shortening those dates too?  \nIf you tell me your preference, I can pull the car/hotel cancellation rules next and show you the options.",
-      "tool_calls": [
-        {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "cancel",
-            "cabin_class": "business",
-            "loyalty_tier": "basic",
-            "route_type": "international"
-          },
-          "result": {
-            "topic": "cancellation",
-            "rules": {
-              "free_cancellation_window": "Full refund within 24 hours (domestic) or 48 hours (international) of booking",
-              "basic_economy": "Not cancellable after free window (unless insured)",
-              "economy_domestic": "Cancellation fee: max($50, 15% of ticket price)",
-              "economy_international": "Cancellation fee: max($75, 20% of ticket price)",
-              "business_domestic": "Cancellation fee: 5% of ticket price",
-              "business_international": "Cancellation fee: 8% of ticket price",
-              "first": "Free cancellation",
-              "insurance": "Travel insurance covers cancellation regardless of cabin class",
-              "route_type_matters": "Fees differ by route type (domestic vs international). Check flight route_type."
-            },
-            "applicable_cabin_class": "business",
-            "applicable_route_type": "international"
-          }
-        },
-        {
-          "name": "cancel_booking",
-          "arguments": {
-            "booking_id": "BK-MS07",
-            "confirm": false
-          },
-          "result": {
-            "status": "preview",
-            "booking_id": "BK-MS07",
-            "cancellation_fee": 0,
-            "refund_amount": 1400,
-            "reason": "Travel insurance covers cancellation"
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Yes, please go ahead and cancel flight booking BK-MS07 and process the $1,400 refund.  \n\nFor the car, actually cancel that too \u2014 we\u2019ll use my friend\u2019s car instead."
-    },
-    {
-      "role": "assistant",
-      "content": "Here\u2019s what I\u2019ve done and where things stand now:\n\n1) Flight \u2013 BK-MS07 (JFK \u2192 CDG, AA100)\n- Status: Cancelled  \n- Refund: $1,400 to your original payment method  \n- Cancellation fee: $0  \n- Reason: Covered by your travel insurance  \n\n2) Car rental \u2013 CR-0102 (Enterprise, CDG)\n- Status: Cancelled  \n- Refund: $325  \n- Cancellation fee: $0  \n- Reason: Free cancellation (more than 24 hours before pickup)  \n\n3) Hotel \u2013 HR-0107 (CDG Inn)\n- Status: Still confirmed  \n- Dates: 2026-06-20 to 2026-06-25  \n- Total: $1,000  \n\nYou\u2019ll still have your 5-night hotel stay near Paris, and you\u2019ll be getting a total of $1,725 back in refunds (flight + car).\n\nDo you want to:\n- Keep the hotel as is,\n- Change the hotel dates (shorten/shift the stay), or\n- Cancel the hotel as well?",
-      "tool_calls": [
-        {
-          "name": "cancel_booking",
-          "arguments": {
-            "booking_id": "BK-MS07",
-            "confirm": true
-          },
-          "result": {
-            "status": "cancelled",
-            "booking_id": "BK-MS07",
-            "refund_amount": 1400,
-            "cancellation_fee": 0,
-            "reason": "Travel insurance covers cancellation"
-          }
-        },
-        {
-          "name": "cancel_car_rental",
-          "arguments": {
-            "rental_id": "CR-0102",
-            "confirm": false
-          },
-          "result": {
-            "status": "preview",
-            "rental_id": "CR-0102",
-            "cancellation_fee": 0,
-            "refund_amount": 325,
-            "reason": "Free cancellation (24+ hours before pickup)."
-          }
-        },
-        {
-          "name": "cancel_car_rental",
-          "arguments": {
-            "rental_id": "CR-0102",
-            "confirm": true
-          },
-          "result": {
-            "status": "cancelled",
-            "rental_id": "CR-0102",
-            "cancellation_fee": 0,
-            "refund_amount": 325,
-            "reason": "Free cancellation (24+ hours before pickup)."
-          }
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": "Keep the hotel, I still need that.  \n\nCould you give me a quick summary of everything now\u2014what\u2019s canceled with refund amounts, and confirm that the hotel HR-0107 is still active with the same dates and cost?"
-    },
-    {
-      "role": "assistant",
-      "content": "Here\u2019s your updated Paris trip summary:\n\n1) Flight \u2013 BK-MS07 (JFK \u2192 CDG, AA100)  \n- Status: Cancelled  \n- Refund amount: $1,400  \n- Cancellation fee: $0  \n- Notes: Refunded to your original payment method; covered by travel insurance.\n\n2) Car rental \u2013 CR-0102 (Enterprise, CDG)  \n- Status: Cancelled  \n- Refund amount: $325  \n- Cancellation fee: $0  \n- Notes: Free cancellation (more than 24 hours before pickup).\n\n3) Hotel \u2013 HR-0107 (CDG Inn, near CDG/Paris)  \n- Status: Confirmed / Active  \n- Check-in: 2026-06-20  \n- Check-out: 2026-06-25  \n- Room type: Standard  \n- Total cost: $1,000  \n- No changes have been made to this reservation.\n\nNet refunds you\u2019re receiving:  \n- Total: $1,725 ($1,400 flight + $325 car)\n\nIf you\u2019d like, I can also check or adjust the hotel\u2019s cancellation/change rules in case your plans shift again.",
+      "content": "Understood — we can take care of the **flight cancellation** first, and leave the **car rental** alone until you decide.\n\nBefore I cancel the flight, I should preview the cancellation terms for your booking **BK-MS07** so you can see any fee/refund. After that, if you want, I can also preview the **car rental cancellation terms** for **CR-0102** so you can compare and decide.\n\nWould you like me to:\n1. **Preview flight cancellation terms only**, or\n2. **Preview both flight and car cancellation terms**?",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "That summary looks perfect, thank you\u2014that\u2019s exactly what I needed.  \n\nI\u2019ll keep the hotel as is, and with the flight and car both canceled and the refunds in place, I don\u2019t need any other changes right now. [TASK_DONE]"
+      "content": "Preview both, please. I think I may end up canceling the car too, but I want to see the terms first."
+    },
+    {
+      "role": "assistant",
+      "content": "Here are the cancellation previews:\n\n### Flight cancellation — BK-MS07\n- **Cancellation fee:** **$0**\n- **Refund:** **$1,400**\n- **Reason:** Travel insurance covers cancellation\n\n### Car rental cancellation — CR-0102\n- **Cancellation fee:** **$0**\n- **Refund:** **$325**\n- **Reason:** Free cancellation since it’s more than 24 hours before pickup\n\nIf you want, I can now:\n- **cancel just the flight**\n- **cancel both the flight and car rental**\n- leave both as-is for now",
+      "tool_calls": [
+        {
+          "name": "cancel_booking",
+          "arguments": {
+            "booking_id": "BK-MS07",
+            "confirm": false
+          },
+          "result": {
+            "status": "preview",
+            "booking_id": "BK-MS07",
+            "cancellation_fee": 0,
+            "refund_amount": 1400,
+            "reason": "Travel insurance covers cancellation"
+          }
+        },
+        {
+          "name": "cancel_car_rental",
+          "arguments": {
+            "rental_id": "CR-0102",
+            "confirm": false
+          },
+          "result": {
+            "status": "preview",
+            "rental_id": "CR-0102",
+            "cancellation_fee": 0,
+            "refund_amount": 325,
+            "reason": "Free cancellation (24+ hours before pickup)."
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Actually cancel that too — we'll use my friend's car. And keep the hotel, I still need that."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I canceled the **flight** and **car rental**, and your **hotel remains confirmed**.\n\n### Cancelled\n**Flight — BK-MS07**\n- Status: Cancelled\n- Refund: **$1,400**\n- Cancellation fee: **$0**\n\n**Car rental — CR-0102**\n- Status: Cancelled\n- Refund: **$325**\n- Cancellation fee: **$0**\n\n### Still active\n**Hotel — HR-0107**\n- Status: Confirmed\n- Stay: **2026-06-20 to 2026-06-25**\n- Hotel: **CDG Inn**\n\nYour total expected refunds are **$1,725**.\n\nIf you want, I can also help you:\n- review the **hotel cancellation policy**\n- look for a **different hotel**\n- help plan anything else for your Paris stay",
+      "tool_calls": [
+        {
+          "name": "cancel_booking",
+          "arguments": {
+            "booking_id": "BK-MS07",
+            "confirm": true
+          },
+          "result": {
+            "status": "cancelled",
+            "booking_id": "BK-MS07",
+            "refund_amount": 1400,
+            "cancellation_fee": 0,
+            "reason": "Travel insurance covers cancellation"
+          }
+        },
+        {
+          "name": "cancel_car_rental",
+          "arguments": {
+            "rental_id": "CR-0102",
+            "confirm": true
+          },
+          "result": {
+            "status": "cancelled",
+            "rental_id": "CR-0102",
+            "cancellation_fee": 0,
+            "refund_amount": 325,
+            "reason": "Free cancellation (24+ hours before pickup)."
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks — can you give me a quick summary one more time, just confirming the flight and car are canceled and the hotel is still active? [TASK_DONE]"
     }
   ]
 }

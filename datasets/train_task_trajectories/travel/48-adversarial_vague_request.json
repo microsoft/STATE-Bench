@@ -10,7 +10,16 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve pulled up your trip, and here\u2019s what I see:\n\n- You have one active booking: **BK-A05**\n- Flight: **DL100** from **JFK \u2192 SFO**\n- Date/time: **2026-06-20 at 11:15** (local time)\n- Status: **Scheduled** (no delay or cancellation reported)\n- Cabin: **Business**\n- Seat: **Aisle**\n- Meal: **Kosher**\n- Wi\u2011Fi: **Yes**\n- Extra legroom: **Yes**\n- Insurance: **No**\n\nFrom the system\u2019s perspective, nothing is obviously wrong: the booking is confirmed and the flight is still scheduled as normal.\n\nTo actually fix the problem, I need to know what seems wrong from your side. For example:\n\n- Did you **expect a different date, time, or route**?\n- Is the **seat type, cabin, or meal** not what you wanted?\n- Did you **mean to add insurance** or checked bags?\n- Are you **seeing a different status** (e.g., cancelled/delayed) in an email or airline app?\n- Is there a **name mismatch, billing issue, or duplicate charge**?\n\nTell me what looks incorrect to you (and what you\u2019d like it changed to), and I can:\n\n- Change your flight (date/time/airline/route), or  \n- Adjust seat/meal/add\u2011ons, or  \n- Help cancel for a refund/credit if that\u2019s what you want.",
+      "content": "I can help. What seems to be wrong with your trip?\n\nIf you want, I can also look it up for you directly. I’d need to know whether the issue is with:\n- a flight\n- a hotel\n- a car rental\n\nOr I can review your current reservations and figure out what needs fixing.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "The dates don't work anymore."
+    },
+    {
+      "role": "assistant",
+      "content": "I found your current trip:\n\n- Booking: BK-A05\n- Flight: DL100\n- Route: JFK → SFO\n- Departure: 2026-06-20 11:15\n- Cabin: business\n\nI can help change it, but I need the new date you want.\n\nIf you already know it, send me:\n- new departure date\n- optionally preferred time of day: morning / afternoon / evening\n- whether nonstop only\n\nIf you’re not sure, I can search options for you.",
       "tool_calls": [
         {
           "name": "get_user_reservations",
@@ -58,39 +67,16 @@
             "departure_time": "2026-06-20T11:15:00",
             "route_type": "domestic"
           }
-        },
-        {
-          "name": "get_flight_status",
-          "arguments": {
-            "flight_id": "DL100"
-          },
-          "result": {
-            "flight_id": "DL100",
-            "status": "scheduled",
-            "origin": "JFK",
-            "destination": "SFO",
-            "scheduled_departure": "2026-06-20T11:15:00",
-            "scheduled_arrival": "2026-06-20T16:56:00"
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Yeah, the dates don\u2019t work for me anymore."
+      "content": "June 22 would work. Morning is better, and I’d prefer nonstop if possible."
     },
     {
       "role": "assistant",
-      "content": "We can change your flight, but I\u2019ll need a bit more detail so I don\u2019t move you to something worse.\n\nPlease tell me:\n\n1. **New travel date(s)** you\u2019d prefer  \n   - Exact date, or a range (e.g., \u201canytime June 22\u201324\u201d)  \n2. **Time of day preference**  \n   - Early morning / morning / afternoon / evening / red\u2011eye  \n3. Any constraints:\n   - **Nonstop only** or are **1-stop** flights okay?\n   - **Max price increase** you\u2019re willing to pay (if any)\n   - Any **airline preference** (you\u2019re currently on DL100)\n\nOnce you share that, I\u2019ll search for new JFK \u2192 SFO options and propose a few specific flights, then we can pick one and I\u2019ll process the change.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "June 22 would work.  \n\nI\u2019d prefer a morning flight if possible, and I\u2019d rather stay on Delta and keep it nonstop like my current one."
-    },
-    {
-      "role": "assistant",
-      "content": "Here\u2019s what I can do based on what you told me.\n\n**Your current flight**\n- Booking: **BK-A05**\n- Flight: **DL100**, JFK \u2192 SFO  \n- Date/time: **June 20, 11:15**  \n- Cabin: **Business**, nonstop\n\n**Good alternative that matches your preferences**\n- Flight: **DL101**, JFK \u2192 SFO  \n- Date: **June 22**  \n- Departure: **11:45 (morning)**  \n- Nonstop: **Yes**  \n- Cabin prices: Business is **$1050**\n\nYou originally paid **$1000** for business, so changing to DL101 in business would likely mean about a **$50 fare difference**.  \nPer the policy for **business class**, changes are **fee-free**, but **fare difference still applies**.\n\nBefore I actually change it, please confirm:\n\n1. Do you want to switch to **DL101 on June 22 in business class** and accept an estimated **$50 fare difference**?\n2. Is the reason for the change **personal** (not medical, bereavement, etc.)?\n\nIf you confirm, I\u2019ll proceed to update booking **BK-A05** to DL101 with:\n- Same seat type: **aisle**\n- Same meal: **kosher**\n- Wi\u2011Fi: **yes**\n- Extra legroom: **yes**\n- Insurance: **no**",
+      "content": "I found 2 nonstop morning options for June 22 from JFK to SFO.\n\n1. AA100\n- Departs 11:15\n- Arrives 16:58\n- Business: $785\n\n2. DL101\n- Departs 11:45\n- Arrives 17:20\n- Business: $1050\n\nYour current booking is in business class and you paid $1000. Since business changes are free, you’d only pay or receive any fare difference.\n\nEstimated difference:\n- AA100: about $215 less than your current fare\n- DL101: about $50 more than your current fare\n\nI can switch your booking and keep your current preferences:\n- aisle seat\n- kosher meal\n- Wi‑Fi: yes\n- extra legroom: yes\n- insurance: no\n\nReply with:\n- “Switch me to AA100”\nor\n- “Switch me to DL101”",
       "tool_calls": [
         {
           "name": "search_flights",
@@ -98,13 +84,29 @@
             "origin": "JFK",
             "destination": "SFO",
             "date": "2026-06-22",
-            "airline": "DL",
+            "airline": "",
             "time_range": "morning",
             "max_stops": 0,
             "max_price": -1
           },
           "result": {
             "flights": [
+              {
+                "flight_id": "AA100",
+                "airline_code": "AA",
+                "origin": "JFK",
+                "destination": "SFO",
+                "departure_time": "2026-06-22T11:15:00",
+                "arrival_time": "2026-06-22T16:58:00",
+                "duration_minutes": 343,
+                "stops": 0,
+                "cabin_prices": {
+                  "economy": 465,
+                  "business": 785
+                },
+                "status": "scheduled",
+                "route_type": "domestic"
+              },
               {
                 "flight_id": "DL101",
                 "airline_code": "DL",
@@ -137,8 +139,8 @@
             "rules": {
               "free_change_window": "Free changes within 24 hours (domestic) or 48 hours (international) of booking",
               "basic_economy": "Not changeable after free window",
-              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if \u22647 days. Fare difference also applies.",
-              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if \u22647 days. Fare difference also applies.",
+              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if ≤7 days. Fare difference also applies.",
+              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if ≤7 days. Fare difference also applies.",
               "economy_medical": "Medical changes: 50% discount on standard fee (requires change_reason='medical')",
               "economy_bereavement": "Bereavement changes: 75% discount on standard fee (requires change_reason='bereavement')",
               "jury_duty": "Jury duty: free change (change_reason='jury_duty')",
@@ -158,12 +160,25 @@
     },
     {
       "role": "user",
-      "content": "Yes, that works.\n\n1. Yes, please switch BK-A05 to **DL101 on June 22 in business class** and I accept the **~$50 fare difference**.  \n2. And yes, the reason is **personal**."
+      "content": "Switch me to DL101. Also, I think my loyalty tier is gold, not basic."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set\u2014I\u2019ve updated your trip.\n\n**Updated booking BK-A05**\n- Flight: **DL101** (Delta)  \n- Route: **JFK \u2192 SFO**  \n- Date: **June 22, 2026**  \n- Departure: **11:45** (scheduled arrival 17:20)  \n- Stops: **Nonstop**  \n- Cabin: **Business**\n\n**Preferences kept the same**\n- Seat: **Aisle**\n- Meal: **Kosher**\n- Wi\u2011Fi: **Yes**\n- Extra legroom: **Yes**\n- Insurance: **No**\n- Paid checked bags: **0**\n\n**Payment / price**\n- Original price: **$1000**\n- New price: **$1050**\n- **Change fee: $0** (business class allows free changes)\n- **Fare difference charged: $50**\n\nYour trip should now show the June 22 flight. If you want, I can also help add checked bags or adjust seat/meal preferences.",
+      "content": "Done — I changed your booking to DL101.\n\nUpdated trip:\n- Booking: BK-A05\n- Flight: DL101\n- Date: 2026-06-22\n- Route: JFK → SFO\n- Departure: 11:45\n- Cabin: business\n\nCost:\n- Change fee: $0\n- Fare difference: $50\n- New total paid: $1050\n\nAnd yes — I checked your profile, and your loyalty tier is Gold.",
       "tool_calls": [
+        {
+          "name": "get_user_details",
+          "arguments": {
+            "user_id": "user_001"
+          },
+          "result": {
+            "user_id": "user_001",
+            "name": "Emma Smith",
+            "email": "emma.smith@example.com",
+            "loyalty_tier": "gold",
+            "loyalty_points": 75000
+          }
+        },
         {
           "name": "update_booking",
           "arguments": {
@@ -203,7 +218,16 @@
     },
     {
       "role": "user",
-      "content": "That all looks correct now\u2014June 22, DL101, business, aisle seat, kosher meal, with Wi\u2011Fi and extra legroom, and no insurance, with a $50 fare difference.\n\nI think that fixes what I needed, thanks.  \n[TASK_DONE]"
+      "content": "Thanks. Just to confirm, the seat, meal, Wi‑Fi, extra legroom, and no insurance all stayed the same on the updated booking, right? If so, that works."
+    },
+    {
+      "role": "assistant",
+      "content": "Yes — all of those stayed the same:\n\n- Seat: aisle\n- Meal: kosher\n- Wi‑Fi: yes\n- Extra legroom: yes\n- Insurance: no\n\nYou’re all set.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "Great, thanks — that works. [TASK_DONE]"
     }
   ]
 }

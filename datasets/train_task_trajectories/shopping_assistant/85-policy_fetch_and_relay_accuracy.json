@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Quick question \u2014 what's your return policy? How long do I have after delivery and what's the refund process?"
+      "content": "Quick question — what's your return policy? How long do I have after delivery and what's the refund process?"
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s our return policy in a nutshell:\n\n- **Return window:** You have **30 days from the delivery date** to start a return.  \n- **Item condition:** Items must be **unused and in original packaging** (including tags, accessories, manuals, etc.).  \n- **Exclusions:** **Final-sale items** and **digital goods** are **not returnable**.  \n- **Refund method:** Once we receive and process your return, we issue a **refund to your original payment method** within **5 business days**.\n\nIf you tell me what you bought (or plan to buy), I can let you know if there are any item-specific exceptions.",
+      "content": "Our return policy is:\n\n- Return window: 30 days from the delivery date\n- Condition: item must be unused and in its original packaging\n- Refund timing: refunded to your original payment method within 5 business days after the return is received\n- Exclusions: final-sale items and digital goods can’t be returned\n\nSo in short: you have 30 days after delivery, and once the returned item is received and inspected, the refund is processed back to your original payment method within 5 business days.",
       "tool_calls": [
         {
           "name": "get_policies",
@@ -32,7 +32,7 @@
     },
     {
       "role": "user",
-      "content": "got it, that's helpful. Thanks.  \n\n[TASK_DONE]"
+      "content": "got it, that's helpful. Thanks. [TASK_DONE]"
     }
   ]
 }

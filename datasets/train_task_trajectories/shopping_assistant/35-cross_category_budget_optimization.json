@@ -6,20 +6,20 @@
     },
     {
       "role": "user",
-      "content": "I've got $500 total to spend \u2014 I need a laptop AND something for my desk setup. What can you put together for me?"
+      "content": "I've got $500 total to spend — I need a laptop AND something for my desk setup. What can you put together for me?"
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s one solid combo that fits under $500 and covers both needs:\n\n1) Laptop  \n- Product: ProBook Chromebook 11 (SP-1106)  \n- Category: Electronics \u2013 Laptop  \n- Price: $329  \n- Rating: 3.9 (530 reviews), in stock  \n- Use case: Good for web browsing, docs, streaming, email, light school/work tasks. Runs ChromeOS, so it\u2019s best if you mainly live in the browser (Google Docs, web apps, etc.) rather than needing heavy Windows/Mac software.\n\n2) Desk setup item  \n- Product: TaskDesk Organizer Tray (SP-3007)  \n- Category: Home office \u2013 Accessory  \n- Price: $49  \n- Rating: 4.2 (540 reviews), in stock  \n- Use case: Sits on your desk to keep pens, notepads, cables, and small items organized. Helps keep a small workspace tidy around the laptop.\n\nTotal so far:  \n- $329 (laptop) + $49 (desk organizer) = $378  \n- That leaves you with about $122 of your $500 budget unused, so we can still upgrade or add something else if you\u2019d like.\n\nBefore I add anything to your cart, a couple of quick questions so I can refine this:\n\n1) What will you mainly use the laptop for?  \n   - Options: basic browsing/streaming, school/college work, office work, light coding, photo/video editing, gaming, something else?  \n2) Do you need Windows specifically, or is a Chromebook okay?  \n3) For your desk setup, what would help you most?  \n   - Options: monitor stand, keyboard/mouse, laptop stand, desk lamp, more storage/organizing, or something ergonomic (wrist rest, etc.)  \n4) Do you want me to stay strictly under $500 including tax/shipping, or is $500 just a rough target for products only?  \n\nAnswer those and I can either:\n- Confirm this combo and add it to your cart, or  \n- Propose a different laptop + a more tailored desk item (e.g., keyboard/mouse or stand) that still stays within your $500 budget.",
+      "content": "Here are the best under-$500 bundles I can make from what’s in stock right now:\n\n### Best balanced bundle\n- **ProBook Chromebook 11** — **$329**\n  - 11\", 4GB RAM, 64GB storage\n  - 10-hour battery\n  - Better-reviewed than the other laptop option\n- **TaskDesk Organizer Tray** — **$49**\n  - Bamboo desk organizer with phone stand\n\n**Total: $378**\n\n### Bigger-screen bundle\n- **BudgetLine Notebook 15** — **$449**\n  - 15\", 4GB RAM, 128GB storage\n  - More storage, but weaker reviews and slower performance\n- No solid desk item fits alongside it except very small add-ons, and the only desk setup item I found in stock under your remaining budget was the organizer tray at $49, which would put you at **$498**.\n\nSo that second bundle would be:\n\n- **BudgetLine Notebook 15** — $449\n- **TaskDesk Organizer Tray** — $49\n\n**Total: $498**\n\n### My recommendation\nIf you want the **better overall combo**, I’d go with:\n- **ProBook Chromebook 11 + TaskDesk Organizer Tray** for **$378**\n\nIf you want the **largest screen possible while staying under budget**, go with:\n- **BudgetLine Notebook 15 + TaskDesk Organizer Tray** for **$498**\n\nOne quick note: both laptops are pretty basic. The Chromebook is better for web, email, docs, and streaming; the 15\" notebook gives you a bigger screen and more storage, but reviews mention sluggish performance.\n\nIf you want, I can also:\n1. **add one of these bundles to your cart**, or\n2. **search for a different kind of desk item** instead of the organizer tray.",
       "tool_calls": [
         {
           "name": "search_products",
           "arguments": {
             "query": "laptop",
             "category": "electronics",
-            "min_price": 250,
-            "max_price": 450,
-            "min_rating": 3.8,
+            "min_price": 0,
+            "max_price": 500,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -35,24 +35,46 @@
                 "rating": 3.9,
                 "review_count": 530,
                 "in_stock": true
+              },
+              {
+                "product_id": "SP-1103",
+                "name": "BudgetLine Notebook 15",
+                "brand": "BudgetLine",
+                "category": "electronics",
+                "subcategory": "laptop",
+                "price": 449,
+                "rating": 3.4,
+                "review_count": 210,
+                "in_stock": true
               }
             ],
-            "total_found": 1
+            "total_found": 2
           }
         },
         {
           "name": "search_products",
           "arguments": {
-            "query": "monitor stand or desk organizer or keyboard",
+            "query": "desk setup",
             "category": "home_office",
-            "min_price": 20,
-            "max_price": 200,
-            "min_rating": 3.8,
+            "min_price": 0,
+            "max_price": 500,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
           "result": {
             "products": [
+              {
+                "product_id": "SP-3003",
+                "name": "ErgoDesk Standing Desk",
+                "brand": "ErgoDesk",
+                "category": "home_office",
+                "subcategory": "desk",
+                "price": 449,
+                "rating": 4.5,
+                "review_count": 960,
+                "in_stock": true
+              },
               {
                 "product_id": "SP-3007",
                 "name": "TaskDesk Organizer Tray",
@@ -65,18 +87,123 @@
                 "in_stock": true
               }
             ],
-            "total_found": 1
+            "total_found": 2
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-1106"
+          },
+          "result": {
+            "product_id": "SP-1106",
+            "name": "ProBook Chromebook 11",
+            "category": "electronics",
+            "subcategory": "laptop",
+            "brand": "ProBook",
+            "price": 329,
+            "rating": 3.9,
+            "review_count": 530,
+            "description": "Ultraportable 11-inch Chromebook. Great for browsing; limited for full coursework.",
+            "specs": {
+              "weight_lb": 2.2,
+              "battery_hours": 10,
+              "ram": "4GB",
+              "ssd": "64GB",
+              "screen_inches": 11
+            },
+            "compatible_with": [],
+            "in_stock": true,
+            "stock_quantity": 50,
+            "shipping_days": 3,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "3 business days (standard)"
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-1103"
+          },
+          "result": {
+            "product_id": "SP-1103",
+            "name": "BudgetLine Notebook 15",
+            "category": "electronics",
+            "subcategory": "laptop",
+            "brand": "BudgetLine",
+            "price": 449,
+            "rating": 3.4,
+            "review_count": 210,
+            "description": "Entry-level 15-inch notebook. Cheap, but reviews flag build quality and slow performance.",
+            "specs": {
+              "weight_lb": 4.4,
+              "battery_hours": 7,
+              "ram": "4GB",
+              "ssd": "128GB",
+              "screen_inches": 15
+            },
+            "compatible_with": [],
+            "in_stock": true,
+            "stock_quantity": 60,
+            "shipping_days": 5,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "5 business days (standard)"
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-3007"
+          },
+          "result": {
+            "product_id": "SP-3007",
+            "name": "TaskDesk Organizer Tray",
+            "category": "home_office",
+            "subcategory": "accessory",
+            "brand": "TaskDesk",
+            "price": 49,
+            "rating": 4.2,
+            "review_count": 540,
+            "description": "Bamboo desk organizer tray. Holds pens, notebooks, cables, phone stand included.",
+            "specs": {
+              "material": "bamboo",
+              "dimensions": "16 × 10 × 3 in"
+            },
+            "compatible_with": [],
+            "in_stock": true,
+            "stock_quantity": 200,
+            "shipping_days": 3,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "3 business days (standard)"
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Let\u2019s keep it simple and stick with this combo for now \u2014 $378 for both is fine and I like that it\u2019s under my $500 cap.  \n\nChromebook is okay for me; I\u2019ll mainly use it for basic browsing and docs, and the organizer tray is enough for my desk. Go ahead and add both to my cart."
+      "content": "Sounds good, add both."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added both items to your cart:\n\n1) ProBook Chromebook 11 (SP-1106)  \n   - Qty: 1  \n   - Price: $329  \n\n2) TaskDesk Organizer Tray (SP-3007)  \n   - Qty: 1  \n   - Price: $49  \n\nCurrent cart summary:  \n- Subtotal: $378  \n- Discounts: $0  \n- Shipping: not selected yet  \n- Estimated total (before tax & shipping): $378  \n\nYou\u2019re comfortably under your $500 cap.  \n\nIf you\u2019d like, next we can:  \n- Pick a shipping speed, and/or  \n- See if there are any promotions or loyalty points you can apply before checkout.",
+      "content": "I can do that, but “add both” is a little ambiguous here since I suggested **two different bundles**, and that would mean **two laptops**.\n\nWhich did you want?\n\n1. **Chromebook bundle** — ProBook Chromebook 11 + TaskDesk Organizer Tray = **$378**\n2. **15-inch notebook bundle** — BudgetLine Notebook 15 + TaskDesk Organizer Tray = **$498**\n3. **Literally all three items** — both laptops + organizer tray = **$827** (over your $500 budget)\n\nReply with **1, 2, or 3** and I’ll add it.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "1."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — I added these to your cart:\n\n- **ProBook Chromebook 11** — $329\n- **TaskDesk Organizer Tray** — $49\n\n**Cart total: $378**\n\nYou’ve still got **$122** left in your budget.\n\nIf you want, I can also:\n- look for **a mouse, lamp, keyboard, or laptop sleeve** with the remaining budget\n- check for **promo codes or discounts**\n- show your **cart total/details**",
       "tool_calls": [
         {
           "name": "add_to_cart",
@@ -121,51 +248,12 @@
             "cart_subtotal": 378,
             "cart_total": 378
           }
-        },
-        {
-          "name": "get_cart",
-          "arguments": {
-            "customer_id": "shop_004"
-          },
-          "result": {
-            "cart_id": "CART-shop_004",
-            "customer_id": "shop_004",
-            "items": [
-              {
-                "cart_item_id": "CI-0001",
-                "product_id": "SP-1106",
-                "product_name": "ProBook Chromebook 11",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 329,
-                "line_total": 329
-              },
-              {
-                "cart_item_id": "CI-0002",
-                "product_id": "SP-3007",
-                "product_name": "TaskDesk Organizer Tray",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 49,
-                "line_total": 49
-              }
-            ],
-            "subtotal": 378,
-            "discount_amount": 0,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 378,
-            "applied_promo_codes": []
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "I don\u2019t need to pick shipping right now \u2014 skip it, I\u2019ll handle it at checkout.  \n\nEverything in the cart looks good. [TASK_DONE]"
+      "content": "[TASK_DONE]"
     }
   ]
 }

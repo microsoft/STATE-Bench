@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi \u2014 I'd like to buy the SlimBook Air 13, and I have a promo code SAVE10. Can you add it and apply the code?"
+      "content": "Hi — I'd like to buy the SlimBook Air 13, and I have a promo code SAVE10. Can you add it and apply the code?"
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the SlimBook Air 13 to your cart and applied the SAVE10 promo code.\n\nCurrent cart:\n- SlimBook Air 13 \u2014 $849\n- Promo code SAVE10: -$84 (10% off)\n- Subtotal: $849  \n- Discount: $84  \n- Shipping: not selected yet  \n- Total (before shipping & tax): $765\n\nDo you want to:\n- add any accessories (case, USB\u2011C hub, external monitor, etc.), or  \n- choose a shipping speed (standard, express, next-day)?",
+      "content": "Done — I added the SlimBook Air 13 to your cart and applied `SAVE10`.\n\nCart summary:\n- SlimBook Air 13: $849\n- Promo discount: -$84\n- Total: $765\n\nIf you want, I can also check whether using some of your loyalty points would lower it further.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -19,7 +19,7 @@
             "category": "electronics",
             "min_price": 0,
             "max_price": 10000,
-            "min_rating": 1,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -110,19 +110,6 @@
           }
         },
         {
-          "name": "get_variants",
-          "arguments": {
-            "product_id": "SP-1001"
-          },
-          "result": {
-            "product_id": "SP-1001",
-            "product_name": "SlimBook Air 13",
-            "base_price": 849,
-            "variants": [],
-            "note": "This product has no variants; no variant_id is needed for add_to_cart."
-          }
-        },
-        {
           "name": "add_to_cart",
           "arguments": {
             "customer_id": "shop_003",
@@ -160,44 +147,12 @@
             "cart_subtotal": 849,
             "cart_total": 765
           }
-        },
-        {
-          "name": "get_cart",
-          "arguments": {
-            "customer_id": "shop_003"
-          },
-          "result": {
-            "cart_id": "CART-shop_003",
-            "customer_id": "shop_003",
-            "items": [
-              {
-                "cart_item_id": "CI-0001",
-                "product_id": "SP-1001",
-                "product_name": "SlimBook Air 13",
-                "quantity": 1,
-                "gift_wrap": false,
-                "unit_price": 849,
-                "line_total": 849
-              }
-            ],
-            "subtotal": 849,
-            "discount_amount": 84,
-            "gift_wrap_fee": 0,
-            "loyalty_discount": 0,
-            "loyalty_points_redeemed": 0,
-            "shipping_option": null,
-            "shipping_cost": 0,
-            "total": 765,
-            "applied_promo_codes": [
-              "SAVE10"
-            ]
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Looks good, thanks \u2014 no accessories.\n\nI don't need to pick shipping right now \u2014 skip it, I'll handle it at checkout.  \n\n[TASK_DONE]"
+      "content": "No, not this time — I don’t want to use points. That cart looks good, thanks. [TASK_DONE]"
     }
   ]
 }

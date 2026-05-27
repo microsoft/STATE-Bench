@@ -10,8 +10,77 @@
     },
     {
       "role": "assistant",
-      "content": "Here\u2019s exactly what \u201cbackordered\u201d means in our store, specifically for something like the Atlas hub:\n\n1. **Out of stock, but reservable**  \n   - The Atlas hub would be **currently out of stock**.  \n   - Because it\u2019s backorder-eligible, you can still place an order to **reserve one from the next shipment**.\n\n2. **10% deposit now, rest later**  \n   - You pay a **10% deposit** of the hub\u2019s price at checkout.  \n   - The remaining **90% is charged only when the item is ready to ship**.\n\n3. **Estimated wait time**  \n   - Restock is typically **2\u20134 weeks**.  \n   - This is an estimate, not a guaranteed date, but it\u2019s the normal window for backordered items.\n\n4. **If restock is delayed or fails**  \n   - If we **can\u2019t restock** the Atlas hub, your **10% deposit is fully refunded**.  \n   - If it\u2019s just delayed, your reservation stays in place unless you choose to cancel.\n\n5. **Your options before I add it**  \n   Before I add the Atlas hub on backorder, I should confirm:  \n   - Are you okay with a **2\u20134 week wait**?  \n   - Are you okay with paying a **10% deposit now** and the rest when it ships?\n\nIf you confirm \u201cyes\u201d to both, I\u2019ll proceed to add the Atlas hub on backorder to your cart.",
+      "content": "The Atlas hub is currently out of stock, but it is available for backorder.\n\nWhat “backordered” means here:\n- You can reserve it now even though it isn’t in stock.\n- The store takes a 10% deposit upfront.\n- For this hub at $79, the deposit would be $7.90.\n- Estimated restock timeline is 2–4 weeks.\n- The deposit is refundable if the restock doesn’t happen.\n\nProduct details:\n- Atlas 9-in-1 USB-C Hub\n- Price: $79\n- Rating: 4.6\n- Backorder available: yes\n- Current stock: 0\n\nImportant note:\n- I can explain it and help you decide, but I can’t actually place a backorder through the cart tools here unless you want me to add the item normally and the system allows it. Since it’s out of stock, that may not succeed.\n\nIf you want, I can:\n- try adding it and see whether the store system accepts the backorder flow, or\n- suggest the in-stock alternative instead.",
       "tool_calls": [
+        {
+          "name": "search_products",
+          "arguments": {
+            "query": "Atlas hub",
+            "category": "electronics",
+            "min_price": 0,
+            "max_price": 10000,
+            "min_rating": 0,
+            "in_stock_only": false,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "products": [
+              {
+                "product_id": "SP-H112",
+                "name": "Atlas 9-in-1 USB-C Hub",
+                "brand": "PortPro",
+                "category": "electronics",
+                "subcategory": "hub",
+                "price": 79,
+                "rating": 4.6,
+                "review_count": 700,
+                "in_stock": false
+              },
+              {
+                "product_id": "SP-H111",
+                "name": "7-Port USB-C Hub",
+                "brand": "PortPro",
+                "category": "electronics",
+                "subcategory": "hub",
+                "price": 49,
+                "rating": 4.2,
+                "review_count": 1550,
+                "in_stock": true
+              }
+            ],
+            "total_found": 2
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-H112"
+          },
+          "result": {
+            "product_id": "SP-H112",
+            "name": "Atlas 9-in-1 USB-C Hub",
+            "category": "electronics",
+            "subcategory": "hub",
+            "brand": "PortPro",
+            "price": 79,
+            "rating": 4.6,
+            "review_count": 700,
+            "description": "Atlas 9-in-1 USB-C Hub from PortPro. Electronics accessory.",
+            "specs": {},
+            "compatible_with": [
+              "SlimBook Air 13",
+              "ProBook Laptop 13"
+            ],
+            "in_stock": false,
+            "stock_quantity": 0,
+            "shipping_days": 7,
+            "gift_wrap_available": true,
+            "backorder_available": true,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "7 business days (standard)"
+          }
+        },
         {
           "name": "get_policies",
           "arguments": {
@@ -23,7 +92,7 @@
             "rules": [
               "Eligibility: product.in_stock is False AND product.backorder_available is True.",
               "Deposit: 10% of the product price, refundable if restock fails.",
-              "Timeline: estimated 2\u20134 weeks to restock.",
+              "Timeline: estimated 2–4 weeks to restock.",
               "Proactive: when a requested product is OOS, agent should check and offer backorder if available."
             ]
           }
@@ -32,7 +101,7 @@
     },
     {
       "role": "user",
-      "content": "Thanks for explaining; that\u2019s clear.  \n\nGiven that, I\u2019m fine with the Atlas hub being backordered under those terms, but for now please leave my cart as-is and don\u2019t add it yet.  \n\n[TASK_DONE]"
+      "content": "Got it — that’s the explanation I needed. Leave the cart unchanged; I understand Atlas would be a backorder and not an in-stock cart add here, and I’m not asking you to add the 7-Port alternative right now. [TASK_DONE]"
     }
   ]
 }

@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Add the SoundMax Wireless Headphones and the SoundMax Beat Pro Speaker to my cart, gift-wrap both, then check me out. I'm in a hurry \u2014 no breakdown, no policy talk, just get it done."
+      "content": "Add the SoundMax Wireless Headphones and the SoundMax Beat Pro Speaker to my cart, gift-wrap both, then check me out. I'm in a hurry — no breakdown, no policy talk, just get it done."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added both items to your cart with gift wrap:\n\n- SoundMax Wireless Headphones \u2014 1, gift-wrapped  \n- SoundMax Beat Pro Wireless Speaker \u2014 1, gift-wrapped  \n\nTo finish checkout, you\u2019ll just need to confirm shipping and payment on the checkout page in your account.",
+      "content": "Done — both items are in your cart with gift wrap added.\n\nCurrent total: $508\n\nI can’t complete payment/checkout from here, but your cart is ready.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +18,8 @@
             "query": "SoundMax Wireless Headphones",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -57,8 +57,8 @@
             "query": "SoundMax Beat Pro Speaker",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 2000,
-            "min_rating": 1,
+            "max_price": 10000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -174,6 +174,15 @@
           }
         },
         {
+          "name": "get_promotions",
+          "arguments": {
+            "category": "electronics"
+          },
+          "result": {
+            "promotions": []
+          }
+        },
+        {
           "name": "add_to_cart",
           "arguments": {
             "customer_id": "shop_001",
@@ -216,30 +225,51 @@
             "cart_subtotal": 498,
             "cart_total": 508
           }
+        },
+        {
+          "name": "get_cart",
+          "arguments": {
+            "customer_id": "shop_001"
+          },
+          "result": {
+            "cart_id": "CART-shop_001",
+            "customer_id": "shop_001",
+            "items": [
+              {
+                "cart_item_id": "CI-0001",
+                "product_id": "SP-2003",
+                "product_name": "SoundMax Wireless Headphones",
+                "quantity": 1,
+                "gift_wrap": true,
+                "unit_price": 149,
+                "line_total": 149
+              },
+              {
+                "cart_item_id": "CI-0002",
+                "product_id": "SP-2009",
+                "product_name": "SoundMax Beat Pro Wireless Speaker",
+                "quantity": 1,
+                "gift_wrap": true,
+                "unit_price": 349,
+                "line_total": 349
+              }
+            ],
+            "subtotal": 498,
+            "discount_amount": 0,
+            "gift_wrap_fee": 10,
+            "loyalty_discount": 0,
+            "loyalty_points_redeemed": 0,
+            "shipping_option": null,
+            "shipping_cost": 0,
+            "total": 508,
+            "applied_promo_codes": []
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "You\u2019re still talking, not checking out. I said no breakdown \u2014 just push it through and wrap both, I\u2019ll deal with shipping and payment myself."
-    },
-    {
-      "role": "assistant",
-      "content": "Both items are in your cart, gift-wrapped and ready for you to complete shipping and payment.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Fine, as long as both are in the cart with gift wrap, I\u2019ll finish the rest myself."
-    },
-    {
-      "role": "assistant",
-      "content": "Got it. Both items are in your cart with gift wrap selected; you can handle shipping and payment when you\u2019re ready.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "Okay, good, I\u2019ll take it from here. [TASK_DONE]"
+      "content": "Fine. [TASK_DONE]"
     }
   ]
 }

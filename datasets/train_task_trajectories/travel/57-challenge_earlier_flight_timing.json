@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "Hi, I need to move my flight BK-1000 from June 25 to June 18 instead \u2014 something came up and I need to fly earlier. My user ID is user_002."
+      "content": "Hi, I need to move my flight BK-1000 from June 25 to June 18 instead — something came up and I need to fly earlier. My user ID is user_002."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve moved your booking BK-1000 to an earlier flight on June 18.\n\nHere are your updated details:\n\n- Passenger: user_002  \n- Route: Chicago O\u2019Hare (ORD) \u2192 San Francisco (SFO)  \n- New flight: UA101  \n- Date: 2026-06-18  \n- Departure: 13:30  \n- Arrival: 18:14  \n- Cabin: Economy  \n- Seat: Window  \n- Meal: Vegetarian  \n- Wi\u2011Fi / Extra legroom / Insurance: Not added  \n- Checked bags: 0 paid extra bags\n\nPricing impact:\n- Original price: $350  \n- Fare difference: +$30  \n- Change fee: +$75  \n- New total price paid: $455  \n\nYour booking status remains confirmed under the same booking ID: BK-1000.\n\nIf you\u2019d like, I can:\n- Add Wi\u2011Fi, extra legroom, or insurance, or  \n- Look for a different time on June 18 (e.g., morning or evening, possibly with stops or on another airline).",
+      "content": "I found your current booking and checked June 18 options from ORD to SFO.\n\nAvailable replacement flight:\n- UA101\n- Departs: Jun 18 at 1:30 PM\n- Arrives: 6:14 PM\n- Nonstop\n- Economy fare currently: $380\n\nYour current booking:\n- BK-1000\n- UA100 on Jun 25 at 11:45 AM\n- Economy\n- Window seat\n- Vegetarian meal\n- No Wi‑Fi, extra legroom, or insurance\n\nI can change you to UA101 and keep the same preferences. Since this is a flight change to a different flight, I’ll need to submit it as:\n- cabin: economy\n- seat: window\n- meal: vegetarian\n- Wi‑Fi: no\n- extra legroom: no\n- insurance: no\n\nIf you want, I can go ahead and process the change now.",
       "tool_calls": [
         {
           "name": "get_booking",
@@ -51,9 +51,9 @@
             "origin": "ORD",
             "destination": "SFO",
             "date": "2026-06-18",
-            "airline": "UA",
+            "airline": "",
             "time_range": "morning",
-            "max_stops": 0,
+            "max_stops": 1,
             "max_price": -1
           },
           "result": {
@@ -67,9 +67,9 @@
             "origin": "ORD",
             "destination": "SFO",
             "date": "2026-06-18",
-            "airline": "UA",
+            "airline": "",
             "time_range": "afternoon",
-            "max_stops": 0,
+            "max_stops": 1,
             "max_price": -1
           },
           "result": {
@@ -92,7 +92,57 @@
               }
             ]
           }
-        },
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Before I approve it, what actually determines the change fee here? I was assuming the new flight timing might drive it, but I want to understand what sets the fee first."
+    },
+    {
+      "role": "assistant",
+      "content": "The fee is not driven by the time of day of the new flight.\n\nFor your ticket, the change cost is determined by:\n- fare class: economy\n- route type: domestic\n- timing relative to your original departure date\n- reason for the change\n- plus any fare difference\n\nFor your case, the policy says:\n- Domestic economy change fee:\n  - $75 if the original departure is more than 7 days away\n  - $150 if the original departure is 7 days away or less\n- Fare difference also applies\n\nImportant nuance:\n- The “timing” that matters is how close you are to departure when the change is made, not whether the new flight is morning vs afternoon.\n- Special reasons can reduce or waive the fee:\n  - medical: 50% off\n  - bereavement: 75% off\n  - jury duty / military / airline schedule change / weather: no change fee\n\nFor BK-1000:\n- Original flight departs Jun 25\n- Today is Jun 15\n- That is 10 days before departure\n- So if this is a personal change, the standard change fee would be $75\n- Your current fare was $350\n- The new flight’s economy fare is $380\n- So the fare difference appears to be $30\n\nEstimated total if processed as a personal change:\n- $75 change fee\n- $30 fare difference\n- Estimated total: $105\n\nIf you want, I can process it as:\n- personal\nor, if one of the exception reasons applies, tell me which one and I’ll use that instead.",
+      "tool_calls": [
+        {
+          "name": "get_policies",
+          "arguments": {
+            "topic": "change",
+            "cabin_class": "economy",
+            "loyalty_tier": "basic",
+            "route_type": "domestic"
+          },
+          "result": {
+            "topic": "change",
+            "rules": {
+              "free_change_window": "Free changes within 24 hours (domestic) or 48 hours (international) of booking",
+              "basic_economy": "Not changeable after free window",
+              "economy_domestic_personal": "Domestic change fee: $75 if departure >7 days, $150 if ≤7 days. Fare difference also applies.",
+              "economy_international_personal": "International change fee: $100 if departure >7 days, $200 if ≤7 days. Fare difference also applies.",
+              "economy_medical": "Medical changes: 50% discount on standard fee (requires change_reason='medical')",
+              "economy_bereavement": "Bereavement changes: 75% discount on standard fee (requires change_reason='bereavement')",
+              "jury_duty": "Jury duty: free change (change_reason='jury_duty')",
+              "military": "Military deployment: free change (change_reason='military')",
+              "schedule_change": "Airline schedule changes: free, no fee (change_reason='schedule_change')",
+              "weather": "Weather-related changes: free, no fee (change_reason='weather')",
+              "business": "Free changes (fare difference still applies)",
+              "first": "Free changes (fare difference still applies)",
+              "change_reason_required": "Pass change_reason parameter: 'personal', 'medical', 'bereavement', 'jury_duty', 'military', 'schedule_change', or 'weather'",
+              "route_type_matters": "Fees differ by route type. Check flight route_type."
+            },
+            "applicable_cabin_class": "economy",
+            "applicable_route_type": "domestic"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "That sounds right. Go ahead."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — your flight has been changed.\n\nUpdated booking:\n- Booking ID: BK-1000\n- New flight: UA101\n- New departure: Jun 18 at 1:30 PM\n- Route: ORD → SFO\n- Cabin: Economy\n- Seat: Window\n- Meal: Vegetarian\n\nCharges applied:\n- Change fee: $75\n- Fare difference: $30\n- Total additional cost: $105\n\nYour updated total paid is:\n- $455\n\nAnything else you’d like me to help with for this trip?",
+      "tool_calls": [
         {
           "name": "update_booking",
           "arguments": {
@@ -132,7 +182,7 @@
     },
     {
       "role": "user",
-      "content": "That sounds right. Go ahead and keep everything as is.\n\nJust to confirm: cabin is economy, seat is window, vegetarian meal, and no Wi\u2011Fi, extra legroom, or insurance on the June 18 UA101 flight, correct? If so, I\u2019m all set.  \n\n[TASK_DONE]"
+      "content": "Looks good, thanks. [TASK_DONE]"
     }
   ]
 }

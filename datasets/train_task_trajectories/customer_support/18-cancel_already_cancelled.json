@@ -10,81 +10,52 @@
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve checked your order, and it\u2019s already cancelled in our system, including the item on it.  \n\nYou don\u2019t need to do anything else; if a refund was due, it should already be processing back to your original payment method. If you\u2019d like, I can also confirm the refund status and expected timeline.",
+      "content": "I checked, and ORD-6021 has already been cancelled, so there’s nothing further to cancel.\n\nIf you want, I can also help you check whether the refund has been issued for that order.",
       "tool_calls": [
         {
-          "name": "get_order",
+          "name": "get_policies",
           "arguments": {
-            "order_id": "ORD-6021"
+            "topic": "cancellation"
           },
           "result": {
+            "topic": "cancellation",
+            "rules": {
+              "pre_shipment": "Free cancellation before shipment (pending/processing status).",
+              "in_transit": "$10 intercept fee per item for in-transit orders.",
+              "delivered": "Cannot cancel delivered orders — must use the return process instead.",
+              "partial": "Partial cancellation allowed if items not yet delivered.",
+              "split_payment": "Refund distributed proportionally to original payment methods.",
+              "already_cancelled": "Already cancelled orders cannot be cancelled again."
+            }
+          }
+        },
+        {
+          "name": "cancel_order",
+          "arguments": {
             "order_id": "ORD-6021",
-            "customer_id": "cust_002",
-            "order_date": "2026-06-05T10:00:00",
-            "status": "cancelled",
-            "shipping_status": "pending",
-            "shipping_method": "standard",
-            "shipping_cost": 8,
-            "tracking_number": "TRK85354885",
-            "delivery_date": null,
-            "delivery_promised_date": "2026-06-05T18:00:00",
-            "signature_required": false,
-            "signature_on_file": null,
-            "payment_method": "credit_card",
-            "payment_details": {
-              "credit_card": 43
-            },
-            "subtotal": 35,
-            "discount_code": null,
-            "discount_amount": 0,
-            "total_paid": 43,
-            "is_gift": false,
-            "gift_sender": null,
-            "items": [
-              {
-                "item_id": "ITEM-9130",
-                "order_id": "ORD-6021",
-                "product_id": "PROD-2130",
-                "quantity": 1,
-                "unit_price": 35,
-                "item_status": "cancelled",
-                "return_reason": null,
-                "refund_amount": null,
-                "refund_method": null,
-                "restocking_fee": null,
-                "return_label_issued": false,
-                "replacement_item_id": null,
-                "goodwill_credit": 0,
-                "goodwill_credit_method": null,
-                "store_credit_only": false,
-                "product": {
-                  "product_id": "PROD-2130",
-                  "name": "UltraShield Phone Case",
-                  "category": "accessories",
-                  "price": 35,
-                  "current_price": null,
-                  "return_window_days": 30,
-                  "warranty_months": 3,
-                  "in_stock": true
-                }
-              }
-            ]
+            "item_ids": [],
+            "confirm": false
+          },
+          "result": {
+            "status": "rejected",
+            "order_id": "ORD-6021",
+            "reason": "Order already cancelled"
           }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Oh, I didn\u2019t realize.  \n\nIn that case, is there anything else I need to do on my side, or am I all set?"
+      "content": "Oh, I didn't realize. Is there anything I still need to do on my end?"
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set\u2014there\u2019s nothing else you need to do.  \n\nIf you don\u2019t see the refund on your card within 5\u201310 business days from the cancellation date, contact me again and I can look into the refund status for you.",
+      "content": "No, there’s usually nothing else you need to do once the order is already cancelled.\n\nThe only thing to keep an eye on is your refund/payment method in case the credit is still processing. If you’d like, I can check the order details and confirm the refund status for you.",
       "tool_calls": null
     },
     {
       "role": "user",
-      "content": "Got it, thanks for confirming everything\u2019s taken care of on your end. Appreciate the help! [TASK_DONE]"
+      "content": "Got it, thanks for checking. I appreciate the help. [TASK_DONE]"
     }
   ]
 }

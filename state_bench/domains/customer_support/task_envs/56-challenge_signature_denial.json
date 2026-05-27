@@ -26,7 +26,7 @@
       "shipping_cost": 0,
       "tracking_number": "TRK74621281",
       "delivery_date": "2026-07-01T14:00:00",
-      "delivery_promised_date": "2026-06-05T18:00:00",
+      "delivery_promised_date": "2026-07-01T18:00:00",
       "signature_required": true,
       "signature_on_file": "J. Smith",
       "payment_method": "credit_card",

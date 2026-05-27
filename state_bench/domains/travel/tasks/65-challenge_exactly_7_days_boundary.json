@@ -1,7 +1,7 @@
 {
   "task_id": "65-challenge_exactly_7_days_boundary",
   "user_id": "user_004",
-  "now": "2026-06-15T10:00:00",
+  "now": "2026-06-15T08:00:00",
   "opening_message": "Need to change BK-1000 to June 29. Personal. My user ID is user_004.",
   "user_simulator": {
     "personality": "Brief.",

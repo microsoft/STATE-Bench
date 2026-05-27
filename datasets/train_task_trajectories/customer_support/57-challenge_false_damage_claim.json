@@ -6,11 +6,11 @@
     },
     {
       "role": "user",
-      "content": "My blender from order ORD-7041 arrived damaged \u2014 the box was crushed and the blender looks scratched. I want a full refund."
+      "content": "My blender from order ORD-7041 arrived damaged — the box was crushed and the blender looks scratched. I want a full refund."
     },
     {
       "role": "assistant",
-      "content": "I\u2019m sorry the blender arrived in that condition; that\u2019s really frustrating. I\u2019ve processed a return for the damaged blender and issued a full refund of $97 back to your original payment method, including the shipping cost. \n\nYou\u2019ll receive a prepaid return label by email shortly\u2014please use it to send the blender back. Once the carrier scans the package, the refund should appear on your statement within 3\u20137 business days, depending on your bank.",
+      "content": "I’ve processed a full refund of $89 to your original payment method for the damaged blender. A return label has also been issued for the item.\n\nI’m sorry it arrived that way. If you want, I can also help with what to expect next for the return and refund timing.",
       "tool_calls": [
         {
           "name": "get_order",
@@ -27,7 +27,7 @@
             "shipping_cost": 8,
             "tracking_number": "TRK75281039",
             "delivery_date": "2026-07-01T14:00:00",
-            "delivery_promised_date": "2026-06-05T18:00:00",
+            "delivery_promised_date": "2026-07-01T18:00:00",
             "signature_required": false,
             "signature_on_file": null,
             "payment_method": "credit_card",
@@ -79,7 +79,7 @@
           "result": {
             "topic": "return",
             "rules": {
-              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim \u2014 skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
+              "agent_computes_amount": "process_return requires the agent to submit the net refund as `amount` on confirm. Compute it from the preview's component breakdown: base_item_price (after promo redistribution) minus restocking_fee plus restocking_discount minus shipping_clawback minus bulk_clawback minus repeat_surcharge minus paid_return_shipping_fee. The env writes the submitted amount verbatim — skipping a component (e.g. forgetting the Gold restocking discount) produces a wrong refund_amount and fails state scoring.",
               "windows_by_category": {
                 "electronics": "15-day return window",
                 "clothing": "30-day return window",
@@ -133,30 +133,6 @@
           }
         },
         {
-          "name": "get_policies",
-          "arguments": {
-            "topic": "refund"
-          },
-          "result": {
-            "topic": "refund",
-            "rules": {
-              "amount": {
-                "full_refund": "Full refund for defective, wrong item, or damaged in transit.",
-                "promo_redistribution": "If a promo/coupon was used: discount allocated proportionally by item price. Refund = item_price - (discount * item_price / subtotal).",
-                "outside_window": "Outside return window but within store-credit grace: store credit only.",
-                "shipping_refund": "When refunding shipping (defective/wrong/damaged returns, 6+-days-late compensation), refund the actual shipping cost the customer was charged on the order \u2014 read order.shipping_cost and refund that amount. Standard policy: $0 on free-shipping orders (subtotal >= $100), $8 otherwise. NOT for buyer's remorse."
-              },
-              "method": {
-                "original_payment": "Default refund method when item was paid for and is being returned for fault.",
-                "store_credit": "Required for: gift returns (at current product price), outside-window grace returns, and exchange-cheaper differences.",
-                "store_credit_only_constraint": "When a return is issued under the store-credit-only rule (gift return OR outside-window grace), the refund method cannot be changed back to original_payment afterward. process_refund will reject any attempt to flip the method on those returns."
-              },
-              "price_match": "If product price drops within 7 days of delivery, refund the difference (no return required).",
-              "goodwill_credit": "Goodwill credits (e.g., fragile-item damage bonus) are issued as a refund with the credit amount."
-            }
-          }
-        },
-        {
           "name": "process_return",
           "arguments": {
             "item_id": "ITEM-10041",
@@ -204,44 +180,12 @@
             "paid_return_shipping_fee": 0,
             "restocking_discount": 0
           }
-        },
-        {
-          "name": "process_refund",
-          "arguments": {
-            "item_id": "ITEM-10041",
-            "refund_method": "original_payment",
-            "amount": 97,
-            "confirm": false
-          },
-          "result": {
-            "status": "preview",
-            "item_id": "ITEM-10041",
-            "refund_amount": 97,
-            "refund_method": "original_payment"
-          }
-        },
-        {
-          "name": "process_refund",
-          "arguments": {
-            "item_id": "ITEM-10041",
-            "refund_method": "original_payment",
-            "amount": 97,
-            "confirm": true
-          },
-          "result": {
-            "status": "refunded",
-            "item_id": "ITEM-10041",
-            "mode": "supplemental_refund",
-            "refund_amount": 97,
-            "refund_method": "original_payment",
-            "total_goodwill_credit": 97
-          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "Okay, thanks for sorting that out and processing the refund so quickly. I\u2019ll ship the blender back using the label once I get the email. [TASK_DONE]"
+      "content": "Thanks, I appreciate it. That answers it for me. [TASK_DONE]"
     }
   ]
 }

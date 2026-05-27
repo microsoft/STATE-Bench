@@ -6,11 +6,20 @@
     },
     {
       "role": "user",
-      "content": "Hi! I'd like to get the SlimBook Air 13 \u2014 adding it to my cart please."
+      "content": "Hi! I'd like to get the SlimBook Air 13 — adding it to my cart please."
     },
     {
       "role": "assistant",
-      "content": "You\u2019re all set \u2014 I\u2019ve added 1\u00d7 SlimBook Air 13 to your cart at $849 (no gift wrap).\n\nDo you want any accessories to go with it (case, USB\u2011C hub, external monitor, or mouse/keyboard)?",
+      "content": "Sure — before I add it, I need one quick choice from you:\n\nWould you like **gift wrap** for the SlimBook Air 13? It’s **$5 per unit**.\n\nIf you want, just reply:\n- **“No gift wrap”**, or\n- **“Yes, gift wrap”**",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "No gift wrap, please."
+    },
+    {
+      "role": "assistant",
+      "content": "Done — **SlimBook Air 13** has been added to your cart.\n\n- Quantity: **1**\n- Gift wrap: **No**\n- Price: **$849**\n\nIf you want, I can also:\n- show your cart,\n- check for eligible promos,\n- or help you add accessories for it.",
       "tool_calls": [
         {
           "name": "search_products",
@@ -18,8 +27,8 @@
             "query": "SlimBook Air 13",
             "category": "electronics",
             "min_price": 0,
-            "max_price": 10000,
-            "min_rating": 1,
+            "max_price": 5000,
+            "min_rating": 0,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -101,16 +110,7 @@
     },
     {
       "role": "user",
-      "content": "Nice, thanks! I\u2019m good with just the laptop for now\u2014no accessories needed."
-    },
-    {
-      "role": "assistant",
-      "content": "Got it, just the laptop then.\n\nIf you\u2019d like, I can:\n- Check your current cart total with any taxes/shipping options, or  \n- Help you compare this SlimBook Air 13 to another laptop you\u2019re considering.\n\nOtherwise you\u2019re ready to proceed to checkout on your end whenever you\u2019re ready.",
-      "tool_calls": null
-    },
-    {
-      "role": "user",
-      "content": "I\u2019m all set then\u2014just the SlimBook Air 13 in my cart is perfect. I\u2019ll go ahead and handle checkout on my side.  \n\n[TASK_DONE]"
+      "content": "Thanks! That’s all I needed. [TASK_DONE]"
     }
   ]
 }

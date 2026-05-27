@@ -10,16 +10,16 @@
     },
     {
       "role": "assistant",
-      "content": "You\u2019re using a ProBook 13, and in our catalog these wireless options are explicitly marked as compatible:\n\n1) SonicBeat Studio Wireless Headphones (SP-2030) \u2013 $229  \n- Type: Over-ear wireless headphones  \n- Compatibility: Confirmed compatible with ProBook 13  \n- Rating: 4.6 (1450 reviews)  \n- Likely best for: Music, movies, general use, some gaming; good all-rounder.\n\n2) DeskMate Conference Headset (SP-2032) \u2013 $179  \n- Type: Wireless headset (likely on-ear/over-ear with mic focus)  \n- Compatibility: Confirmed compatible with ProBook 13  \n- Rating: 4.4 (810 reviews)  \n- Likely best for: Calls, Zoom/Teams meetings, voice clarity.\n\nThe others I found (SoundMax Wireless, AirPhone Buds Pro, UniversalPods Max) are marked as *not* compatible with ProBook 13 in this store\u2019s system, so I\u2019d avoid them for your laptop.\n\nTo narrow it down, tell me:\n- What\u2019s your main use: music/movies, work calls, gaming, or a mix?  \n- Do you prefer over-ear or smaller/portable?  \n- Rough budget within $179\u2013$229?\n\nBased on that, I can recommend one of these two specifically and add it to your cart if you\u2019d like.",
+      "content": "I found two wireless options officially compatible with your ProBook 13:\n\n- SonicBeat Studio Wireless Headphones — $229\n  - 4.6★, 1,450 reviews\n  - 30-hour battery\n  - ANC\n  - Bluetooth 5.3\n  - Best if you want a more general music/everyday premium headphone\n\n- DeskMate Conference Headset — $179\n  - 4.4★, 810 reviews\n  - 20-hour battery\n  - Boom mic\n  - USB-C / Bluetooth 5.2\n  - Best if you want clearer calls/meetings on a laptop\n\nA few others showed up in search, but they are not officially compatible with ProBook 13, so I’d avoid those for your use case.\n\nMy quick recommendation:\n- For music + ANC + longer battery: SonicBeat Studio Wireless Headphones\n- For work calls + laptop use: DeskMate Conference Headset\n\nIf you want, I can also:\n1. compare these two in more detail, or\n2. add one to your cart.",
       "tool_calls": [
         {
           "name": "search_products",
           "arguments": {
             "query": "wireless headphones",
             "category": "electronics",
-            "min_price": 20,
-            "max_price": 400,
-            "min_rating": 3.5,
+            "min_price": 0,
+            "max_price": 1000,
+            "min_rating": 4,
             "in_stock_only": true,
             "sort_by": "relevance"
           },
@@ -88,96 +88,6 @@
           "name": "check_compatibility",
           "arguments": {
             "product_id": "SP-2030",
-            "device_name": "ProBook Laptop 13-inch"
-          },
-          "result": {
-            "compatible": false,
-            "product_id": "SP-2030",
-            "device": "ProBook Laptop 13-inch",
-            "reason": "Unknown device name 'ProBook Laptop 13-inch'. Canonical devices in this catalog: ProBook 13, SlimBook Air 13, TechPhone Pro 16.",
-            "canonical_devices": [
-              "ProBook 13",
-              "SlimBook Air 13",
-              "TechPhone Pro 16"
-            ]
-          }
-        },
-        {
-          "name": "check_compatibility",
-          "arguments": {
-            "product_id": "SP-2003",
-            "device_name": "ProBook Laptop 13-inch"
-          },
-          "result": {
-            "compatible": false,
-            "product_id": "SP-2003",
-            "device": "ProBook Laptop 13-inch",
-            "reason": "Unknown device name 'ProBook Laptop 13-inch'. Canonical devices in this catalog: ProBook 13, SlimBook Air 13, TechPhone Pro 16.",
-            "canonical_devices": [
-              "ProBook 13",
-              "SlimBook Air 13",
-              "TechPhone Pro 16"
-            ]
-          }
-        },
-        {
-          "name": "check_compatibility",
-          "arguments": {
-            "product_id": "SP-2031",
-            "device_name": "ProBook Laptop 13-inch"
-          },
-          "result": {
-            "compatible": false,
-            "product_id": "SP-2031",
-            "device": "ProBook Laptop 13-inch",
-            "reason": "Unknown device name 'ProBook Laptop 13-inch'. Canonical devices in this catalog: ProBook 13, SlimBook Air 13, TechPhone Pro 16.",
-            "canonical_devices": [
-              "ProBook 13",
-              "SlimBook Air 13",
-              "TechPhone Pro 16"
-            ]
-          }
-        },
-        {
-          "name": "check_compatibility",
-          "arguments": {
-            "product_id": "SP-2033",
-            "device_name": "ProBook Laptop 13-inch"
-          },
-          "result": {
-            "compatible": false,
-            "product_id": "SP-2033",
-            "device": "ProBook Laptop 13-inch",
-            "reason": "Unknown device name 'ProBook Laptop 13-inch'. Canonical devices in this catalog: ProBook 13, SlimBook Air 13, TechPhone Pro 16.",
-            "canonical_devices": [
-              "ProBook 13",
-              "SlimBook Air 13",
-              "TechPhone Pro 16"
-            ]
-          }
-        },
-        {
-          "name": "check_compatibility",
-          "arguments": {
-            "product_id": "SP-2032",
-            "device_name": "ProBook Laptop 13-inch"
-          },
-          "result": {
-            "compatible": false,
-            "product_id": "SP-2032",
-            "device": "ProBook Laptop 13-inch",
-            "reason": "Unknown device name 'ProBook Laptop 13-inch'. Canonical devices in this catalog: ProBook 13, SlimBook Air 13, TechPhone Pro 16.",
-            "canonical_devices": [
-              "ProBook 13",
-              "SlimBook Air 13",
-              "TechPhone Pro 16"
-            ]
-          }
-        },
-        {
-          "name": "check_compatibility",
-          "arguments": {
-            "product_id": "SP-2030",
             "device_name": "ProBook 13"
           },
           "result": {
@@ -238,16 +148,187 @@
             "device": "ProBook 13",
             "reason": "DeskMate Conference Headset is compatible with ProBook 13."
           }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-2030"
+          },
+          "result": {
+            "product_id": "SP-2030",
+            "name": "SonicBeat Studio Wireless Headphones",
+            "category": "electronics",
+            "subcategory": "headphones",
+            "brand": "SonicBeat",
+            "price": 229,
+            "rating": 4.6,
+            "review_count": 1450,
+            "description": "Studio-grade wireless headphones with broad cross-device support. Officially certified for TechPhone Pro 16, ProBook 13, and SlimBook Air 13.",
+            "specs": {
+              "battery_hours": 30,
+              "anc": true,
+              "connectivity": "Bluetooth 5.3"
+            },
+            "compatible_with": [
+              "TechPhone Pro 16",
+              "ProBook 13",
+              "SlimBook Air 13"
+            ],
+            "in_stock": true,
+            "stock_quantity": 80,
+            "shipping_days": 3,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "3 business days (standard)"
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-2003"
+          },
+          "result": {
+            "product_id": "SP-2003",
+            "name": "SoundMax Wireless Headphones",
+            "category": "electronics",
+            "subcategory": "headphones",
+            "brand": "SoundMax",
+            "price": 149,
+            "rating": 4.4,
+            "review_count": 4100,
+            "description": "Mid-range wireless headphones with 20-hour battery.",
+            "specs": {},
+            "compatible_with": [],
+            "in_stock": true,
+            "stock_quantity": 50,
+            "shipping_days": 3,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "3 business days (standard)"
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-2031"
+          },
+          "result": {
+            "product_id": "SP-2031",
+            "name": "AirPhone Buds Pro",
+            "category": "electronics",
+            "subcategory": "headphones",
+            "brand": "AirPhone",
+            "price": 249,
+            "rating": 4.7,
+            "review_count": 2340,
+            "description": "Premium wireless earbuds tightly integrated with the AirPhone ecosystem. Certified for TechPhone Pro 16 only — other devices may have limited feature support.",
+            "specs": {
+              "battery_hours": 24,
+              "anc": true,
+              "connectivity": "Bluetooth 5.3"
+            },
+            "compatible_with": [
+              "TechPhone Pro 16"
+            ],
+            "in_stock": true,
+            "stock_quantity": 120,
+            "shipping_days": 2,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "2 business days (standard)"
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-2033"
+          },
+          "result": {
+            "product_id": "SP-2033",
+            "name": "UniversalPods Max",
+            "category": "electronics",
+            "subcategory": "headphones",
+            "brand": "UniversalPods",
+            "price": 199,
+            "rating": 4.5,
+            "review_count": 3200,
+            "description": "Our most versatile wireless headphones yet — marketed as 'works with everything'. Popular with phone users. (Note: official certification list is TechPhone Pro 16.)",
+            "specs": {
+              "battery_hours": 28,
+              "anc": true,
+              "connectivity": "Bluetooth 5.2"
+            },
+            "compatible_with": [
+              "TechPhone Pro 16"
+            ],
+            "in_stock": true,
+            "stock_quantity": 200,
+            "shipping_days": 2,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "2 business days (standard)"
+          }
+        },
+        {
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "SP-2032"
+          },
+          "result": {
+            "product_id": "SP-2032",
+            "name": "DeskMate Conference Headset",
+            "category": "electronics",
+            "subcategory": "headphones",
+            "brand": "DeskMate",
+            "price": 179,
+            "rating": 4.4,
+            "review_count": 810,
+            "description": "Wired/wireless conference headset optimized for laptops with business certifications. Certified for ProBook 13 and SlimBook Air 13.",
+            "specs": {
+              "battery_hours": 20,
+              "mic": "boom",
+              "connectivity": "USB-C / Bluetooth 5.2"
+            },
+            "compatible_with": [
+              "ProBook 13",
+              "SlimBook Air 13"
+            ],
+            "in_stock": true,
+            "stock_quantity": 95,
+            "shipping_days": 3,
+            "gift_wrap_available": true,
+            "backorder_available": false,
+            "previous_price": null,
+            "variants": null,
+            "shipping_estimate": "3 business days (standard)"
+          }
         }
       ]
     },
     {
       "role": "user",
-      "content": "I mostly want them for a mix of music, movies, and some work calls, and over-ear is fine. No specific budget within that range, so just pick the one that\u2019s the best overall fit for my ProBook 13 and we can go with that."
+      "content": "SonicBeat Studio sounds good — please add it."
     },
     {
       "role": "assistant",
-      "content": "I\u2019ve added the SonicBeat Studio Wireless Headphones (SP-2030) to your cart:\n\n- Type: Over-ear wireless\n- Use case fit: Great all\u2011rounder for music, movies, and work calls\n- Compatibility: Confirmed compatible with your ProBook 13\n- Price: $229\n\nIf you\u2019d like, I can:\n- Compare it briefly with the DeskMate Conference Headset,  \n- Help you add any accessories (like a USB-C dongle or case), or  \n- Move on to shipping options and checkout.",
+      "content": "Before I add it: would you like gift wrap for this item? It’s optional.Before I add it: would you like gift wrap for this item? It’s optional.",
+      "tool_calls": null
+    },
+    {
+      "role": "user",
+      "content": "No gift wrap. Please add it."
+    },
+    {
+      "role": "assistant",
+      "content": "Added: SonicBeat Studio Wireless Headphones — $229\n\nCart total: $229\n\nIf you want, I can also check whether any promo codes or loyalty savings apply.",
       "tool_calls": [
         {
           "name": "add_to_cart",
@@ -275,7 +356,7 @@
     },
     {
       "role": "user",
-      "content": "Perfect, that sounds like what I need\u2014let\u2019s stick with the SonicBeat Studio and move on. I don\u2019t need to pick shipping right now \u2014 skip it, I\u2019ll handle it at checkout.  \n\n[TASK_DONE]"
+      "content": "[TASK_DONE]"
     }
   ]
 }
