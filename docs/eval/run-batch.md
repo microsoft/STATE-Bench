@@ -23,12 +23,12 @@ uv run python -m state_bench.scripts.run_batch \
   --agent-model-name <model-name> \
   --num-runs 5 \
   --num-workers <parallel workers> \
-  --output-dir outputs/<domain>/test_trajectories
+  --output-dir outputs/<domain>/
 ```
 
 If your agent model uses a reportable reasoning level, add `--agent-model-reasoning-level <reasoning-level>`.
 
-Add `--agent-class`, `--agent-client-class`, and `--retrieve-learnings-top-k` per the matrix above. For cost reporting, also add the pricing flags from [docs/eval/cost-reporting.md](cost-reporting.md).
+Add `--agent-class`, `--agent-client-class`, and `--retrieve-learnings-top-k` per the matrix above. For cost reporting, also add the pricing flags from [cost-reporting.md](cost-reporting.md).
 
 ## Arguments
 
@@ -55,10 +55,10 @@ A good starting point is the number of parallel API calls your agent model can h
 Scored trajectories are written to:
 
 ```
-outputs/<domain>/test_trajectories/run1/<task_id>.json
-outputs/<domain>/test_trajectories/run2/<task_id>.json
+outputs/<domain>/run1/<task_id>.json
+outputs/<domain>/run2/<task_id>.json
 ...
-outputs/<domain>/test_trajectories/run5/<task_id>.json
+outputs/<domain>/run5/<task_id>.json
 ```
 
-Proceed to [docs/eval/compute-metrics.md](compute-metrics.md).
+Proceed to [compute-metrics.md](compute-metrics.md).

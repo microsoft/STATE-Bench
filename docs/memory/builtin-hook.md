@@ -1,6 +1,6 @@
 # Memory Hook — Built-in `StateBenchAgent`
 
-Use this hook when you are running the [Agent Learning Track](../../AGENT_LEARNING_TRACK.md) with the built-in standard tool-calling `StateBenchAgent`.
+Use this hook when you are running the [Agent Learning Track](../AGENT_LEARNING_TRACK.md) with the built-in standard tool-calling `StateBenchAgent`.
 
 Expose your learnings by subclassing `StateBenchAgent` and implementing `retrieve_learnings(query, top_k=3) -> list[str]`. Place the file under the repo-root `agents/` folder so the harness can discover it by class name.
 
@@ -43,4 +43,4 @@ Generation of the learnings artifact is **fully user-owned**. STATE-Bench only r
 
 ## Next step
 
-Return to [Agent Learning Track](../../AGENT_LEARNING_TRACK.md) and continue with the run steps using `--agent-class MyMemoryAgent --retrieve-learnings-top-k 3`.
+Return to [Agent Learning Track](../AGENT_LEARNING_TRACK.md) and continue with the run steps using `--agent-class MyMemoryAgent --retrieve-learnings-top-k 3`.

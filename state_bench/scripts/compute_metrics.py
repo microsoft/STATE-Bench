@@ -5,11 +5,11 @@ Reads trajectory JSONs from outputs/<domain>/run*/ and produces:
   - per_task_metrics/{task_id}.json: per-task breakdown with per-run task-completion and UX metrics
 
 Usage:
-    uv run python -m state_bench.scripts.compute_metrics --save-filepath outputs/travel/metrics.json
-    uv run python -m state_bench.scripts.compute_metrics --domain travel --save-filepath outputs/travel/metrics.json
-    uv run python -m state_bench.scripts.compute_metrics --results-dir outputs/travel --save-filepath outputs/travel/metrics.json
-    uv run python -m state_bench.scripts.compute_metrics --num-runs 5 --save-filepath outputs/travel/metrics.json
-    uv run python -m state_bench.scripts.compute_metrics --domain travel --num-runs 5 --save-filepath outputs/travel/metrics.json
+    uv run python -m state_bench.scripts.compute_metrics --output-dir outputs/travel/
+    uv run python -m state_bench.scripts.compute_metrics --domain travel --output-dir outputs/travel/
+    uv run python -m state_bench.scripts.compute_metrics --results-dir outputs/travel --output-dir outputs/travel/
+    uv run python -m state_bench.scripts.compute_metrics --num-runs 5 --output-dir outputs/travel/
+    uv run python -m state_bench.scripts.compute_metrics --domain travel --num-runs 5 --output-dir outputs/travel/
 """
 
 import argparse
@@ -1022,7 +1022,16 @@ def main():
     )
     parser.add_argument("--num-runs-idx-start", type=int, default=1, help="Starting run index to analyze (default: 1)")
     parser.add_argument(
-        "--save-filepath", type=str, required=True, help="Path to write the standardized public metrics JSON file"
+        "--output-dir",
+        type=str,
+        default=None,
+        help="Directory where metrics.json and per-task metrics are written (default: --results-dir)",
+    )
+    parser.add_argument(
+        "--save-filepath",
+        type=str,
+        default=None,
+        help=argparse.SUPPRESS,
     )
     parser.add_argument("--compare", type=str, default=None, help="Compare against another results directory")
     parser.add_argument(
@@ -1068,10 +1077,13 @@ def main():
 
     print_per_task_table(m)
     print_summary(s, verbose=args.verbose)
-    standard_metrics_path = Path(args.save_filepath)
+    if args.save_filepath and args.output_dir:
+        parser.error("Use --output-dir instead of --save-filepath; do not pass both")
+    output_dir = Path(args.output_dir) if args.output_dir else results_dir
+    standard_metrics_path = Path(args.save_filepath) if args.save_filepath else output_dir / "metrics.json"
     save_standard_metrics(s, standard_metrics_path, protocol.protocol_id, verbose=args.verbose)
-    save_metrics(s, results_dir, skip_path=standard_metrics_path)
-    save_per_task(m, results_dir)
+    save_metrics(s, output_dir, skip_path=standard_metrics_path)
+    save_per_task(m, output_dir)
 
     if args.compare:
         comp_dir = Path(args.compare)

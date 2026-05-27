@@ -27,7 +27,7 @@ The score asks whether learnings extracted from past trajectories improve agent 
 Train trajectories live at:
 
 ```text
-datasets/train_task_trajectories/<domain>/<task_id>.json
+../datasets/train_task_trajectories/<domain>/<task_id>.json
 ```
 
 Use these trajectories to generate your reusable learnings. Test task definitions and task environments are used by the benchmark at evaluation time and must not be used as oracle inputs for learning extraction.
@@ -55,13 +55,13 @@ The simulator and judge are fixed by the benchmark protocol. Your agent model an
 
 Every official run requires the protocol-locked GPT-5.1 evaluation client. Configure it first:
 
-- [Locked Evaluation Client](docs/setup/eval-client.md)
+- [Locked Evaluation Client](setup/eval-client.md)
 
 ### Agent under test
 
 If your learning-enabled agent uses an Azure AI Foundry model or OpenAI model through the built-in standard tool-calling `StateBenchAgent`, configure the built-in agent client:
 
-- [Built-in StateBenchAgent Client](docs/agents/builtin.md) (no code change needed; only configure env variables)
+- [Built-in StateBenchAgent Client](agents/builtin.md) (no code change needed; only configure env variables)
 
 If your learning method evaluates models from a different provider or uses a custom tool-calling agent, follow the instructions to extend the base classes:
 
@@ -97,13 +97,13 @@ class MyMemoryAgent(StateBenchAgent):
 
 When the subclass defines `retrieve_learnings`, `StateBenchAgent` adds the retrieval tool, routes calls to your method, forces the benchmark-configured `top_k`, and validates that the result is `list[str]`.
 
-Details: [Memory Hook: Built-in StateBenchAgent](docs/memory/builtin-hook.md).
+Details: [Memory Hook: Built-in StateBenchAgent](memory/builtin-hook.md).
 
 ### Custom `BaseAgent`
 
 If you are using a custom client + agent, first implement the custom harness in [Custom Client + Agent](USE_CUSTOM_CLIENT.md), then expose retrieval from your `BaseAgent` using the custom memory hook:
 
-- [Memory Hook: Custom BaseAgent](docs/memory/custom-hook.md)
+- [Memory Hook: Custom BaseAgent](memory/custom-hook.md)
 
 Memory retrieval tools must be read-only. Domain tools are still owned and executed by STATE-Bench.
 
@@ -119,7 +119,7 @@ uv run python -m state_bench.scripts.run_batch \
   --num-runs 5 \
   --retrieve-learnings-top-k 3 \
   --num-workers <parallel-workers> \
-  --output-dir outputs/<domain>/test_trajectories
+  --output-dir outputs/<domain>/
 ```
 
 If your agent model uses a reportable reasoning level, add:
@@ -146,18 +146,18 @@ Use these values:
 | `--num-runs` | `5` for official submissions |
 | `--retrieve-learnings-top-k` | `3` for official submissions |
 | `--num-workers` | Parallel task workers; tune for your provider rate limits |
-| `--output-dir` | `outputs/<domain>/test_trajectories` for the standard layout |
+| `--output-dir` | `outputs/<domain>/` for the standard layout |
 
 `run_batch` writes scored trajectories under:
 
 ```text
-outputs/<domain>/test_trajectories/run1/<task_id>.json
-outputs/<domain>/test_trajectories/run2/<task_id>.json
+outputs/<domain>/run1/<task_id>.json
+outputs/<domain>/run2/<task_id>.json
 ...
-outputs/<domain>/test_trajectories/run5/<task_id>.json
+outputs/<domain>/run5/<task_id>.json
 ```
 
-For the full CLI reference and worker guidance, see [run_batch](docs/eval/run-batch.md).
+For the full CLI reference and worker guidance, see [run_batch](eval/run-batch.md).
 
 ## 6. Report Cost Per Task
 
@@ -169,7 +169,7 @@ Cost reporting is optional but strongly encouraged. Add pricing flags to `run_ba
   --agent-cached-input-cost-per-1m <cached-input-price>
 ```
 
-The cached-input flag is optional. Embedding or offline artifact-building costs are not included in the official public metrics. Details: [Reporting Avg. Cost Per Task](docs/eval/cost-reporting.md).
+The cached-input flag is optional. Embedding or offline artifact-building costs are not included in the official public metrics. Details: [Reporting Avg. Cost Per Task](eval/cost-reporting.md).
 
 ## 7. Compute Metrics
 
@@ -178,18 +178,18 @@ After a domain finishes, produce its standardized metrics file:
 ```bash
 uv run python -m state_bench.scripts.compute_metrics \
   --domain <domain> \
-  --results-dir outputs/<domain>/test_trajectories \
+  --results-dir outputs/<domain>/ \
   --num-runs 5 \
-  --save-filepath outputs/<domain>/metrics.json
+  --output-dir outputs/<domain>/
 ```
 
-Metrics default to the protocol test split and fail if any expected test task is missing or unscored. Details: [Compute Metrics](docs/eval/compute-metrics.md).
+Metrics default to the protocol test split and fail if any expected test task is missing or unscored. Details: [Compute Metrics](eval/compute-metrics.md).
 
 Repeat the run and metrics steps for `travel`, `customer_support`, and `shopping_assistant` for a complete submission.
 
 ## 8. Submit
 
-Package the scored trajectories and metrics for each completed domain, then open a submission issue. Details: [Submit Results](docs/submit.md).
+Package the scored trajectories and metrics for each completed domain, then open a submission issue. Details: [Submit Results](submit.md).
 
 ## Official Run Settings
 

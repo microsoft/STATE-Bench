@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="RUN_BENCHMARK.md">Main Track</a> &nbsp;·&nbsp; <a href="AGENT_LEARNING_TRACK.md">Agent Learning Track</a>
+  <a href="docs/RUN_BENCHMARK.md">Main Track</a> &nbsp;·&nbsp; <a href="docs/AGENT_LEARNING_TRACK.md">Agent Learning Track</a>
 </p>
 
 STATE-Bench evaluates AI agents on realistic, multi-step enterprise workflows across three domains: **travel**, **customer support**, and **shopping assistant**.
@@ -35,8 +35,8 @@ Start with the track that matches what you want to evaluate. Each track guide li
 
 | Goal | Start here |
 | --- | --- |
-| Evaluate an agent or model directly on the provided enterprise benchmark tasks | **[Main Track](RUN_BENCHMARK.md)** |
-| Evaluate agentic memory, skills, or prompt optimization | **[Agent Learning Track](AGENT_LEARNING_TRACK.md)** |
+| Evaluate an agent or model directly on the provided enterprise benchmark tasks | **[Main Track](docs/RUN_BENCHMARK.md)** |
+| Evaluate agentic memory, skills, or prompt optimization | **[Agent Learning Track](docs/AGENT_LEARNING_TRACK.md)** |
 
 The **Main Track** is the default benchmark path. The **Agent Learning Track** uses the same simulator, domain tools, judges, and metrics, but adds train trajectories and a retrieval hook for reusable learnings such as memories, skills, or prompt optimizations.
 
