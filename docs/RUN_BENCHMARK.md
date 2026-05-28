@@ -25,7 +25,7 @@ The simulator and judge are fixed by the benchmark protocol. Your agent model is
 
 ### Locked simulator and judge
 
-Every official run requires the protocol-locked GPT-5.1 evaluation client. Configure it first:
+Every official run requires the protocol-locked GPT-5.4 evaluation client. Configure it first:
 
 - [Locked Evaluation Client](setup/eval-client.md)
 
@@ -125,7 +125,7 @@ Package the scored trajectories and metrics for each completed domain, then open
 
 For protocol-compliant submissions:
 
-- use the locked GPT-5.1 simulator and judge client,
+- use the locked GPT-5.4 simulator and judge client,
 - do not edit simulator prompts, judge prompts, domain tools, task files, environment files, or protocol files,
 - run `--num-runs 5`,
 - compute metrics with the same number of runs,

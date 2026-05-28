@@ -37,8 +37,8 @@ def _build_agent_model_metadata(args: argparse.Namespace) -> dict[str, str | Non
     return {"model_name": model_name, "reasoning_level": reasoning_level}
 
 
-def _build_agent_pricing(args: argparse.Namespace, default_model_name: str | None = None) -> AgentPricing | None:
-    model_name = (args.agent_model_name or default_model_name or "").strip()
+def _build_agent_pricing(args: argparse.Namespace) -> AgentPricing | None:
+    model_name = (args.agent_model_name or "").strip()
     pricing_values = [
         args.agent_input_cost_per_1m,
         args.agent_output_cost_per_1m,
@@ -308,7 +308,7 @@ def main() -> None:
     protocol = load_default_protocol()
     try:
         agent_model = _build_agent_model_metadata(args)
-        agent_pricing = _build_agent_pricing(args, protocol.official_model)
+        agent_pricing = _build_agent_pricing(args)
     except ValueError as exc:
         parser.error(str(exc))
     protocol_errors = protocol.validate_prompt_hashes()
