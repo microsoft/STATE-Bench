@@ -19,4 +19,4 @@ uv run python -m state_bench.scripts.compute_metrics \
 
 Metrics default to the protocol test split and **fail if any expected test task is missing or unscored**. For local partial analysis only, add `--ignore-missing-runs`; submissions must not use this flag.
 
-Repeat for every protocol domain, then proceed to [Submit Results](../submit.md).
+Repeat for every protocol domain, then proceed to [Submit Results](../SUBMIT.md).

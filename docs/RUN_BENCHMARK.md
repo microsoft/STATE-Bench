@@ -119,7 +119,7 @@ Repeat the run and metrics steps for `travel`, `customer_support`, and `shopping
 
 ## 6. Submit
 
-Package the scored trajectories and metrics for each completed domain, then open a submission issue. Details: [Submit Results](submit.md).
+Package the scored trajectories and metrics for each completed domain, then open a submission issue. Details: [Submit Results](SUBMIT.md).
 
 ## Official Run Settings
 
