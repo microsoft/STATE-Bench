@@ -346,7 +346,7 @@ def test_agent_pricing_returns_none_when_no_pricing_flags_given():
         },
     )()
 
-    pricing = _build_batch_agent_pricing(args, "gpt-5.1")
+    pricing = _build_batch_agent_pricing(args)
 
     assert pricing is None
 

@@ -12,7 +12,7 @@ from state_bench.paths import CONFIGS_DIR, DOMAINS_DIR
 from state_bench.version import get_benchmark_version, get_package_version
 
 PROTOCOLS_DIR = CONFIGS_DIR / "eval_protocols"
-DEFAULT_PROTOCOL_KEY = "gpt51"
+DEFAULT_PROTOCOL_KEY = "gpt54"
 
 
 def build_protocol_id(protocol_key: str = DEFAULT_PROTOCOL_KEY) -> str:

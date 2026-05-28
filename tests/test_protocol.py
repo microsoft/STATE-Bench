@@ -15,13 +15,13 @@ from state_bench.protocol import (
 from state_bench.version import get_benchmark_version, get_package_version
 
 
-def test_protocol_loads_locked_gpt51_metadata_without_infra() -> None:
+def test_protocol_loads_locked_gpt54_metadata_without_infra() -> None:
     protocol = load_protocol(DEFAULT_PROTOCOL_ID)
 
     assert protocol.protocol_id == DEFAULT_PROTOCOL_ID
     assert DEFAULT_PROTOCOL_ID == build_protocol_id(DEFAULT_PROTOCOL_KEY)
     assert protocol.data["benchmark_version"] == get_benchmark_version()
-    assert protocol.official_model == "gpt-5.1"
+    assert protocol.official_model == "gpt-5.4"
     assert protocol.split == "test"
     assert protocol.split_version == "train_test"
     assert protocol.num_runs == 5
