@@ -714,13 +714,15 @@ class UXQualityJudge:
                 reasoning_effort=self.reasoning_effort,
                 max_tokens=16384,
             )
+            score = response.get("ux_score")
             return UXQualityResult(
-                consent=int(response.get("consent", 3)),
-                ease=int(response.get("ease", 3)),
-                discovery=int(response.get("discovery", 3)),
-                information_quality=int(response.get("information_quality", 3)),
-                disambiguation=int(response.get("disambiguation", 3)),
+                user_control=int(response.get("user_control", 3)),
+                friction=int(response.get("friction", 3)),
+                situational_awareness=int(response.get("situational_awareness", 3)),
+                communication_quality=int(response.get("communication_quality", 3)),
+                intent_alignment=int(response.get("intent_alignment", 3)),
                 reasoning=str(response.get("reasoning", "")),
+                score=float(score) if isinstance(score, int | float) else None,
             )
         except Exception as e:
             logger.warning("UX quality judge failed: %s", e)

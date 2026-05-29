@@ -177,12 +177,24 @@ def _pricing_key(pricing: dict) -> str:
 
 
 UX_DIMENSIONS = {
-    "ux_consent": "mean_ux_consent",
-    "ux_ease": "mean_ux_ease",
-    "ux_discovery": "mean_ux_discovery",
-    "ux_information_quality": "mean_ux_information_quality",
-    "ux_disambiguation": "mean_ux_disambiguation",
+    "ux_user_control": "mean_ux_user_control",
+    "ux_friction": "mean_ux_friction",
+    "ux_situational_awareness": "mean_ux_situational_awareness",
+    "ux_communication_quality": "mean_ux_communication_quality",
+    "ux_intent_alignment": "mean_ux_intent_alignment",
 }
+
+LEGACY_UX_FIELD_MAP = {
+    "ux_user_control": "ux_consent",
+    "ux_friction": "ux_ease",
+    "ux_situational_awareness": "ux_discovery",
+    "ux_communication_quality": "ux_information_quality",
+    "ux_intent_alignment": "ux_disambiguation",
+}
+
+
+def _ux_value(traj: dict, field: str) -> object:
+    return traj.get(field, traj.get(LEGACY_UX_FIELD_MAP[field]))
 
 
 def load_run(run_dir: Path) -> tuple[dict[str, dict], dict[str, object]]:
@@ -221,11 +233,11 @@ def load_run(run_dir: Path) -> tuple[dict[str, dict], dict[str, object]]:
             "state_requirements_reasoning": traj.get("state_requirements_reasoning", ""),
             "ux_score": ux_score,
             "ux_reasoning": traj.get("ux_reasoning"),
-            "ux_consent": traj.get("ux_consent"),
-            "ux_ease": traj.get("ux_ease"),
-            "ux_discovery": traj.get("ux_discovery"),
-            "ux_information_quality": traj.get("ux_information_quality"),
-            "ux_disambiguation": traj.get("ux_disambiguation"),
+            "ux_user_control": _ux_value(traj, "ux_user_control"),
+            "ux_friction": _ux_value(traj, "ux_friction"),
+            "ux_situational_awareness": _ux_value(traj, "ux_situational_awareness"),
+            "ux_communication_quality": _ux_value(traj, "ux_communication_quality"),
+            "ux_intent_alignment": _ux_value(traj, "ux_intent_alignment"),
             "state_requirements_met": traj.get("state_requirements_met"),
             "task_requirements_met": traj.get("task_requirements_met"),
             "task_completion_pass": task_completion,
@@ -427,7 +439,7 @@ def build_matrices(runs: list[dict[str, dict]]) -> dict:
     }
     for ux_field in UX_DIMENSIONS:
         matrices[ux_field] = {
-            tid: [run.get(tid, {}).get(ux_field) if tid in run else None for run in runs] for tid in all_tasks
+            tid: [_ux_value(run.get(tid, {}), ux_field) if tid in run else None for run in runs] for tid in all_tasks
         }
     return matrices
 
@@ -591,11 +603,15 @@ def compute_summary(m: dict, run_meta: list[dict[str, object]] | None = None) ->
         "per_run_task_requirements_pass_rates": [round(r, 4) for r in per_run_task_rates],
         "per_run_task_completion_pass_rates": [round(r, 4) for r in per_run_completion_rates],
         "per_run_ux_scores": [round(r, 4) for r in per_run_ux_scores],
-        "per_run_ux_consent_scores": [round(r, 4) for r in per_run_ux_dim_scores["ux_consent"]],
-        "per_run_ux_ease_scores": [round(r, 4) for r in per_run_ux_dim_scores["ux_ease"]],
-        "per_run_ux_discovery_scores": [round(r, 4) for r in per_run_ux_dim_scores["ux_discovery"]],
-        "per_run_ux_information_quality_scores": [round(r, 4) for r in per_run_ux_dim_scores["ux_information_quality"]],
-        "per_run_ux_disambiguation_scores": [round(r, 4) for r in per_run_ux_dim_scores["ux_disambiguation"]],
+        "per_run_ux_user_control_scores": [round(r, 4) for r in per_run_ux_dim_scores["ux_user_control"]],
+        "per_run_ux_friction_scores": [round(r, 4) for r in per_run_ux_dim_scores["ux_friction"]],
+        "per_run_ux_situational_awareness_scores": [
+            round(r, 4) for r in per_run_ux_dim_scores["ux_situational_awareness"]
+        ],
+        "per_run_ux_communication_quality_scores": [
+            round(r, 4) for r in per_run_ux_dim_scores["ux_communication_quality"]
+        ],
+        "per_run_ux_intent_alignment_scores": [round(r, 4) for r in per_run_ux_dim_scores["ux_intent_alignment"]],
         "per_run_scored_counts": per_run_scored_counts,
         "per_run_state_pass_counts": per_run_state_counts,
         "per_run_task_requirements_pass_counts": per_run_task_counts,
@@ -660,20 +676,20 @@ def print_summary(s: dict, verbose: bool = False) -> None:
         print(f"{'task_requirements_pass@1':<30s} {s['task_requirements_pass@1']:.0%}")
         print(f"{'Per-run scored counts':<30s} {', '.join(str(c) for c in s['per_run_scored_counts'])}")
         print(f"{'Per-run UX scores':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_scores'])}")
-        print(f"{'Mean UX consent':<30s} {s['mean_ux_consent']:.2f}/5")
-        print(f"{'Mean UX ease':<30s} {s['mean_ux_ease']:.2f}/5")
-        print(f"{'Mean UX discovery':<30s} {s['mean_ux_discovery']:.2f}/5")
-        print(f"{'Mean UX info quality':<30s} {s['mean_ux_information_quality']:.2f}/5")
-        print(f"{'Mean UX disambiguation':<30s} {s['mean_ux_disambiguation']:.2f}/5")
-        print(f"{'Per-run UX consent':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_consent_scores'])}")
-        print(f"{'Per-run UX ease':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_ease_scores'])}")
-        print(f"{'Per-run UX discovery':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_discovery_scores'])}")
+        print(f"{'Mean UX user control':<30s} {s['mean_ux_user_control']:.2f}/5")
+        print(f"{'Mean UX friction':<30s} {s['mean_ux_friction']:.2f}/5")
+        print(f"{'Mean UX awareness':<30s} {s['mean_ux_situational_awareness']:.2f}/5")
+        print(f"{'Mean UX communication':<30s} {s['mean_ux_communication_quality']:.2f}/5")
+        print(f"{'Mean UX intent alignment':<30s} {s['mean_ux_intent_alignment']:.2f}/5")
+        print(f"{'Per-run UX control':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_user_control_scores'])}")
+        print(f"{'Per-run UX friction':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_friction_scores'])}")
         print(
-            f"{'Per-run UX info quality':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_information_quality_scores'])}"
+            f"{'Per-run UX awareness':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_situational_awareness_scores'])}"
         )
         print(
-            f"{'Per-run UX disambiguation':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_disambiguation_scores'])}"
+            f"{'Per-run UX communication':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_communication_quality_scores'])}"
         )
+        print(f"{'Per-run UX intent':<30s} {', '.join(f'{r:.2f}' for r in s['per_run_ux_intent_alignment_scores'])}")
         print(f"{'Mean turns (pass only)':<30s} {s['mean_turns_pass']:.1f}")
         print(f"{'Mean tool calls (pass only)':<30s} {s['mean_tool_calls_pass']:.1f}")
         print(f"{'Mean input tokens':<30s} {s['mean_input_tokens']:.1f}")
@@ -702,11 +718,11 @@ def save_metrics(s: dict, results_dir: Path, *, skip_path: Path | None = None) -
         f"task_completion_pass^{pn}": s["task_completion_pass^N"],
         f"task_completion_pass^{pn}_count": s["task_completion_pass^N_count"],
         "mean_ux_score": s["mean_ux_score"],
-        "mean_ux_consent": s["mean_ux_consent"],
-        "mean_ux_ease": s["mean_ux_ease"],
-        "mean_ux_discovery": s["mean_ux_discovery"],
-        "mean_ux_information_quality": s["mean_ux_information_quality"],
-        "mean_ux_disambiguation": s["mean_ux_disambiguation"],
+        "mean_ux_user_control": s["mean_ux_user_control"],
+        "mean_ux_friction": s["mean_ux_friction"],
+        "mean_ux_situational_awareness": s["mean_ux_situational_awareness"],
+        "mean_ux_communication_quality": s["mean_ux_communication_quality"],
+        "mean_ux_intent_alignment": s["mean_ux_intent_alignment"],
         "mean_turns": s["mean_turns"],
         "mean_turns_pass": s["mean_turns_pass"],
         "mean_tool_calls": s["mean_tool_calls"],
@@ -729,11 +745,11 @@ def save_metrics(s: dict, results_dir: Path, *, skip_path: Path | None = None) -
         "per_run_task_requirements_pass_counts": s["per_run_task_requirements_pass_counts"],
         "per_run_task_completion_pass_counts": s["per_run_task_completion_pass_counts"],
         "per_run_ux_scores": s["per_run_ux_scores"],
-        "per_run_ux_consent_scores": s["per_run_ux_consent_scores"],
-        "per_run_ux_ease_scores": s["per_run_ux_ease_scores"],
-        "per_run_ux_discovery_scores": s["per_run_ux_discovery_scores"],
-        "per_run_ux_information_quality_scores": s["per_run_ux_information_quality_scores"],
-        "per_run_ux_disambiguation_scores": s["per_run_ux_disambiguation_scores"],
+        "per_run_ux_user_control_scores": s["per_run_ux_user_control_scores"],
+        "per_run_ux_friction_scores": s["per_run_ux_friction_scores"],
+        "per_run_ux_situational_awareness_scores": s["per_run_ux_situational_awareness_scores"],
+        "per_run_ux_communication_quality_scores": s["per_run_ux_communication_quality_scores"],
+        "per_run_ux_intent_alignment_scores": s["per_run_ux_intent_alignment_scores"],
         "comparable_task_count": s["comparable_task_count"],
         "partial": s["partial"],
         "agent_model": s.get("agent_model"),
@@ -831,11 +847,11 @@ def save_per_task(m: dict, results_dir: Path) -> None:
         m["reasoning_task_req"],
         m["reasoning_state_req"],
     )
-    ux_consent_m = m["ux_consent"]
-    ux_ease_m = m["ux_ease"]
-    ux_discovery_m = m["ux_discovery"]
-    ux_information_quality_m = m["ux_information_quality"]
-    ux_disambiguation_m = m["ux_disambiguation"]
+    ux_user_control_m = m["ux_user_control"]
+    ux_friction_m = m["ux_friction"]
+    ux_situational_awareness_m = m["ux_situational_awareness"]
+    ux_communication_quality_m = m["ux_communication_quality"]
+    ux_intent_alignment_m = m["ux_intent_alignment"]
 
     analysis_dir = results_dir / "per_task_metrics"
     analysis_dir.mkdir(parents=True, exist_ok=True)
@@ -849,11 +865,11 @@ def save_per_task(m: dict, results_dir: Path) -> None:
                     "passed": pass_m[tid][i],
                     "score": score_m[tid][i],
                     "ux_score": ux_score_m[tid][i],
-                    "ux_consent": ux_consent_m[tid][i],
-                    "ux_ease": ux_ease_m[tid][i],
-                    "ux_discovery": ux_discovery_m[tid][i],
-                    "ux_information_quality": ux_information_quality_m[tid][i],
-                    "ux_disambiguation": ux_disambiguation_m[tid][i],
+                    "ux_user_control": ux_user_control_m[tid][i],
+                    "ux_friction": ux_friction_m[tid][i],
+                    "ux_situational_awareness": ux_situational_awareness_m[tid][i],
+                    "ux_communication_quality": ux_communication_quality_m[tid][i],
+                    "ux_intent_alignment": ux_intent_alignment_m[tid][i],
                     "state_requirements_met": state_m[tid][i],
                     "task_requirements_met": task_m[tid][i],
                     "task_completion_pass": completion_m[tid][i],
@@ -875,11 +891,15 @@ def save_per_task(m: dict, results_dir: Path) -> None:
             "task_id": tid,
             "avg_score": round(_avg([v for v in score_m[tid] if v is not None]), 2),
             "avg_ux_score": round(_avg([v for v in ux_score_m[tid] if v is not None]), 2),
-            "avg_ux_consent": round(_avg([v for v in ux_consent_m[tid] if v is not None]), 2),
-            "avg_ux_ease": round(_avg([v for v in ux_ease_m[tid] if v is not None]), 2),
-            "avg_ux_discovery": round(_avg([v for v in ux_discovery_m[tid] if v is not None]), 2),
-            "avg_ux_information_quality": round(_avg([v for v in ux_information_quality_m[tid] if v is not None]), 2),
-            "avg_ux_disambiguation": round(_avg([v for v in ux_disambiguation_m[tid] if v is not None]), 2),
+            "avg_ux_user_control": round(_avg([v for v in ux_user_control_m[tid] if v is not None]), 2),
+            "avg_ux_friction": round(_avg([v for v in ux_friction_m[tid] if v is not None]), 2),
+            "avg_ux_situational_awareness": round(
+                _avg([v for v in ux_situational_awareness_m[tid] if v is not None]), 2
+            ),
+            "avg_ux_communication_quality": round(
+                _avg([v for v in ux_communication_quality_m[tid] if v is not None]), 2
+            ),
+            "avg_ux_intent_alignment": round(_avg([v for v in ux_intent_alignment_m[tid] if v is not None]), 2),
             "avg_turns": round(_avg([v for v in turns_m[tid] if v is not None]), 2),
             "avg_tool_calls": round(_avg([v for v in tools_m[tid] if v is not None]), 2),
             "avg_input_tokens": round(_avg([v for v in input_tokens_m[tid] if v is not None]), 2),
@@ -932,19 +952,19 @@ def print_comparison(
     )
     if verbose:
         print(
-            f"{'Mean UX consent':<35} {base_s['mean_ux_consent']:>10.2f} {comp_s['mean_ux_consent']:>10.2f} {comp_s['mean_ux_consent'] - base_s['mean_ux_consent']:>+10.2f}"
+            f"{'Mean UX user control':<35} {base_s['mean_ux_user_control']:>10.2f} {comp_s['mean_ux_user_control']:>10.2f} {comp_s['mean_ux_user_control'] - base_s['mean_ux_user_control']:>+10.2f}"
         )
         print(
-            f"{'Mean UX ease':<35} {base_s['mean_ux_ease']:>10.2f} {comp_s['mean_ux_ease']:>10.2f} {comp_s['mean_ux_ease'] - base_s['mean_ux_ease']:>+10.2f}"
+            f"{'Mean UX friction':<35} {base_s['mean_ux_friction']:>10.2f} {comp_s['mean_ux_friction']:>10.2f} {comp_s['mean_ux_friction'] - base_s['mean_ux_friction']:>+10.2f}"
         )
         print(
-            f"{'Mean UX discovery':<35} {base_s['mean_ux_discovery']:>10.2f} {comp_s['mean_ux_discovery']:>10.2f} {comp_s['mean_ux_discovery'] - base_s['mean_ux_discovery']:>+10.2f}"
+            f"{'Mean UX awareness':<35} {base_s['mean_ux_situational_awareness']:>10.2f} {comp_s['mean_ux_situational_awareness']:>10.2f} {comp_s['mean_ux_situational_awareness'] - base_s['mean_ux_situational_awareness']:>+10.2f}"
         )
         print(
-            f"{'Mean UX info quality':<35} {base_s['mean_ux_information_quality']:>10.2f} {comp_s['mean_ux_information_quality']:>10.2f} {comp_s['mean_ux_information_quality'] - base_s['mean_ux_information_quality']:>+10.2f}"
+            f"{'Mean UX communication':<35} {base_s['mean_ux_communication_quality']:>10.2f} {comp_s['mean_ux_communication_quality']:>10.2f} {comp_s['mean_ux_communication_quality'] - base_s['mean_ux_communication_quality']:>+10.2f}"
         )
         print(
-            f"{'Mean UX disambiguation':<35} {base_s['mean_ux_disambiguation']:>10.2f} {comp_s['mean_ux_disambiguation']:>10.2f} {comp_s['mean_ux_disambiguation'] - base_s['mean_ux_disambiguation']:>+10.2f}"
+            f"{'Mean UX intent':<35} {base_s['mean_ux_intent_alignment']:>10.2f} {comp_s['mean_ux_intent_alignment']:>10.2f} {comp_s['mean_ux_intent_alignment'] - base_s['mean_ux_intent_alignment']:>+10.2f}"
         )
         print(
             f"{'Mean turns (pass only)':<35} {base_s['mean_turns_pass']:>10.1f} {comp_s['mean_turns_pass']:>10.1f} {comp_s['mean_turns_pass'] - base_s['mean_turns_pass']:>+10.1f}"

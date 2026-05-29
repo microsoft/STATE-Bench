@@ -112,11 +112,19 @@ def score_one(
         ux_result = ux_judge.evaluate(task, traj["conversation"], tool_calls)
         if ux_result is None:
             return {"task_id": tid, "status": "ERR", "error": "ux judge returned None"}
-        traj["ux_consent"] = ux_result.consent
-        traj["ux_ease"] = ux_result.ease
-        traj["ux_discovery"] = ux_result.discovery
-        traj["ux_information_quality"] = ux_result.information_quality
-        traj["ux_disambiguation"] = ux_result.disambiguation
+        for key in [
+            "ux_consent",
+            "ux_ease",
+            "ux_discovery",
+            "ux_information_quality",
+            "ux_disambiguation",
+        ]:
+            traj.pop(key, None)
+        traj["ux_user_control"] = ux_result.user_control
+        traj["ux_friction"] = ux_result.friction
+        traj["ux_situational_awareness"] = ux_result.situational_awareness
+        traj["ux_communication_quality"] = ux_result.communication_quality
+        traj["ux_intent_alignment"] = ux_result.intent_alignment
         traj["ux_score"] = round(ux_result.ux_score, 2)
         traj["ux_reasoning"] = ux_result.reasoning
 

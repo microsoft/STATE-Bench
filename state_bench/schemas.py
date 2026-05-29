@@ -304,24 +304,33 @@ class TaskRequirementsScore:
 class UXQualityResult:
     """Result from the UX quality judge."""
 
-    consent: int
-    ease: int
-    discovery: int
-    information_quality: int
-    disambiguation: int
+    user_control: int
+    friction: int
+    situational_awareness: int
+    communication_quality: int
+    intent_alignment: int
     reasoning: str
+    score: float | None = None
 
     @property
     def ux_score(self) -> float:
-        return (self.consent + self.ease + self.discovery + self.information_quality + self.disambiguation) / 5
+        if self.score is not None:
+            return self.score
+        return (
+            self.user_control
+            + self.friction
+            + self.situational_awareness
+            + self.communication_quality
+            + self.intent_alignment
+        ) / 5
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "ux_consent": self.consent,
-            "ux_ease": self.ease,
-            "ux_discovery": self.discovery,
-            "ux_information_quality": self.information_quality,
-            "ux_disambiguation": self.disambiguation,
+            "ux_user_control": self.user_control,
+            "ux_friction": self.friction,
+            "ux_situational_awareness": self.situational_awareness,
+            "ux_communication_quality": self.communication_quality,
+            "ux_intent_alignment": self.intent_alignment,
             "ux_score": round(self.ux_score, 2),
             "ux_reasoning": self.reasoning,
         }
@@ -370,11 +379,11 @@ class Trajectory:
             else None,
             "task_requirements_details": self.task_requirements_score.details if self.task_requirements_score else None,
             "task_completion_pass": self.task_completion_pass,
-            "ux_consent": self.ux_quality.consent if self.ux_quality else None,
-            "ux_ease": self.ux_quality.ease if self.ux_quality else None,
-            "ux_discovery": self.ux_quality.discovery if self.ux_quality else None,
-            "ux_information_quality": self.ux_quality.information_quality if self.ux_quality else None,
-            "ux_disambiguation": self.ux_quality.disambiguation if self.ux_quality else None,
+            "ux_user_control": self.ux_quality.user_control if self.ux_quality else None,
+            "ux_friction": self.ux_quality.friction if self.ux_quality else None,
+            "ux_situational_awareness": self.ux_quality.situational_awareness if self.ux_quality else None,
+            "ux_communication_quality": self.ux_quality.communication_quality if self.ux_quality else None,
+            "ux_intent_alignment": self.ux_quality.intent_alignment if self.ux_quality else None,
             "ux_score": round(self.ux_quality.ux_score, 2) if self.ux_quality else None,
             "ux_reasoning": self.ux_quality.reasoning if self.ux_quality else None,
             "turns": self.efficiency.turns if self.efficiency else 0,

@@ -537,11 +537,12 @@ class TestUXQualityJudge:
     def test_evaluate_returns_ux_result(self):
         client = MagicMock()
         client.complete_json.return_value = {
-            "consent": 4,
-            "ease": 5,
-            "discovery": 3,
-            "information_quality": 4,
-            "disambiguation": 5,
+            "user_control": 4,
+            "friction": 5,
+            "situational_awareness": 3,
+            "communication_quality": 4,
+            "intent_alignment": 5,
+            "ux_score": 4.0,
             "reasoning": "solid",
         }
         prompts_dir = _make_prompts_dir_with_ux()
@@ -556,14 +557,17 @@ class TestUXQualityJudge:
         )
 
         assert result == UXQualityResult(
-            consent=4,
-            ease=5,
-            discovery=3,
-            information_quality=4,
-            disambiguation=5,
+            user_control=4,
+            friction=5,
+            situational_awareness=3,
+            communication_quality=4,
+            intent_alignment=5,
             reasoning="solid",
+            score=4.0,
         )
-        assert result.ux_score == 4.2
+        assert result.ux_score == 4.0
+        _, kwargs = client.complete_json.call_args
+        assert kwargs["system_prompt"] == "You are a UX judge."
 
     def test_evaluate_returns_none_on_exception(self):
         client = MagicMock()

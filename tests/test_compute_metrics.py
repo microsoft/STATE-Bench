@@ -121,6 +121,11 @@ def test_compute_summary_includes_ux_scores():
                 "task_id": "t1",
                 "score": 1,
                 "ux_score": 4.2,
+                "ux_user_control": 5,
+                "ux_friction": 4,
+                "ux_situational_awareness": 4,
+                "ux_communication_quality": 4,
+                "ux_intent_alignment": 4,
                 "reasoning": "ok",
                 "state_requirements_met": 1,
                 "task_requirements_met": 1,
@@ -142,6 +147,11 @@ def test_compute_summary_includes_ux_scores():
                 "task_id": "t1",
                 "score": 0,
                 "ux_score": 3.8,
+                "ux_user_control": 3,
+                "ux_friction": 4,
+                "ux_situational_awareness": 4,
+                "ux_communication_quality": 4,
+                "ux_intent_alignment": 4,
                 "reasoning": "bad",
                 "state_requirements_met": 0,
                 "task_requirements_met": 0,
@@ -163,7 +173,40 @@ def test_compute_summary_includes_ux_scores():
     summary = compute_summary(build_matrices(runs))
 
     assert summary["mean_ux_score"] == 4.0
+    assert summary["mean_ux_user_control"] == 4.0
+    assert summary["mean_ux_friction"] == 4.0
     assert summary["per_run_ux_scores"] == [4.2, 3.8]
+    assert summary["per_run_ux_user_control_scores"] == [5.0, 3.0]
+
+
+def test_compute_summary_reads_legacy_ux_dimension_fields():
+    runs = [
+        {
+            "t1": {
+                "task_id": "t1",
+                "score": 1,
+                "ux_score": 4.0,
+                "ux_consent": 5,
+                "ux_ease": 4,
+                "ux_discovery": 3,
+                "ux_information_quality": 2,
+                "ux_disambiguation": 1,
+                "state_requirements_met": 1,
+                "task_requirements_met": 1,
+                "task_completion_pass": 1,
+                "turns": 1,
+                "tool_calls": 1,
+            }
+        }
+    ]
+
+    summary = compute_summary(build_matrices(runs))
+
+    assert summary["mean_ux_user_control"] == 5.0
+    assert summary["mean_ux_friction"] == 4.0
+    assert summary["mean_ux_situational_awareness"] == 3.0
+    assert summary["mean_ux_communication_quality"] == 2.0
+    assert summary["mean_ux_intent_alignment"] == 1.0
 
 
 def test_build_standard_metrics_returns_protocol_stamped_public_metrics():
