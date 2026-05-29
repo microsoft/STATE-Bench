@@ -24,6 +24,28 @@ const entries = [
   {
     id: "main-02",
     track: "main",
+    model: "Claude Opus 4.7",
+    reasoningLabel: "high",
+    agent: "",
+    organization: "Anthropic",
+    submissionDate: "2026-05-29",
+    verificationStatus: "verified",
+    metrics: {
+      overallPassAt1: 53.4,
+      overallPassAt1Std: 1.7,
+      passAt5: 33.9,
+      meanUxScore: 3.46,
+      costPerTask: 0.0773,
+      domains: {
+        travel: { passAt1: 55.0, passAt1Std: 1.0, passAt5: 36.0, meanUxScore: 3.47, costPerTask: 0.1068 },
+        customerSupport: { passAt1: 51.0, passAt1Std: 3.0, passAt5: 28.0, meanUxScore: 3.19, costPerTask: 0.0755 },
+        shoppingAssistant: { passAt1: 54.0, passAt1Std: 1.0, passAt5: 37.0, meanUxScore: 3.72, costPerTask: 0.0496 },
+      },
+    },
+  },
+  {
+    id: "main-03",
+    track: "main",
     model: "Kimi-K2.6",
     agent: "",
     organization: "Moonshot AI",
@@ -43,7 +65,7 @@ const entries = [
     },
   },
   {
-    id: "main-03",
+    id: "main-04",
     track: "main",
     model: "DeepSeek-v4-Pro",
     agent: "",
@@ -64,7 +86,7 @@ const entries = [
     },
   },
   {
-    id: "main-04",
+    id: "main-05",
     track: "main",
     organization: "OpenAI",
     model: "GPT-5.4",
@@ -103,9 +125,9 @@ const primaryScoreSort = document.querySelector("#primary-score-sort");
 
 const scoreLabels = {
   overall: "pass@1 (%)",
-  travel: "Travel pass@1 (%)",
-  customerSupport: "Customer Support pass@1 (%)",
-  shoppingAssistant: "Shopping pass@1 (%)",
+  travel: "pass@1 (%)",
+  customerSupport: "pass@1 (%)",
+  shoppingAssistant: "pass@1 (%)",
 };
 
 function selectedScore(entry) {

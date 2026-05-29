@@ -430,6 +430,8 @@ a {
   padding: 0;
   text-align: inherit;
   text-transform: inherit;
+  line-height: 1.2;
+  white-space: normal;
   width: 100%;
 }
 

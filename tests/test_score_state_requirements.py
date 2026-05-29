@@ -131,7 +131,13 @@ def test_score_can_write_ux_fields_only(tmp_path: Path):
 
     ux_judge = MagicMock()
     ux_judge.evaluate.return_value = MagicMock(
-        consent=4, ease=3, discovery=5, information_quality=4, disambiguation=3, ux_score=3.8, reasoning="ux ok"
+        user_control=4,
+        friction=3,
+        situational_awareness=5,
+        communication_quality=4,
+        intent_alignment=3,
+        ux_score=3.8,
+        reasoning="ux ok",
     )
 
     output_path = tmp_path / "out.json"
@@ -140,11 +146,11 @@ def test_score_can_write_ux_fields_only(tmp_path: Path):
 
     assert result["status"] == "OK"
     assert result["ux_score"] == 3.8
-    assert saved["ux_consent"] == 4
-    assert saved["ux_ease"] == 3
-    assert saved["ux_discovery"] == 5
-    assert saved["ux_information_quality"] == 4
-    assert saved["ux_disambiguation"] == 3
+    assert saved["ux_user_control"] == 4
+    assert saved["ux_friction"] == 3
+    assert saved["ux_situational_awareness"] == 5
+    assert saved["ux_communication_quality"] == 4
+    assert saved["ux_intent_alignment"] == 3
     assert saved["ux_score"] == 3.8
     assert saved["ux_reasoning"] == "ux ok"
 
@@ -195,7 +201,13 @@ def test_score_one_overwrites_in_place(tmp_path: Path):
 
     ux_judge = MagicMock()
     ux_judge.evaluate.return_value = MagicMock(
-        consent=5, ease=5, discovery=5, information_quality=5, disambiguation=5, ux_score=5.0, reasoning="ok"
+        user_control=5,
+        friction=5,
+        situational_awareness=5,
+        communication_quality=5,
+        intent_alignment=5,
+        ux_score=5.0,
+        reasoning="ok",
     )
 
     result = score_one(traj_path, tasks_dir, None, ux_judge, traj_path)
